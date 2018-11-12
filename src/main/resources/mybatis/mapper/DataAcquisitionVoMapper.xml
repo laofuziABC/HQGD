@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper">
+  <resultMap id="BaseResultMap" type="com.hqgd.pms.domain.DataAcquisitionVo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="EQUIPMENT_ID" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="EQUIPMENT_NAME" jdbcType="VARCHAR" property="equipmentName" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="CHANNEL_NUM" jdbcType="VARCHAR" property="channelNum" />
+    <result column="OPTICAL_FIBER_POSITION" jdbcType="VARCHAR" property="opticalFiberPosition" />
+    <result column="TEMPERATURE" jdbcType="DECIMAL" property="temperature" />
+    <result column="PD" jdbcType="VARCHAR" property="pd" />
+    <result column="UV" jdbcType="VARCHAR" property="uv" />
+    <result column="STATE" jdbcType="INTEGER" property="state" />
+    <result column="MESSAGE" jdbcType="VARCHAR" property="message" />
+    <result column="RECEIVE_TIME" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="DUTY_PERSON" jdbcType="VARCHAR" property="dutyPerson" />
+    <result column="TEL" jdbcType="VARCHAR" property="tel" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
+    PD, UV, STATE, MESSAGE, RECEIVE_TIME, DUTY_PERSON, TEL
+  </sql>
+  <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+  		t.ID,
+  		t.EQUIPMENT_ID,
+  		t.EQUIPMENT_NAME,
+  		t.ADDRESS,
+  		t.CHANNEL_NUM,
+  		t.OPTICAL_FIBER_POSITION,
+  		t.TEMPERATURE,
+  		t.PD,
+  		t.UV,
+  		t.STATE,
+  		t.MESSAGE,
+  		t.RECEIVE_TIME,
+  		t.DUTY_PERSON,
+  		t.TEL 
+	FROM
+  		(SELECT 
+    		EQUIPMENT_ID,
+    		MAX(RECEIVE_TIME) AS RECEIVE_TIME 
+  		FROM
+    		hq_equipment_monitor_data 
+  		GROUP BY EQUIPMENT_ID) AS temp 
+  	LEFT JOIN hq_equipment_monitor_data AS t 
+    	ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+   	 	where t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectHistoricalDataById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_monitor_data
+    where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME &lt;= #{startTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME &gt;= #{endTime,jdbcType=VARCHAR} 
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_monitor_data
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from hq_equipment_monitor_data
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into hq_equipment_monitor_data (ID, EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL)
+    values (#{id,jdbcType=INTEGER}, #{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into hq_equipment_monitor_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="equipmentId != null">
+        EQUIPMENT_ID,
+      </if>
+      <if test="equipmentName != null">
+        EQUIPMENT_NAME,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="channelNum != null">
+        CHANNEL_NUM,
+      </if>
+      <if test="opticalFiberPosition != null">
+        OPTICAL_FIBER_POSITION,
+      </if>
+      <if test="temperature != null">
+        TEMPERATURE,
+      </if>
+      <if test="pd != null">
+        PD,
+      </if>
+      <if test="uv != null">
+        UV,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="message != null">
+        MESSAGE,
+      </if>
+      <if test="receiveTime != null">
+        RECEIVE_TIME,
+      </if>
+      <if test="dutyPerson != null">
+        DUTY_PERSON,
+      </if>
+      <if test="tel != null">
+        TEL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="equipmentId != null">
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null">
+        #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNum != null">
+        #{channelNum,jdbcType=VARCHAR},
+      </if>
+      <if test="opticalFiberPosition != null">
+        #{opticalFiberPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null">
+        #{temperature,jdbcType=DECIMAL},
+      </if>
+      <if test="pd != null">
+        #{pd,jdbcType=VARCHAR},
+      </if>
+      <if test="uv != null">
+        #{uv,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null">
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dutyPerson != null">
+        #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    update hq_equipment_monitor_data
+    <set>
+      <if test="equipmentId != null">
+        EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null">
+        EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNum != null">
+        CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR},
+      </if>
+      <if test="opticalFiberPosition != null">
+        OPTICAL_FIBER_POSITION = #{opticalFiberPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null">
+        TEMPERATURE = #{temperature,jdbcType=DECIMAL},
+      </if>
+      <if test="pd != null">
+        PD = #{pd,jdbcType=VARCHAR},
+      </if>
+      <if test="uv != null">
+        UV = #{uv,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="message != null">
+        MESSAGE = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null">
+        RECEIVE_TIME = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dutyPerson != null">
+        DUTY_PERSON = #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    update hq_equipment_monitor_data
+    set EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR},
+      EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR},
+      OPTICAL_FIBER_POSITION = #{opticalFiberPosition,jdbcType=VARCHAR},
+      TEMPERATURE = #{temperature,jdbcType=DECIMAL},
+      PD = #{pd,jdbcType=VARCHAR},
+      UV = #{uv,jdbcType=VARCHAR},
+      STATE = #{state,jdbcType=INTEGER},
+      MESSAGE = #{message,jdbcType=VARCHAR},
+      RECEIVE_TIME = #{receiveTime,jdbcType=TIMESTAMP},
+      DUTY_PERSON = #{dutyPerson,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

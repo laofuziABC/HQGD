@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <!--禁用兼容模式-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <title>新农合缴费管理后台</title>
+    <link rel="stylesheet" href="/css/login.css"/>
+    <style>
+    	.linkGo {
+    		display: block;
+    		text-align: right;
+    	}
+    </style>
+</head>
+<body>
+<div id="body">
+
+    <header id="header">
+        <figure>
+            <img src="/img/login/logo.png" class="logo"/>
+        </figure>
+    </header>
+    <section>
+        <div id="content">
+            <ul class="input_box ">
+            	<a class="linkGo" href="./updatePassword">>修改密码</a>
+                <h1>新农合缴费管理后台</h1>
+                <form action="/user/login" method="post" onsubmit="return checkFormInput()">
+                    <li class="account">
+                        <input name="userName" type="text" placeholder="请输入您的用户名" class="full_input"/>
+                    </li>
+                    <li class="password">
+                        <input name="password" type="password" placeholder="请输入您的密码" class="full_input"/>
+                    </li>
+                    <div th:if="${loginError}" class="error_tips">
+                        *用户名密码输入有误
+                    </div>
+                    <button type="submit">登录</button>
+                </form>
+            </ul>
+
+        </div>
+    </section>
+    <footer id="footer">
+        Copyright&nbsp;©&nbsp;2017 上海京颐科技股份有限公司
+
+    </footer>
+
+
+</div>
+<script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    document.getElementsByTagName('body')[0].style.height = document.documentElement.clientHeight + "px";
+    
+    function checkFormInput() {
+    	var username = $("input[name='userName']").val();
+        var password = $("input[name='password']").val();
+        if (!username || !password) {
+        	alert("用户名密码不能为空！");
+        	return false;
+        }
+        return true;
+    }
+    
+</script>
+
+</body>
+</html>
