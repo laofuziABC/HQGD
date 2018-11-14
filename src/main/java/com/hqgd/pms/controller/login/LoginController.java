@@ -14,10 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.login.ILoginService;
 import com.hqgd.pms.service.user.IUserService;
 
@@ -27,7 +29,6 @@ import com.hqgd.pms.service.user.IUserService;
  */
 @Controller
 @Scope("request")
-@RequestMapping("/login")
 public class LoginController {
 
 	@Autowired
@@ -36,30 +37,21 @@ public class LoginController {
 	ILoginService loginService;
 
 	/**
-	 * 描述：用户登陆界面 作者：姚绒 日期：2018年11月5日 上午10:21:12 @param username @param
-	 * password @param response @param request @return String @throws
-	 * 
-	 * @throws IOException
+	 * 描述：打开用户登陆界面 
+	 * 作者：姚绒 日期：2018年11月5日 上午10:21:12 @param username @param password 
+	 * @param response @param request @return String @throws
+	 * @throws IOException 
 	 */
-	@PostMapping(value = "/login")
-	public String login(Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
-
+	@RequestMapping("/hqgd")
+	public String login(Model model, HttpServletResponse response, HttpServletRequest request) {
+		return "login";
+	}
+	
+	@RequestMapping("/hqgd/login")
+	@ResponseBody
+	public Map<String, Object> userLogin(HttpServletResponse response, HttpServletRequest request) throws Exception{
 		Map<String, Object> result = loginService.login(request, response);
-		String json = new Gson().toJson(result).toString();
-		return json;
-
-	}
-
-	@GetMapping(value = "/loginError")
-	public String loginError(Model model) {
-		model.addAttribute("loginError", true);
-		return "user/login";
-	}
-
-	@GetMapping(value = "/login")
-	public String userLogin(Model model) {
-		model.addAttribute("loginError", false);
-		return "user/login";
+		return result;
 	}
 
 	@GetMapping(value = "/updatePassword")

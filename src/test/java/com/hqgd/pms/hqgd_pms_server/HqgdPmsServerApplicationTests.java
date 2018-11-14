@@ -1,4 +1,4 @@
-package com.hegd.pms.hqgd_pms_server;
+package com.hqgd.pms.hqgd_pms_server;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

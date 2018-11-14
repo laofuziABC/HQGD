@@ -27,7 +27,7 @@ public class LoginService implements ILoginService {
 
 	@Override
 	public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String userName = request.getParameter("userName").trim();
+		String userName = request.getParameter("username").trim();
 		String password = request.getParameter("password").trim();
 		String isRemember = request.getParameter("isRemember");
 		log.info("登录开始，参数为userName=" + userName + "password=" + password + "isRemember=" + isRemember);
@@ -39,7 +39,7 @@ public class LoginService implements ILoginService {
 			log.info("用户名密码正确");
 			// 记住密码
 			if ("Y".equals(isRemember)) {
-				Cookie cookie1 = new Cookie("userName", userName);
+				Cookie cookie1 = new Cookie("username", userName);
 				cookie1.setPath("/");
 				cookie1.setMaxAge(60 * 60 * 24 * 30);
 				response.addCookie(cookie1);

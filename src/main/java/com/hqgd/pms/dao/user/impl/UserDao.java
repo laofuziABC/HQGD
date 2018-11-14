@@ -35,5 +35,4 @@ public class UserDao implements IUserDao{
 		return sqlSessionTemplate.selectList("selectAll");
 	}
 	
-
 }
