@@ -23,7 +23,7 @@ import com.hqgd.pms.service.equipment.IEquipmentService;
  */
 @Controller
 @Scope("request")
-@RequestMapping("/equipment")
+@RequestMapping("equipment")
 public class EquipmentController {
 	@Autowired
 	IEquipmentService equipmentService;
@@ -70,11 +70,11 @@ public class EquipmentController {
 
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
-	public String selectAll(Model model, String param, HttpServletRequest request, HttpServletResponse response)
+	public Map<String, Object> selectAll(Model model, String param, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
-		List<EquipmentInfo> equipmentList = equipmentService.selectAll(param);
-		String json = new Gson().toJson(equipmentList).toString();
+//		List<EquipmentInfo> equipmentList = equipmentService.selectAll(param);
+//		String json = new Gson().toJson(equipmentList).toString();
 //		return json;
 		return null;
 

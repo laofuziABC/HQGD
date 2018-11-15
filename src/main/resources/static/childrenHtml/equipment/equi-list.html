@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设备管理</title>
+	</head>
+	<body class="page-content">
+		<div class="container-fluid">
+			<!-- 页面标题和导航【开始】-->
+			<div class="row-fluid">
+				<div class="span12">
+					<h3 class="page-title">关联设备列表&nbsp;<small>此功能用于管理当前所有关联设备</small></h3>
+					<!--导航-->
+					<ul class="breadcrumb">
+						<li>
+							<i class="icon-home"></i>
+							<a href="#">首页</a> 
+							<span class="icon-angle-right"></span>
+						</li>
+						<li>
+							<a href="#">设备管理</a>
+							<span class="icon-angle-right"></span>
+						</li>
+						<li><a href="#">关联设备列表</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- 页面标题和导航【结束】-->
+			<!--加载关联设备列表【开始】-->
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="portlet box blue">
+						<!--关联设备列表【开始】-->
+						<div class="portlet-body">
+								<div class="clearfix">
+									<!--新增按钮-->
+									<div class="btn-group">
+										<button id="sample_editable_1_new" class="btn green" onclick="getEquiEdit();">
+											新增设备&nbsp;<i class="icon-plus"></i>
+										</button>
+									</div>
+									<!--便捷操作工具栏-->
+									<div class="btn-group pull-right">
+										<button class="btn dropdown-toggle" data-toggle="dropdown">更多操作<i class="icon-angle-down"></i>
+										</button>
+										<ul class="dropdown-menu pull-right">
+											<li><a href="#">打印</a></li>
+											<li><a href="#">保存为PDF</a></li>
+											<li><a href="#">导出到Excel</a></li>
+										</ul>
+									</div>
+								</div>
+								<!--表格【开始】-->
+								<table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+									<thead>
+										<tr> 
+											<th>设备编号</th>
+											<th>设备名称</th>
+											<th>设备型号</th>
+											<th>当前使用通道数量</th>
+											<th>所属企业中文名称</th>
+											<th>运行状态</th>
+											<th>更多操作</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr class="">
+											<td>1</td>
+											<td>测温仪</td>
+											<td>XXX-XXX</td>
+											<td>6</td>
+											<td>XXX公司</td>
+											<td>正常</td>
+											<td class="center">
+												<a class="details" href="javascript:;" onclick="getEquiDetails();">详情</a>&nbsp;
+												<a class="edit" href="javascript:;" onclick="getEquiEdit(1);">编辑</a>&nbsp;
+												<a class="delete" href="javascript:;"onclick="getEquiDelete();">删除</a>&nbsp;
+												<a class="resetpsw" href="javascript:;" onclick="resetRange();">设置值域</a>&nbsp;
+												<a class="resetpsw" href="javascript:;" onclick="connUser();">关联用户</a>
+											</td>
+										</tr>
+										<tr class="">
+											<td>2</td>
+											<td>测温仪</td>
+											<td>XXX-XXX</td>
+											<td>6</td>
+											<td>XXX公司</td>
+											<td>正常</td>
+											<td class="center">
+												<a class="details" href="javascript:;">详情</a>&nbsp;
+												<a class="edit" href="javascript:;">编辑</a>&nbsp;
+												<a class="delete" href="javascript:;">删除</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">关联用户</a>
+											</td>
+										</tr>
+										<tr class="">
+											<td>3</td>
+											<td>测温仪</td>
+											<td>XXX-XXX</td>
+											<td>9</td>
+											<td>XXX公司</td>
+											<td>异常</td>
+											<td class="center">
+												<a class="details" href="javascript:;">详情</a>&nbsp;
+												<a class="edit" href="javascript:;">编辑</a>&nbsp;
+												<a class="delete" href="javascript:;">删除</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">关联用户</a>
+											</td>
+										</tr>
+										<tr class="">
+											<td>4</td>
+											<td>绕组</td>
+											<td>XXX-XXX</td>
+											<td>6</td>
+											<td>XXX公司</td>
+											<td>正常</td>
+											<td class="center">
+												<a class="details" href="javascript:;">详情</a>&nbsp;
+												<a class="edit" href="javascript:;">编辑</a>&nbsp;
+												<a class="delete" href="javascript:;">删除</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">关联用户</a>
+											</td>
+										</tr>
+										<tr class="">
+											<td>5</td>
+											<td>绕组</td>
+											<td>XXX-XXX</td>
+											<td>9</td>
+											<td>XXX公司</td>
+											<td>异常</td>
+											<td class="center">
+												<a class="details" href="javascript:;">详情</a>&nbsp;
+												<a class="edit" href="javascript:;">编辑</a>&nbsp;
+												<a class="delete" href="javascript:;">删除</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">关联用户</a>
+											</td>
+										</tr>
+										<tr class="">
+											<td>6</td>
+											<td>光纤</td>
+											<td>XXX-XXX</td>
+											<td>6</td>
+											<td>XXX公司</td>
+											<td>正常</td>
+											<td class="center">
+												<a class="details" href="javascript:;">详情</a>&nbsp;
+												<a class="edit" href="javascript:;">编辑</a>&nbsp;
+												<a class="delete" href="javascript:;">删除</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">关联用户</a>
+											</td>
+										</tr>
+										<tr class="">
+											<td>7</td>
+											<td>光纤</td>
+											<td>XXX-XXX</td>
+											<td>9</td>
+											<td>XXX公司</td>
+											<td>异常</td>
+											<td class="center">
+												<a class="details" href="javascript:;">详情</a>&nbsp;
+												<a class="edit" href="javascript:;">编辑</a>&nbsp;
+												<a class="delete" href="javascript:;">删除</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
+												<a class="resetpsw" href="javascript:;">关联用户</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<!--用户列表【结束】-->
+							</div>
+					</div>
+				</div>
+			</div>
+			<!--加载关联设备列表【结束】-->
+		</div>
+		
+		<script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="media/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="media/js/DT_bootstrap.js"></script>
+		
+		<script src="media/js/table-editable.js"></script>
+		<script>
+			jQuery(document).ready(function() {
+			   TableEditable.init();
+			});
+		</script>
+	</body>
+</html>
