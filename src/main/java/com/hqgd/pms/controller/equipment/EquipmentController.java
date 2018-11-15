@@ -71,7 +71,7 @@ public class EquipmentController {
 
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
-	public Map<String, Object> selectAll(Model model, String param, HttpServletRequest request, HttpServletResponse response)
+	public Map<String, Object> selectAll(Model model, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		User user = (User) request.getSession(true).getAttribute("user");
 		String userId = user.getId().toString();

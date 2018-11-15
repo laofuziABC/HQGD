@@ -1,12 +1,9 @@
 package com.hqgd.pms.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class EquipmentInfo {
     private String equipmentId;
-
-    private Integer id;
 
     private String equipmentName;
 
@@ -16,11 +13,7 @@ public class EquipmentInfo {
 
     private String icon;
 
-    private String group;
-
-    private BigDecimal max;
-
-    private BigDecimal min;
+    private String region;
 
     private String creator;
 
@@ -36,14 +29,6 @@ public class EquipmentInfo {
 
     public void setEquipmentId(String equipmentId) {
         this.equipmentId = equipmentId == null ? null : equipmentId.trim();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getEquipmentName() {
@@ -78,28 +63,12 @@ public class EquipmentInfo {
         this.icon = icon == null ? null : icon.trim();
     }
 
-    public String getGroup() {
-        return group;
+    public String getRegion() {
+        return region;
     }
 
-    public void setGroup(String group) {
-        this.group = group == null ? null : group.trim();
-    }
-
-    public BigDecimal getMax() {
-        return max;
-    }
-
-    public void setMax(BigDecimal max) {
-        this.max = max;
-    }
-
-    public BigDecimal getMin() {
-        return min;
-    }
-
-    public void setMin(BigDecimal min) {
-        this.min = min;
+    public void setRegion(String region) {
+        this.region = region == null ? null : region.trim();
     }
 
     public String getCreator() {

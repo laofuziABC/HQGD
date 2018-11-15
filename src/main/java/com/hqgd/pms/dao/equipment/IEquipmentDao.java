@@ -6,6 +6,6 @@ import com.hqgd.pms.domain.EquipmentInfo;
 
 public interface IEquipmentDao {
 
-	List<EquipmentInfo> select(String userId);
+	List<EquipmentInfo> select(String param);
 
 }
