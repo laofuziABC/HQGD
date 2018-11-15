@@ -15,6 +15,6 @@ public interface IEquipmentService {
 
 	EquipmentInfo select(String equipmentId);
 
-	List<EquipmentInfo> selectAll(String param);
+	List<EquipmentInfo> selectAll(String userId);
 
 }
