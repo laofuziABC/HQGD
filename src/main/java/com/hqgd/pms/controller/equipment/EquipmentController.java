@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.hqgd.pms.domain.EquipmentInfo;
+import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.equipment.IEquipmentService;
 
 /**
@@ -72,8 +73,9 @@ public class EquipmentController {
 	@ResponseBody
 	public Map<String, Object> selectAll(Model model, String param, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-
-//		List<EquipmentInfo> equipmentList = equipmentService.selectAll(param);
+		User user = (User) request.getSession(true).getAttribute("user");
+		String userId = user.getId().toString();
+		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
 //		String json = new Gson().toJson(equipmentList).toString();
 //		return json;
 		return null;
