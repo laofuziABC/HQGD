@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.hqgd.pms.domain.EquipmentInfo;
@@ -68,12 +69,14 @@ public class EquipmentController {
 	}
 
 	@RequestMapping(value = "/selectAll")
+	@ResponseBody
 	public String selectAll(Model model, String param, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll(param);
 		String json = new Gson().toJson(equipmentList).toString();
-		return json;
+//		return json;
+		return null;
 
 	}
 }
