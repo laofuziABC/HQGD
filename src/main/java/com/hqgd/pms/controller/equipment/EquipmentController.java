@@ -71,14 +71,13 @@ public class EquipmentController {
 
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
-	public Map<String, Object> selectAll(Model model, HttpServletRequest request, HttpServletResponse response)
+	public String selectAll(Model model, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		User user = (User) request.getSession(true).getAttribute("user");
 		String userId = user.getId().toString();
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
-//		String json = new Gson().toJson(equipmentList).toString();
-//		return json;
-		return null;
+		String json = new Gson().toJson(equipmentList).toString();
+		return json;
 
 	}
 }
