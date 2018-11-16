@@ -33,15 +33,16 @@ public class DataAcquisitionController {
 	
 	@RequestMapping(value = "/realtime")
     public String getRealTimeMonitoringData(Model model,String equipmentId, HttpServletRequest request) throws ExecutionException, InterruptedException {
-        
+        log.info("查询实时数据开始,equipmentId="+equipmentId);
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId);
 		model.addAttribute("realTimeDateList", realTimeDateList);
-		String json = new Gson().toJson(realTimeDateList).toString();    
+		String json = new Gson().toJson(realTimeDateList).toString();
+		log.info("查询实时数据结束，list = "+json);
         return json;
     }
 	@RequestMapping(value = "/historical")
     public String getHistoricalData(Model model,QueryParametersVo queryVo, HttpServletRequest request) throws ExecutionException, InterruptedException {
-        
+		log.info("查询历史数据开始,queryVo="+queryVo);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
 		model.addAttribute("historicalDataList", historicalDataList);
 		String json = new Gson().toJson(historicalDataList).toString();

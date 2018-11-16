@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hqgd.pms.dao.equipment.IEquipmentDao;
 import com.hqgd.pms.domain.EquipmentInfo;
+import com.hqgd.pms.domain.EquipmentParam;
 @Repository
 public class EquipmentDao implements IEquipmentDao {
 	@Autowired
@@ -16,6 +17,11 @@ public class EquipmentDao implements IEquipmentDao {
 	@Override
 	public List<EquipmentInfo> select(String param) {
 		return sqlSessionTemplate.selectList("selectAllEquipment", param);
+	}
+
+	@Override
+	public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
+		return sqlSessionTemplate.selectList("selectEquipmentParam", equipmentId);
 	}
 
 }

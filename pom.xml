@@ -44,11 +44,16 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>1.3.2</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>sqljdbc4</artifactId>
 			<version>4.0</version>
-		</dependency> -->
+		</dependency>
+		<dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>4.0.5.Final</version>
+        </dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -89,11 +94,11 @@
 		</dependency>
 		<!-- com.google.code.gson/gson引入【结束】 -->
 		<!-- 设置SpringBoot依赖【开始】 -->
-		<dependency>
+		<!-- <dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-starter-thymeleaf</artifactId>
 		  <scope></scope>
-		</dependency>
+		</dependency> -->
 		<!-- 设置SpringBoot依赖【结束】 -->
 		<!-- 添加热部署【开始】 -->
 		<dependency>
@@ -106,6 +111,14 @@
 	</dependencies>
 
 	<build>
+	
+	<!-- <resource>
+	   <directory>src/main/resources</directory>
+	   <includes>
+	      <include>**/*.*</include>
+	   </includes>
+	   <filtering>true</filtering>
+	</resource> -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
