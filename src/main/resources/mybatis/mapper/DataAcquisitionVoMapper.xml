@@ -19,24 +19,19 @@
   </resultMap>
   <sql id="Base_Column_List">
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
-    PD, UV, STATE, MESSAGE, RECEIVE_TIME, DUTY_PERSON, TEL
+    PD, UV, STATE, MESSAGE, DATE_FORMAT(RECEIVE_TIME,'%Y-%m-%d %H:%i:%s') AS RECEIVE_TIME, DUTY_PERSON, TEL
   </sql>
   <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT 
-  		t.ID,
   		t.EQUIPMENT_ID,
   		t.EQUIPMENT_NAME,
   		t.ADDRESS,
   		t.CHANNEL_NUM,
   		t.OPTICAL_FIBER_POSITION,
   		t.TEMPERATURE,
-  		t.PD,
-  		t.UV,
-  		t.STATE,
+ 		t.STATE,
   		t.MESSAGE,
-  		t.RECEIVE_TIME,
-  		t.DUTY_PERSON,
-  		t.TEL 
+  		t.RECEIVE_TIME 
 	FROM
   		(SELECT 
     		EQUIPMENT_ID,
@@ -46,7 +41,8 @@
   		GROUP BY EQUIPMENT_ID) AS temp 
   	LEFT JOIN hq_equipment_monitor_data AS t 
     	ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
-   	 	where t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+    	AND temp.RECEIVE_TIME = t.RECEIVE_TIME 
+	WHERE t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}  
   </select>
   
   <select id="selectHistoricalDataById" parameterType="java.util.HashMap" resultMap="BaseResultMap">

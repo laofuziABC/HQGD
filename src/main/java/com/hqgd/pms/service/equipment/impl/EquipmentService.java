@@ -13,6 +13,7 @@ import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.dao.equipment.IEquipmentDao;
 import com.hqgd.pms.domain.EquipmentInfo;
+import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.service.equipment.IEquipmentService;
 
 @Service
@@ -74,6 +75,12 @@ public class EquipmentService implements IEquipmentService {
 	public List<EquipmentInfo> selectAll(String param) {
 		List<EquipmentInfo> equipmentInfoList = equipmentDao.select(param);
 		return equipmentInfoList;
+	}
+
+	@Override
+	public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
+		List<EquipmentParam> equipmentParamList = equipmentDao.selectEquipmentParam(equipmentId);
+		return equipmentParamList;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hqgd.pms.domain.EquipmentInfo;
+import com.hqgd.pms.domain.EquipmentParam;
 
 public interface IEquipmentService {
 
@@ -16,5 +17,7 @@ public interface IEquipmentService {
 	EquipmentInfo select(String equipmentId);
 
 	List<EquipmentInfo> selectAll(String userId);
+
+	List<EquipmentParam> selectEquipmentParam(String equipmentId);
 
 }

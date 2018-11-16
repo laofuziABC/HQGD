@@ -16,14 +16,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.hqgd.pms.domain.EquipmentInfo;
+import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.equipment.IEquipmentService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 姚绒 设备管理，增删改查
  */
 @Controller
 @Scope("request")
+@Slf4j
 @RequestMapping("equipment")
 public class EquipmentController {
 	@Autowired
@@ -77,6 +81,17 @@ public class EquipmentController {
 		String userId = user.getId().toString();
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
 		String json = new Gson().toJson(equipmentList).toString();
+		log.info(json);
+		return json;
+	}
+	
+	@RequestMapping(value = "/equipmentParam")
+	public String selectEquipmentParam(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		log.info("查询设备参数开始 ，equipmentId =  " + equipmentId);
+		List<EquipmentParam> equipmentParam = equipmentService.selectEquipmentParam(equipmentId);
+		String json = new Gson().toJson(equipmentParam).toString();
+		log.info("查询设备参数结束"+json);
 		return json;
 
 	}
