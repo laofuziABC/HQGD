@@ -91,7 +91,7 @@ public class EquipmentController {
 		log.info("查询设备参数开始 ，equipmentId =  " + equipmentId);
 		List<EquipmentParam> equipmentParam = equipmentService.selectEquipmentParam(equipmentId);
 		String json = new Gson().toJson(equipmentParam).toString();
-		log.info("查询设备参数结束"+json);
+		log.info("查询设备参数结束 "+json);
 		return json;
 
 	}
