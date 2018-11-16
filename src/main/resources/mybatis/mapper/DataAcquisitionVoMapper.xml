@@ -19,7 +19,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
-    PD, UV, STATE, MESSAGE, RECEIVE_TIME, DUTY_PERSON, TEL
+    PD, UV, STATE, MESSAGE, DATE_FORMAT(RECEIVE_TIME,'%Y-%m-%d %H:%i:%s') AS RECEIVE_TIME, DUTY_PERSON, TEL
   </sql>
   <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT 
