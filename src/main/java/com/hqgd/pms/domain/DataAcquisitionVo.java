@@ -18,7 +18,7 @@ public class DataAcquisitionVo {
 
 	    private String opticalFiberPosition;
 
-	    private Long temperature;
+	    private double temperature;
 
 	    private String pd;
 
@@ -28,7 +28,7 @@ public class DataAcquisitionVo {
 
 	    private String message;
 
-	    private Date receiveTime;
+	    private String receiveTime;
 
 	    private String dutyPerson;
 
