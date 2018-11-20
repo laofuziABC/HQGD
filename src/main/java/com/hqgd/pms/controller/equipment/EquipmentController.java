@@ -1,6 +1,7 @@
 package com.hqgd.pms.controller.equipment;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.hqgd.pms.common.PayCommon;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.User;
@@ -34,65 +36,91 @@ public class EquipmentController {
 	IEquipmentService equipmentService;
 
 	@RequestMapping(value = "/add")
-	public String add(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-
-		Map<String, Object> result = equipmentService.add(equipmentInfo);
-		String json = new Gson().toJson(result).toString();
-		return json;
-
+	public void add(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		log.info("添加设备开始");
+		Map<String, Object> resultMap = equipmentService.add(equipmentInfo);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("添加设备结束");
 	}
 
 	@RequestMapping(value = "/delete")
-	public String delete(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
+	public void delete(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-
-		Map<String, Object> result = equipmentService.delete(equipmentId);
-		String json = new Gson().toJson(result).toString();
-		return json;
-
+		log.info("删除设备开始");
+		Map<String, Object> resultMap = equipmentService.delete(equipmentId);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("删除设备开始");
 	}
 
 	@RequestMapping(value = "/update")
-	public String update(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request,
+	public void update(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-
-		Map<String, Object> result = equipmentService.update(equipmentInfo);
-		String json = new Gson().toJson(result).toString();
-		return json;
-
+		log.info("更新设备开始");
+		Map<String, Object> resultMap = equipmentService.update(equipmentInfo);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("更新设备开始");
 	}
 
 	@RequestMapping(value = "/select")
-	public String select(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
+	public void select(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-
+		log.info("查询设备开始");
 		EquipmentInfo equipmentInfo = equipmentService.select(equipmentId);
-		String json = new Gson().toJson(equipmentInfo).toString();
-		return json;
-
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000004");
+		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		resultMap.put("data", equipmentInfo);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询设备结束");
 	}
 
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
-	public String selectAll(Model model, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.info("添加设备开始");
 		User user = (User) request.getSession(true).getAttribute("user");
 		String userId = user.getId().toString();
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
-		String json = new Gson().toJson(equipmentList).toString();
-		log.info(json);
-		return json;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000005");
+		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		resultMap.put("data", equipmentList);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
 	}
-	
+
 	@RequestMapping(value = "/equipmentParam")
-	public String selectEquipmentParam(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public void selectEquipmentParam(Model model, String equipmentId, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		log.info("查询设备参数开始 ，equipmentId =  " + equipmentId);
 		List<EquipmentParam> equipmentParam = equipmentService.selectEquipmentParam(equipmentId);
-		String json = new Gson().toJson(equipmentParam).toString();
-		log.info("查询设备参数结束 "+json);
-		return json;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000006");
+		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		resultMap.put("data", equipmentParam);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
 
+	}
+
+	@RequestMapping(value = "/setParam")
+	public void setEquipmentParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		log.info("设置设备参数开始, request = " + request);
+		Map<String, Object> rusultMap = equipmentService.setEquipmentParam(equipmentParam);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(rusultMap));
+		log.info("设置设备参数结束 ");
 	}
 }

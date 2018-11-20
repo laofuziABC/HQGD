@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hqgd.pms.common.PayCommon;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.dao.equipment.IEquipmentDao;
@@ -29,40 +30,39 @@ public class EquipmentService implements IEquipmentService {
 
 	@Override
 	public Map<String, Object> add(EquipmentInfo equipmentInfo) {
-		Map<String, Object> map = new HashMap<>();
-		// String equipmentId = equipmentInfo.getEquipmentId();
-		// String equipmentName = equipmentInfo.getEquipmentName();
+		Map<String, Object> resultMap = new HashMap<>();
 		int i = equipmentInfoMapper.insert(equipmentInfo);
 		Boolean result = (i == 0) ? false : true;
-		// if (result) {
-		// DataAcquisitionVo da = new DataAcquisitionVo();
-		// da.setEquipmentId(equipmentId);
-		// da.setEquipmentName(equipmentName);
-		// int j = dataAcquisitionVoMapper.insert(da);
-		// Boolean r = (j == 0) ? false : true;
-		// map.put("result", r);
-		// } else {
-		map.put("result", result);
-		// }
-		return map;
+		resultMap.put("success", result);
+		resultMap.put("resultCode", "00000001");
+		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+
+		return resultMap;
 	}
 
 	@Override
 	public Map<String, Object> delete(String equipmentId) {
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> resultMap = new HashMap<>();
 		int i = equipmentInfoMapper.deleteByPrimaryKey(equipmentId);
 		Boolean result = (i == 0) ? false : true;
-		map.put("result", result);
-		return map;
+		resultMap.put("success", result);
+		resultMap.put("resultCode", "00000002");
+		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		return resultMap;
 	}
 
 	@Override
 	public Map<String, Object> update(EquipmentInfo equipmentInfo) {
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> resultMap = new HashMap<>();
 		int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
 		Boolean result = (i == 0) ? false : true;
-		map.put("result", result);
-		return map;
+		resultMap.put("success", result);
+		resultMap.put("resultCode", "00000003");
+		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		return resultMap;
 	}
 
 	@Override
@@ -81,6 +81,18 @@ public class EquipmentService implements IEquipmentService {
 	public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
 		List<EquipmentParam> equipmentParamList = equipmentDao.selectEquipmentParam(equipmentId);
 		return equipmentParamList;
+	}
+
+	@Override
+	public Map<String, Object> setEquipmentParam(EquipmentParam equipmentParam) {
+		int i = equipmentInfoMapper.insert(equipmentParam);
+		Boolean result = (i == 0) ? false : true;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", result);
+		resultMap.put("resultCode", "00000007");
+		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		return resultMap;
 	}
 
 }

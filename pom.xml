@@ -50,10 +50,10 @@
 			<version>4.0</version>
 		</dependency>
 		<dependency>
-            <groupId>org.hibernate.common</groupId>
-            <artifactId>hibernate-commons-annotations</artifactId>
-            <version>4.0.5.Final</version>
-        </dependency>
+			<groupId>org.hibernate.common</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>4.0.5.Final</version>
+		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -74,7 +74,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -88,37 +88,40 @@
 		</dependency>
 		<!-- com.google.code.gson/gson引入【开始】 -->
 		<dependency>
-		    <groupId>com.google.code.gson</groupId>
-		    <artifactId>gson</artifactId>
-		    <version>2.8.0</version>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
 		</dependency>
-		<!-- com.google.code.gson/gson引入【结束】 -->
-		<!-- 设置SpringBoot依赖【开始】 -->
-		<!-- <dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-starter-thymeleaf</artifactId>
-		  <scope></scope>
-		</dependency> -->
-		<!-- 设置SpringBoot依赖【结束】 -->
-		<!-- 添加热部署【开始】 -->
+		<!-- com.google.code.gson/gson引入【结束】 设置SpringBoot依赖【开始】 -->
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-thymeleaf</artifactId> 
+			<scope></scope> </dependency> -->
+		<!-- 设置SpringBoot依赖【结束】 添加热部署【开始】 -->
 		<dependency>
-	      <groupId>org.springframework.boot</groupId>
-	      <artifactId>spring-boot-devtools</artifactId>
-	      <scope>provided</scope>
-	      <optional>true</optional>
-	    </dependency>
-	    <!-- 添加热部署【结束】 -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+		<!-- 添加热部署【结束】 -->
+
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<!-- <dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.3.0-alpha4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>1.7.24</version>
+		</dependency> -->
 	</dependencies>
 
 	<build>
-	
-	<!-- <resource>
-	   <directory>src/main/resources</directory>
-	   <includes>
-	      <include>**/*.*</include>
-	   </includes>
-	   <filtering>true</filtering>
-	</resource> -->
+
+		<!-- <resource> <directory>src/main/resources</directory> <includes> <include>**/*.*</include> 
+			</includes> <filtering>true</filtering> </resource> -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -137,13 +140,8 @@
 			</plugin>
 		</plugins>
 	</build>
-	<!-- <resource>
-	   <directory>src/main/resources</directory>
-	   <includes>
-	      <include>**/*.*</include>
-	   </includes>
-	   <filtering>true</filtering>
-	</resource> -->
+	<!-- <resource> <directory>src/main/resources</directory> <includes> <include>**/*.*</include> 
+		</includes> <filtering>true</filtering> </resource> -->
 
 
 </project>
