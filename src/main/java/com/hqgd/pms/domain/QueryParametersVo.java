@@ -1,13 +1,15 @@
 package com.hqgd.pms.domain;
 
 public class QueryParametersVo {
-	private Integer equipmentId;//代表设备的唯一性
+	private String equipmentId;//代表设备的唯一性
     private String startTime;
     private String endTime;
-	public Integer getEquipmentId() {
+    private String limit;
+    
+	public String getEquipmentId() {
 		return equipmentId;
 	}
-	public void setEquipmentId(Integer equipmentId) {
+	public void setEquipmentId(String equipmentId) {
 		this.equipmentId = equipmentId;
 	}
 	public String getStartTime() {

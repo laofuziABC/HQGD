@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  * 描述：数据采集 作者：姚绒 日期：2018年11月20日 下午1:49:37
  *
  */
+
 @Slf4j
 @Controller
 @Scope("request")
@@ -60,6 +61,22 @@ public class DataAcquisitionController {
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		log.info("查询历史数据开始,queryVo=" + queryVo);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000000");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "查询历史数据成功");
+		resultMap.put("data", historicalDataList);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询历史数据结束 ");
+	}
+	
+	@RequestMapping(value = "/historicalCurve")
+	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+		log.info("查询历史数据开始,queryVo=" + queryVo);
+		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");

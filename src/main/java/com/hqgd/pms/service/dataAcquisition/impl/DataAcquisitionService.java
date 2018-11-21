@@ -2,6 +2,8 @@ package com.hqgd.pms.service.dataAcquisition.impl;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,22 +42,45 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		List<DataAcquisitionVo> getHistoricalDataList = dataAcquisitionDao.getHistoricalData(queryVo);
-		String channelNum = null;
-		String receiveTime = null;
-		String [] channelNumArr = null;
-		for (DataAcquisitionVo vo : getHistoricalDataList) {
-			channelNum = vo.getChannelNum();
-//			channelNumArr.
-		}
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.getHistoricalData(queryVo);
+		return historicalDataList;
+	}
 
-		return getHistoricalDataList;
+	@Override
+	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) {
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.historicalCurve(queryVo);
+		List<String> channelNumArr = new ArrayList<>();// 通道号数组
+		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
+		List<String> tem = new ArrayList<>();
+//		List<String> state = new ArrayList<>();
+//		List<List<String>> stateArr = new ArrayList<>();
+		DataAcquisitionVo vo = historicalDataList.get(0);
+		String equipmentId = queryVo.getEquipmentId();
+		String receiveTime = vo.getReceiveTime();
+
+		if (historicalDataList.size() > 0) {
+			for (int i = 0; i < historicalDataList.size(); i++) {
+
+				channelNumArr.add(historicalDataList.get(i).getChannelNum());
+				tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
+				channelTemArr.add(tem);
+//				state = Arrays.asList(historicalDataList.get(i).getState().split(","));
+//				stateArr.add(state);
+			}
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("equipmentId", equipmentId);
+		map.put("receiveTime", receiveTime);
+		map.put("channelNumArr", channelNumArr);
+		map.put("channelTemArr", channelTemArr);
+//		map.put("stateArr", stateArr);
+		return map;
 	}
 
 	@Override
 	public String execRecordExport(@Valid QueryParametersVo data) {
 
-		List<DataAcquisitionVo> recordList = getHistoricalData(data);
+		List<DataAcquisitionVo> recordList = dataAcquisitionDao.getHistoricalData(data);
 		CommonUtil comm = new CommonUtil();
 		String classPath = comm.getDocumentSavePath().replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp()
 				+ "historicalData.xls";

@@ -12,9 +12,6 @@ import com.hqgd.pms.dao.dataAcquisition.IDataAcquisitionDao;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Repository
 public class DataAcquisitionDao implements IDataAcquisitionDao {
 	@Autowired
@@ -32,6 +29,15 @@ public class DataAcquisitionDao implements IDataAcquisitionDao {
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		return sqlSessionTemplate.selectList("selectHistoricalDataById", param);
+	}
+
+	@Override
+	public List<DataAcquisitionVo> historicalCurve(QueryParametersVo queryVo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId().toString());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		return sqlSessionTemplate.selectList("selectHistoricalCurveById", param);
 	}
 
 }

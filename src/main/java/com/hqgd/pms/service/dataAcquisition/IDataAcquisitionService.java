@@ -1,6 +1,7 @@
 package com.hqgd.pms.service.dataAcquisition;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -14,5 +15,7 @@ public interface IDataAcquisitionService {
 	List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo);
 
 	String execRecordExport(@Valid QueryParametersVo data);
+
+	Map<String, Object> historicalCurve(QueryParametersVo queryVo);
 
 }

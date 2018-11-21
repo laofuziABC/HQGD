@@ -11,4 +11,6 @@ public interface IDataAcquisitionDao {
 
 	List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo);
 
+	List<DataAcquisitionVo> historicalCurve(QueryParametersVo queryVo);
+
 }

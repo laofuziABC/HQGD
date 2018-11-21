@@ -14,7 +14,9 @@
   </resultMap>
   
   <select id="selectEquipmentParam" parameterType="java.lang.String" resultMap="BaseResultMap">
-    SELECT 
+    SELECT
+    	EQUIPMENT_ID,
+    	EQUIPMENT_NAME,
   		CHANNEL_NUM,
  	 	MAX_TEM,
   		MIN_TEM 

@@ -62,6 +62,18 @@ FROM
   </select>
   
   
+  <select id="selectHistoricalCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT 
+  		CHANNEL_NUM,
+  		CONVERT(GROUP_CONCAT(TEMPERATURE), CHAR) AS TEMPERATURE,
+  		CONVERT(GROUP_CONCAT(RECEIVE_TIME), CHAR) AS RECEIVE_TIME 
+    from hq_equipment_monitor_data
+    where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+    GROUP BY CHANNEL_NUM
+  </select>
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
