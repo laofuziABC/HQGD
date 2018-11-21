@@ -4,17 +4,22 @@
 		<meta charset="UTF-8">
 		<title>数据监测</title>
 		<style type="text/css">
-			#setValue{font-size: 18px; text-align: center; background-color: #28b779; border: 1px; padding: 5px; color: #FFFFFF;}
+			.buttonForAction{font-size: 18px;  text-align: center;  background-color: #27A9E3;  border: 1px;  padding: 5px;  color: #FFFFFF; }
+			.table-tools{width: 300px; height: 40px; float: left; font-size: 16px;}
+			.table-tools input{width: 200px; font-size: 16px;}
+			.table-tools select{width: 120px;}
+			.table-tools span :hover{ cursor: pointer;}
 		</style>
+		<link type="text/css" href="js/pager/pager.css" rel="stylesheet">
 	</head>
-	<body class="page-content">
+	<body class="page-content" style="width: 80%;">
 		<div class="container-fluid">
 			<!-- 页面标题和导航【开始】-->
 			<div class="row-fluid">
 				<div class="span12">
 					<h3 class="page-title">数据监测&nbsp;<small>此功能用于展示设备的应用数据</small></h3>
 					<!--导航-->
-					<ul class="breadcrumb">
+					<ul class="breadcrumb" id="breadcrumb">
 						<li>
 							<i class="icon-home"></i>
 							<a href="#">首页</a>
@@ -33,74 +38,29 @@
 					<!--标签行【开始】-->
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#tab_3_1">当前监测数据</a></li>
-						<li><a data-toggle="tab" href="#tab_3_2">历史监测数据</a></li>
-						<li><a data-toggle="tab" href="#tab_3_3">异常数据汇总</a></li>
+						<li><a data-toggle="tab" href="#tab_3_2">历史监测数据曲线</a></li>
+						<li><a data-toggle="tab" href="#tab_3_3">历史监测数据统计表</a></li>
 					</ul>
 					<!--标签行【结束】-->
 					<!--所有标签内容【开始】-->
 					<div class="tab-content">
-						<!--加载当前的设备基本信息【开始】-->
-						<div class="responsive"style="height: 50px; width: 1220px; margin: 0 0 0 80px; padding: 10px 0; background-color: #27A9E3;">
-							<table id="equiSource" style="width: 80%; margin: 15px auto; font-size: 20px; text-align: center;">
-									<tr>
-										<td>设备名称：设备一</td>
-										<td>所属企业：XXX公司</td>
-										<td>安装地：陕西省西安市</td>
-										<td>
-											<button id="setValue">设置通道温度值域</button>
-										</td>
-									</tr>
-							</table>
-						</div>
-						<!--加载当前的设备基本信息【结束】-->
 						<!--当前设备各通道监测温度表【开始】-->
 						<div id="tab_3_1" class="tab-pane active">
-							<div id="channels" class="row-fluid" style="padding: 2% 5% 0% 5%;">
+							<div class="row-fluid" style="padding: 1% 5% 1% 5%; width: 1220px;">
 								<!--展示各个通道的数据-->
 								<!-- 单一通道【开始】 -->
 								<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
 									<div class="dashboard-stat center">
 										<div class="details">
-											<!-- 通道设置的温度上限【开始】 -->
-											<div class="number resetTempValue" style="display: none;">温度上限：
-												<b>20.0</b>&nbsp;℃
-											</div>
-											<!-- 通道设置的温度上限【结束】 -->
 											<!-- 通道当前的温度监测数据【开始】 -->
 											<div class="number">通道一：
 												<b class="color-alert">23.5</b>&nbsp;℃
 											</div>
 											<!-- 通道当前的温度监测数据【结束】 -->
-											<!-- 通道设置的温度下限【开始】 -->
-											<div class="number resetTempValue" style="display: none;">温度下限：
-												<b>30.0</b>&nbsp;℃
-											</div>
-											<!-- 通道设置的温度下限【结束】 -->
 										</div>
 									</div>
 								</div>
 								<!-- 单一通道【结束】 -->
-								
-								<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-									<div class="dashboard-stat center">
-										<div class="details">
-											<div class="number">通道二：
-												<b class="color-alert">33.5</b>&nbsp;℃
-											</div>
-										</div>
-									</div>
-								</div>
-								
-								<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-									<div class="dashboard-stat center">
-										<div class="details">
-											<div class="number">通道三：
-												<b class="color-alert">56.0</b>&nbsp;℃
-											</div>
-										</div>
-									</div>
-								</div>
-								
 							</div>
 						</div>
 						<!--当前设备各通道监测温度表【结束】-->	
@@ -108,31 +68,106 @@
 						<div id="tab_3_2" class="tab-pane">
 							<!--历史数据统计图【开始】-->
 							<div class="row-fluid">
+								<!-- 时间筛选条件【开始】 -->
+								<form action="" id="timeRangeForm" class="form-horizontal">
+									<table>
+										<tr>
+											<td>起始时间：<input type="datetime" id="startTime"  name="startTime" placeholder="yyyy-MM-dd HH:mm:ss"/></td>
+											<td>终止时间：<input type="datetime" id="endTime"  name="endTime" placeholder="yyyy-MM-dd HH:mm:ss"/></td>
+											<td>
+												<input type="button" onclick="getChartData();" value="查询" />
+												<input type="reset" value="重置" />
+											</td>
+										</tr>
+									</table>
+								</form>
+								<!-- 时间筛选条件【结束】 -->
 								<div class="span10 responsive" data-tablet="span6" data-desktop="span10">
-									<!--<div id="line-chart" style="width: 800px; height: 500px;"></div>-->
 									<div id="line-chart" style="width: 1200px; height: 500px; margin: 20px auto;"></div>
 								</div>
 							</div>
 							<!--历史数据统计图【结束】-->
 						</div>
 						<!--当前设备各通道历史监测温度表【结束】-->
-						<!--异常数据【开始】-->
+						<!--所有历史数据【开始】-->
 						<div id="tab_3_3" class="tab-pane" style="width: 1220px; padding: 20px 0 0 80px;">
 							<div class="clearfix">
 								<!--便捷操作工具栏【开始】-->
 								<div class="btn-group pull-right">
-									<button class="btn dropdown-toggle" data-toggle="dropdown">更多操作<i class="icon-angle-down"></i>
-									</button>
+									<button class="btn dropdown-toggle" data-toggle="dropdown">更多操作<i class="icon-angle-down"></i></button>
 									<ul class="dropdown-menu pull-right">
 										<li><a href="#">打印</a></li>
 										<li><a href="#">保存为PDF</a></li>
 										<li><a href="#">导出到Excel</a></li>
 									</ul>
 								</div>
+								<!--便捷操作工具栏【结束】-->
 							</div>
-							<!--便捷操作工具栏【结束】-->
+							<!-- 查询参数【开始】 -->
+							<div class="row-fluid">
+								<div class="table-tools">
+									起始时间：<input type="datetime" id="startTime"  name="startTime" placeholder="yyyy-MM-dd HH:mm:ss"/>
+								</div>
+								<div class="table-tools">
+									终止时间：<input type="datetime" id="endTime"  name="endTime" placeholder="yyyy-MM-dd HH:mm:ss"/>
+								</div>
+								<!-- 设定搜索栏【开始】 -->
+								<div class="table-tools">
+									<div>
+										<input type="text" id="search-by-name" class="m-wrap medium" placeholder="输入设备名称查询"/>
+										<span onclick="searchResult();">
+											<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
+										</span>
+									</div>
+								</div>
+								<!-- 设定搜索栏【结束】 -->
+								<!-- 显示设置【开始】 -->
+								<div class="table-tools">
+									<select id="data-type">
+										<option value="0" checked>显示所有数据</option>
+										<option value="1" checked>显示异常数据</option>
+									</select>
+									<select id="page-size">
+										<option value="5">每页5条</option>
+										<option value="10" selected="selected">每页10条</option>
+										<option value="20">每页20条</option>
+										<option value="50">每页50条</option>
+									</select>
+								</div>
+								<!-- 显示设置【结束】 -->
+							</div>
+							<!-- 查询参数【结束】 -->
+							<table class="table table-striped table-hover table-bordered dataTable">
+								<thead>
+									<tr>
+										<th>设备名称</th> <th>通道号</th> <th>通道温度</th>
+										<th>采集时间</th> <th>运行状态</th> <th>状态码</th>
+									</tr>
+								</thead>
+								<tbody id="history-table-body">
+									<tr>
+										<td>0</td> <td>0</td> <td>0</td>
+										<td>0</td> <td>0</td> <td>0</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="6">
+											<!--翻页插件【start】-->
+											<div class="list-page-tail page-down" id="pager">
+			                                    <a class="pre">上一页</a>
+			                                    <a class="active">1</a>
+			                                    <a>2</a> <a>3</a> <a>4</a>
+			                                    <a>5</a> <a>6</a> <a>7</a>
+			                                    <a class="next">下一页</a>
+			                                </div>
+											<!--翻页插件【end】-->
+										</td>
+									</tr>
+								</tfoot>
+							</table>
 						</div>
-						<!--异常数据【结束】-->
+						<!--所有历史数据【结束】-->
 					</div>
 					<!--所有标签内容【结束】-->
 				</div>
@@ -148,104 +183,157 @@
 		<script src="js/echarts.min.js"></script>
 		<script src="js/charts.js"></script>
 		<!--在线表格JS-->
-		<script type="text/javascript" src="media/js/jquery.dataTables.js"></script>
-		<script type="text/javascript" src="media/js/DT_bootstrap.js"></script>
-		<script src="media/js/table-editable.js"></script>
+		<!-- <script type="text/javascript" src="media/js/jquery.dataTables.js"></script> -->
+		<!-- <script type="text/javascript" src="media/js/DT_bootstrap.js"></script> -->
+		<!-- <script src="media/js/table-editable.js"></script> -->
+		
+		<script type="text/javascript" src="js/pager/pager.js"></script>
 		<!--引入JS文件【结束】-->
-		<script>
+		<script type="text/javascript">
 			//初始化界面
 			jQuery(document).ready(function() {
 			   Search.init();
+			   showBlocks();
+			   searchResult();
+			   /* TableEditable.init(); */
 			});
-			var equiId=menuId.trim();			/* 获取全局变量——设备主键 */
-			//通过设备主键，获取设备基本信息【开始】
-			/* $.ajax({
-				url:"equi/getEquiDetailById",
-				type:"post",
-				data:{"equiId": equiId},
-				dataType: "json",
-				success: function(data){
-					
-					var content = "<tr>";
-					content+="<td>设备名称："+data.equiName+"</td>";
-					content+="<td>所属企业："+data.belongCompany+"</td>";
-					content+="<td>安装地："+data.equiPosition+"</td>";
-					content+="</tr>";
-					$("#equiSource").append(content);
-				}
-			}); */
-			//通过设备主键，获取设备基本信息【结束】
-			//tab1：通过颜色，对获取的温度做简单的预警【开始】
-			jQuery(document).ready(function() {
-				var target = document.getElementsByClassName("color-alert");
-				$.each(target, function(i, v) {
-					let tem = parseFloat($(this).text())
-					if(tem > 20 && tem <= 30){
-						$(this).parent().parent().parent().addClass("green");
-					}else if(tem > 30 && tem <= 50){
-						$(this).parent().parent().parent().addClass("yellow");
-					}else{
-						$(this).parent().parent().parent().addClass("red");
+			equiId=equiId.trim();			/* 获取全局变量——设备主键 */
+			//tab1：通过设备主键，获取设备通道温度信息【开始】
+			function showBlocks(){
+				$.ajax({
+					/* url:"equi/getEquiDetailById", */
+					url:"dataAcquisition/realtime",
+					type:"post",
+					data:{"equipmentId": equiId},
+					dataType: "json",
+					success: function(data){
+						//设置导航栏
+						var breadcrumb = "";
+						breadcrumb+="<li><i class=\"icon-home\"></i><a href=\"#\">首页</a><span class=\"icon-angle-right\"></span></li>";
+						breadcrumb+="<li><a href=\"#\">数据监测</a><span class=\"icon-angle-right\"></span></li>";
+						breadcrumb+="<li><a href=\"#\">"+data[0].equipmentName+"</a></li>";
+						$("#breadcrumb").html(breadcrumb);
+						//设置tab1内容：表格
+						var channel = "";
+						channel+="<div class=\"responsive\"style=\"height: 50px; width: 1220px; margin: 0 0 0 80px; padding: 10px 0; background-color: #27A9E3;\">";
+						channel+="<table style=\"width: 80%; margin: 15px auto; font-size: 20px; text-align: center;\">";
+						channel+="<tr>";
+						channel+="<td><button class=\"buttonForAction\" onclick=\"setChannelValue(' "+data[0].equipmentId+" ')\">设置设备温度值域</button></td>";
+						channel+="<td><button class=\"buttonForAction\" onclick=\"showBlocks()\">查看当前通道温度</button></td>";
+						channel+="<td><button class=\"buttonForAction\" onclick=\"showCharts()\">实时监测温度曲线</button></td>";
+						channel+="</tr></table></div>"
+						//设置tab1内容：通道温度值
+						let num = data.length;
+						let count = (num/3 == 0)?(num/3):(num/3 +1);
+						channel+="<div id=\"time-line-chart\" style=\"padding: 2% 5% 0% 5%; width: 1220px; height: 500px;\">";
+						for(let i=0; i<count; i++){
+							let endIndex = (3*i+3>num)?num:(3*i+3);
+							channel+="<div class=\"row-fluid\">";
+							//通道结果每三个循环一回，缘于界面展示效果较规整
+							for(let j=3*i; j<endIndex; j++){
+								let tem = parseFloat(data[j].temperature)
+								channel+="<div class=\"span4 \" data-tablet=\"span6\" data-desktop=\"span3\">";
+								//tab1：通过颜色，对获取的温度做简单的预警【开始】
+								if(tem > 20 && tem <= 30){ channel+="<div class=\"dashboard-stat center green\">"; }
+								else if(tem > 30 && tem <= 60){ channel+="<div class=\"dashboard-stat center yellow\">"; }
+								else{ channel+="<div class=\"dashboard-stat center red\">"; }
+								//tab1：通过颜色，对获取的温度做简单的预警【结束】
+								channel+="<div class=\"details\">";
+								channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;℃</div>";
+								channel+="</div></div></div>";
+							}
+							channel+="</div>";
+						}
+						channel+="</div>";
+						$("#tab_3_1").empty();
+						$("#tab_3_1").append(channel);
 					}
 				});
-				
-			});
-			//tab1：通过颜色，对获取的温度做简单的预警【结束】
-			//tab2：绘制折线图【开始】
-			var lineChart = echarts.init(document.getElementById("line-chart"));
-			lineChart.setOption(lineOption);
-			//异步获取数据
-			/* $.ajax({
-				url:"equi/getEquiData",
-				type:"post",
-				data:{"equiId": equiId},
-				dataType: "json",
-				success: function(data){
-				var Xparam, Yparam;
-					var series = [];
-					$.each(data, function(index, value){
-						var serie = new Object();
-						serie.name=value;
-						serie.data=value;
-					});
-					lineChart.setOption({
-						xAxis: {data: ['time1', 'time2', 'time3', 'time4', 'time5', 'time6'] },
-						legend: {data:['通道一','通道二','通道三','通道四','通道五','通道六'] },
-						series: series
-					}});
-				}
-			}); */
-			//tab2：绘制折线图【结束】
-			//tab3：加载异常数据表【开始】
-			/* $.ajax({
-				url:"equi/getEquiAbnormalData",
-				type:"post",
-				data:{"equiId": equiId},
-				dataType: "json",
-				success: function(data){
-					
-				}
-			}); */
-			var table = "<table class=\"table table-striped table-hover table-bordered\" id=\"sample_editable_1\">";
-			table+="<thead><tr>";
-			table+="<th>时间</th><th>异常通道</th><th>异常数值</th><th>异常类型</th><th>其它</th>";
-			table+="</tr></thead>";
-			table+="<tbody>";
-			for(var i=0; i<20; i++){
-				table+="<tr>";
-				table+="<td>000</td>";
-				table+="<td>通道"+i+"</td>";
-				table+="<td>100</td>";
-				table+="<td>超高温</td>";
-				table+="<td>待处理</td>";
-				table+="</tr>";
 			}
-			table+="</tbody>";
-			table+="</table>";
-			$("#tab_3_3").append(table);
-			TableEditable.init();
-			//tab3：加载异常数据表【结束】
+			function showCharts(){
+				var timeLineChart = echarts.init(document.getElementById("time-line-chart"));
+				if (timelineOption && typeof timelineOption === "object") {
+					timeLineChart.setOption(timelineOption);
+			    }
+			}
+			//tab1：通过设备主键，获取设备通道温度信息【结束】
+			//设定通道温度值域【开始】
+			function setChannelValue(equipmentId){
+				var param = new Object();
+				param.equipmentId = equipmentId.trim();
+				param.width=600;
+				param.height=500;
+				let title = "设置设备通道温度值域";
+				let url = "formHtml/data/set-channel-form.html";
+				parent.openModal(title, url, param);
+			}
+			//设定通道温度值域【结束】
+			//tab2：绘制折线图【开始】
+			function getChartData(){
+				//获取日期、时间参数
+				var param = new Object();
+				param.equipmentId = equiId;
+				param.startTime = new Date($("#startTime").val()).valueOf();
+				param.endTime = new Date($("#endTime").val()).valueOf();
+				//alert(param.equipmentId+"==="+param.startTime+"==="+param.endTime);
+				//渲染图表
+				var lineChart = echarts.init(document.getElementById("line-chart"));
+				lineChart.setOption(lineOption);
+				//异步获取数据
+				/* $.ajax({
+					url:"dataAcquisition/historical",
+					type:"post",
+					data:{"queryVo": param},
+					dataType: "json",
+					success: function(data){
+						alert(data);
+						var series = [];
+						$.each(data, function(index, value){
+							var serie = new Object();
+							serie.name=value;
+							serie.data=value;
+						});
+						lineChart.setOption({
+							xAxis: {data: ['time1', 'time2', 'time3', 'time4', 'time5', 'time6'] },
+							legend: {data:['通道一','通道二','通道三','通道四','通道五','通道六'] },
+							series: series
+						});
+					}
+				}); */
+			}
+			//tab2：绘制折线图【结束】
+			//tab3：加载历史数据列表【开始】
+			function searchResult(){
+				var param ={
+					"pageNo": currentPage,
+					"pageSize": $("#page-size").val(),
+					"equiName": $("#search-by-name").val(),
+					"dataTypes": $("#data-type").val()
+				};
+				$.ajax({
+					url:"dataAcquisition/historical",
+					type:"post",
+					data:{"param": param},
+					dataType: "json",
+					success: function(data){
+						var historyTable = "";
+						//加载表格内容
+						for(let i=0; i<10; i++){
+							historyTable+="<tr>";
+							historyTable+="<td>设备"+(i+1)+"</td>";
+							historyTable+="<td>通道"+i+"</td>";
+							historyTable+="<td>"+(20+i)+"&nbsp;℃</td>";
+							historyTable+="<td>"+i+"</td>";
+							historyTable+="<td>"+i+"</td>";
+							historyTable+="<td>"+(i+1)+"</td>";
+							historyTable+="</tr>";
+						}
+						$("#history-table-body").empty();
+						$("#history-table-body").append(historyTable);
+					}
+				});
+			}
+			//tab3：加载历史数据列表【结束】
 		</script>
-		
 	</body>
 </html>
