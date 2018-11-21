@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
-import com.hqgd.pms.common.PayCommon;
+import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.User;
@@ -73,7 +73,7 @@ public class EquipmentController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000004");
-		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		resultMap.put("data", equipmentInfo);
 		response.setContentType("application/json; charset=UTF-8");
@@ -84,18 +84,19 @@ public class EquipmentController {
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.info("添加设备开始");
+		log.info("查询设备开始");
 		User user = (User) request.getSession(true).getAttribute("user");
 		String userId = user.getId().toString();
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000005");
-		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		resultMap.put("data", equipmentList);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询设备结束");
 	}
 
 	@RequestMapping(value = "/equipmentParam")
@@ -106,7 +107,7 @@ public class EquipmentController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000006");
-		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		resultMap.put("data", equipmentParam);
 		response.setContentType("application/json; charset=UTF-8");

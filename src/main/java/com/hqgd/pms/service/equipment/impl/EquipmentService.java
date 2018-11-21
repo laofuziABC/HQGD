@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hqgd.pms.common.PayCommon;
+import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.dao.equipment.IEquipmentDao;
@@ -35,7 +35,7 @@ public class EquipmentService implements IEquipmentService {
 		Boolean result = (i == 0) ? false : true;
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000001");
-		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 
 		return resultMap;
@@ -48,7 +48,7 @@ public class EquipmentService implements IEquipmentService {
 		Boolean result = (i == 0) ? false : true;
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000002");
-		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		return resultMap;
 	}
@@ -60,7 +60,7 @@ public class EquipmentService implements IEquipmentService {
 		Boolean result = (i == 0) ? false : true;
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000003");
-		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		return resultMap;
 	}
@@ -90,7 +90,7 @@ public class EquipmentService implements IEquipmentService {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000007");
-		resultMap.put("time", PayCommon.getSimpleFormatTimestamp());
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		return resultMap;
 	}

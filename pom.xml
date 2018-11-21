@@ -93,8 +93,11 @@
 			<version>2.8.0</version>
 		</dependency>
 		<!-- com.google.code.gson/gson引入【结束】 设置SpringBoot依赖【开始】 -->
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-thymeleaf</artifactId> 
-			<scope></scope> </dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<scope></scope>
+		</dependency>
 		<!-- 设置SpringBoot依赖【结束】 添加热部署【开始】 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -103,19 +106,21 @@
 			<optional>true</optional>
 		</dependency>
 		<!-- 添加热部署【结束】 -->
-
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
-		<!-- <dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.3.0-alpha4</version>
-			<scope>test</scope>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.12</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-nop</artifactId>
-			<version>1.7.24</version>
-		</dependency> -->
+			<groupId>org.attoparser</groupId>
+			<artifactId>attoparser</artifactId>
+			<version>1.0-beta2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<!-- <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> 
+			<version>1.3.0-alpha4</version> <scope>test</scope> </dependency> <dependency> 
+			<groupId>org.slf4j</groupId> <artifactId>slf4j-nop</artifactId> <version>1.7.24</version> 
+			</dependency> -->
 	</dependencies>
 
 	<build>
