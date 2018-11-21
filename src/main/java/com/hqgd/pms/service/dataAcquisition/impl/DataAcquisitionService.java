@@ -41,6 +41,14 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
 		List<DataAcquisitionVo> getHistoricalDataList = dataAcquisitionDao.getHistoricalData(queryVo);
+		String channelNum = null;
+		String receiveTime = null;
+		String [] channelNumArr = null;
+		for (DataAcquisitionVo vo : getHistoricalDataList) {
+			channelNum = vo.getChannelNum();
+//			channelNumArr.
+		}
+
 		return getHistoricalDataList;
 	}
 

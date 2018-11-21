@@ -85,8 +85,9 @@ public class EquipmentController {
 	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("查询设备开始");
-		User user = (User) request.getSession(true).getAttribute("user");
-		String userId = user.getId().toString();
+//		User user = (User) request.getSession(true).getAttribute("user");
+//		String userId = user.getId().toString();
+		String userId = "1";
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());

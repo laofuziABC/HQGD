@@ -15,6 +15,10 @@ public class DataAcquisitionVo {
 	    private String address;
 
 	    private String channelNum;
+	    
+	    private String maxTem;
+	    
+	    private String minTem;
 
 	    private String opticalFiberPosition;
 
