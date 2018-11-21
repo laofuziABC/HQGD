@@ -20,4 +20,6 @@ public interface IEquipmentService {
 
 	List<EquipmentParam> selectEquipmentParam(String equipmentId);
 
+	Map<String, Object> setEquipmentParam(EquipmentParam equipmentParam);
+
 }

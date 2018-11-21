@@ -50,8 +50,8 @@
     <include refid="Base_Column_List" />
     from hq_equipment_monitor_data
     where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-      AND RECEIVE_TIME &lt;= #{startTime,jdbcType=VARCHAR} 
-      AND RECEIVE_TIME &gt;= #{endTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
   </select>
   
   

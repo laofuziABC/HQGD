@@ -28,7 +28,7 @@ public class DataAcquisitionDao implements IDataAcquisitionDao {
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
 		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("equipmentId", queryVo.getEquipmentId().toString());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		return sqlSessionTemplate.selectList("selectHistoricalDataById", param);
