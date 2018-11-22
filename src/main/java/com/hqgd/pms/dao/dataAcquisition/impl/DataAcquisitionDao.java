@@ -28,7 +28,17 @@ public class DataAcquisitionDao implements IDataAcquisitionDao {
 		param.put("equipmentId", queryVo.getEquipmentId().toString());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
-		return sqlSessionTemplate.selectList("selectHistoricalDataById", param);
+		param.put("limit", Integer.valueOf(queryVo.getLimit()));
+		param.put("total", (Integer.valueOf(queryVo.getPage())-1)*Integer.valueOf(queryVo.getLimit()));
+		param.put("state", queryVo.getState());
+		String state = queryVo.getState();
+		
+		if (state.equals("0")) {
+			return sqlSessionTemplate.selectList("selectHistoricalDataById", param);
+		} else {
+			return sqlSessionTemplate.selectList("selectAbnormalDataById", param);
+		}
+
 	}
 
 	@Override

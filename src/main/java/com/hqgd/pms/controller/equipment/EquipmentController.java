@@ -19,7 +19,6 @@ import com.google.gson.Gson;
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.EquipmentParam;
-import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.equipment.IEquipmentService;
 
 import lombok.extern.slf4j.Slf4j;
