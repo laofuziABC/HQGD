@@ -1,5 +1,6 @@
 package com.hqgd.pms.service.equipment.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.dao.equipment.IEquipmentDao;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.EquipmentParam;
+import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.equipment.IEquipmentService;
 
 @Service
@@ -29,15 +31,25 @@ public class EquipmentService implements IEquipmentService {
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 
 	@Override
-	public Map<String, Object> add(EquipmentInfo equipmentInfo) {
+	public Map<String, Object> add(EquipmentInfo equipmentInfo, User loginUser) {
 		Map<String, Object> resultMap = new HashMap<>();
-		int i = equipmentInfoMapper.insert(equipmentInfo);
-		Boolean result = (i == 0) ? false : true;
+		Boolean result = false;
+		EquipmentInfo equipFind = equipmentInfoMapper.selectByPrimaryKey(equipmentInfo.getEquipmentId());
+		if (equipFind == null) {
+			equipmentInfo.setUpdater(loginUser.getUserName());
+			equipmentInfo.setCreator(loginUser.getUserName());
+			equipmentInfo.setUpdateTime(new Date());
+			equipmentInfo.setCreateTime(new Date());
+
+			int i = equipmentInfoMapper.insert(equipmentInfo);
+			result = (i == 0) ? false : true;
+			resultMap.put("message", "添加设备成功");
+		} else {
+			resultMap.put("message", "该设备ID已经存在");
+		}
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000001");
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "");
-
 		return resultMap;
 	}
 
@@ -54,7 +66,9 @@ public class EquipmentService implements IEquipmentService {
 	}
 
 	@Override
-	public Map<String, Object> update(EquipmentInfo equipmentInfo) {
+	public Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser) {
+		equipmentInfo.setUpdater(loginUser.getUserName());
+		equipmentInfo.setUpdateTime(new Date());
 		Map<String, Object> resultMap = new HashMap<>();
 		int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
 		Boolean result = (i == 0) ? false : true;
@@ -84,8 +98,10 @@ public class EquipmentService implements IEquipmentService {
 	}
 
 	@Override
-	public Map<String, Object> setEquipmentParam(EquipmentParam equipmentParam) {
-		int i = equipmentInfoMapper.insert(equipmentParam);
+	public Map<String, Object> setEquipmentParam(EquipmentParam equipmentParam, User loginUser) {
+		equipmentParam.setUpdater(loginUser.getUserName());
+		equipmentParam.setUpdateTime(new Date());
+		int i = equipmentDao.setEquipmentParam(equipmentParam);
 		Boolean result = (i == 0) ? false : true;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", result);

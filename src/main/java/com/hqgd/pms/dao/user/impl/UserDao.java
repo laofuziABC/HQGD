@@ -34,5 +34,9 @@ public class UserDao implements IUserDao{
 	public List<User> selectAll() {
 		return sqlSessionTemplate.selectList("selectAll");
 	}
+//	@Override
+//	public Integer getUserRoleType(String id) {
+//		return sqlSessionTemplate.selectOne("selectUserRoleType", id);
+//	}
 	
 }

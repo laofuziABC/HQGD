@@ -1,9 +1,5 @@
 package com.hqgd.pms.domain;
 
-import java.util.Date;
-
-import lombok.Data;
-
 //@Data
 public class DataAcquisitionVo {
 	 private Integer id;

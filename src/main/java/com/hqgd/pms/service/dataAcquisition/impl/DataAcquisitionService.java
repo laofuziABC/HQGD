@@ -56,7 +56,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 //		List<List<String>> stateArr = new ArrayList<>();
 		DataAcquisitionVo vo = historicalDataList.get(0);
 		String equipmentId = queryVo.getEquipmentId();
-		String receiveTime = vo.getReceiveTime();
+		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
 
 		if (historicalDataList.size() > 0) {
 			for (int i = 0; i < historicalDataList.size(); i++) {

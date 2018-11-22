@@ -5,7 +5,27 @@ public class QueryParametersVo {
     private String startTime;
     private String endTime;
     private String limit;
+    private String page;
+    private String state;
     
+	public String getPage() {
+		return page;
+	}
+	public void setPage(String page) {
+		this.page = page;
+	}
+	public String getLimit() {
+		return limit;
+	}
+	public void setLimit(String limit) {
+		this.limit = limit;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
 	public String getEquipmentId() {
 		return equipmentId;
 	}

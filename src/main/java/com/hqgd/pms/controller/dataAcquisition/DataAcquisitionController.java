@@ -40,7 +40,7 @@ public class DataAcquisitionController {
 	@Qualifier("dataAcquisitionService")
 	private IDataAcquisitionService dataAcquisitionService;
 
-	@RequestMapping(value = "/realtime")
+	@RequestMapping("/realtime")
 	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		log.info("查询实时数据开始,equipmentId=" + equipmentId);
@@ -56,7 +56,7 @@ public class DataAcquisitionController {
 		log.info("查询实时数据结束，list = " + resultMap);
 	}
 
-	@RequestMapping(value = "/historical")
+	@RequestMapping("/historical")
 	public void getHistoricalData(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		log.info("查询历史数据开始,queryVo=" + queryVo);
@@ -72,7 +72,7 @@ public class DataAcquisitionController {
 		log.info("查询历史数据结束 ");
 	}
 	
-	@RequestMapping(value = "/historicalCurve")
+	@RequestMapping("/historicalCurve")
 	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		log.info("查询历史数据开始,queryVo=" + queryVo);
@@ -92,7 +92,7 @@ public class DataAcquisitionController {
 	 * 描述： 作者：姚绒 日期：2018年11月20日 下午1:53:51 @param data @return @throws Exception
 	 * Model @throws
 	 */
-	@RequestMapping("recordExport")
+	@RequestMapping("/recordExport")
 	public void recordExport(HttpServletResponse response, QueryParametersVo data) throws Exception {
 		String path = dataAcquisitionService.execRecordExport(data);
 		try {

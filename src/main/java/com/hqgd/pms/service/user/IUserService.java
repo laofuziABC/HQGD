@@ -13,14 +13,16 @@ public interface IUserService {
 
 	void updatePassword(String userName, String newPassword);
 
-	Map<String, Object> add(User user);
+	Map<String, Object> add(User user, User userLog);
 
 	Map<String, Object> delete(String userId);
 
-	Map<String, Object> update(User user);
+	Map<String, Object> update(User user, User userLog);
 
 	User select(String userId);
 
 	List<User> selectAll();
+
+	Boolean isSystemUser(Integer id);
 
 }

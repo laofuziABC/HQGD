@@ -59,6 +59,10 @@ FROM
     where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+     <if test="state!='0'">  
+      AND state!=0  
+     </if> 
+      AND ID > (SELECT     ID   FROM    hq_equipment_monitor_data   ORDER BY ID DESC   LIMIT #{total}, 1) LIMIT #{limit} ;
   </select>
   
   
