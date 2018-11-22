@@ -24,4 +24,9 @@ public class EquipmentDao implements IEquipmentDao {
 		return sqlSessionTemplate.selectList("selectEquipmentParam", equipmentId);
 	}
 
+	@Override
+	public int setEquipmentParam(EquipmentParam equipmentParam) {
+		return sqlSessionTemplate.insert("setEquipmentParam", equipmentParam);
+	}
+
 }

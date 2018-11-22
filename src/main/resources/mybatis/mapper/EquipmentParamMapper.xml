@@ -24,7 +24,7 @@
   		hq_equipment_param 
 	WHERE EQUIPMENT_ID =#{equipmentId,jdbcType=VARCHAR}
   </select>
-  <insert id="insert" parameterType="com.hqgd.pms.domain.EquipmentParam">
+  <insert id="setEquipmentParam" parameterType="com.hqgd.pms.domain.EquipmentParam">
     insert into hq_equipment_param (EQUIPMENT_ID, EQUIPMENT_NAME, CHANNEL_NUM, 
       MAX_TEM, MIN_TEM, CREATOR, 
       CREATE_TIME, UPDATER, UPDATE_TIME
