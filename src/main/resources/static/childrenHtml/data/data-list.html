@@ -72,8 +72,8 @@
 								<form action="" id="timeRangeForm" class="form-horizontal">
 									<table>
 										<tr>
-											<td>起始时间：<input type="datetime" id="startTime"  name="startTime" placeholder="yyyy-MM-dd HH:mm:ss"/></td>
-											<td>终止时间：<input type="datetime" id="endTime"  name="endTime" placeholder="yyyy-MM-dd HH:mm:ss"/></td>
+											<td>起始时间：<input type="datetime" id="chartStartTime"  name="startTime" placeholder="yyyy-MM-dd HH:mm:ss"/></td>
+											<td>终止时间：<input type="datetime" id="chartEndTime"  name="endTime" placeholder="yyyy-MM-dd HH:mm:ss"/></td>
 											<td>
 												<input type="button" onclick="getChartData();" value="查询" />
 												<input type="reset" value="重置" />
@@ -106,15 +106,15 @@
 							<!-- 查询参数【开始】 -->
 							<div class="row-fluid">
 								<div class="table-tools">
-									起始时间：<input type="datetime" id="startTime"  name="startTime" placeholder="yyyy-MM-dd HH:mm:ss"/>
+									起始时间：<input type="datetime" id="tableStartTime"  name="startTime" placeholder="yyyy-MM-dd HH:mm:ss" value=""/>
 								</div>
 								<div class="table-tools">
-									终止时间：<input type="datetime" id="endTime"  name="endTime" placeholder="yyyy-MM-dd HH:mm:ss"/>
+									终止时间：<input type="datetime" id="tableEndTime"  name="endTime" placeholder="yyyy-MM-dd HH:mm:ss" value=""/>
 								</div>
 								<!-- 设定搜索栏【开始】 -->
 								<div class="table-tools">
 									<div>
-										<input type="text" id="search-by-name" class="m-wrap medium" placeholder="输入设备名称查询"/>
+										<input type="text" id="search-by-channel" class="m-wrap medium" placeholder="输入通道号查询"/>
 										<span onclick="searchResult();">
 											<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
 										</span>
@@ -123,11 +123,11 @@
 								<!-- 设定搜索栏【结束】 -->
 								<!-- 显示设置【开始】 -->
 								<div class="table-tools">
-									<select id="data-type">
+									<select id="data-type" onchange="searchResult();">
 										<option value="0" checked>显示所有数据</option>
 										<option value="1" checked>显示异常数据</option>
 									</select>
-									<select id="page-size">
+									<select id="page-size" onchange="searchResult();">
 										<option value="5">每页5条</option>
 										<option value="10" selected="selected">每页10条</option>
 										<option value="20">每页20条</option>
@@ -140,12 +140,14 @@
 							<table class="table table-striped table-hover table-bordered dataTable">
 								<thead>
 									<tr>
-										<th>设备名称</th> <th>通道号</th> <th>通道温度</th>
-										<th>采集时间</th> <th>运行状态</th> <th>状态码</th>
+										<th>设备名称</th> <th>通道号</th> <th>光纤位置</th>
+										<th>温度</th>		 <th>PD</th> 		<th>UV</th>
+										<th>运行状态</th> <th>状态码</th><th>采集时间</th> 
 									</tr>
 								</thead>
 								<tbody id="history-table-body">
 									<tr>
+										<td>0</td> <td>0</td> <td>0</td>
 										<td>0</td> <td>0</td> <td>0</td>
 										<td>0</td> <td>0</td> <td>0</td>
 									</tr>
@@ -192,27 +194,29 @@
 		<script type="text/javascript">
 			//初始化界面
 			jQuery(document).ready(function() {
-			   Search.init();
-			   showBlocks();
-			   searchResult();
-			   /* TableEditable.init(); */
+			   /* Search.init(); */
+			    /* TableEditable.init(); */
+			   showBlocks();				//初始化Tab1
+			   getChartData()			//初始化Tab2
+			   searchResult();			//初始化Tab3
 			});
 			equiId=equiId.trim();			/* 获取全局变量——设备主键 */
 			//tab1：通过设备主键，获取设备通道温度信息【开始】
 			function showBlocks(){
 				$.ajax({
-					/* url:"equi/getEquiDetailById", */
 					url:"dataAcquisition/realtime",
 					type:"post",
 					data:{"equipmentId": equiId},
 					dataType: "json",
-					success: function(data){
-						//设置导航栏
+					success: function(result){
+						let data = result.data;
+						//设置导航栏【开始】
 						var breadcrumb = "";
 						breadcrumb+="<li><i class=\"icon-home\"></i><a href=\"#\">首页</a><span class=\"icon-angle-right\"></span></li>";
 						breadcrumb+="<li><a href=\"#\">数据监测</a><span class=\"icon-angle-right\"></span></li>";
 						breadcrumb+="<li><a href=\"#\">"+data[0].equipmentName+"</a></li>";
 						$("#breadcrumb").html(breadcrumb);
+						//设置导航栏【结束】
 						//设置tab1内容：表格
 						var channel = "";
 						channel+="<div class=\"responsive\"style=\"height: 50px; width: 1220px; margin: 0 0 0 80px; padding: 10px 0; background-color: #27A9E3;\">";
@@ -232,11 +236,18 @@
 							//通道结果每三个循环一回，缘于界面展示效果较规整
 							for(let j=3*i; j<endIndex; j++){
 								let tem = parseFloat(data[j].temperature)
+								let minTem = parseFloat(data[j].minTem)
+								let maxTem = parseFloat(data[j].maxTem)
 								channel+="<div class=\"span4 \" data-tablet=\"span6\" data-desktop=\"span3\">";
 								//tab1：通过颜色，对获取的温度做简单的预警【开始】
-								if(tem > 20 && tem <= 30){ channel+="<div class=\"dashboard-stat center green\">"; }
-								else if(tem > 30 && tem <= 60){ channel+="<div class=\"dashboard-stat center yellow\">"; }
-								else{ channel+="<div class=\"dashboard-stat center red\">"; }
+								//温度处于值域上下限之间，显示绿色
+								if(tem > minTem && tem <= maxTem){channel+="<div class=\"dashboard-stat center green\">"; }
+								//温度大于最大值，小于最大值两倍；或者温度小于最小值，大于最小值的一半；显示黄色预警
+								else if( (tem > (minTem/2) && tem <= minTem) || (tem > maxTem && tem <= (2*maxTem)) ){
+									channel+="<div class=\"dashboard-stat center yellow\">"; 
+								}
+								//温度过高或者过低，显示红色预警
+								else{channel+="<div class=\"dashboard-stat center red\">"; }
 								//tab1：通过颜色，对获取的温度做简单的预警【结束】
 								channel+="<div class=\"details\">";
 								channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;℃</div>";
@@ -250,82 +261,100 @@
 					}
 				});
 			}
+			//tab1：通过设备主键，获取设备通道温度信息【结束】
+			//tab1：加载实时温度监控曲线【开始】待完善图表JS
 			function showCharts(){
 				var timeLineChart = echarts.init(document.getElementById("time-line-chart"));
 				if (timelineOption && typeof timelineOption === "object") {
 					timeLineChart.setOption(timelineOption);
 			    }
 			}
-			//tab1：通过设备主键，获取设备通道温度信息【结束】
-			//设定通道温度值域【开始】
+			//tab1：加载实时温度监控曲线【结束】
+			//tab1：设定通道温度值域【开始】
 			function setChannelValue(equipmentId){
-				var param = new Object();
-				param.equipmentId = equipmentId.trim();
-				param.width=600;
-				param.height=500;
+				var param = {
+					"equipmentId":equipmentId.trim(),
+					"width": 600,
+					"height": 500
+				};
 				let title = "设置设备通道温度值域";
 				let url = "formHtml/data/set-channel-form.html";
 				parent.openModal(title, url, param);
 			}
-			//设定通道温度值域【结束】
-			//tab2：绘制折线图【开始】
+			//tab1：设定通道温度值域【结束】
+			//tab2：绘制折线图【开始】待与后台对接
 			function getChartData(){
 				//获取日期、时间参数
-				var param = new Object();
-				param.equipmentId = equiId;
-				param.startTime = new Date($("#startTime").val()).valueOf();
-				param.endTime = new Date($("#endTime").val()).valueOf();
-				//alert(param.equipmentId+"==="+param.startTime+"==="+param.endTime);
+				var startTime = $("#chartStartTime").val();
+				var endTime = $("#chartEndTime").val();
+				var param = {
+					"equipmentId": equiId,
+					"startTime": (startTime == "")?("2018-01-01 00:00:00"):startTime,
+					"endTime": (endTime == "")?(formatDateToString(new Date())):endTime
+				}
 				//渲染图表
 				var lineChart = echarts.init(document.getElementById("line-chart"));
 				lineChart.setOption(lineOption);
 				//异步获取数据
-				/* $.ajax({
-					url:"dataAcquisition/historical",
-					type:"post",
-					data:{"queryVo": param},
+				$.ajax({
+					url: "dataAcquisition/historicalCurve",
+					type: "post",
+					data: param,
 					dataType: "json",
-					success: function(data){
-						alert(data);
+					success: function(result){
+						var x = [];
+						var legend = [];
 						var series = [];
-						$.each(data, function(index, value){
-							var serie = new Object();
-							serie.name=value;
-							serie.data=value;
-						});
+						var data = result.data;
+						var x = data.receiveTimeArr;
+						var LegendData = data.channelNumArr;
+						var seriesData = data.channelTemArr;
+						alert(x);
+						//横坐标
 						lineChart.setOption({
-							xAxis: {data: ['time1', 'time2', 'time3', 'time4', 'time5', 'time6'] },
-							legend: {data:['通道一','通道二','通道三','通道四','通道五','通道六'] },
+							xAxis: {data: x },
+							legend: {data: legend },
 							series: series
 						});
 					}
-				}); */
+				});
 			}
 			//tab2：绘制折线图【结束】
 			//tab3：加载历史数据列表【开始】
 			function searchResult(){
+				var startTime = $("#tableStartTime").val();
+				var endTime = $("#tableEndTime").val();
 				var param ={
-					"pageNo": currentPage,
-					"pageSize": $("#page-size").val(),
-					"equiName": $("#search-by-name").val(),
-					"dataTypes": $("#data-type").val()
+					"equipmentId": equiId,
+					//"pageNum": currentPage,
+					//"pageSize": $("#page-size").val(),
+					//"content": $("#search-by-channel").val(),
+					//'startTime': (startTime == "")?(formatInitDateToString(new Date())):startTime,
+					"startTime": (startTime == "")?("2018-01-01 00:00:00"):startTime,
+					"endTime": (endTime == "")?(formatDateToString(new Date())):endTime
+					/* "state": $("#data-type").val() */
 				};
 				$.ajax({
 					url:"dataAcquisition/historical",
 					type:"post",
-					data:{"param": param},
+					data: param,
 					dataType: "json",
-					success: function(data){
+					success: function(result){
+						let data = result.data;
+						var size = ($("#page-size").val()<data.length)?($("#page-size").val()):data.length
 						var historyTable = "";
 						//加载表格内容
-						for(let i=0; i<10; i++){
+						for(let i=0; i<size; i++){
 							historyTable+="<tr>";
-							historyTable+="<td>设备"+(i+1)+"</td>";
-							historyTable+="<td>通道"+i+"</td>";
-							historyTable+="<td>"+(20+i)+"&nbsp;℃</td>";
-							historyTable+="<td>"+i+"</td>";
-							historyTable+="<td>"+i+"</td>";
-							historyTable+="<td>"+(i+1)+"</td>";
+							historyTable+="<td>"+data[i].equipmentName+"</td>";
+							historyTable+="<td>"+data[i].channelNum+"</td>";
+							historyTable+="<td>"+data[i].opticalFiberPosition+"</td>";
+							historyTable+="<td>"+data[i].temperature+"</td>";
+							historyTable+="<td>"+data[i].pd+"</td>";
+							historyTable+="<td>"+data[i].uv+"</td>";
+							historyTable+="<td>"+data[i].message+"</td>";
+							historyTable+="<td>"+data[i].state+"</td>";
+							historyTable+="<td>"+data[i].receiveTime+"</td>";
 							historyTable+="</tr>";
 						}
 						$("#history-table-body").empty();
@@ -334,6 +363,30 @@
 				});
 			}
 			//tab3：加载历史数据列表【结束】
+			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
+			function formatDateToString(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var H = unifiedFormat(param.getHours());
+				var m = unifiedFormat(param.getMinutes());
+				var s = unifiedFormat(param.getSeconds());
+				var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
+				return result;
+			}
+			function formatInitDateToString(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var result = y+"-"+M+"-"+d+" 00:00:00";
+				return result;
+			}
+			//统一显示格式
+			function unifiedFormat(param){
+				return (param<10)?("0"+param):param;
+			}
+			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
 		</script>
+		
 	</body>
 </html>

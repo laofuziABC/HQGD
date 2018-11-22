@@ -18,8 +18,8 @@
 		<!--页面内容-->
 		<div class="content">
 			<form action="equipment/setParam" method="post">
-				<h4 style="display: none;">设备主键：<input type="text" id="equiId" name="equiId" value="" disabled="disabled"/></h4>
-				<h4 id="equiName">设备名称：</h4>
+				<h4 style="display: none;">设备主键：<input type="text" id="equiId" name="equipmentId" value="" disabled="disabled"/></h4>
+				<h4>设备名称：<input type="text" id="equiName" name="equipmentName" value=""/></h4>
 				<table>
 					<tr>
 						<td rowspan="2" align="center">选择通道号：<br />
@@ -47,6 +47,9 @@
 		<!--序列化提交-->
 		<!-- <script type="text/javascript" src="media/js/jquery.validate.min.js"></script> -->
 		<script type="text/javascript">
+			var CHANNELS=[];
+			var MAX_VALUE=[];
+			var MIN_VALUE=[];
 			//根据设备主键，获取所有通道号、通道原设定的值域
 			$(function(){
 				$.ajax({
@@ -54,14 +57,15 @@
 					type:"post",
 					data: {"equipmentId": equiId},
 					dataType: "json",
-					success: function(data){
+					success: function(result){
+						
+						let data = result.data;
 						//回显设备主键和名称
 						$("#equiId").val(equiId);
-						alert($("#equiId").val());
-						$("#equiName").html("设备名称：设备一");
+						/* $("#equiName").val(data[0].equipmentName);
+						alert($("#equiId").val()+"——"+$("#equiName").val()); */
 						//组装所有结果【开始】
 						$.each(data, function(i,v){
-							CHANNEL_IDS.push("00"+i);				//通道主键集合
 							CHANNELS.push(v.channelNum);			//通道名称集合
 							MAX_VALUE.push(v.maxTem);				//通道最大值集合
 							MIN_VALUE.push(v.minTem);				//通道最小值集合
@@ -71,19 +75,17 @@
 						var channelOptions = $("#channelOptions").find("select");
 						let options = "<option value=\"null\">—请选择—</option>";
 						for(let i=0; i<data.length; i++){
-							/* options+="<option value=\" "+data[i].channelId+" \">"+data[i].channelName+"</option>"; */
-							options+="<option value=\" "+CHANNEL_IDS[i]+" \">"+CHANNELS[i]+"</option>";
+							options+="<option value=\" "+CHANNELS[i]+" \">"+CHANNELS[i]+"</option>";
 						}
 						channelOptions.html(options);
 						//添加各个通道的下拉框选项【结束】
 					}
 				});
 			});
-			
 			//根据通道主键回显原设定的通道值域【开始】
 			function getValueRange(){
 				channelId=$("#channelId").val().trim();
-				let i = $.inArray(channelId, CHANNEL_IDS);
+				let i = $.inArray(channelId, CHANNELS);
 				$("#maxValue").val(MAX_VALUE[i]);
 				$("#minValue").val(MIN_VALUE[i]);
 			}

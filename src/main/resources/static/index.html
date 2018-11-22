@@ -1417,9 +1417,6 @@
 		var menuId = "";					//菜单主键
 		//var menuName="";				//菜单名称
 		var equiId="";						//设备主键
-		var channelId="";					//通道主键
-		var channelMaxValue="";	//通道值域【最大温度值】
-		var channelMinValue="";	//通道值域【最小温度值】
 		/* 设置全局变量【结束】 */
 		<!-- 模态框操作【开始】 -->
 		var target = document.getElementById("portlet-config");
@@ -1469,7 +1466,8 @@
 			type: "post",
 			data:{"param":null},
 			dataType: "json",
-			success: function(data){
+			success: function(result){
+				let data = result.data;
 				var equiMenu = "";
 				for(let i=0; i<data.length; i++){
 					equiMenu+="<li><a href=\"#\" onclick=\"loadContext(' "+data[i].equipmentId+" ');\">"+data[i].equipmentName+"</a></li>"

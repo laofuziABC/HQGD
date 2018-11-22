@@ -3,18 +3,18 @@
 /*历史温度折线图(line-chart)【开始】*/
 var lineOption={
 	title: {text: '历史温度折线图', x: 'center'},
-	xAxis: {type: 'category', data: ['time1', 'time2', 'time3', 'time4', 'time5', 'time6'] },
+	xAxis: {type: 'category', data: [] },			//data: ['time1', 'time2', 'time3', 'time4', 'time5', 'time6']
     yAxis: {type: 'value', text:'温度'},
     tooltip: {trigger: 'axis'},
-    legend: {top: 30, data:['通道一','通道二','通道三','通道四','通道五','通道六'] },
+    legend: {top: 30, data:[] },						//data:['通道一','通道二','通道三','通道四','通道五','通道六']
     grid: {x: 30, y: 30, x2: 0, y2: 20},
     series: [
-	    {type: 'line',smooth: true, name: '通道一', data: [21.6, 18.5, 22.4, 27.1, 25.2, 24.4]},
-	    {type: 'line',smooth: true, name: '通道二', data: [18.5, 22.4, 27.1, 25.2, 24.4, 21.6]},
-	    {type: 'line',smooth: true, name: '通道三', data: [22.4, 27.1, 25.2, 24.4, 21.6, 18.5]},
-	    {type: 'line',smooth: true, name: '通道四', data: [27.1, 25.2, 24.4, 21.6, 18.5, 22.4]},
-	    {type: 'line',smooth: true, name: '通道五', data: [25.2, 24.4, 21.6, 18.5, 22.4, 27.1]},
-	    {type: 'line',smooth: true, name: '通道六', data: [24.4, 21.6, 18.5, 22.4, 27.1, 25.2]}
+	    {type: 'line',smooth: true, name: '', data: []},
+	    {type: 'line',smooth: true, name: '', data: []},
+	    {type: 'line',smooth: true, name: '', data: []},
+	    {type: 'line',smooth: true, name: '', data: []},
+	    {type: 'line',smooth: true, name: '', data: []},
+	    {type: 'line',smooth: true, name: '', data: []}
     ]
 }
 /*历史温度折线图(line-chart)【结束】*/
