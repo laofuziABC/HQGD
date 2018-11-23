@@ -4,20 +4,20 @@ public class QueryParametersVo {
 	private String equipmentId;//代表设备的唯一性
     private String startTime;
     private String endTime;
-    private String limit;
-    private String page;
+    private int limit;
+    private int page;
     private String state;
     
-	public String getPage() {
+	public int getPage() {
 		return page;
 	}
-	public void setPage(String page) {
+	public void setPage(int page) {
 		this.page = page;
 	}
-	public String getLimit() {
+	public int getLimit() {
 		return limit;
 	}
-	public void setLimit(String limit) {
+	public void setLimit(int limit) {
 		this.limit = limit;
 	}
 	public String getState() {

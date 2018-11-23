@@ -89,7 +89,7 @@ public class LoginService implements ILoginService {
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("message", message);
-		map.put("result", success);
+		map.put("success", success);
 		return map;
 	}
 

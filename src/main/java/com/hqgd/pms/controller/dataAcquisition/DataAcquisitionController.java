@@ -61,12 +61,14 @@ public class DataAcquisitionController {
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		log.info("查询历史数据开始,queryVo=" + queryVo);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
+		Integer total = dataAcquisitionService.selectTotal(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "查询历史数据成功");
 		resultMap.put("data", historicalDataList);
+		resultMap.put("total", total);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询历史数据结束 ");

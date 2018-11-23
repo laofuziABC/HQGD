@@ -201,7 +201,7 @@
 					dataType:"json",
 					async: false,
 					success: function(data){
-						if(data.result){
+						if(data.success){
 							window.location.href = "index.html";
 						}else{
 							$('.alert-error', $('.login-form')).html(data.message);

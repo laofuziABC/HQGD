@@ -23,22 +23,8 @@ public class DataAcquisitionDao implements IDataAcquisitionDao {
 	}
 
 	@Override
-	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", queryVo.getEquipmentId().toString());
-		param.put("startTime", queryVo.getStartTime());
-		param.put("endTime", queryVo.getEndTime());
-		param.put("limit", Integer.valueOf(queryVo.getLimit()));
-		param.put("total", (Integer.valueOf(queryVo.getPage()) - 1) * Integer.valueOf(queryVo.getLimit()));
-		param.put("state", queryVo.getState());
-		// String state = queryVo.getState();
-		//
-		// if (state.equals("0")) {
+	public List<DataAcquisitionVo> getHistoricalData(Map<String, Object> param) {
 		return sqlSessionTemplate.selectList("selectHistoricalDataById", param);
-		// } else {
-		// return sqlSessionTemplate.selectList("selectAbnormalDataById", param);
-		// }
-
 	}
 
 	@Override
@@ -48,6 +34,21 @@ public class DataAcquisitionDao implements IDataAcquisitionDao {
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		return sqlSessionTemplate.selectList("selectHistoricalCurveById", param);
+	}
+
+	@Override
+	public int getTotalChNum() {
+		return sqlSessionTemplate.selectOne("selectTotalChNum");
+	}
+
+	@Override
+	public int selectEquipCh(String equipmentId) {
+		return sqlSessionTemplate.selectOne("selectEquipCh",equipmentId);
+	}
+
+	@Override
+	public Integer selectTotal(Map<String, Object> param) {
+		return sqlSessionTemplate.selectOne("selectTotal",param);
 	}
 
 }

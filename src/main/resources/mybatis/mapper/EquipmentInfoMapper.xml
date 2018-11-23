@@ -17,6 +17,20 @@
     EQUIPMENT_ID, EQUIPMENT_NAME, USER_NAME, USER_ID, ICON, REGION, CREATOR, CREATE_TIME, 
     UPDATER, UPDATE_TIME
   </sql>
+  
+  <select id="selectTotalChNum" resultType="java.lang.Integer" >
+	SELECT 
+  		COUNT(EQUIPMENT_ID) 
+	FROM
+  		hq_equipment_param
+  </select>
+  <select id="selectEquipCh" resultType="java.lang.Integer" >
+	SELECT 
+  		COUNT(EQUIPMENT_ID) 
+	FROM
+  		hq_equipment_param
+  	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+  </select>
   <select id="selectAllEquipment" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

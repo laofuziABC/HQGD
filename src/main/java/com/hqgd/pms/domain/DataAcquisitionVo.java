@@ -2,164 +2,173 @@ package com.hqgd.pms.domain;
 
 //@Data
 public class DataAcquisitionVo {
-	 private Integer id;
+	private Integer id;
 
-	    private String equipmentId;
+	private String equipmentId;
 
-	    private String equipmentName;
+	private String equipmentName;
 
-	    private String address;
+	private String address;
 
-	    private String channelNum;
-	    
-	    private String maxTem;
-	    
-	    private String minTem;
+	private String channelNum;
 
-	    private String opticalFiberPosition;
+	private String maxTem;
 
-	    private String temperature;
+	private String minTem;
 
-	    private String pd;
+	private String opticalFiberPosition;
 
-	    private String uv;
+	private String temperature;
 
-	    private String state;
+	private String pd;
 
-	    private String message;
+	private String uv;
 
-	    private String receiveTime;
+	private String state;
 
-	    private String dutyPerson;
+	private String message;
 
-	    private String tel;
+	private String receiveTime;
 
-		public Integer getId() {
-			return id;
-		}
+	private String dutyPerson;
 
-		public void setId(Integer id) {
-			this.id = id;
-		}
+	private String tel;
+	private Integer total;
 
-		public String getEquipmentId() {
-			return equipmentId;
-		}
+	public Integer getTotal() {
+		return total;
+	}
 
-		public void setEquipmentId(String equipmentId) {
-			this.equipmentId = equipmentId;
-		}
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 
-		public String getEquipmentName() {
-			return equipmentName;
-		}
+	public Integer getId() {
+		return id;
+	}
 
-		public void setEquipmentName(String equipmentName) {
-			this.equipmentName = equipmentName;
-		}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-		public String getAddress() {
-			return address;
-		}
+	public String getEquipmentId() {
+		return equipmentId;
+	}
 
-		public void setAddress(String address) {
-			this.address = address;
-		}
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId;
+	}
 
-		public String getChannelNum() {
-			return channelNum;
-		}
+	public String getEquipmentName() {
+		return equipmentName;
+	}
 
-		public void setChannelNum(String channelNum) {
-			this.channelNum = channelNum;
-		}
+	public void setEquipmentName(String equipmentName) {
+		this.equipmentName = equipmentName;
+	}
 
-		public String getMaxTem() {
-			return maxTem;
-		}
+	public String getAddress() {
+		return address;
+	}
 
-		public void setMaxTem(String maxTem) {
-			this.maxTem = maxTem;
-		}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-		public String getMinTem() {
-			return minTem;
-		}
+	public String getChannelNum() {
+		return channelNum;
+	}
 
-		public void setMinTem(String minTem) {
-			this.minTem = minTem;
-		}
+	public void setChannelNum(String channelNum) {
+		this.channelNum = channelNum;
+	}
 
-		public String getOpticalFiberPosition() {
-			return opticalFiberPosition;
-		}
+	public String getMaxTem() {
+		return maxTem;
+	}
 
-		public void setOpticalFiberPosition(String opticalFiberPosition) {
-			this.opticalFiberPosition = opticalFiberPosition;
-		}
+	public void setMaxTem(String maxTem) {
+		this.maxTem = maxTem;
+	}
 
-		public String getTemperature() {
-			return temperature;
-		}
+	public String getMinTem() {
+		return minTem;
+	}
 
-		public void setTemperature(String temperature) {
-			this.temperature = temperature;
-		}
+	public void setMinTem(String minTem) {
+		this.minTem = minTem;
+	}
 
-		public String getPd() {
-			return pd;
-		}
+	public String getOpticalFiberPosition() {
+		return opticalFiberPosition;
+	}
 
-		public void setPd(String pd) {
-			this.pd = pd;
-		}
+	public void setOpticalFiberPosition(String opticalFiberPosition) {
+		this.opticalFiberPosition = opticalFiberPosition;
+	}
 
-		public String getUv() {
-			return uv;
-		}
+	public String getTemperature() {
+		return temperature;
+	}
 
-		public void setUv(String uv) {
-			this.uv = uv;
-		}
+	public void setTemperature(String temperature) {
+		this.temperature = temperature;
+	}
 
-		public String getState() {
-			return state;
-		}
+	public String getPd() {
+		return pd;
+	}
 
-		public void setState(String state) {
-			this.state = state;
-		}
+	public void setPd(String pd) {
+		this.pd = pd;
+	}
 
-		public String getMessage() {
-			return message;
-		}
+	public String getUv() {
+		return uv;
+	}
 
-		public void setMessage(String message) {
-			this.message = message;
-		}
+	public void setUv(String uv) {
+		this.uv = uv;
+	}
 
-		public String getReceiveTime() {
-			return receiveTime;
-		}
+	public String getState() {
+		return state;
+	}
 
-		public void setReceiveTime(String receiveTime) {
-			this.receiveTime = receiveTime;
-		}
+	public void setState(String state) {
+		this.state = state;
+	}
 
-		public String getDutyPerson() {
-			return dutyPerson;
-		}
+	public String getMessage() {
+		return message;
+	}
 
-		public void setDutyPerson(String dutyPerson) {
-			this.dutyPerson = dutyPerson;
-		}
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-		public String getTel() {
-			return tel;
-		}
+	public String getReceiveTime() {
+		return receiveTime;
+	}
 
-		public void setTel(String tel) {
-			this.tel = tel;
-		}
+	public void setReceiveTime(String receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+
+	public String getDutyPerson() {
+		return dutyPerson;
+	}
+
+	public void setDutyPerson(String dutyPerson) {
+		this.dutyPerson = dutyPerson;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 
 }

@@ -18,4 +18,6 @@ public interface IDataAcquisitionService {
 
 	Map<String, Object> historicalCurve(QueryParametersVo queryVo);
 
+	Integer selectTotal(QueryParametersVo queryVo);
+
 }
