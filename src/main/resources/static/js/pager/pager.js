@@ -7,7 +7,9 @@ var CP = 1;				//点击的页面排序值ClickPage
 var AP = 1;				//当前活动的页面排序值ActivePage
 var PrevP = 0;		//“上一页”的排序值
 var NextP = 1;		//“下一页”的排序值
-$(".list-page-tail > a").click(this, function(){
+/*$(".list-page-tail > a").click(this, function(){*/
+$("#pager > a").click(this, function(){
+	alert("123");
 	CP = $(this).index();
 	AP = $("#pager > .active").index();	
 	NextP = $("#pager > a:contains('下一页')").index();

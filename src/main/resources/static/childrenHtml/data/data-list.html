@@ -302,19 +302,19 @@
 					data: param,
 					dataType: "json",
 					success: function(result){
-						var x = [];
-						var legend = [];
 						var series = [];
 						var data = result.data;
-						var x = data.receiveTimeArr;
+						var x = data.receiveTime;
 						var LegendData = data.channelNumArr;
 						var seriesData = data.channelTemArr;
-						alert(x);
-						//横坐标
+						for(let i=0; i<LegendData.length; i++){
+							let serie = {"name": LegendData[i], "data": seriesData[i]};
+							series.push(serie);
+						}
 						lineChart.setOption({
-							xAxis: {data: x },
-							legend: {data: legend },
-							series: series
+							xAxis: {data: x },						//横坐标
+							legend: {data: LegendData },	//图例
+							series: series								//系列数值
 						});
 					}
 				});
@@ -326,13 +326,13 @@
 				var endTime = $("#tableEndTime").val();
 				var param ={
 					"equipmentId": equiId,
-					//"pageNum": currentPage,
-					//"pageSize": $("#page-size").val(),
+					"page": currentPage,						//当前页码，相当于pageNum
+					"limit": $("#page-size").val(),		//当前页面大小，相当于pageSize
 					//"content": $("#search-by-channel").val(),
 					//'startTime': (startTime == "")?(formatInitDateToString(new Date())):startTime,
 					"startTime": (startTime == "")?("2018-01-01 00:00:00"):startTime,
-					"endTime": (endTime == "")?(formatDateToString(new Date())):endTime
-					/* "state": $("#data-type").val() */
+					"endTime": (endTime == "")?(formatDateToString(new Date())):endTime,
+					"state": $("#data-type").val()
 				};
 				$.ajax({
 					url:"dataAcquisition/historical",
@@ -359,6 +359,19 @@
 						}
 						$("#history-table-body").empty();
 						$("#history-table-body").append(historyTable);
+						//加载页码
+						var total = result.total;
+						var pageSize = $("#page-size").val();
+						var totalPage = (total%pageSize == 0)?(total/pageSize):(total/pageSize+1);
+						var pageinfo="";
+						pageinfo+="<a class=\"pre\">上一页</a>";
+						for(let i=1; i<totalPage; i++){
+							if(i>1){ pageinfo+="<a>"+i+"</a>"; }
+							else{ pageinfo+="<a class=\"active\">"+i+"</a>"; }
+						}
+						pageinfo+=" <a class=\"next\">下一页</a>";
+						$("#pager").empty();
+						$("#pager").html(pageinfo);
 					}
 				});
 			}
@@ -387,6 +400,5 @@
 			}
 			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
 		</script>
-		
 	</body>
 </html>
