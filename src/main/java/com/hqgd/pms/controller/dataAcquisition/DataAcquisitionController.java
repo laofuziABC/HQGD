@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  * 描述：数据采集 作者：姚绒 日期：2018年11月20日 下午1:49:37
  *
  */
+
 @Slf4j
 @Controller
 @Scope("request")
@@ -39,7 +40,7 @@ public class DataAcquisitionController {
 	@Qualifier("dataAcquisitionService")
 	private IDataAcquisitionService dataAcquisitionService;
 
-	@RequestMapping(value = "/realtime")
+	@RequestMapping("/realtime")
 	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		log.info("查询实时数据开始,equipmentId=" + equipmentId);
@@ -55,11 +56,29 @@ public class DataAcquisitionController {
 		log.info("查询实时数据结束，list = " + resultMap);
 	}
 
-	@RequestMapping(value = "/historical")
+	@RequestMapping("/historical")
 	public void getHistoricalData(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		log.info("查询历史数据开始,queryVo=" + queryVo);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
+		Integer total = dataAcquisitionService.selectTotal(queryVo);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000000");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "查询历史数据成功");
+		resultMap.put("data", historicalDataList);
+		resultMap.put("total", total);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询历史数据结束 ");
+	}
+	
+	@RequestMapping("/historicalCurve")
+	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+		log.info("查询历史数据开始,queryVo=" + queryVo);
+		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
@@ -75,7 +94,7 @@ public class DataAcquisitionController {
 	 * 描述： 作者：姚绒 日期：2018年11月20日 下午1:53:51 @param data @return @throws Exception
 	 * Model @throws
 	 */
-	@RequestMapping("recordExport")
+	@RequestMapping("/recordExport")
 	public void recordExport(HttpServletResponse response, QueryParametersVo data) throws Exception {
 		String path = dataAcquisitionService.execRecordExport(data);
 		try {

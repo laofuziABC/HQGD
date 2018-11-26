@@ -39,7 +39,8 @@ public class EquipmentController {
 	public void add(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("添加设备开始");
-		Map<String, Object> resultMap = equipmentService.add(equipmentInfo);
+		User loginUser = (User) request.getSession(true).getAttribute("user");
+		Map<String, Object> resultMap = equipmentService.add(equipmentInfo, loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("添加设备结束");
@@ -59,7 +60,8 @@ public class EquipmentController {
 	public void update(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		log.info("更新设备开始");
-		Map<String, Object> resultMap = equipmentService.update(equipmentInfo);
+		User loginUser = (User) request.getSession(true).getAttribute("user");
+		Map<String, Object> resultMap = equipmentService.update(equipmentInfo, loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("更新设备开始");
@@ -75,7 +77,7 @@ public class EquipmentController {
 		resultMap.put("resultCode", "00000004");
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
-		resultMap.put("data", equipmentInfo);
+		resultMap.put("data", equipmentInfo == null ? "null" : equipmentInfo);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询设备结束");
@@ -87,6 +89,7 @@ public class EquipmentController {
 		log.info("查询设备开始");
 		User user = (User) request.getSession(true).getAttribute("user");
 		String userId = user.getId().toString();
+		// String userId = "1";
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
@@ -119,7 +122,8 @@ public class EquipmentController {
 	public void setEquipmentParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		log.info("设置设备参数开始, request = " + request);
-		Map<String, Object> rusultMap = equipmentService.setEquipmentParam(equipmentParam);
+		User loginUser = (User) request.getSession(true).getAttribute("user");
+		Map<String, Object> rusultMap = equipmentService.setEquipmentParam(equipmentParam,loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(rusultMap));
 		log.info("设置设备参数结束 ");

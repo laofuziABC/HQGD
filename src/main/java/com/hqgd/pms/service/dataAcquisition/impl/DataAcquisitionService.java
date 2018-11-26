@@ -2,6 +2,8 @@ package com.hqgd.pms.service.dataAcquisition.impl;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +42,76 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		List<DataAcquisitionVo> getHistoricalDataList = dataAcquisitionDao.getHistoricalData(queryVo);
-		return getHistoricalDataList;
+		int count = dataAcquisitionDao.getTotalChNum();
+		String equipmentId = queryVo.getEquipmentId();
+		int count1 = dataAcquisitionDao.selectEquipCh(equipmentId);
+		int page = queryVo.getPage();
+		int limit = queryVo.getLimit();
+		// DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+		// String num = df.format((float)limit/count1);//返回的是String类型
+		double num = (float) limit / count1;
+		int offset = (int) (num * count * page) + count;
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		param.put("limit", queryVo.getLimit());
+		param.put("offset", offset);
+		param.put("state", queryVo.getState());
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.getHistoricalData(param);
+		return historicalDataList;
 	}
 
 	@Override
-	public String execRecordExport(@Valid QueryParametersVo data) {
+	public Integer selectTotal(QueryParametersVo queryVo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		param.put("state", queryVo.getState());
+		Integer total = dataAcquisitionDao.selectTotal(param);
+		return total;
+	}
 
-		List<DataAcquisitionVo> recordList = getHistoricalData(data);
+	@Override
+	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) {
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.historicalCurve(queryVo);
+		List<String> channelNumArr = new ArrayList<>();// 通道号数组
+		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
+		List<String> tem = new ArrayList<>();
+		// List<String> state = new ArrayList<>();
+		// List<List<String>> stateArr = new ArrayList<>();
+		DataAcquisitionVo vo = historicalDataList.get(0);
+		String equipmentId = queryVo.getEquipmentId();
+		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
+
+		if (historicalDataList.size() > 0) {
+			for (int i = 0; i < historicalDataList.size(); i++) {
+
+				channelNumArr.add(historicalDataList.get(i).getChannelNum());
+				tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
+				channelTemArr.add(tem);
+				// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
+				// stateArr.add(state);
+			}
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("equipmentId", equipmentId);
+		map.put("receiveTime", receiveTime);
+		map.put("channelNumArr", channelNumArr);
+		map.put("channelTemArr", channelTemArr);
+		// map.put("stateArr", stateArr);
+		return map;
+	}
+
+	@Override
+	public String execRecordExport(@Valid QueryParametersVo queryVo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId().toString());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		param.put("state", queryVo.getState());
+		List<DataAcquisitionVo> recordList = dataAcquisitionDao.getHistoricalData(param);
 		CommonUtil comm = new CommonUtil();
 		String classPath = comm.getDocumentSavePath().replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp()
 				+ "historicalData.xls";

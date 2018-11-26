@@ -13,6 +13,7 @@
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  <!--   <result column="TYPE" jdbcType="INTEGER" property="type" /> -->
   </resultMap>
   <sql id="Base_Column_List">
     ID, USER_NAME, PASSWORD, COMMENTS, ENABLED, ISDEL, ORG_NAME, CREATOR, CREATE_TIME, 
@@ -25,6 +26,19 @@
     from access_control_user
     where USER_NAME = #{userName,jdbcType=VARCHAR}
   </select>
+  
+  <select id="selectUserRoleType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT 
+  		r.TYPE AS ID
+	FROM
+ 	 	access_control_user u,
+  		access_control_role_user_ref ur,
+  		access_control_role r 
+	WHERE u.ID = ur.USER_ID
+  	  AND ur.ROLE_ID = r.ID
+  	  AND u.ID = #{id,jdbcType=INTEGER}
+  </select>
+  
   <update id="updatePassword">
         UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE USER_NAME = #{userName}
   </update>

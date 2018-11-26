@@ -12,9 +12,6 @@ import com.hqgd.pms.dao.dataAcquisition.IDataAcquisitionDao;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Repository
 public class DataAcquisitionDao implements IDataAcquisitionDao {
 	@Autowired
@@ -26,12 +23,32 @@ public class DataAcquisitionDao implements IDataAcquisitionDao {
 	}
 
 	@Override
-	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
+	public List<DataAcquisitionVo> getHistoricalData(Map<String, Object> param) {
+		return sqlSessionTemplate.selectList("selectHistoricalDataById", param);
+	}
+
+	@Override
+	public List<DataAcquisitionVo> historicalCurve(QueryParametersVo queryVo) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId().toString());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
-		return sqlSessionTemplate.selectList("selectHistoricalDataById", param);
+		return sqlSessionTemplate.selectList("selectHistoricalCurveById", param);
+	}
+
+	@Override
+	public int getTotalChNum() {
+		return sqlSessionTemplate.selectOne("selectTotalChNum");
+	}
+
+	@Override
+	public int selectEquipCh(String equipmentId) {
+		return sqlSessionTemplate.selectOne("selectEquipCh",equipmentId);
+	}
+
+	@Override
+	public Integer selectTotal(Map<String, Object> param) {
+		return sqlSessionTemplate.selectOne("selectTotal",param);
 	}
 
 }

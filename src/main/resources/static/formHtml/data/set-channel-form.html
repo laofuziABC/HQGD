@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置通道温度值域</title>
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<meta content="" name="description" />
+		<meta content="" name="author" />
+		<style type="text/css">
+			form table{width: 100%; font-size: 16px;}
+			form table td{border: 1px solid red; margin: 0px; padding: 0px; height: 35px; }
+			form table input{width: 160px; margin: 0px; padding: 0px;}
+			form p{margin: 0px 150px;}
+			form p input{height: 35px; margin:30px 0px; border-radius: 5px; font-size: 20px; background-color: #27A9E3;}
+		</style>
+	</head>
+	<body>
+		<!--页面内容-->
+		<div class="content">
+			<form action="equipment/setParam" method="post">
+				<h4 style="display: none;">设备主键：<input type="text" id="equiId" name="equipmentId" value="" disabled="disabled"/></h4>
+				<h4>设备名称：<input type="text" id="equiName" name="equipmentName" value=""/></h4>
+				<table>
+					<tr>
+						<td rowspan="2" align="center">选择通道号：<br />
+							<span id="channelOptions">
+								<select id="channelId" name="channelId" style="width: 130px;text-align: center; margin: 10px;" onchange="getValueRange();">
+									<option value="" selected>—请选择—</option>
+								</select>
+							</span>
+						</td>
+						<td>设置温度上限值(单位:℃)：</td>
+						<td><input type="text" id="maxValue" name="maxValue" value=""/></td>
+					</tr>
+					<tr>
+						<td>设置温度下限值(单位:℃)：</td>
+						<td><input type="text" id="minValue" name="minValue" value=""/></td>
+					</tr>
+				</table>
+				<p><input type="submit" value="提&nbsp;&nbsp;交" style="width: 270px;"/></p>
+			</form>
+		
+		</div>
+		
+		<!--引入JS文件-->
+		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js" ></script>
+		<!--序列化提交-->
+		<!-- <script type="text/javascript" src="media/js/jquery.validate.min.js"></script> -->
+		<script type="text/javascript">
+			var CHANNELS=[];
+			var MAX_VALUE=[];
+			var MIN_VALUE=[];
+			//根据设备主键，获取所有通道号、通道原设定的值域
+			$(function(){
+				$.ajax({
+					url: "equipment/equipmentParam",
+					type:"post",
+					data: {"equipmentId": equiId},
+					dataType: "json",
+					success: function(result){
+						
+						let data = result.data;
+						//回显设备主键和名称
+						$("#equiId").val(equiId);
+						/* $("#equiName").val(data[0].equipmentName);
+						alert($("#equiId").val()+"——"+$("#equiName").val()); */
+						//组装所有结果【开始】
+						$.each(data, function(i,v){
+							CHANNELS.push(v.channelNum);			//通道名称集合
+							MAX_VALUE.push(v.maxTem);				//通道最大值集合
+							MIN_VALUE.push(v.minTem);				//通道最小值集合
+						});
+						//组装所有结果【结束】
+						//添加各个通道的下拉框选项【开始】
+						var channelOptions = $("#channelOptions").find("select");
+						let options = "<option value=\"null\">—请选择—</option>";
+						for(let i=0; i<data.length; i++){
+							options+="<option value=\" "+CHANNELS[i]+" \">"+CHANNELS[i]+"</option>";
+						}
+						channelOptions.html(options);
+						//添加各个通道的下拉框选项【结束】
+					}
+				});
+			});
+			//根据通道主键回显原设定的通道值域【开始】
+			function getValueRange(){
+				channelId=$("#channelId").val().trim();
+				let i = $.inArray(channelId, CHANNELS);
+				$("#maxValue").val(MAX_VALUE[i]);
+				$("#minValue").val(MIN_VALUE[i]);
+			}
+			//根据通道主键回显原设定的通道值域【结束】
+		</script>
+	</body>
+</html>

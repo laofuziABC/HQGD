@@ -16,32 +16,40 @@
     <result column="RECEIVE_TIME" jdbcType="TIMESTAMP" property="receiveTime" />
     <result column="DUTY_PERSON" jdbcType="VARCHAR" property="dutyPerson" />
     <result column="TEL" jdbcType="VARCHAR" property="tel" />
+    <result column="MAX_TEM" jdbcType="VARCHAR" property="maxTem" />
+    <result column="MIN_TEM" jdbcType="VARCHAR" property="minTem" />
+    <result column="TOTAL" jdbcType="INTEGER" property="total" />
   </resultMap>
   <sql id="Base_Column_List">
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
     PD, UV, STATE, MESSAGE, DATE_FORMAT(RECEIVE_TIME,'%Y-%m-%d %H:%i:%s') AS RECEIVE_TIME, DUTY_PERSON, TEL
   </sql>
   <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
-    SELECT 
-  		t.EQUIPMENT_ID,
-  		t.EQUIPMENT_NAME,
-  		t.ADDRESS,
-  		t.CHANNEL_NUM,
-  		t.OPTICAL_FIBER_POSITION,
-  		t.TEMPERATURE,
- 		t.STATE,
-  		t.MESSAGE,
-  		CONVERT (t.RECEIVE_TIME , CHAR) AS RECEIVE_TIME
-	FROM
-  		(SELECT 
-    		EQUIPMENT_ID,
-    		CONVERT (MAX(RECEIVE_TIME) , CHAR) AS RECEIVE_TIME
-  		FROM
-    		hq_equipment_monitor_data 
-  		GROUP BY EQUIPMENT_ID) AS temp 
-  	LEFT JOIN hq_equipment_monitor_data AS t 
-    	ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
-    	AND temp.RECEIVE_TIME = t.RECEIVE_TIME 
+   SELECT 
+  t.EQUIPMENT_ID,
+  t.EQUIPMENT_NAME,
+  t.ADDRESS,
+  t.CHANNEL_NUM,
+  p.MAX_TEM,
+  p.MIN_TEM,
+  t.OPTICAL_FIBER_POSITION,
+  t.TEMPERATURE,
+  t.STATE,
+  t.MESSAGE,
+  CONVERT (t.RECEIVE_TIME, CHAR) AS RECEIVE_TIME 
+FROM
+  (SELECT 
+    EQUIPMENT_ID,
+    CONVERT (MAX(RECEIVE_TIME), CHAR) AS RECEIVE_TIME 
+  FROM
+    hq_equipment_monitor_data 
+  GROUP BY EQUIPMENT_ID) AS temp 
+  LEFT JOIN hq_equipment_monitor_data AS t 
+    ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+    AND temp.RECEIVE_TIME = t.RECEIVE_TIME 
+  LEFT JOIN hq_equipment_param AS p 
+    ON t.EQUIPMENT_ID = p.EQUIPMENT_ID 
+    AND t.CHANNEL_NUM = p.CHANNEL_NUM 
 	WHERE t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}  
   </select>
   
@@ -52,8 +60,37 @@
     where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+     <if test="state != null and state != 0">  
+      AND state!=0  
+     </if> 
+     <if test="offset!= null"> 
+      AND ID > (SELECT     ID   FROM    hq_equipment_monitor_data   ORDER BY ID DESC   LIMIT #{offset}, 1) LIMIT #{limit} ;
+     </if>
   </select>
   
+  <select id="selectTotal" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    SELECT 
+  		COUNT(ID) AS TOTAL
+	FROM
+  		hq_equipment_monitor_data 
+	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+      <if test="state != null and state != 0">  
+      AND state!=0  
+     </if>
+  </select>
+  <select id="selectHistoricalCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT 
+  		CHANNEL_NUM,
+  		CONVERT(GROUP_CONCAT(TEMPERATURE), CHAR) AS TEMPERATURE,
+  		CONVERT(GROUP_CONCAT(RECEIVE_TIME), CHAR) AS RECEIVE_TIME 
+    from hq_equipment_monitor_data
+    where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+    GROUP BY CHANNEL_NUM
+  </select>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 

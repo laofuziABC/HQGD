@@ -11,4 +11,6 @@ public interface IEquipmentDao {
 
 	List<EquipmentParam> selectEquipmentParam(String equipmentId);
 
+	int setEquipmentParam(EquipmentParam equipmentParam);
+
 }

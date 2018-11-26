@@ -2970,9 +2970,9 @@ Dashboard container
 /***
 Dashboard stats
 ***/
-/* .dashboard-stat {				//更改说明：去掉底部外边框 (老夫子 2018.11.15)
+.dashboard-stat {				/* 更改说明：去掉底部外边框 (老夫子 2018.11.15)，后又改回原样式 */
   margin-bottom: 25px;
-} */
+}
 
 .dashboard-stat:before,
 .dashboard-stat:after {
