@@ -18,12 +18,14 @@ $(function(){
 				NextP = $("#pager > a:contains('下一页')").index();
 				if(CP == 0 && AP > (PrevP+1)){ currentPage--; }		//上一页
 				else if(CP == NextP && AP < (NextP-1)){ currentPage++; }		//下一页
-				else if((CP == 0 && AP == (PrevP+1))||(CP == NextP && AP == (NextP-1))){currentPage=currentPage;}
-				else{ currentPage=CP;	}		//当前页
-				/*if(CP == 0 && AP > (PrevP+1)){ currentPage=AP-1; }		//上一页
-				else if(CP == NextP && AP < (NextP-1)){ currentPage=AP+1; }		//下一页
-				else{ currentPage=CP;	}		//当前页
-*/				
+				else if((CP == 0 && AP == (PrevP+1))||(CP == NextP && AP == (NextP-1))){currentPage=currentPage;}			//排除第一页和最后一页的上一页和下一页操作
+				else{		//当前页
+					if(currentPage>=3){
+						currentPage=CP+currentPage-3;	
+					}else{
+						currentPage=CP
+					}
+				}
 				//更改currentPage后，刷新表格
 				alert(currentPage);
 				searchResult(currentPage);
@@ -31,30 +33,10 @@ $(function(){
 		}
 		
 	})
-	/*//设定样式，改变页码值
-	$("#pager > a").click(this, function(){
-		CP = $(this).index();
-		AP = $("#pager > .active").index();	
-		NextP = $("#pager > a:contains('下一页')").index();
-		//去掉活动页的class='active'属性
-		$("#pager > a").removeClass("active");
-		if(CP == 0 && AP > (PrevP+1)){
-			//为前一页添加class='active'属性
-			$("#pager > a:eq("+(AP-1)+")").addClass("active");
-			currentPage=AP-1;
-		}else if(CP == NextP && AP < (NextP-1)){
-			//为后一页添加class='active'属性
-			$("#pager > a:eq("+(AP+1)+")").addClass("active");
-			currentPage=AP+1;
-		}else{
-			//为点击页添加class='active'属性
-			$("#pager > a:eq("+CP+")").addClass("active");
-			currentPage=CP;
-		}
-		//更改currentPage后，刷新表格
-		alert("当前页码是："+currentPage);
-		searchResult(currentPage);
-	});*/
+	
+	
+	
+	
 	
 });
 	
