@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -14,13 +15,11 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.common.ExcelFormat;
-import com.hqgd.pms.dao.dataAcquisition.IDataAcquisitionDao;
+import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
@@ -30,21 +29,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class DataAcquisitionService implements IDataAcquisitionService {
-	@Autowired
-	@Qualifier("dataAcquisitionDao")
-	private IDataAcquisitionDao dataAcquisitionDao;
+	@Resource
+	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionDao.getRealTimeDate(equipmentId);
+		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
 		return realTimeDateList;
 	}
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		int count = dataAcquisitionDao.getTotalChNum();
+		int count = dataAcquisitionVoMapper.selectTotalChNum();
 		String equipmentId = queryVo.getEquipmentId();
-		int count1 = dataAcquisitionDao.selectEquipCh(equipmentId);
+		int count1 = dataAcquisitionVoMapper.selectEquipCh(equipmentId);
 		int page = queryVo.getPage();
 		int limit = queryVo.getLimit();
 		// DecimalFormat df = new DecimalFormat("0.00");//格式化小数
@@ -58,7 +56,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("limit", queryVo.getLimit());
 		param.put("offset", offset);
 		param.put("state", queryVo.getState());
-		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.getHistoricalData(param);
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 		return historicalDataList;
 	}
 
@@ -69,13 +67,17 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
-		Integer total = dataAcquisitionDao.selectTotal(param);
+		Integer total = dataAcquisitionVoMapper.selectTotal(param);
 		return total;
 	}
 
 	@Override
 	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) {
-		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.historicalCurve(queryVo);
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId().toString());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 		List<String> channelNumArr = new ArrayList<>();// 通道号数组
 		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
 		List<String> tem = new ArrayList<>();
@@ -111,7 +113,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
-		List<DataAcquisitionVo> recordList = dataAcquisitionDao.getHistoricalData(param);
+		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 		CommonUtil comm = new CommonUtil();
 		String classPath = comm.getDocumentSavePath().replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp()
 				+ "historicalData.xls";

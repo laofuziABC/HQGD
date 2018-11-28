@@ -25,32 +25,26 @@
     PD, UV, STATE, MESSAGE, DATE_FORMAT(RECEIVE_TIME,'%Y-%m-%d %H:%i:%s') AS RECEIVE_TIME, DUTY_PERSON, TEL
   </sql>
   <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
-   SELECT 
-  t.EQUIPMENT_ID,
-  t.EQUIPMENT_NAME,
-  t.ADDRESS,
-  t.CHANNEL_NUM,
-  p.MAX_TEM,
-  p.MIN_TEM,
-  t.OPTICAL_FIBER_POSITION,
-  t.TEMPERATURE,
-  t.STATE,
-  t.MESSAGE,
-  CONVERT (t.RECEIVE_TIME, CHAR) AS RECEIVE_TIME 
+   SELECT
+	t.EQUIPMENT_ID,
+	t.EQUIPMENT_NAME,
+	t.ADDRESS,
+	t.CHANNEL_NUM,
+	p.MAX_TEM,
+	p.MIN_TEM,
+	t.OPTICAL_FIBER_POSITION,
+	t.TEMPERATURE,
+	t.STATE,
+	t.MESSAGE,
+	CONVERT ( VARCHAR ( 100 ), t.RECEIVE_TIME, 20 ) AS RECEIVE_TIME 
 FROM
-  (SELECT 
-    EQUIPMENT_ID,
-    CONVERT (MAX(RECEIVE_TIME), CHAR) AS RECEIVE_TIME 
-  FROM
-    hq_equipment_monitor_data 
-  GROUP BY EQUIPMENT_ID) AS temp 
-  LEFT JOIN hq_equipment_monitor_data AS t 
-    ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
-    AND temp.RECEIVE_TIME = t.RECEIVE_TIME 
-  LEFT JOIN hq_equipment_param AS p 
-    ON t.EQUIPMENT_ID = p.EQUIPMENT_ID 
-    AND t.CHANNEL_NUM = p.CHANNEL_NUM 
-	WHERE t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}  
+	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM hq_equipment_monitor_data GROUP BY EQUIPMENT_ID ) AS temp
+	LEFT JOIN hq_equipment_monitor_data AS t ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+	AND temp.RECEIVE_TIME = t.RECEIVE_TIME
+	LEFT JOIN hq_equipment_param AS p ON t.EQUIPMENT_ID = p.EQUIPMENT_ID 
+	AND t.CHANNEL_NUM = p.CHANNEL_NUM 
+WHERE
+	t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}  
   </select>
   
   <select id="selectHistoricalDataById" parameterType="java.util.HashMap" resultMap="BaseResultMap">

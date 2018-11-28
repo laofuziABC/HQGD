@@ -7,13 +7,11 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
-import com.hqgd.pms.dao.equipment.IEquipmentDao;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.User;
@@ -21,9 +19,6 @@ import com.hqgd.pms.service.equipment.IEquipmentService;
 
 @Service
 public class EquipmentService implements IEquipmentService {
-
-	@Autowired
-	IEquipmentDao equipmentDao;
 
 	@Resource
 	private EquipmentInfoMapper equipmentInfoMapper;
@@ -87,13 +82,13 @@ public class EquipmentService implements IEquipmentService {
 
 	@Override
 	public List<EquipmentInfo> selectAll(String param) {
-		List<EquipmentInfo> equipmentInfoList = equipmentDao.select(param);
+		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllEquipment(param);
 		return equipmentInfoList;
 	}
 
 	@Override
 	public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
-		List<EquipmentParam> equipmentParamList = equipmentDao.selectEquipmentParam(equipmentId);
+		List<EquipmentParam> equipmentParamList = equipmentInfoMapper.selectEquipmentParam(equipmentId);
 		return equipmentParamList;
 	}
 
@@ -101,7 +96,7 @@ public class EquipmentService implements IEquipmentService {
 	public Map<String, Object> setEquipmentParam(EquipmentParam equipmentParam, User loginUser) {
 		equipmentParam.setUpdater(loginUser.getUserName());
 		equipmentParam.setUpdateTime(new Date());
-		int i = equipmentDao.setEquipmentParam(equipmentParam);
+		int i = equipmentInfoMapper.setEquipmentParam(equipmentParam);
 		Boolean result = (i == 0) ? false : true;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", result);

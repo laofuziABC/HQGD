@@ -7,10 +7,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hqgd.pms.dao.user.IUserDao;
 import com.hqgd.pms.dao.user.UserMapper;
 import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.user.IUserService;
@@ -22,14 +20,14 @@ import com.hqgd.pms.service.user.IUserService;
 @Service
 public class UserService implements IUserService {
 
-	@Autowired
-	IUserDao userDao;
-
 	@Resource
 	private UserMapper userMapper;
 
 	public void updatePassword(String userName, String newPassword) {
-		userDao.updatePassword(userName, newPassword);
+		Map<String, String> param = new HashMap<>();
+		param.put("username", userName);
+		param.put("newPassword", newPassword);
+		userMapper.updatePassword(param);
 	}
 
 	public User getUserById(int userId) {
@@ -38,21 +36,20 @@ public class UserService implements IUserService {
 
 	@Override
 	public User findUserByUserName(String userName) {
-		return userDao.getUserByUserName(userName);
+		return userMapper.findUserByUserName(userName);
 	}
 
 	@Override
 	public Map<String, Object> add(User user, User loginUser) {
 		Boolean result = false;
 		String message = "";
-		User userfind = userDao.getUserByUserName(user.getUserName());
+		User userfind = userMapper.findUserByUserName(user.getUserName());
 		if (userfind == null) {
 			user.setUpdater(loginUser.getUserName());
 			user.setCreator(loginUser.getUserName());
 			user.setUpdateTime(new Date());
 			user.setCreateTime(new Date());
 			user.setIsdel("N");
-			user.setEnabled("Y");
 			int i = userMapper.insert(user);
 			result = (i == 0) ? false : true;
 			message = "添加用户成功！";
@@ -93,7 +90,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public List<User> selectAll() {
-		return userDao.selectAll();
+		return userMapper.selectAll();
 	}
 
 	@Override

@@ -6,9 +6,7 @@
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
     <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
     <result column="COMMENTS" jdbcType="VARCHAR" property="comments" />
-    <result column="ENABLED" jdbcType="VARCHAR" property="enabled" />
     <result column="ISDEL" jdbcType="VARCHAR" property="isdel" />
-    <result column="ORG_NAME" jdbcType="VARCHAR" property="orgName" />
     <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
@@ -16,7 +14,7 @@
   <!--   <result column="TYPE" jdbcType="INTEGER" property="type" /> -->
   </resultMap>
   <sql id="Base_Column_List">
-    ID, USER_NAME, PASSWORD, COMMENTS, ENABLED, ISDEL, ORG_NAME, CREATOR, CREATE_TIME, 
+    ID, USER_NAME, PASSWORD, COMMENTS, ISDEL, CREATOR, CREATE_TIME, 
     UPDATER, UPDATE_TIME
   </sql>
   
@@ -64,21 +62,17 @@
     where ID = #{id,jdbcType=INTEGER}
   </delete> -->
   <insert id="insert" parameterType="com.hqgd.pms.domain.User">
-    insert into access_control_user (ID, USER_NAME, PASSWORD, 
-      COMMENTS, ENABLED, ISDEL, 
-      ORG_NAME, CREATOR, CREATE_TIME, 
+    insert into access_control_user (USER_NAME, PASSWORD, 
+      COMMENTS, ISDEL, CREATOR, CREATE_TIME, 
       UPDATER, UPDATE_TIME)
-    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{comments,jdbcType=VARCHAR}, #{enabled,jdbcType=VARCHAR}, #{isdel,jdbcType=VARCHAR}, 
-      #{orgName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{comments,jdbcType=VARCHAR}, #{isdel,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.hqgd.pms.domain.User">
     insert into access_control_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        ID,
-      </if>
       <if test="userName != null">
         USER_NAME,
       </if>
@@ -88,15 +82,11 @@
       <if test="comments != null">
         COMMENTS,
       </if>
-      <if test="enabled != null">
-        ENABLED,
-      </if>
+      
       <if test="isdel != null">
         ISDEL,
       </if>
-      <if test="orgName != null">
-        ORG_NAME,
-      </if>
+      
       <if test="creator != null">
         CREATOR,
       </if>
@@ -111,9 +101,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
@@ -123,15 +110,11 @@
       <if test="comments != null">
         #{comments,jdbcType=VARCHAR},
       </if>
-      <if test="enabled != null">
-        #{enabled,jdbcType=VARCHAR},
-      </if>
+      
       <if test="isdel != null">
         #{isdel,jdbcType=VARCHAR},
       </if>
-      <if test="orgName != null">
-        #{orgName,jdbcType=VARCHAR},
-      </if>
+     
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -158,15 +141,11 @@
       <if test="comments != null">
         COMMENTS = #{comments,jdbcType=VARCHAR},
       </if>
-      <if test="enabled != null">
-        ENABLED = #{enabled,jdbcType=VARCHAR},
-      </if>
+      
       <if test="isdel != null">
         ISDEL = #{isdel,jdbcType=VARCHAR},
       </if>
-      <if test="orgName != null">
-        ORG_NAME = #{orgName,jdbcType=VARCHAR},
-      </if>
+      
       <if test="creator != null">
         CREATOR = #{creator,jdbcType=VARCHAR},
       </if>
@@ -187,9 +166,9 @@
     set USER_NAME = #{userName,jdbcType=VARCHAR},
       PASSWORD = #{password,jdbcType=VARCHAR},
       COMMENTS = #{comments,jdbcType=VARCHAR},
-      ENABLED = #{enabled,jdbcType=VARCHAR},
+      
       ISDEL = #{isdel,jdbcType=VARCHAR},
-      ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      
       CREATOR = #{creator,jdbcType=VARCHAR},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       UPDATER = #{updater,jdbcType=VARCHAR},

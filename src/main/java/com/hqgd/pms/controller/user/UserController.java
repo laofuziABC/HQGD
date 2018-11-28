@@ -28,7 +28,7 @@ public class UserController {
 	@ResponseBody
 	public String add(Model model, User user, HttpServletRequest request, HttpServletResponse response) {
 		User userLog = (User) request.getSession(true).getAttribute("user");
-		// User userLog = user;
+//		User userLog = user;
 		Map<String, Object> result = userService.add(user, userLog);
 		String json = new Gson().toJson(result).toString();
 		return json;

@@ -1,5 +1,7 @@
 package com.hqgd.pms.dao.equipment;
 
+import java.util.List;
+
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.EquipmentParam;
 
@@ -19,5 +21,11 @@ public interface EquipmentInfoMapper {
     int insert(EquipmentParam record);
 
     int insertSelective(EquipmentParam record);
+    
+    List<EquipmentInfo> selectAllEquipment(String param);
+
+	List<EquipmentParam> selectEquipmentParam(String equipmentId);
+
+	int setEquipmentParam(EquipmentParam equipmentParam);
     
 }
