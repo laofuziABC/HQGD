@@ -1,4 +1,4 @@
-package com.hqgd.pms;
+package com.hqgd.pms.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

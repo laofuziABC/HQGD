@@ -1,4 +1,4 @@
-package com.hqgd.pms;
+package com.hqgd.pms.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
