@@ -123,9 +123,12 @@ public class EquipmentController {
 			HttpServletResponse response) throws IOException {
 		log.info("设置设备参数开始, request = " + request);
 		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Map<String, Object> rusultMap = equipmentService.setEquipmentParam(equipmentParam,loginUser);
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(rusultMap));
+		Boolean rusult = equipmentService.setEquipmentParam(equipmentParam,loginUser);
+		if(rusult) {
+			response.sendRedirect("index.html");
+		}
+//		response.setContentType("application/json; charset=UTF-8");
+//		response.getWriter().write(new Gson().toJson(rusultMap));
 		log.info("设置设备参数结束 ");
 	}
 	
@@ -134,7 +137,7 @@ public class EquipmentController {
 			HttpServletResponse response) throws IOException {
 		log.info("更新设备参数开始, request = " + request);
 		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Map<String, Object> rusultMap = equipmentService.setEquipmentParam(equipmentParam,loginUser);
+		Map<String, Object> rusultMap = equipmentService.updateParam(equipmentParam,loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(rusultMap));
 		log.info("更新设备参数结束 ");

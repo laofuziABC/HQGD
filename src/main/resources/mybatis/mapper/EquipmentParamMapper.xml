@@ -35,7 +35,15 @@
       )
   </insert>
   
-  
+  <update id="updateParam" parameterType="com.hqgd.pms.domain.EquipmentParam">
+    update hq_equipment_param 
+    SET MAX_TEM = #{maxTem,jdbcType=VARCHAR}, 
+    MIN_TEM = #{minTem,jdbcType=VARCHAR},
+    UPDATER = #{updater,jdbcType=VARCHAR},
+    UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE 
+   EQUIPMENT_ID =#{equipmentId,jdbcType=VARCHAR}
+  </update>
   <insert id="insertSelective" parameterType="com.hqgd.pms.domain.EquipmentParam">
     insert into hq_equipment_param
     <trim prefix="(" suffix=")" suffixOverrides=",">

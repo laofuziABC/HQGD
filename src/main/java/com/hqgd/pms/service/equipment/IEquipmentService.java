@@ -21,6 +21,8 @@ public interface IEquipmentService {
 
 	List<EquipmentParam> selectEquipmentParam(String equipmentId);
 
-	Map<String, Object> setEquipmentParam(EquipmentParam equipmentParam, User loginUser);
+	Boolean setEquipmentParam(EquipmentParam equipmentParam, User loginUser);
+
+	Map<String, Object> updateParam(EquipmentParam equipmentParam, User loginUser);
 
 }

@@ -24,9 +24,5 @@ public interface DataAcquisitionVoMapper {
 
 	List<DataAcquisitionVo> selectHistoricalCurveById(Map<String, Object> param);
 
-	int selectTotalChNum();
-
-	int selectEquipCh(String equipmentId);
-
 	Integer selectTotal(Map<String, Object> param);
 }

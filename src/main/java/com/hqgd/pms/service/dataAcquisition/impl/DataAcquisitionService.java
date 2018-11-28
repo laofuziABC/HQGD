@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.common.ExcelFormat;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
+import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
@@ -31,7 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 public class DataAcquisitionService implements IDataAcquisitionService {
 	@Resource
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
-
+	@Resource
+	private EquipmentInfoMapper equipmentInfoMapper;
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
@@ -40,21 +42,21 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		int count = dataAcquisitionVoMapper.selectTotalChNum();
-		String equipmentId = queryVo.getEquipmentId();
-		int count1 = dataAcquisitionVoMapper.selectEquipCh(equipmentId);
+//		int count = equipmentInfoMapper.selectTotalChNum();
+//		String equipmentId = queryVo.getEquipmentId();
+//		int count1 = equipmentInfoMapper.selectEquipCh(equipmentId);
 		int page = queryVo.getPage();
 		int limit = queryVo.getLimit();
 		// DecimalFormat df = new DecimalFormat("0.00");//格式化小数
 		// String num = df.format((float)limit/count1);//返回的是String类型
-		double num = (float) limit / count1;
-		int offset = (int) (num * count * page) + count;
+//		double num = (float) limit / count1;
+		int total =  limit * page;
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("limit", queryVo.getLimit());
-		param.put("offset", offset);
+		param.put("total", total);
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 		return historicalDataList;

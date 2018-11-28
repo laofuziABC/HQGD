@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
+import com.hqgd.pms.dao.equipment.EquipmentParamMapper;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.User;
@@ -22,6 +23,8 @@ public class EquipmentService implements IEquipmentService {
 
 	@Resource
 	private EquipmentInfoMapper equipmentInfoMapper;
+	@Resource
+	private EquipmentParamMapper equipmentParamMapper;
 	@Resource
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 
@@ -88,19 +91,35 @@ public class EquipmentService implements IEquipmentService {
 
 	@Override
 	public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
-		List<EquipmentParam> equipmentParamList = equipmentInfoMapper.selectEquipmentParam(equipmentId);
+		List<EquipmentParam> equipmentParamList = equipmentParamMapper.selectEquipmentParam(equipmentId);
 		return equipmentParamList;
 	}
 
 	@Override
-	public Map<String, Object> setEquipmentParam(EquipmentParam equipmentParam, User loginUser) {
+	public Boolean setEquipmentParam(EquipmentParam equipmentParam, User loginUser) {
+		equipmentParam.setCreator(loginUser.getUserName());
+		equipmentParam.setCreateTime(new Date());
 		equipmentParam.setUpdater(loginUser.getUserName());
 		equipmentParam.setUpdateTime(new Date());
-		int i = equipmentInfoMapper.setEquipmentParam(equipmentParam);
+		int i = equipmentParamMapper.setEquipmentParam(equipmentParam);
+		Boolean result = (i == 0) ? false : true;
+//		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		resultMap.put("success", result);
+//		resultMap.put("resultCode", "00000007");
+//		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+//		resultMap.put("message", "");
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> updateParam(EquipmentParam equipmentParam, User loginUser) {
+		equipmentParam.setUpdater(loginUser.getUserName());
+		equipmentParam.setUpdateTime(new Date());
+		int i = equipmentParamMapper.updateParam(equipmentParam);
 		Boolean result = (i == 0) ? false : true;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", result);
-		resultMap.put("resultCode", "00000007");
+		resultMap.put("resultCode", "00000008");
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		return resultMap;
