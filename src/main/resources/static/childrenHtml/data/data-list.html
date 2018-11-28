@@ -124,8 +124,7 @@
 							</div>
 							<!-- 查询参数【开始】 -->
 							<div class="row-fluid">
-								
-								<!-- 时间筛选条件【开始】 -->
+								<!-- 筛选条件【开始】 -->
 								<form action="#" id="paramForm" class="form-horizontal">
 									<table>
 										<tr>
@@ -172,40 +171,9 @@
 										</tr>
 									</table>
 								</form>
-								<!-- 时间筛选条件【结束】 -->
-								
-								<!-- <div class="table-tools">
-									起始时间：<input type="datetime" id="tableStartTime"  name="startTime" placeholder="yyyy-MM-dd HH:mm:ss" value=""/>
-								</div>
-								<div class="table-tools">
-									终止时间：<input type="datetime" id="tableEndTime"  name="endTime" placeholder="yyyy-MM-dd HH:mm:ss" value=""/>
-								</div>
-								设定搜索栏【开始】
-								<div class="table-tools">
-									<div>
-										<input type="text" id="search-by-channel" class="m-wrap medium" placeholder="输入通道号查询"/>
-										<span onclick="searchResult(1);">
-											<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
-										</span>
-									</div>
-								</div>
-								设定搜索栏【结束】
-								显示设置【开始】
-								<div class="table-tools">
-									<select id="data-type" onchange="searchNewResult();">
-										<option value="0" checked>显示所有数据</option>
-										<option value="1" checked>显示异常数据</option>
-									</select>
-									<select id="page-size" onchange="searchNewResult();">
-										<option value="5">每页5条</option>
-										<option value="10" selected="selected">每页10条</option>
-										<option value="20">每页20条</option>
-										<option value="50">每页50条</option>
-									</select>
-								</div> -->
-								<!-- 显示设置【结束】 -->
+								<!-- 筛选条件【结束】 -->
 							</div>
-							<!-- 查询参数【结束】 -->
+							<!-- 查询结果列表【开始】 -->
 							<table class="table table-striped table-hover table-bordered dataTable">
 								<thead>
 									<tr>
@@ -219,14 +187,13 @@
 								<tfoot>
 									<tr>
 										<td colspan="8" align="center">
-											<!--翻页插件【start】-->
-											<div class="list-page-tail page-down" id="pager" style="margin: auto;">
-			                                </div>
-											<!--翻页插件【end】-->
+											<!--翻页插件-->
+											<div class="list-page-tail page-down" id="pager" style="margin: auto;"></div>
 										</td>
 									</tr>
 								</tfoot>
 							</table>
+							<!-- 查询结果列表【结束】 -->
 						</div>
 						<!--所有历史数据【结束】-->
 					</div>

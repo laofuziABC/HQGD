@@ -27,7 +27,7 @@ $(function(){
 					}
 				}
 				//更改currentPage后，刷新表格
-				alert(currentPage);
+//				alert(currentPage);
 				searchResult(currentPage);
 			});
 		}
