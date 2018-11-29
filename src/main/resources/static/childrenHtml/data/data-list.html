@@ -287,9 +287,16 @@
 			//tab1：加载实时温度监控曲线【开始】待完善图表JS
 			function showCharts(){
 				var timeLineChart = echarts.init(document.getElementById("time-line-chart"));
-				if (timelineOption && typeof timelineOption === "object") {
+				if (typeof (timelineOption) === "object") {
 					timeLineChart.setOption(timelineOption);
 			    }
+				setInterval(function () {
+				    data.shift();
+				    data.push(randomData());
+				    timeLineChart.setOption({
+				        series: [{ data: data }]
+				    });
+				}, 1000);
 			}
 			//tab1：加载实时温度监控曲线【结束】
 			//tab1：设定通道温度值域【开始】
