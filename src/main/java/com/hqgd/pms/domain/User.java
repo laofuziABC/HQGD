@@ -7,16 +7,14 @@ public class User {
 	public User() {
 	}
 
-	public User(Integer id, String userName, String password, String comments, String enabled, String isdel,
-			String orgName, String creator, Date createTime, String updater, Date updateTime) {
+	public User(Integer id, String userName, String password, String comments, String isdel, String creator,
+			Date createTime, String updater, Date updateTime) {
 		super();
 		this.id = id;
 		this.userName = userName;
 		this.password = password;
 		this.comments = comments;
-		this.enabled = enabled;
 		this.isdel = isdel;
-		this.orgName = orgName;
 		this.creator = creator;
 		this.createTime = createTime;
 		this.updater = updater;
@@ -31,11 +29,7 @@ public class User {
 
 	private String comments;
 
-	private String enabled;
-
 	private String isdel;
-
-	private String orgName;
 
 	private String creator;
 
@@ -77,28 +71,12 @@ public class User {
 		this.comments = comments == null ? null : comments.trim();
 	}
 
-	public String getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(String enabled) {
-		this.enabled = enabled == null ? null : enabled.trim();
-	}
-
 	public String getIsdel() {
 		return isdel;
 	}
 
 	public void setIsdel(String isdel) {
 		this.isdel = isdel == null ? null : isdel.trim();
-	}
-
-	public String getOrgName() {
-		return orgName;
-	}
-
-	public void setOrgName(String orgName) {
-		this.orgName = orgName == null ? null : orgName.trim();
 	}
 
 	public String getCreator() {

@@ -1,5 +1,8 @@
 package com.hqgd.pms.dao.dataAcquisition;
 
+import java.util.List;
+import java.util.Map;
+
 import com.hqgd.pms.domain.DataAcquisitionVo;
 
 public interface DataAcquisitionVoMapper {
@@ -14,4 +17,14 @@ public interface DataAcquisitionVoMapper {
     int updateByPrimaryKeySelective(DataAcquisitionVo record);
 
     int updateByPrimaryKey(DataAcquisitionVo record);
+    
+    List<DataAcquisitionVo> selectRealTimeDataById(String equipmentId);
+
+	List<DataAcquisitionVo> selectHistoricalDataById(Map<String, Object> param);
+
+	List<DataAcquisitionVo> selectHistoricalCurveById(Map<String, Object> param);
+
+	Integer selectTotal(Map<String, Object> param);
+
+	List<DataAcquisitionVo> recordExport(Map<String, Object> param);
 }

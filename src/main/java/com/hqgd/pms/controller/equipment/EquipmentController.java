@@ -53,7 +53,7 @@ public class EquipmentController {
 		Map<String, Object> resultMap = equipmentService.delete(equipmentId);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("删除设备开始");
+		log.info("删除设备结束");
 	}
 
 	@RequestMapping(value = "/update")
@@ -64,7 +64,7 @@ public class EquipmentController {
 		Map<String, Object> resultMap = equipmentService.update(equipmentInfo, loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("更新设备开始");
+		log.info("更新设备结束");
 	}
 
 	@RequestMapping(value = "/select")
@@ -86,7 +86,7 @@ public class EquipmentController {
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.info("查询设备开始");
+		log.info("查询所有设备开始");
 		User user = (User) request.getSession(true).getAttribute("user");
 		String userId = user.getId().toString();
 		// String userId = "1";
@@ -99,7 +99,7 @@ public class EquipmentController {
 		resultMap.put("data", equipmentList);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询设备结束");
+		log.info("查询所有设备结束");
 	}
 
 	@RequestMapping(value = "/equipmentParam")
@@ -115,7 +115,7 @@ public class EquipmentController {
 		resultMap.put("data", equipmentParam);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-
+		log.info("查询设备参数结束 ");
 	}
 
 	@RequestMapping(value = "/setParam")
@@ -123,9 +123,23 @@ public class EquipmentController {
 			HttpServletResponse response) throws IOException {
 		log.info("设置设备参数开始, request = " + request);
 		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Map<String, Object> rusultMap = equipmentService.setEquipmentParam(equipmentParam,loginUser);
+		Boolean rusult = equipmentService.setEquipmentParam(equipmentParam,loginUser);
+		if(rusult) {
+			response.sendRedirect("index.html");
+		}
+//		response.setContentType("application/json; charset=UTF-8");
+//		response.getWriter().write(new Gson().toJson(rusultMap));
+		log.info("设置设备参数结束 ");
+	}
+	
+	@RequestMapping(value = "/updateParam")
+	public void updateParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		log.info("更新设备参数开始, request = " + request);
+		User loginUser = (User) request.getSession(true).getAttribute("user");
+		Map<String, Object> rusultMap = equipmentService.updateParam(equipmentParam,loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(rusultMap));
-		log.info("设置设备参数结束 ");
+		log.info("更新设备参数结束 ");
 	}
 }

@@ -3,10 +3,12 @@ package com.hqgd.pms.service.dataAcquisition.impl;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -14,13 +16,12 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.common.ExcelFormat;
-import com.hqgd.pms.dao.dataAcquisition.IDataAcquisitionDao;
+import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
+import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
@@ -30,35 +31,37 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class DataAcquisitionService implements IDataAcquisitionService {
-	@Autowired
-	@Qualifier("dataAcquisitionDao")
-	private IDataAcquisitionDao dataAcquisitionDao;
+	@Resource
+	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
+	@Resource
+	private EquipmentInfoMapper equipmentInfoMapper;
 
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionDao.getRealTimeDate(equipmentId);
+		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
+		log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
 		return realTimeDateList;
 	}
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		int count = dataAcquisitionDao.getTotalChNum();
-		String equipmentId = queryVo.getEquipmentId();
-		int count1 = dataAcquisitionDao.selectEquipCh(equipmentId);
+		// int count = equipmentInfoMapper.selectTotalChNum();
+		// String equipmentId = queryVo.getEquipmentId();
+		// int count1 = equipmentInfoMapper.selectEquipCh(equipmentId);
 		int page = queryVo.getPage();
 		int limit = queryVo.getLimit();
 		// DecimalFormat df = new DecimalFormat("0.00");//格式化小数
 		// String num = df.format((float)limit/count1);//返回的是String类型
-		double num = (float) limit / count1;
-		int offset = (int) (num * count * page) + count;
+		// double num = (float) limit / count1;
+		int total = limit * page;
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("limit", queryVo.getLimit());
-		param.put("offset", offset);
+		param.put("total", total);
 		param.put("state", queryVo.getState());
-		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.getHistoricalData(param);
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 		return historicalDataList;
 	}
 
@@ -69,33 +72,53 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
-		Integer total = dataAcquisitionDao.selectTotal(param);
+		Integer total = dataAcquisitionVoMapper.selectTotal(param);
 		return total;
 	}
 
 	@Override
-	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) {
-		List<DataAcquisitionVo> historicalDataList = dataAcquisitionDao.historicalCurve(queryVo);
+	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws Exception {
+		String startTime = queryVo.getStartTime();
+		String endTime = queryVo.getEndTime();
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", startTime);
+		param.put("endTime", endTime);
+
+		long inTime = System.currentTimeMillis();
+		log.info("查询数据SQL开始：" + inTime);
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
+		long outTime = System.currentTimeMillis();
+		log.info("SQL结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("时长为：" + midTime);
+
 		List<String> channelNumArr = new ArrayList<>();// 通道号数组
 		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
 		List<String> tem = new ArrayList<>();
+		Map<String, Object> map = new HashMap<>();
 		// List<String> state = new ArrayList<>();
 		// List<List<String>> stateArr = new ArrayList<>();
+		if (historicalDataList.isEmpty()) {
+			return map;
+		}
 		DataAcquisitionVo vo = historicalDataList.get(0);
 		String equipmentId = queryVo.getEquipmentId();
+		long inTime1 = System.currentTimeMillis();
+		log.info("处理数据开始：" + inTime);
 		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
+		for (int i = 0; i < historicalDataList.size(); i++) {
 
-		if (historicalDataList.size() > 0) {
-			for (int i = 0; i < historicalDataList.size(); i++) {
-
-				channelNumArr.add(historicalDataList.get(i).getChannelNum());
-				tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-				channelTemArr.add(tem);
-				// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
-				// stateArr.add(state);
-			}
+			channelNumArr.add(historicalDataList.get(i).getChannelNum());
+			tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
+			channelTemArr.add(tem);
+			// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
+			// stateArr.add(state);
 		}
-		Map<String, Object> map = new HashMap<>();
+		long outTime1 = System.currentTimeMillis();
+		log.info("处理数据结束：" + outTime1);
+		long midTime1 = outTime1 - inTime1;
+		log.info("时长为：" + midTime1);
 		map.put("equipmentId", equipmentId);
 		map.put("receiveTime", receiveTime);
 		map.put("channelNumArr", channelNumArr);
@@ -105,16 +128,14 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	}
 
 	@Override
-	public String execRecordExport(@Valid QueryParametersVo queryVo) {
+	public String execRecordExport(@Valid QueryParametersVo queryVo, String path) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId().toString());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
-		List<DataAcquisitionVo> recordList = dataAcquisitionDao.getHistoricalData(param);
-		CommonUtil comm = new CommonUtil();
-		String classPath = comm.getDocumentSavePath().replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp()
-				+ "historicalData.xls";
+		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.recordExport(param);
+		String classPath = path.replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp() + "historicalData.xls";
 		List<String> header = getHeader();
 		List<String> columns = getColumns();
 		exportExcel(recordList, columns, header, classPath);

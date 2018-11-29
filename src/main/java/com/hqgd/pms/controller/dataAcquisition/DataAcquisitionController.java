@@ -76,7 +76,7 @@ public class DataAcquisitionController {
 	
 	@RequestMapping("/historicalCurve")
 	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
-			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+			HttpServletResponse response) throws Exception {
 		log.info("查询历史数据开始,queryVo=" + queryVo);
 		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -95,19 +95,28 @@ public class DataAcquisitionController {
 	 * Model @throws
 	 */
 	@RequestMapping("/recordExport")
-	public void recordExport(HttpServletResponse response, QueryParametersVo data) throws Exception {
-		String path = dataAcquisitionService.execRecordExport(data);
+	public void recordExport(QueryParametersVo data ,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		String path = request.getParameter("path");
+		String classPath = dataAcquisitionService.execRecordExport(data, path);
 		try {
 			try {
-				path = new String(path.getBytes(), "ISO8859-1");
+				path = new String(classPath.getBytes(), "ISO8859-1");
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response.setContentType("application/octet-stream;charset=ISO8859-1");
+			response.setContentType("application/vnd.ms-excel;charset=gb2312"); 
+//			response.setContentType("application/octet-stream;charset=ISO8859-1");
 			response.setHeader("Content-Disposition", "attachment;filename=" + path);
 			response.addHeader("Pargam", "no-cache");
 			response.addHeader("Cache-Control", "no-cache");
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			resultMap.put("success", Boolean.TRUE.toString());
+			resultMap.put("resultCode", "00000000");
+			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+			resultMap.put("message", "查询历史数据成功");
+			resultMap.put("data", path);
+			response.getWriter().write(new Gson().toJson(resultMap));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
