@@ -38,6 +38,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
+		log.info("最新时间为："+realTimeDateList.get(0).getReceiveTime());
 		return realTimeDateList;
 	}
 
@@ -116,15 +117,14 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	}
 
 	@Override
-	public String execRecordExport(@Valid QueryParametersVo queryVo) {
+	public String execRecordExport(@Valid QueryParametersVo queryVo,String path) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId().toString());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
-		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
-		CommonUtil comm = new CommonUtil();
-		String classPath = comm.getDocumentSavePath().replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp()
+		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.recordExport(param);
+		String classPath = path.replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp()
 				+ "historicalData.xls";
 		List<String> header = getHeader();
 		List<String> columns = getColumns();

@@ -25,4 +25,6 @@ public interface DataAcquisitionVoMapper {
 	List<DataAcquisitionVo> selectHistoricalCurveById(Map<String, Object> param);
 
 	Integer selectTotal(Map<String, Object> param);
+
+	List<DataAcquisitionVo> recordExport(Map<String, Object> param);
 }

@@ -113,12 +113,12 @@
 							<div class="clearfix">
 								<!--便捷操作工具栏【开始】-->
 								<div class="btn-group pull-right">
-									<button class="btn dropdown-toggle" data-toggle="dropdown">更多操作<i class="icon-angle-down"></i></button>
-									<ul class="dropdown-menu pull-right">
+									<button class="btn dropdown-toggle" onclick="report()" >导出<i class="icon-angle-down"></i></button>
+									<!-- <ul class="dropdown-menu pull-right">
 										<li><a href="#">打印</a></li>
 										<li><a href="#">保存为PDF</a></li>
 										<li><a href="#">导出到Excel</a></li>
-									</ul>
+									</ul> -->
 								</div>
 								<!--便捷操作工具栏【结束】-->
 							</div>
@@ -160,15 +160,20 @@
 													<option value="50">50条</option>
 												</select>
 											</td>
+											<td style="width: 40px; font-size: 18px;">
+												<span onclick="searchResult(1);">
+													<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
+												</span>
+											</td>
 										</tr>
-										<tr>
+										<!-- <tr>
 											<td style="font-size: 18px;">通道号:
 												<input type="text" id="search-by-channel" placeholder="输入通道号查询" style="width: 150px; height: 24px;"/>
 												<span onclick="searchResult(1);">
 													<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
 												</span>
 											</td>
-										</tr>
+										</tr> -->
 									</table>
 								</form>
 								<!-- 筛选条件【结束】 -->
@@ -258,22 +263,29 @@
 							//通道结果每三个循环一回，缘于界面展示效果较规整
 							for(let j=3*i; j<endIndex; j++){
 								let tem = parseFloat(data[j].temperature)
-								let minTem = parseFloat(data[j].minTem)
-								let maxTem = parseFloat(data[j].maxTem)
+								let state = parseFloat(data[j].state)
+								/* let maxTem = parseFloat(data[j].maxTem) */
 								channel+="<div class=\"span4 \" data-tablet=\"span6\" data-desktop=\"span3\">";
 								//tab1：通过颜色，对获取的温度做简单的预警【开始】
 								//温度处于值域上下限之间，显示绿色
-								if(tem > minTem && tem <= maxTem){channel+="<div class=\"dashboard-stat center green\">"; }
+								if(state == '0'){channel+="<div class=\"dashboard-stat center green\">"; }
 								//温度大于最大值，小于最大值两倍；或者温度小于最小值，大于最小值的一半；显示黄色预警
-								else if( (tem > (minTem/2) && tem <= minTem) || (tem > maxTem && tem <= (2*maxTem)) ){
+								else if(state == '1'){
 									channel+="<div class=\"dashboard-stat center yellow\">"; 
 								}
 								//温度过高或者过低，显示红色预警
 								else{channel+="<div class=\"dashboard-stat center red\">"; }
 								//tab1：通过颜色，对获取的温度做简单的预警【结束】
-								channel+="<div class=\"details\">";
-								channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;℃</div>";
-								channel+="</div></div></div>";
+								if(state == '0'||state == '1'||state == '2'){
+									channel+="<div class=\"details\">";
+									channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;℃</div>";
+									channel+="</div></div></div>";
+								}else{
+									channel+="<div class=\"details\">";
+									channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;</div>";
+									channel+="</div></div></div>";
+								}
+								
 							}
 							channel+="</div>";
 						}
@@ -313,13 +325,24 @@
 			//tab1：设定通道温度值域【结束】
 			//tab2：绘制折线图【开始】待与后台对接
 			function getChartData(){
+				
 				//获取日期、时间参数
 				var startTime = $("#chartStartTime").val();
 				var endTime = $("#chartEndTime").val();
+				
+				if(startTime > endTime){
+					//parent.openModal('提示框', null, {"width":300, "height": 200});
+					alert("开始时间不能大于结束时间");
+					return false;
+				}
+				if(startTime == ""||endTime == ""){
+					alert("开始时间和结束时间不能为空");
+					return false;
+				}
 				var param = {
 					"equipmentId": equiId,
-					"startTime": (startTime == "")?("2018-01-01 00:00:00"):startTime,
-					"endTime": (endTime == "")?(formatDateToString(new Date())):endTime
+					"startTime": startTime ,
+					"endTime": endTime
 				}
 				//渲染图表
 				var lineChart = echarts.init(document.getElementById("line-chart"));
@@ -353,14 +376,23 @@
 			function searchResult(pageNo){
 				var startTime = $("#tableStartTime").val();
 				var endTime = $("#tableEndTime").val();
+				
+				if(startTime > endTime){
+					alert("开始时间不能大于结束时间");
+					return false;
+				}
+				if(startTime == ""||endTime == ""){
+					alert("开始时间和结束时间不能为空");
+					return false;
+				}
 				var param ={
 					"equipmentId": equiId,
 					"page": pageNo,								//当前页码，相当于pageNum
 					"limit": $("#page-size").val(),		//当前页面大小，相当于pageSize
 					//"content": $("#search-by-channel").val(),
 					//'startTime': (startTime == "")?(formatInitDateToString(new Date())):startTime,
-					"startTime": (startTime == "")?("2018-01-01 00:00:00"):startTime,
-					"endTime": (endTime == "")?(formatDateToString(new Date())):endTime,
+					"startTime": startTime ,
+					"endTime": endTime,
 					"state": $("#data-type").val()
 				};
 				$.ajax({
@@ -406,6 +438,38 @@
 				});
 			}
 			//tab3：加载历史数据列表【结束】
+			
+			//导出数据【开始】
+			function report(){
+				var startTime = $("#tableStartTime").val();
+				var endTime = $("#tableEndTime").val();
+				alert(startTime + "----"+endTime)
+				if(startTime > endTime){
+					alert("开始时间不能大于结束时间");
+					return false;
+				}
+				if(startTime == ""||endTime == ""){
+					alert("开始时间和结束时间不能为空");
+					return false;
+				}
+				var param = {
+					"equipmentId": equiId,
+					"startTime": startTime ,
+					"endTime": endTime,
+					"state": $("#data-type").val()
+				}
+				$.ajax({
+					url:"dataAcquisition/recordExport",
+					type:"post",
+					data: param,
+					dataType: "json",
+					success: function(result){
+						window.open();
+						
+					}
+				});
+			}
+			//导出数据【结束】
 			function searchNewResult(){
 				currentPage = 1;
 				searchResult(currentPage);
