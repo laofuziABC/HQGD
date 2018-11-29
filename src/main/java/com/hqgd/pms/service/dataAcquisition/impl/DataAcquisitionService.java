@@ -34,6 +34,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 	@Resource
 	private EquipmentInfoMapper equipmentInfoMapper;
+
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
@@ -42,15 +43,15 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-//		int count = equipmentInfoMapper.selectTotalChNum();
-//		String equipmentId = queryVo.getEquipmentId();
-//		int count1 = equipmentInfoMapper.selectEquipCh(equipmentId);
+		// int count = equipmentInfoMapper.selectTotalChNum();
+		// String equipmentId = queryVo.getEquipmentId();
+		// int count1 = equipmentInfoMapper.selectEquipCh(equipmentId);
 		int page = queryVo.getPage();
 		int limit = queryVo.getLimit();
 		// DecimalFormat df = new DecimalFormat("0.00");//格式化小数
 		// String num = df.format((float)limit/count1);//返回的是String类型
-//		double num = (float) limit / count1;
-		int total =  limit * page;
+		// double num = (float) limit / count1;
+		int total = limit * page;
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", queryVo.getStartTime());
@@ -74,32 +75,38 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	}
 
 	@Override
-	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) {
+	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws Exception {
+		String startTime = queryVo.getStartTime();
+		String endTime = queryVo.getEndTime();
+		if (!startTime.isEmpty() && startTime.compareTo(endTime) > 0) {
+			// 如果起始时间不为空的话，起始时间必须小于等截止时间，否则为数据异常
+			throw new Exception("起始时间必须小于等于截止时间");
+		}
 		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", queryVo.getEquipmentId().toString());
-		param.put("startTime", queryVo.getStartTime());
-		param.put("endTime", queryVo.getEndTime());
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", startTime);
+		param.put("endTime", endTime);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 		List<String> channelNumArr = new ArrayList<>();// 通道号数组
 		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
 		List<String> tem = new ArrayList<>();
+		Map<String, Object> map = new HashMap<>();
 		// List<String> state = new ArrayList<>();
 		// List<List<String>> stateArr = new ArrayList<>();
+		if (historicalDataList.isEmpty()) {
+			return map;
+		}
 		DataAcquisitionVo vo = historicalDataList.get(0);
 		String equipmentId = queryVo.getEquipmentId();
 		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
+		for (int i = 0; i < historicalDataList.size(); i++) {
 
-		if (historicalDataList.size() > 0) {
-			for (int i = 0; i < historicalDataList.size(); i++) {
-
-				channelNumArr.add(historicalDataList.get(i).getChannelNum());
-				tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-				channelTemArr.add(tem);
-				// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
-				// stateArr.add(state);
-			}
+			channelNumArr.add(historicalDataList.get(i).getChannelNum());
+			tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
+			channelTemArr.add(tem);
+			// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
+			// stateArr.add(state);
 		}
-		Map<String, Object> map = new HashMap<>();
 		map.put("equipmentId", equipmentId);
 		map.put("receiveTime", receiveTime);
 		map.put("channelNumArr", channelNumArr);

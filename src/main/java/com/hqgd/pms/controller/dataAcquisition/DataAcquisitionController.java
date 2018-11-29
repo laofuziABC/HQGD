@@ -76,7 +76,7 @@ public class DataAcquisitionController {
 	
 	@RequestMapping("/historicalCurve")
 	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
-			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+			HttpServletResponse response) throws Exception {
 		log.info("查询历史数据开始,queryVo=" + queryVo);
 		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();

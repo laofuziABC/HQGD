@@ -16,7 +16,7 @@ public interface IDataAcquisitionService {
 
 	String execRecordExport(@Valid QueryParametersVo data);
 
-	Map<String, Object> historicalCurve(QueryParametersVo queryVo);
+	Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws Exception;
 
 	Integer selectTotal(QueryParametersVo queryVo);
 

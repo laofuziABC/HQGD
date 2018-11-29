@@ -94,15 +94,51 @@ ORDER BY
      </if>
   </select>
   <select id="selectHistoricalCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-    SELECT 
-  		CHANNEL_NUM,
-  		CONVERT(GROUP_CONCAT(TEMPERATURE), CHAR) AS TEMPERATURE,
-  		CONVERT(GROUP_CONCAT(RECEIVE_TIME), CHAR) AS RECEIVE_TIME 
-    from hq_equipment_monitor_data
-    where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+    SELECT
+    	CHANNEL_NUM,
+    	[TEMPERATURE] = stuff (
+    	(
+    SELECT
+    	',' + CAST( TEMPERATURE AS VARCHAR ) 
+    FROM
+    	pms.dbo.hq_equipment_monitor_data t 
+    WHERE
+    	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
+    	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+        AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} FOR XML path ( '' ) 
+    	),
+    	1,
+    	1,
+    	'' 
+    	),
+    	[RECEIVE_TIME] = stuff (
+    	(
+    SELECT
+    	',' + CAST( RECEIVE_TIME AS VARCHAR ) 
+    FROM
+    	pms.dbo.hq_equipment_monitor_data t 
+    WHERE
+    	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
+    	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+        AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} FOR XML path ( '' ) 
+    	),
+    	1,
+    	1,
+    	'' 
+    	)     	
+    FROM
+    	pms.dbo.hq_equipment_monitor_data 
+    WHERE
+      1=1
+      AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
-    GROUP BY CHANNEL_NUM
+    GROUP BY
+    	CHANNEL_NUM 
+    ORDER BY
+    	CHANNEL_NUM ASC
   </select>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
