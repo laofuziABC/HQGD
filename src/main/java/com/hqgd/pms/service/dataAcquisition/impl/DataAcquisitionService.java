@@ -3,6 +3,7 @@ package com.hqgd.pms.service.dataAcquisition.impl;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
-		log.info("最新时间为："+realTimeDateList.get(0).getReceiveTime());
+		log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
 		return realTimeDateList;
 	}
 
@@ -79,15 +80,19 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws Exception {
 		String startTime = queryVo.getStartTime();
 		String endTime = queryVo.getEndTime();
-		if (!startTime.isEmpty() && startTime.compareTo(endTime) > 0) {
-			// 如果起始时间不为空的话，起始时间必须小于等截止时间，否则为数据异常
-			throw new Exception("起始时间必须小于等于截止时间");
-		}
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", startTime);
 		param.put("endTime", endTime);
+
+		long inTime = System.currentTimeMillis();
+		log.info("查询数据SQL开始：" + inTime);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
+		long outTime = System.currentTimeMillis();
+		log.info("SQL结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("时长为：" + midTime);
+
 		List<String> channelNumArr = new ArrayList<>();// 通道号数组
 		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
 		List<String> tem = new ArrayList<>();
@@ -99,6 +104,8 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		}
 		DataAcquisitionVo vo = historicalDataList.get(0);
 		String equipmentId = queryVo.getEquipmentId();
+		long inTime1 = System.currentTimeMillis();
+		log.info("处理数据开始：" + inTime);
 		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
 		for (int i = 0; i < historicalDataList.size(); i++) {
 
@@ -108,6 +115,10 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
 			// stateArr.add(state);
 		}
+		long outTime1 = System.currentTimeMillis();
+		log.info("处理数据结束：" + outTime1);
+		long midTime1 = outTime1 - inTime1;
+		log.info("时长为：" + midTime1);
 		map.put("equipmentId", equipmentId);
 		map.put("receiveTime", receiveTime);
 		map.put("channelNumArr", channelNumArr);
@@ -117,15 +128,14 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	}
 
 	@Override
-	public String execRecordExport(@Valid QueryParametersVo queryVo,String path) {
+	public String execRecordExport(@Valid QueryParametersVo queryVo, String path) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId().toString());
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.recordExport(param);
-		String classPath = path.replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp()
-				+ "historicalData.xls";
+		String classPath = path.replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp() + "historicalData.xls";
 		List<String> header = getHeader();
 		List<String> columns = getColumns();
 		exportExcel(recordList, columns, header, classPath);
