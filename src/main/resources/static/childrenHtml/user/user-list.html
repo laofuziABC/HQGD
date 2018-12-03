@@ -56,13 +56,13 @@
 									<tr> 
 										<th></th>
 										<th>登录名</th>
-										<th>所属企业中文名称</th>
 										<th>用户状态</th>
-										<th>更多操作</th>
+										<th>备注</th>
+										<th>其它操作</th>
 									</tr>
 								</thead>
 
-								<tbody>
+								<tbody id="userList">
 									<tr class="">
 										<td>1</td>
 										<td>abc</td>
@@ -73,66 +73,6 @@
 											<a class="edit" href="javascript:;" onclick="getUserEdit(1);">编辑</a>&nbsp;
 											<a class="delete" href="javascript:;"onclick="getUserDelete();">删除</a>&nbsp;
 											<a class="resetpsw" href="javascript:;" onclick="resetUserPsw();">密码初始化</a>
-										</td>
-									</tr>
-									<tr class="">
-										<td>2</td>
-										<td>123</td>
-										<td>XXX公司</td>
-										<td>禁用</td>
-										<td class="center">
-											<a class="details" href="javascript:;">详情</a>&nbsp;
-											<a class="edit" href="javascript:;">编辑</a>&nbsp;
-											<a class="delete" href="javascript:;">删除</a>&nbsp;
-											<a class="resetpsw" href="javascript:;">密码初始化</a>
-										</td>
-									</tr>
-									<tr class="">
-										<td>3</td>
-										<td>#$@</td>
-										<td>XXX公司</td>
-										<td>禁用</td>
-										<td class="center">
-											<a class="details" href="javascript:;">详情</a>&nbsp;
-											<a class="edit" href="javascript:;">编辑</a>&nbsp;
-											<a class="delete" href="javascript:;">删除</a>&nbsp;
-											<a class="resetpsw" href="javascript:;">密码初始化</a>
-										</td>
-									</tr>
-									<tr class="">
-										<td>4</td>
-										<td>金木水火土</td>
-										<td>XXX有限公司</td>
-										<td>启用</td>
-										<td class="center">
-											<a class="details" href="javascript:;">详情</a>&nbsp;
-											<a class="edit" href="javascript:;">编辑</a>&nbsp;
-											<a class="delete" href="javascript:;">删除</a>&nbsp;
-											<a class="resetpsw" href="javascript:;">密码初始化</a>
-										</td>
-									</tr>
-									<tr class="">
-										<td>5</td>
-										<td>东西南北中</td>
-										<td>XXX有限公司</td>
-										<td>禁用</td>
-										<td class="center">
-											<a class="details" href="javascript:;">详情</a>&nbsp;
-											<a class="edit" href="javascript:;">编辑</a>&nbsp;
-											<a class="delete" href="javascript:;">删除</a>&nbsp;
-											<a class="resetpsw" href="javascript:;">密码初始化</a>
-										</td>
-									</tr>
-									<tr class="">
-										<td>6</td>
-										<td>宫商角徵羽</td>
-										<td>XXX有限公司</td>
-										<td>禁用</td>
-										<td class="center">
-											<a class="details" href="javascript:;">详情</a>&nbsp;
-											<a class="edit" href="javascript:;">编辑</a>&nbsp;
-											<a class="delete" href="javascript:;">删除</a>&nbsp;
-											<a class="resetpsw" href="javascript:;">密码初始化</a>
 										</td>
 									</tr>
 								</tbody>
@@ -150,58 +90,74 @@
 		
 		<script src="media/js/table-editable.js"></script>    
 		<script>
-			jQuery(document).ready(function() {       
-			   TableEditable.init();
+			jQuery(document).ready(function() {
+				getUserList();
+				/* TableEditable.init(); */
 			});
-		</script>
-		<!--用户的添、删、改初始化密码【开始】-->
-		<script type="application/javascript">
-//			var target = document.getElementById("portlet-config");
-			/*添加/编辑用户*/
+			
+			//获取用户列表
+			function getUserList(){
+				$.ajax({
+					url: "user/selectAll",
+					type: "post",
+					dataType: "json",
+					success: function(result){
+						var userlist = "";
+						for(let i=0; i<result.length; i++){
+							userlist += "<tr class=\"\">";
+							userlist += "<td>"+(i+1)+"</td>";
+							userlist += "<td>"+result[i].userName+"</td>";
+							if(result[i].isdel == "N"){userlist += "<td>启用</td>"; }
+							else{userlist += "<td>已删除</td>";}
+							userlist += "<td>"+result[i].comments+"</td>";
+							userlist += "<td class=\"center\">";
+							userlist += "<a class=\"details\" href=\"#\" onclick=\"getUserDetails('"+result[i].id+"');\">详情</a>&nbsp;";
+							userlist += "<a class=\"edit\" href=\"#\" onclick=\"getUserEdit('"+result[i].id+"');\">编辑</a>&nbsp;";
+							userlist += "<a class=\"delete\" href=\"#\" onclick=\"getUserDelete('"+result[i].id+"');\">删除</a>&nbsp;";
+							userlist += "<a class=\"resetpsw\" href=\"#\" onclick=\"initUserPassword('"+result[i].id+"');\">密码初始化</a>";
+							userlist += "</td>";
+							userlist += "</tr>";
+						}
+						$("#userList").html(userlist);
+					}
+				});
+			}
+			//查看用户详情
+			function getUserDetails(param){
+				let title = "用户详情";
+				let url = "formHtml/user/user-details.html";
+				var params = {"width": 600, "height": 500, "userId": param.trim()};
+				parent.openModal(title, url, params);
+			}
+			//添加或者编辑用户
 			function getUserEdit(param){
-				if(typeof(param) == 'undefined'){
-//					alert(target.style.display=="none");
-//					if(target.style.display == "none"){
-//						target.style.display = "block";
-//						let title = "新增用户";
-//						let context = "新增用户表单";
-//						$("#modal-title").html(title);
-//						$("#modal-body").load("reset-password.html");
-//						$("#portlet-config").load("childrenHtml/user/update-password.html");
-					parent.openModal("",800,800);
-//					}
-				}else{
-					alert("编辑用户");
-				}
-				
+				let title;
+				if(param == null){ title = "新增用户"; }
+				else{ title = "编辑用户"; }
+				let url = "formHtml/user/user-edit.html";
+				var params = {"width": 600, "height": 400, "userId": param};
+				parent.openModal(title, url, params);
 			}
-			
-			/*查看详情*/
-			function getUserDetails(){
-				alert("查看详情");
-				parent.openModal("",800,800);
+			//删除用户
+			function getUserDelete(param){
+				$.ajax({
+					url: "user/delete",
+					type: "post",
+					data: {"userId": param},
+					dataType: "json",
+					success: function(result){
+						if(result.success){ alert("删除成功！"); }
+						else{ alert("删除失败！"); }
+						getUserList();
+					}
+				});
 			}
-			
-			/*删除用户*/
-			function getUserDelete(){
-				alert("删除用户");
-			}
-			
-			/*用户密码初始化*/
-			function resetUserPsw(){
-				alert("用户密码初始化");
-			}
-			
-			/*关闭模态框*/
-			function closeModal(){
-				if(target.style.display == "block"){
-					target.style.display = "none";
-				}
+			//用户密码初始化
+			function initUserPassword(param){
+				alert("用户密码初始化"+param);
 			}
 		</script>
-		<!--用户的添、删、改、查、初始化密码【结束】-->
-	
-		<script type="text/javascript">
+		<!-- <script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-37564768-1']);
 			_gaq.push(['_setDomainName', 'keenthemes.com']);
@@ -213,6 +169,6 @@
 				ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
-		</script>
+		</script> -->
 	</body>
 </html>

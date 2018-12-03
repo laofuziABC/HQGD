@@ -250,7 +250,7 @@
 						channel+="<table style=\"width: 80%; margin: 15px auto; font-size: 20px; text-align: center;\">";
 						channel+="<tr>";
 						channel+="<td><button class=\"buttonForAction\" onclick=\"setChannelValue(' "+data[0].equipmentId+" ')\">设置设备温度值域</button></td>";
-						channel+="<td><button class=\"buttonForAction\" onclick=\"showBlocks()\">查看当前通道温度</button></td>";
+						channel+="<td><button class=\"buttonForAction\" onclick=\"showBlocks()\">查看当前通道温度(℃)</button></td>";
 						channel+="<td><button class=\"buttonForAction\" onclick=\"showCharts()\">实时监测温度曲线</button></td>";
 						channel+="</tr></table></div>"
 						//设置tab1内容：通道温度值
@@ -264,28 +264,15 @@
 							for(let j=3*i; j<endIndex; j++){
 								let tem = parseFloat(data[j].temperature)
 								let state = parseFloat(data[j].state)
-								/* let maxTem = parseFloat(data[j].maxTem) */
 								channel+="<div class=\"span4 \" data-tablet=\"span6\" data-desktop=\"span3\">";
-								//tab1：通过颜色，对获取的温度做简单的预警【开始】
-								//温度处于值域上下限之间，显示绿色
+								//tab1：通过state，对获取的温度做简单的预警【开始】
 								if(state == '0'){channel+="<div class=\"dashboard-stat center green\">"; }
-								//温度大于最大值，小于最大值两倍；或者温度小于最小值，大于最小值的一半；显示黄色预警
-								else if(state == '1'){
-									channel+="<div class=\"dashboard-stat center yellow\">"; 
-								}
-								//温度过高或者过低，显示红色预警
+								else if(state == '1'){channel+="<div class=\"dashboard-stat center yellow\">"; }
 								else{channel+="<div class=\"dashboard-stat center red\">"; }
 								//tab1：通过颜色，对获取的温度做简单的预警【结束】
-								if(state == '0'||state == '1'||state == '2'){
-									channel+="<div class=\"details\">";
-									channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;℃</div>";
-									channel+="</div></div></div>";
-								}else{
-									channel+="<div class=\"details\">";
-									channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;</div>";
-									channel+="</div></div></div>";
-								}
-								
+								channel+="<div class=\"details\">";
+								channel+="<div class=\"number\">"+data[j].opticalFiberPosition+"：<b class=\"color-alert\">"+data[j].temperature+"</b>&nbsp;</div>";
+								channel+="</div></div></div>";
 							}
 							channel+="</div>";
 						}
@@ -304,11 +291,28 @@
 			    }
 				setInterval(function () {
 				    data.shift();
-				    data.push(randomData());
+				    data1.shift();
+				    data2.shift();
+				    data3.shift();
+				    data4.shift();
+				    data5.shift();
+				    data.push(randomData(20));
+				    data1.push(randomData(22));
+				    data2.push(randomData(30));
+				    data3.push(randomData(25));
+				    data4.push(randomData(15));
+				    data5.push(randomData(18));
 				    timeLineChart.setOption({
-				        series: [{ data: data }]
+				        series: [
+				        	{name: 'CH1',	data: data	},
+				        	{name: 'CH2',	data: data1	},
+				        	{name: 'CH3',	data: data2	},
+				        	{name: 'CH4',	data: data3	},
+				        	{name: 'CH5',	data: data4	},
+				        	{name: 'CH6',	data: data5	},
+				        ]
 				    });
-				}, 1000);
+				}, 6000);
 			}
 			//tab1：加载实时温度监控曲线【结束】
 			//tab1：设定通道温度值域【开始】
@@ -325,13 +329,10 @@
 			//tab1：设定通道温度值域【结束】
 			//tab2：绘制折线图【开始】待与后台对接
 			function getChartData(){
-				
 				//获取日期、时间参数
 				var startTime = $("#chartStartTime").val();
 				var endTime = $("#chartEndTime").val();
-				
 				if(startTime > endTime){
-					//parent.openModal('提示框', null, {"width":300, "height": 200});
 					alert("开始时间不能大于结束时间");
 					return false;
 				}
@@ -376,7 +377,6 @@
 			function searchResult(pageNo){
 				var startTime = $("#tableStartTime").val();
 				var endTime = $("#tableEndTime").val();
-				
 				if(startTime > endTime){
 					alert("开始时间不能大于结束时间");
 					return false;
@@ -454,7 +454,7 @@
 				}
 				var param = {
 					"equipmentId": equiId,
-					"startTime": startTime ,
+					"startTime": startTime,
 					"endTime": endTime,
 					"state": $("#data-type").val()
 				}
@@ -474,29 +474,6 @@
 				currentPage = 1;
 				searchResult(currentPage);
 			}
-			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
-			function formatDateToString(param){
-				var y = param.getFullYear();
-				var M = unifiedFormat(param.getMonth()+1);
-				var d = unifiedFormat(param.getDate());
-				var H = unifiedFormat(param.getHours());
-				var m = unifiedFormat(param.getMinutes());
-				var s = unifiedFormat(param.getSeconds());
-				var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
-				return result;
-			}
-			function formatInitDateToString(param){
-				var y = param.getFullYear();
-				var M = unifiedFormat(param.getMonth()+1);
-				var d = unifiedFormat(param.getDate());
-				var result = y+"-"+M+"-"+d+" 00:00:00";
-				return result;
-			}
-			//统一显示格式
-			function unifiedFormat(param){
-				return (param<10)?("0"+param):param;
-			}
-			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
 		</script>
 		<!-- 使用JS文件将时间日期格式化 -->
 		<script type="text/javascript">

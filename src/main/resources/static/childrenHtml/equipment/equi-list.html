@@ -57,14 +57,14 @@
 											<th>设备编号</th>
 											<th>设备名称</th>
 											<th>设备型号</th>
-											<th>当前使用通道数量</th>
-											<th>所属企业中文名称</th>
+											<!-- <th>当前使用通道数量</th> -->
+											<th>所属用户</th>
 											<th>运行状态</th>
-											<th>更多操作</th>
+											<th>其它操作</th>
 										</tr>
 									</thead>
 
-									<tbody>
+									<tbody id="equipmentList">
 										<tr class="">
 											<td>1</td>
 											<td>测温仪</td>
@@ -73,101 +73,9 @@
 											<td>XXX公司</td>
 											<td>正常</td>
 											<td class="center">
-												<a class="details" href="javascript:;" onclick="getEquiDetails();">详情</a>&nbsp;
-												<a class="edit" href="javascript:;" onclick="getEquiEdit(1);">编辑</a>&nbsp;
-												<a class="delete" href="javascript:;"onclick="getEquiDelete();">删除</a>&nbsp;
-												<a class="resetpsw" href="javascript:;" onclick="resetRange();">设置值域</a>&nbsp;
-												<a class="resetpsw" href="javascript:;" onclick="connUser();">关联用户</a>
-											</td>
-										</tr>
-										<tr class="">
-											<td>2</td>
-											<td>测温仪</td>
-											<td>XXX-XXX</td>
-											<td>6</td>
-											<td>XXX公司</td>
-											<td>正常</td>
-											<td class="center">
-												<a class="details" href="javascript:;">详情</a>&nbsp;
-												<a class="edit" href="javascript:;">编辑</a>&nbsp;
-												<a class="delete" href="javascript:;">删除</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">关联用户</a>
-											</td>
-										</tr>
-										<tr class="">
-											<td>3</td>
-											<td>测温仪</td>
-											<td>XXX-XXX</td>
-											<td>9</td>
-											<td>XXX公司</td>
-											<td>异常</td>
-											<td class="center">
-												<a class="details" href="javascript:;">详情</a>&nbsp;
-												<a class="edit" href="javascript:;">编辑</a>&nbsp;
-												<a class="delete" href="javascript:;">删除</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">关联用户</a>
-											</td>
-										</tr>
-										<tr class="">
-											<td>4</td>
-											<td>绕组</td>
-											<td>XXX-XXX</td>
-											<td>6</td>
-											<td>XXX公司</td>
-											<td>正常</td>
-											<td class="center">
-												<a class="details" href="javascript:;">详情</a>&nbsp;
-												<a class="edit" href="javascript:;">编辑</a>&nbsp;
-												<a class="delete" href="javascript:;">删除</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">关联用户</a>
-											</td>
-										</tr>
-										<tr class="">
-											<td>5</td>
-											<td>绕组</td>
-											<td>XXX-XXX</td>
-											<td>9</td>
-											<td>XXX公司</td>
-											<td>异常</td>
-											<td class="center">
-												<a class="details" href="javascript:;">详情</a>&nbsp;
-												<a class="edit" href="javascript:;">编辑</a>&nbsp;
-												<a class="delete" href="javascript:;">删除</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">关联用户</a>
-											</td>
-										</tr>
-										<tr class="">
-											<td>6</td>
-											<td>光纤</td>
-											<td>XXX-XXX</td>
-											<td>6</td>
-											<td>XXX公司</td>
-											<td>正常</td>
-											<td class="center">
-												<a class="details" href="javascript:;">详情</a>&nbsp;
-												<a class="edit" href="javascript:;">编辑</a>&nbsp;
-												<a class="delete" href="javascript:;">删除</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">关联用户</a>
-											</td>
-										</tr>
-										<tr class="">
-											<td>7</td>
-											<td>光纤</td>
-											<td>XXX-XXX</td>
-											<td>9</td>
-											<td>XXX公司</td>
-											<td>异常</td>
-											<td class="center">
-												<a class="details" href="javascript:;">详情</a>&nbsp;
-												<a class="edit" href="javascript:;">编辑</a>&nbsp;
-												<a class="delete" href="javascript:;">删除</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">设置值域</a>&nbsp;
-												<a class="resetpsw" href="javascript:;">关联用户</a>
+												<a class="details" href="#">详情</a>&nbsp;
+												<a class="edit" href="#">编辑</a>&nbsp;
+												<a class="delete" href="#">删除</a>&nbsp;
 											</td>
 										</tr>
 									</tbody>
@@ -187,8 +95,67 @@
 		<script src="media/js/table-editable.js"></script>
 		<script>
 			jQuery(document).ready(function() {
-			   TableEditable.init();
+			   getEquipmentList();
+			  /*  TableEditable.init(); */
 			});
+			//获取所有设备信息列表
+			function getEquipmentList(){
+				$.ajax({
+					url: "equipment/selectAll",
+					type: "post",
+					dataType: "json",
+					success: function(result){
+						var data = result.data;
+						var equipList = "";
+						for(let i=0; i<data.length; i++){
+							equipList+="<tr>";
+							equipList+="<td>"+(i+1)+"</td>";
+							equipList+="<td>"+data[i].equipmentName+"</td>";
+							equipList+="<td>XXX-XXX</td>";
+							/* equipList+="<td>"+data[i].equipmentName+"</td>"; */
+							equipList+="<td>"+data[i].userName+"</td>";
+							equipList+="<td>正常</td>";
+							equipList+="<td class=\"center\">";
+							equipList+="<a class=\"details\" href=\"#\" onclick=\"getEquiDetails('"+data[i].equipmentId+"');\">详情</a>&nbsp;";
+							equipList+="<a class=\"edit\" href=\"#\" onclick=\"getEquiEdit('"+data[i].equipmentId+"');\">编辑</a>&nbsp;";
+							equipList+="<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"+data[i].equipmentId+"');\">删除</a>&nbsp;";
+							equipList+="</td>";
+							equipList+="</tr>";
+						}
+						$("#equipmentList").html(equipList);
+					}
+				});
+			}
+			//查看设备详情
+			function getEquiDetails(param){
+				let title="设备详情";
+				let url = "formHtml/equipment/equi-details.html";
+				var params={"width": 700, "height": 800, "equipmentId": param};
+				parent.openModal(title, url, params);
+			}
+			//编辑或者新增设备信息
+			function getEquiEdit(param){
+				let title;
+				if(param == null){title = "新增设备"; }
+				else{title = "编辑设备"; }
+				let url = "formHtml/equipment/equi-edit.html";
+				var params={"width": 700, "height": 800, "equipmentId": param};
+				parent.openModal(title, url, params);
+			}
+			//删除一条设备信息
+			function getEquiDelete(param){
+				$.ajax({
+					url: "equipment/delete",
+					type: "post",
+					data: {"equipmentId": param.trim()},
+					dataType: "json",
+					success: function(result){
+						if(result.success){ alert("设备删除成功！"); }
+						else{ alert("设备删除失败！"); }
+						getEquipmentList();
+					}
+				});
+			}
 		</script>
 	</body>
 </html>

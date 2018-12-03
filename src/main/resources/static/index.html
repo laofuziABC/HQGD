@@ -96,7 +96,7 @@
 				</li>
 			</ul>
 			<!-- 页面隐藏模态框【开始】-->
-			<div id="portlet-config" class="modal hide" style="display: none; width: 200px; height: 200px;">
+			<div id="portlet-config" class="modal hide" style="display: none; width: 200px; height: 200px; margin: auto;">
 				<div class="modal-header">
 					<button data-dismiss="modal" class="close" type="button" onclick="closeModal();"></button>
 					<h3 id="modal-title">模态框标题</h3>
@@ -110,17 +110,6 @@
 		<!-- 设置侧边栏【结束】 -->
 		<!-- 页面内容【开始】 -->
 		<div class="page-content" id="page-content">
-			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!--<div id="portlet-config" class="modal hide" style="display: none;">
-				<div class="modal-header">
-					<button data-dismiss="modal" class="close" type="button"></button>
-					<h3>Widget Settings</h3>
-				</div>
-				<div class="modal-body">
-					Widget settings form goes here
-				</div>
-			</div>-->
-			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE CONTAINER-->
 			<div class="container-fluid">
 				<!-- BEGIN PAGE HEADER-->
@@ -1383,6 +1372,10 @@
 				target.style.height = (param.height == null)?("900px"):(param.height+"px");
 			}
 			equiId=param.equipmentId;
+			userId=param.userId;
+			//先清空，后载入新页面
+			$("#modal-title").html("");
+			$("#modal-body").html("");
 			$("#modal-title").html(title);
 			$("#modal-body").load(url);
 		}
@@ -1414,6 +1407,29 @@
 		}; */
 		//拖拽模态框【结束】
 		<!-- 模态框操作【结束】 -->
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
+		function formatDateToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var H = unifiedFormat(param.getHours());
+			var m = unifiedFormat(param.getMinutes());
+			var s = unifiedFormat(param.getSeconds());
+			var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
+			return result;
+		}
+		function formatInitDateToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var result = y+"-"+M+"-"+d+" 00:00:00";
+			return result;
+		}
+		//统一显示格式
+		function unifiedFormat(param){
+			return (param<10)?("0"+param):param;
+		}
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
 		<!-- 获取侧边栏设备列表【开始】 -->
 		$.ajax({
 			/* url:"equipment/getEquiMenuList", */

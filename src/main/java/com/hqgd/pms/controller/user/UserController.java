@@ -1,6 +1,7 @@
 package com.hqgd.pms.controller.user;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,13 @@ public class UserController {
 			throws IOException {
 		User userLog = (User) request.getSession(true).getAttribute("user");
 		// User userLog = user;
-		Map<String, Object> result = userService.update(user, userLog);
+//		Map<String, Object> result = userService.update(user, userLog);
+		Map<String, Object> result = new HashMap<String, Object>();
+		if(user.getId() == null) {
+			result = userService.add(user, userLog);
+		}else {
+			result = userService.update(user, userLog);
+		}
 		String json = new Gson().toJson(result).toString();
 		return json;
 
@@ -59,11 +66,14 @@ public class UserController {
 	@ResponseBody
 	public String select(Model model, String userId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-
-		User user = userService.select(userId);
-		String json = new Gson().toJson(user).toString();
-		return json;
-
+		
+		if(userId == null) {
+			return null;
+		}else {
+			User user = userService.select(userId);
+			String json = new Gson().toJson(user).toString();
+			return json;
+		}
 	}
 
 	@RequestMapping(value = "selectAll")
