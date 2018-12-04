@@ -57,6 +57,11 @@
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
+						<td class="info_text">帧结构：</td>
+						<td><input type="text" class="right_input" id="uniqueCode" name="uniqueCode"/></td>
+						<td class="info_text"></td>
+					</tr>
+					<tr class="normal">
 						<td class="info_text">设备通道<span style="color: red;">*</span>：</td>
 						<td><input type="button" value="新增通道" onclick="addChannel();" class="innerButton"/></td>
 						<td class="info_text"></td>
@@ -66,7 +71,7 @@
 							<div id="channelsInfo">
 								<div class="chan_info">
 									<span>通道名称</span><span>温度上限</span>
-									<span>温度下限</span><span>操作</span>
+									<span>温度下限</span><!-- <span>操作</span> -->
 								</div>
 							</div>
 						</td>
@@ -122,22 +127,44 @@
 			//提交设备信息表单
 			function submitEquiInfo(){
 				var target = document.getElementsByClassName("chan_info");
+				//封装通道名称、温度最大值、温度最小值
+				var channelNums=[];
+				var maxTems=[];
+				var minTems=[];
 				for(let i=1; i<target.length; i++){
-					var equiParam = $("#outerForm").serialize();
 					var chanParam = $("#list"+i).serialize();
-					var param = chanParam+"&"+equiParam;
-					alert(param);
-					/* $.ajax({
-						url: "equipment/setParam",
-						type: "post",
-						data: param,
-						dataType: "json",
-						success: function(result){
-							if(result.message == "true"){ alert("添加成功！"); }
-							else{ alert("添加失败！"); }
-						}
-					}); */
+					var temp = chanParam.split("&");
+					let num0 = temp[0].indexOf("=")+1;
+					let obj0 = temp[0].substring(num0);
+					channelNums.push(obj0);
+					let num1 = temp[1].indexOf("=")+1;
+					let obj1 = temp[1].substring(num1);
+					maxTems.push(obj1);
+					let num2 = temp[2].indexOf("=")+1;
+					let obj2 = temp[2].substring(num2);
+					minTems.push(obj2);
 				}
+				alert(channelNums+"\n"+maxTems+"\n"+minTems);
+				var params={
+					"equipmentId": $("#equipmentId").val(),
+					"equipmentName": $("#equipmentName").val(),
+					"userId": $("#userId").val(),
+					"region": $("#region").val(),
+					"uniqueCode": $("#uniqueCode").val(),
+					"channelNum": channelNums,
+					"maxTem": maxTems,
+					"minTem": minTems
+				};
+				$.ajax({
+					url: "equipment/setParam",
+					type: "post",
+					data: params,
+					dataType: "json",
+					success: function(result){
+						if(result.message == "true"){ alert("添加成功！"); }
+						else{ alert("添加失败！"); }
+					}
+				});
 				closeModal();
 				getEquipmentList();
 			}

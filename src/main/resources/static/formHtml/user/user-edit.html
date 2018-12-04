@@ -22,6 +22,7 @@
 			#channelsInfo .chan_info .chan_button{width: 90px; height: 28px; margin: 0px 15px; background-color: #27A9E3; color: #FFFFFF; border: 0px; border-radius: 4px;}
 			#userForm .outerButton{width: 24%; height: 35px; margin: 10px 38%; background-color: #00B848; border: 0px; border-radius: 4px; color: #FFFFFF; font-size: 16px;}
 		</style>
+		
 	</head>
 	<body>
 		<div class="content">
@@ -60,17 +61,14 @@
 				</table>
 				<input type="button" value="提 &nbsp; 交" class="outerButton" onclick="submitUserInfo();"/>
 			</form>
+			
 		</div>
-		
-		<script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
 		<script type="text/javascript">
 			$(function(){
 				$(".hideInfo").hide();
-				if(userId == null){
-					$(".hideInfo").show();
-				}else{
-					$(".hideInfo").hide();
-				}
+				if(userId == null){$(".hideInfo").show(); }
+				else{ $(".hideInfo").hide(); }
 				//数据回显
 				$.ajax({
 					url: "user/select",
@@ -83,6 +81,7 @@
 						$("#username").val(data.userName);
 						$("#loginName").val(data.userName);
 						$("#password").val(data.password);
+						$("#confirm").val(data.password);
 						$("#isdel").val(data.isdel);
 						$("#comments").val(data.comments);
 					}
@@ -91,18 +90,31 @@
 			//提交用户信息
 			function submitUserInfo(){
 				var param = $("#userForm").serialize();
-				$.ajax({
-					url: "user/update",
-					type: "post",
-					data: param,
-					dataType: "json",
-					success: function(result){
-						if(result.success){ alert("操作成功！"); }
-						else{ alert("操作失败！"); }
-						closeModal();
-						getUserList();
-					}
-				});
+				var password = $("#password").val();
+				var confirm = $("#confirm").val();
+				alert(password.trim() == "");
+				alert(password.trim() == null);
+				alert(password+"——"+confirm);
+				if(password.trim() == ""){
+					alert("密码不能为空！");
+				}else if(confirm.trim() == ""){
+					alert("请确认密码！");
+				}else if(password != confirm){
+					alert("输入密码前后不一致，请检查！");
+				}else{
+					$.ajax({
+						url: "user/update",
+						type: "post",
+						data: param,
+						dataType: "json",
+						success: function(result){
+							if(result.success){ alert("操作成功！"); }
+							else{ alert("操作失败！"); }
+							closeModal();
+							getUserList();
+						}
+					});
+				}
 			}
 		</script>
 	</body>
