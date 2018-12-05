@@ -1,9 +1,9 @@
 package com.hqgd.pms.service.dataAcquisition.impl;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,6 +135,11 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.recordExport(param);
+		path = (path == null || path.isEmpty()) ? "C:\\Program Files\\PMS" : path;
+		File file = new File(path);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
 		String classPath = path.replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp() + "historicalData.xls";
 		List<String> header = getHeader();
 		List<String> columns = getColumns();

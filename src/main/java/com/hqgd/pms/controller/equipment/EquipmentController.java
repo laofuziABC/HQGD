@@ -36,10 +36,11 @@ public class EquipmentController {
 	IEquipmentService equipmentService;
 
 	@RequestMapping(value = "/add")
-	public void add(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
+	public void add(Model model, User user,EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("添加设备开始");
-		User loginUser = (User) request.getSession(true).getAttribute("user");
+		User loginUser = user;
+//		User loginUser = (User) request.getSession(true).getAttribute("user");
 		Map<String, Object> resultMap = equipmentService.add(equipmentInfo, loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));

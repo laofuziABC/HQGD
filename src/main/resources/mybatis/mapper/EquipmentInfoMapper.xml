@@ -6,18 +6,29 @@
     <result column="EQUIPMENT_NAME" jdbcType="VARCHAR" property="equipmentName" />
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
     <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="FRAME_STRU" jdbcType="VARCHAR" property="frameStru" />
     <result column="ICON" jdbcType="VARCHAR" property="icon" />
-    <result column="REGION" jdbcType="VARCHAR" property="region" />
+    <result column="CHANNEL_TEM" jdbcType="VARCHAR" property="channelTem" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="LNG_LAT" jdbcType="VARCHAR" property="lngLat" />
+    <result column="POSTAL_CODE" jdbcType="VARCHAR" property="postalCode" />
     <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <!-- <resultMap id="Maps" type="com.hqgd.pms.domain.Maps">
+  <result column="LNG_LAT" jdbcType="VARCHAR" property="lngLat" />
+  </resultMap> -->
   <sql id="Base_Column_List">
-    EQUIPMENT_ID, EQUIPMENT_NAME, USER_NAME, USER_ID, ICON, REGION, CREATOR, CREATE_TIME, 
-    UPDATER, UPDATE_TIME
+    EQUIPMENT_ID, EQUIPMENT_NAME, USER_NAME, USER_ID, FRAME_STRU, ICON, CHANNEL_TEM, 
+    ADDRESS, LNG_LAT, POSTAL_CODE, CREATOR, CREATE_TIME, UPDATER, UPDATE_TIME
   </sql>
-  
+  <select id="selectLngLat" resultType="java.lang.String" >
+    select 
+    LNG_LAT
+    from hq_equipment_info
+  </select>
   <select id="selectTotalChNum" resultType="java.lang.Integer" >
 	SELECT 
   		COUNT(EQUIPMENT_ID) 
@@ -31,12 +42,17 @@
   		hq_equipment_param
   	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
   </select>
-  <select id="selectAllEquipment" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectAllEquipmentByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from hq_equipment_info
     where 1=1 
      AND USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_info
   </select>
   <select id="selectEquipmentByGroup" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -56,13 +72,15 @@
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     insert into hq_equipment_info (EQUIPMENT_ID, EQUIPMENT_NAME, USER_NAME, 
-      USER_ID, ICON, REGION, 
-      CREATOR, CREATE_TIME, UPDATER, 
-      UPDATE_TIME)
+      USER_ID, FRAME_STRU, ICON, 
+      CHANNEL_TEM, ADDRESS, LNG_LAT, 
+      POSTAL_CODE, CREATOR, CREATE_TIME, 
+      UPDATER, UPDATE_TIME)
     values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-      #{userId,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{userId,jdbcType=VARCHAR}, #{frameStru,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+      #{channelTem,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{lngLat,jdbcType=VARCHAR}, 
+      #{postalCode,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     insert into hq_equipment_info
@@ -79,11 +97,23 @@
       <if test="userId != null">
         USER_ID,
       </if>
+      <if test="frameStru != null">
+        FRAME_STRU,
+      </if>
       <if test="icon != null">
         ICON,
       </if>
-      <if test="region != null">
-        REGION,
+      <if test="channelTem != null">
+        CHANNEL_TEM,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="lngLat != null">
+        LNG_LAT,
+      </if>
+      <if test="postalCode != null">
+        POSTAL_CODE,
       </if>
       <if test="creator != null">
         CREATOR,
@@ -111,11 +141,23 @@
       <if test="userId != null">
         #{userId,jdbcType=VARCHAR},
       </if>
+      <if test="frameStru != null">
+        #{frameStru,jdbcType=VARCHAR},
+      </if>
       <if test="icon != null">
         #{icon,jdbcType=VARCHAR},
       </if>
-      <if test="region != null">
-        #{region,jdbcType=VARCHAR},
+      <if test="channelTem != null">
+        #{channelTem,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lngLat != null">
+        #{lngLat,jdbcType=VARCHAR},
+      </if>
+      <if test="postalCode != null">
+        #{postalCode,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -143,11 +185,23 @@
       <if test="userId != null">
         USER_ID = #{userId,jdbcType=VARCHAR},
       </if>
+      <if test="frameStru != null">
+        FRAME_STRU = #{frameStru,jdbcType=VARCHAR},
+      </if>
       <if test="icon != null">
         ICON = #{icon,jdbcType=VARCHAR},
       </if>
-      <if test="region != null">
-        REGION = #{region,jdbcType=VARCHAR},
+      <if test="channelTem != null">
+        CHANNEL_TEM = #{channelTem,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lngLat != null">
+        LNG_LAT = #{lngLat,jdbcType=VARCHAR},
+      </if>
+      <if test="postalCode != null">
+        POSTAL_CODE = #{postalCode,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         CREATOR = #{creator,jdbcType=VARCHAR},
@@ -169,8 +223,12 @@
     set EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
       USER_NAME = #{userName,jdbcType=VARCHAR},
       USER_ID = #{userId,jdbcType=VARCHAR},
+      FRAME_STRU = #{frameStru,jdbcType=VARCHAR},
       ICON = #{icon,jdbcType=VARCHAR},
-      REGION = #{region,jdbcType=VARCHAR},
+      CHANNEL_TEM = #{channelTem,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      LNG_LAT = #{lngLat,jdbcType=VARCHAR},
+      POSTAL_CODE = #{postalCode,jdbcType=VARCHAR},
       CREATOR = #{creator,jdbcType=VARCHAR},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       UPDATER = #{updater,jdbcType=VARCHAR},
