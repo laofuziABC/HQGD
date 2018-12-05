@@ -16,14 +16,14 @@
 	</head>
 	<body class="login">
 		<!--企业logo-->
-		<div class="logo">
-			<!--<img src="img/hqgd/logo.jpg" alt="企业logo" />--> 
-		</div>
+		<!-- <div class="logo">
+			<img src="img/hqgd/logo.jpg" alt="企业logo" /> 
+		</div> -->
 		<!--页面内容-->
 		<div class="content">
 			<!-- 登录表单【开始】 -->
 			<form class="form-vertical login-form" action="">
-				<h3 class="form-title">用户登录</h3><hr />
+				<h3 class="form-title">系统登录</h3><hr />
 				<!--验证警示框：请输入登录信息-->
 				<div class="alert alert-error hide">
 					<button class="close" data-dismiss="alert"></button>
@@ -202,7 +202,7 @@
 					async: false,
 					success: function(data){
 						if(data.success){
-							window.location.href = "index.html";
+							window.location.href = "index2.html";
 						}else{
 							$('.alert-error', $('.login-form')).html(data.message);
 							$('.alert-error', $('.login-form')).show();

@@ -22,13 +22,13 @@ Login page
   background-color:#fff; 
   /*width: 291px;*/
   /*margin: 0 auto; */
-	width: 370px;
-	margin: 120px auto; 
+  width: 370px;
+  margin: 200px auto; 
   margin-bottom: 0px;
   padding: 30px;  
   padding-top: 20px;  
   padding-bottom: 15px;
-  border-radius: 10px;;
+  border-radius: 10px;
 }
 
 .login .content h3 {								/*更改说明：添加文本居中（老夫子 2018.11.06）*/

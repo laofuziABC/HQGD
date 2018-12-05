@@ -63,11 +63,8 @@ public class LoginService implements ILoginService {
 			} else {
 				map.put("roleId", "0");
 			}
-			return map;
-
-		} else {
-			return map;
 		}
+		return map;
 	}
 
 	private Map<String, Object> authUser(User userFind, User userNew) {

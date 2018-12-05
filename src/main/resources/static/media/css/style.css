@@ -709,12 +709,13 @@ ul.page-sidebar-menu > li > ul.sub-menu  li > ul.sub-menu > li > a > i {
 Sidebar toggler(show/hide)
 ***/
 
-.page-sidebar .sidebar-toggler {
+.page-sidebar .sidebar-toggler {				/* 更改说明：改变左外边框 */
   cursor: pointer; 
   opacity: 0.5;
   filter: alpha(opacity=50);
   margin-top: 15px;
-  margin-left: 175px;
+  /* margin-left: 175px; */
+  margin-left: 195px;
   width: 29px;
   height: 29px;
   background-repeat: no-repeat;
