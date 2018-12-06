@@ -127,8 +127,6 @@
 		}
 		//根据roleId加载侧边菜单栏——roleId=1，管理员；其余都为普通用户
 		var roleId =getParam("roleId");
-		var userId=getParam("userId");
-		alert(userId);
 		var menuHtml="";
 		menuHtml+="<li><div class=\"sidebar-toggler hidden-phone\"></div></li>";
 		if(roleId == 1){
@@ -289,7 +287,6 @@
 		
 		<!-- 关联侧边栏和展示内容【开始】 -->
 		function loadContext(param){
-			alert("123");
 			//先清空页面原有内容
 			$("#page-content").empty();
 			//再引入新的界面

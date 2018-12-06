@@ -33,22 +33,21 @@
 						<td><input type="text" class="right_input" value="" id="userId" name="id"/></td>
 						<td class="info_text"></td>
 					</tr>
-					<tr class="normal hideInfo">
+					<tr class="normal">
 						<td class="info_text">原始密码<span style="color: red;">*</span>：</td>
 						<td><input type="password" class="right_input" value="" id="oldpassword" name="oldpassword" /></td>
 						<td class="info_text"></td>
 					</tr>
-					<tr class="normal hideInfo">
+					<tr class="normal">
 						<td class="info_text">新密码<span style="color: red;">*</span>：</td>
 						<td><input type="password" class="right_input" value="" id="newPassword" name="newPassword" /></td>
 						<td class="info_text"></td>
 					</tr>
-					<tr class="normal hideInfo">
+					<tr class="normal">
 						<td class="info_text">确认新密码<span style="color: red;">*</span>：</td>
 						<td><input type="password" class="right_input" value="" id="confirm"/></td>
 						<td class="info_text"></td>
 					</tr>
-					
 				</table>
 				<input type="button" value="提 &nbsp; 交" class="outerButton" onclick="submitUserInfo();"/>
 			</form>
@@ -56,29 +55,8 @@
 		</div>
 		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
 		<script type="text/javascript">
-			$(function(){
-				$(".hideInfo").hide();
-				if(userId == null){$(".hideInfo").show(); }
-				else{ $(".hideInfo").hide(); }
-				//数据回显
-				/* $.ajax({
-					url: "user/select",
-					type: "post",
-					data: {"userId": userId},
-					dataType: "json",
-					success: function(data){
-						//回显用户基本信息
-						$("#userId").val(data.id);
-						$("#username").val(data.userName);
-						$("#loginName").val(data.userName);
-						$("#password").val(data.password);
-						$("#confirm").val(data.password);
-						$("#isdel").val(data.isdel);
-						$("#comments").val(data.comments);
-					}
-				}); */
-			});
-			//提交用户信息
+			$("#userId").val(getParam("userId"));
+			//提交修改密码信息
 			function submitUserInfo(){
 				var param = $("#userForm").serialize();
 				var oldpassword = $("#oldpassword").val();
