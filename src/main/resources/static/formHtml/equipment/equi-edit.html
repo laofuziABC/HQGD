@@ -52,13 +52,23 @@
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
-						<td class="info_text">安装地区：</td>
-						<td><input type="text" class="right_input" id="region" name="region"/></td>
+						<td class="info_text">安装地址：</td>
+						<td><input type="text" class="right_input" id="address" name="address"/></td>
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
-						<td class="info_text">帧结构：</td>
-						<td><input type="text" class="right_input" id="uniqueCode" name="uniqueCode"/></td>
+						<td class="info_text">地区编码<span style="color: red;">*</span>：</td>
+						<td><input type="text" class="right_input" id="postalCode" name="postalCode"/></td>
+						<td class="info_text"></td>
+					</tr>
+					<tr class="normal">
+						<td class="info_text">坐标<span style="color: red;">*</span>：</td>
+						<td><input type="text" class="right_input" id="latLon" name="latLon"/></td>
+						<td class="info_text"></td>
+					</tr>
+					<tr class="normal">
+						<td class="info_text">帧结构<span style="color: red;">*</span>：</td>
+						<td><input type="text" class="right_input" id="frameStru" name="frameStru"/></td>
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
@@ -95,7 +105,10 @@
 						$("#equipmentId").val(data.equipmentId);
 						$("#equipmentName").val(data.equipmentName);
 						$("#userId").val(data.userId);
-						$("#region").val(data.region);
+						$("#address").val(data.address);
+						$("#postalCode").val(data.postalCode);
+						$("#latLon").val(data.latLon);
+						$("#frameStru").val(data.frameStru);
 					}
 				});
 			});

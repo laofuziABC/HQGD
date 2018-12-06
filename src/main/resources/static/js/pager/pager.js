@@ -27,14 +27,23 @@ $(function(){
 					}
 				}
 				//更改currentPage后，刷新表格
-//				alert(currentPage);
 				searchResult(currentPage);
 			});
-		}
-		
-	})
+		},
+//		//加载页码
+//		loadAllPage: function(totalPage){
+//			var pageInfo="<a class=\"pre\">上一页</a>";
+//			if(currentPage>2){ pageInfo+="<a>"+(currentPage-2)+"</a>"; }
+//			if(currentPage>1){ pageInfo+="<a>"+(currentPage-1)+"</a>"; }
+//			pageInfo+="<a class=\"active\">"+currentPage+"</a>";
+//			if(currentPage<totalPage){ pageInfo+="<a>"+(currentPage+1)+"</a>"; }
+//			if(currentPage<totalPage-1){ pageInfo+="<a>"+(currentPage+2)+"</a>"; }
+//			pageInfo+="<a class=\"next\">下一页</a>";
+//			pageInfo+="<a>共有"+totalPage+"页</a>";
+//			return pageInfo;
+//		}
 	
-	
+	});
 	
 	
 	
