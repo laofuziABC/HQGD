@@ -34,15 +34,15 @@
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
-						<td class="info_text">用户名称<span style="color: red;">*</span>：</td>
+						<td class="info_text">用户名<span style="color: red;">*</span>：</td>
 						<td><input type="text" class="right_input" value="" id="username" name="userName" /></td>
 						<td class="info_text"></td>
 					</tr>
-					<tr class="normal">
-						<td class="info_text">登录名<span style="color: red;">*</span>：</td>
+					<!-- <tr class="normal">
+						<td class="info_text">用户名<span style="color: red;">*</span>：</td>
 						<td><input type="text" class="right_input" value="" id="loginName" name="loginName" /></td>
 						<td class="info_text"></td>
-					</tr>
+					</tr> -->
 					<tr class="normal hideInfo">
 						<td class="info_text">登录密码<span style="color: red;">*</span>：</td>
 						<td><input type="password" class="right_input" value="" id="password" name="password" /></td>
@@ -70,7 +70,7 @@
 				if(userId == null){$(".hideInfo").show(); }
 				else{ $(".hideInfo").hide(); }
 				//数据回显
-				/* $.ajax({
+				$.ajax({
 					url: "user/select",
 					type: "post",
 					data: {"userId": userId},
@@ -79,22 +79,18 @@
 						//回显用户基本信息
 						$("#userId").val(data.id);
 						$("#username").val(data.userName);
-						$("#loginName").val(data.userName);
 						$("#password").val(data.password);
 						$("#confirm").val(data.password);
 						$("#isdel").val(data.isdel);
 						$("#comments").val(data.comments);
 					}
-				}); */
+				});
 			});
 			//提交用户信息
 			function submitUserInfo(){
 				var param = $("#userForm").serialize();
 				var password = $("#password").val();
 				var confirm = $("#confirm").val();
-				alert(password.trim() == "");
-				alert(password.trim() == null);
-				alert(password+"——"+confirm);
 				if(password.trim() == ""){
 					alert("密码不能为空！");
 				}else if(confirm.trim() == ""){

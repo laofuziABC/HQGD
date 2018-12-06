@@ -37,7 +37,7 @@
 			<table class="table table-striped table-hover table-bordered" id="sample_editable_1">
 				<thead>
 					<tr> 
-						<th>序号</th>			<th>登录名</th>	<th>用户状态</th>	<th>创建时间</th>
+						<th>序号</th>			<th>用户名</th>	<th>用户属性</th>	<th>创建时间</th>
 						<th>更新时间</th>	<th>更新者</th>	<th>备注</th>			<th>操作</th>
 					</tr>
 				</thead>
@@ -104,7 +104,7 @@
 				if(param == null){ title = "新增用户"; }
 				else{ title = "编辑用户"; }
 				let url = "formHtml/user/user-edit.html";
-				var params = {"width": 600, "height": 450, "userId": param};
+				var params = {"width": 600, "height": 350, "userId": param};
 				parent.openModal(title, url, params);
 			}
 			//删除用户

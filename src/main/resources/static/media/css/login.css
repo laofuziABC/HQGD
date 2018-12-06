@@ -3,11 +3,11 @@ Login page
 ***/
 
 /* logo page */
-.login {																	/*更改说明：将背景改为自定义图片（老夫子 2018.11.06）*/
+.login {																	/*鏇存敼璇存槑锛氬皢鑳屾櫙鏀逛负鑷畾涔夊浘鐗囷紙鑰佸か瀛� 2018.11.06锛�*/
   /*background-color: #444 !important;*/
 }
 
-.login .logo {													/* 更改说明：更改宽度；新增高度；删掉内外边距；去掉文本居中；添加背景颜色（老夫子 2018.11.06） */
+.login .logo {													/* 鏇存敼璇存槑锛氭洿鏀瑰搴︼紱鏂板楂樺害锛涘垹鎺夊唴澶栬竟璺濓紱鍘绘帀鏂囨湰灞呬腑锛涙坊鍔犺儗鏅鑹诧紙鑰佸か瀛� 2018.11.06锛� */
   /*width: 247px;*/
   width: 100%;	
  	height: 100px;
@@ -18,7 +18,7 @@ Login page
   background-color: #FFFFFF;
 }  
 
-.login .content {									/*更改说明：更改宽度；更改外边框；新增边框圆角（老夫子 2018.11.06）*/
+.login .content {									/*鏇存敼璇存槑锛氭洿鏀瑰搴︼紱鏇存敼澶栬竟妗嗭紱鏂板杈规鍦嗚锛堣�佸か瀛� 2018.11.06锛�*/
   background-color:#fff; 
   /*width: 291px;*/
   /*margin: 0 auto; */
@@ -31,7 +31,7 @@ Login page
   border-radius: 10px;
 }
 
-.login .content h3 {								/*更改说明：添加文本居中（老夫子 2018.11.06）*/
+.login .content h3 {								/*鏇存敼璇存槑锛氭坊鍔犳枃鏈眳涓紙鑰佸か瀛� 2018.11.06锛�*/
   color: #000;
   text-align: center;
 }
@@ -48,8 +48,11 @@ Login page
     padding: 0px;
     margin: 0px;
 }
-
-.login .content .m-wrap {									/*更改说明：更改宽度（老夫子 2018.11.06）*/
+.login .content .forget-form1 {
+    padding: 0px;
+    margin: 0px;
+}
+.login .content .m-wrap {									/*鏇存敼璇存槑锛氭洿鏀瑰搴︼紙鑰佸か瀛� 2018.11.06锛�*/
   /*width: 249px;*/
   width: 309px;
   border-left: 0 !important;
@@ -70,7 +73,9 @@ Login page
 .login .content .forget-form {
   display: none;
 }
-
+.login .content .forget-form1 {
+  display: none;
+}
 .login .content .register-form {
   display: none;
 }
@@ -95,7 +100,11 @@ Login page
   margin-bottom: 0;
   padding-bottom: 20px;
 }  
-
+.login .content .forget-form1 .form-actions {
+  border: 0;
+  margin-bottom: 0;
+  padding-bottom: 20px;
+}  
 .login .content .register-form .form-actions {
   border: 0;
   margin-bottom: 0;
@@ -107,14 +116,14 @@ Login page
   display: inline-block;
 }
 
-.login .content .form-actions .btn {											/*更改说明：新增字体大小、宽度、更改颜色（老夫子 2018.11.06）*/
+.login .content .form-actions .btn {											/*鏇存敼璇存槑锛氭柊澧炲瓧浣撳ぇ灏忋�佸搴︺�佹洿鏀归鑹诧紙鑰佸か瀛� 2018.11.06锛�*/
   margin-top: 1px;
   /*font-size: 18px;
   background-color: #1E90FF;
   width: 250px;*/
 }
 
-.login .content .forget-password {											/*更改说明：更改外边框上边距（老夫子 2018.11.06）*/
+.login .content .forget-password {											/*鏇存敼璇存槑锛氭洿鏀瑰杈规涓婅竟璺濓紙鑰佸か瀛� 2018.11.06锛�*/
   /*margin-top: 25px;*/
  margin-top: 8px;
 }

@@ -25,15 +25,6 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	@RequestMapping("add")
-	@ResponseBody
-	public String add(Model model, User user, HttpServletRequest request, HttpServletResponse response) {
-		User userLog = (User) request.getSession(true).getAttribute("user");
-		// User userLog = user;
-		Map<String, Object> result = userService.add(user, userLog);
-		String json = new Gson().toJson(result).toString();
-		return json;
-	}
 
 	@RequestMapping("delete")
 	@ResponseBody
@@ -44,7 +35,7 @@ public class UserController {
 		return json;
 	}
 
-	@RequestMapping(value = "update")
+	@RequestMapping(value = "update")//新增和编辑用户信息都是此接口
 	@ResponseBody
 	public String update(Model model, User user, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
