@@ -11,9 +11,17 @@ public class EquipmentInfo {
 
     private String userId;
 
+    private String frameStru;
+
     private String icon;
 
-    private String region;
+    private String channelTem;
+
+    private String address;
+
+    private String lngLat;
+
+    private String postalCode;
 
     private String creator;
 
@@ -22,8 +30,18 @@ public class EquipmentInfo {
     private String updater;
 
     private Date updateTime;
+    
+    
 
-    public String getEquipmentId() {
+    public String getLngLat() {
+		return lngLat;
+	}
+
+	public void setLngLat(String lngLat) {
+		this.lngLat = lngLat;
+	}
+
+	public String getEquipmentId() {
         return equipmentId;
     }
 
@@ -55,6 +73,14 @@ public class EquipmentInfo {
         this.userId = userId == null ? null : userId.trim();
     }
 
+    public String getFrameStru() {
+        return frameStru;
+    }
+
+    public void setFrameStru(String frameStru) {
+        this.frameStru = frameStru == null ? null : frameStru.trim();
+    }
+
     public String getIcon() {
         return icon;
     }
@@ -63,12 +89,28 @@ public class EquipmentInfo {
         this.icon = icon == null ? null : icon.trim();
     }
 
-    public String getRegion() {
-        return region;
+    public String getChannelTem() {
+        return channelTem;
     }
 
-    public void setRegion(String region) {
-        this.region = region == null ? null : region.trim();
+    public void setChannelTem(String channelTem) {
+        this.channelTem = channelTem == null ? null : channelTem.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode == null ? null : postalCode.trim();
     }
 
     public String getCreator() {

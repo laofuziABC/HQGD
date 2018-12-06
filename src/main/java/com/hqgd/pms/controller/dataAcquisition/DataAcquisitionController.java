@@ -43,7 +43,8 @@ public class DataAcquisitionController {
 	@RequestMapping("/realtime")
 	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
-		log.info("查询实时数据开始,equipmentId=" + equipmentId);
+		long inTime = System.currentTimeMillis();
+		log.info("查询实时数据开始 " + inTime);
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
@@ -53,13 +54,17 @@ public class DataAcquisitionController {
 		resultMap.put("data", realTimeDateList);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询实时数据结束，list = " + resultMap);
+		long outTime = System.currentTimeMillis();
+		log.info("查询实时数据结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("接口访问时长为：" + midTime);
 	}
 
 	@RequestMapping("/historical")
 	public void getHistoricalData(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
-		log.info("查询历史数据开始,queryVo=" + queryVo);
+		long inTime = System.currentTimeMillis();
+		log.info("查询历史数据开始 " + inTime);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
 		Integer total = dataAcquisitionService.selectTotal(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -71,13 +76,17 @@ public class DataAcquisitionController {
 		resultMap.put("total", total);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询历史数据结束 ");
+		long outTime = System.currentTimeMillis();
+		log.info("查询历史数据结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("接口访问时长为：" + midTime);
 	}
 	
 	@RequestMapping("/historicalCurve")
 	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		log.info("查询历史数据开始,queryVo=" + queryVo);
+		long inTime = System.currentTimeMillis();
+		log.info("查询历史数据曲线开始 " + inTime);
 		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
@@ -87,7 +96,10 @@ public class DataAcquisitionController {
 		resultMap.put("data", historicalDataList);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询历史数据结束 ");
+		long outTime = System.currentTimeMillis();
+		log.info("查询历史数据曲线结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("接口访问时长为：" + midTime);
 	}
 
 	/**
@@ -121,4 +133,5 @@ public class DataAcquisitionController {
 			ex.printStackTrace();
 		}
 	}
+	
 }
