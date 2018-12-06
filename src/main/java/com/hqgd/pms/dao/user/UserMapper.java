@@ -1,7 +1,6 @@
 package com.hqgd.pms.dao.user;
 
 import java.util.List;
-import java.util.Map;
 
 import com.hqgd.pms.domain.User;
 
@@ -22,7 +21,9 @@ public interface UserMapper {
     
 	User findUserByUserName(String userName);
 
-	void updatePassword(Map<String, String> param);
-
 	List<User> selectAll();
+
+	int initUserPassword(String id);
+
+	void updatePassword(String id, String newPassword);
 }

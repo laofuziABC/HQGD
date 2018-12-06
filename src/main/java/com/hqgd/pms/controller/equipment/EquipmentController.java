@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.domain.EquipmentInfo;
-import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.equipment.IEquipmentService;
 
@@ -84,14 +83,30 @@ public class EquipmentController {
 		log.info("查询设备结束");
 	}
 
+	@RequestMapping(value = "/selectAllByUser")
+	@ResponseBody
+	public void selectAllByUser(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.info("查询该用户下所有设备开始");
+		User user = (User) request.getSession(true).getAttribute("user");
+		String userId = user.getId().toString();
+		// String userId = "1";
+		List<EquipmentInfo> equipmentList = equipmentService.selectAllByUser(userId);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000005");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		resultMap.put("data", equipmentList);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询该用户下所有设备结束");
+	}
+	
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("查询所有设备开始");
-		User user = (User) request.getSession(true).getAttribute("user");
-		String userId = user.getId().toString();
-		// String userId = "1";
-		List<EquipmentInfo> equipmentList = equipmentService.selectAll(userId);
+		List<EquipmentInfo> equipmentList = equipmentService.selectAll();
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000005");
@@ -103,44 +118,44 @@ public class EquipmentController {
 		log.info("查询所有设备结束");
 	}
 
-	@RequestMapping(value = "/equipmentParam")
-	public void selectEquipmentParam(Model model, String equipmentId, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		log.info("查询设备参数开始 ，equipmentId =  " + equipmentId);
-		List<EquipmentParam> equipmentParam = equipmentService.selectEquipmentParam(equipmentId);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000006");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "");
-		resultMap.put("data", equipmentParam);
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询设备参数结束 ");
-	}
+//	@RequestMapping(value = "/equipmentParam")
+//	public void selectEquipmentParam(Model model, String equipmentId, HttpServletRequest request,
+//			HttpServletResponse response) throws IOException {
+//		log.info("查询设备参数开始 ，equipmentId =  " + equipmentId);
+//		List<EquipmentParam> equipmentParam = equipmentService.selectEquipmentParam(equipmentId);
+//		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		resultMap.put("success", Boolean.TRUE.toString());
+//		resultMap.put("resultCode", "00000006");
+//		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+//		resultMap.put("message", "");
+//		resultMap.put("data", equipmentParam);
+//		response.setContentType("application/json; charset=UTF-8");
+//		response.getWriter().write(new Gson().toJson(resultMap));
+//		log.info("查询设备参数结束 ");
+//	}
 
-	@RequestMapping(value = "/setParam")
-	public void setEquipmentParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		log.info("设置设备参数开始, request = " + request);
-		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Boolean rusult = equipmentService.setEquipmentParam(equipmentParam,loginUser);
-		if(rusult) {
-			response.sendRedirect("index.html");
-		}
+//	@RequestMapping(value = "/setParam")
+//	public void setEquipmentParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
+//			HttpServletResponse response) throws IOException {
+//		log.info("设置设备参数开始, request = " + request);
+//		User loginUser = (User) request.getSession(true).getAttribute("user");
+//		Boolean rusult = equipmentService.setEquipmentParam(equipmentParam,loginUser);
+//		if(rusult) {
+//			response.sendRedirect("index.html");
+//		}
+////		response.setContentType("application/json; charset=UTF-8");
+////		response.getWriter().write(new Gson().toJson(rusultMap));
+//		log.info("设置设备参数结束 ");
+//	}
+	
+//	@RequestMapping(value = "/updateParam")
+//	public void updateParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
+//			HttpServletResponse response) throws IOException {
+//		log.info("更新设备参数开始, request = " + request);
+//		User loginUser = (User) request.getSession(true).getAttribute("user");
+//		Map<String, Object> rusultMap = equipmentService.updateParam(equipmentParam,loginUser);
 //		response.setContentType("application/json; charset=UTF-8");
 //		response.getWriter().write(new Gson().toJson(rusultMap));
-		log.info("设置设备参数结束 ");
-	}
-	
-	@RequestMapping(value = "/updateParam")
-	public void updateParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		log.info("更新设备参数开始, request = " + request);
-		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Map<String, Object> rusultMap = equipmentService.updateParam(equipmentParam,loginUser);
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(rusultMap));
-		log.info("更新设备参数结束 ");
-	}
+//		log.info("更新设备参数结束 ");
+//	}
 }

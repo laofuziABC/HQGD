@@ -36,9 +36,11 @@
   	  AND ur.ROLE_ID = r.ID
   	  AND u.ID = #{id,jdbcType=INTEGER}
   </select>
-  
+  <update id="initUserPassword">
+        UPDATE access_control_user SET PASSWORD = '123456' WHERE ID = #{id}
+  </update>
   <update id="updatePassword">
-        UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE USER_NAME = #{userName}
+        UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE ID = #{id}
   </update>
   <update id="deleteByPrimaryKey">
         UPDATE access_control_user SET ISDEL = 'Y' WHERE ID = #{id}

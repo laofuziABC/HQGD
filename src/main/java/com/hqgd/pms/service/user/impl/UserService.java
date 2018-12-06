@@ -23,13 +23,6 @@ public class UserService implements IUserService {
 	@Resource
 	private UserMapper userMapper;
 
-	public void updatePassword(String userName, String newPassword) {
-		Map<String, String> param = new HashMap<>();
-		param.put("username", userName);
-		param.put("newPassword", newPassword);
-		userMapper.updatePassword(param);
-	}
-
 	public User getUserById(int userId) {
 		return userMapper.selectByPrimaryKey(userId);
 	}
@@ -52,7 +45,7 @@ public class UserService implements IUserService {
 			user.setIsdel("N");
 			int i = userMapper.insert(user);
 			result = (i == 0) ? false : true;
-			message = "添加用户成功！";
+			message = (result == true) ? "添加用户成功！" : "添加用户失败！";
 		} else {
 			message = "该用户名已被注册！";
 		}
@@ -101,6 +94,56 @@ public class UserService implements IUserService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public Map<String, Object> initUserPassword(String id) {
+		Boolean result = false;
+		String message = "";
+		int i = userMapper.initUserPassword(id);
+		result = (i == 0) ? false : true;
+		message = (result == true) ? "密码初始化成功！" : "密码初始化失败！";
+		Map<String, Object> map = new HashMap<>();
+		map.put("success", result);
+		map.put("message", message);
+		return map;
+	}
+
+	public Map<String, Object> updatePassword(String id, String password, String newPassword) {
+		User userFind = userMapper.selectByPrimaryKey(Integer.valueOf(id));
+		Map<String, Object> result = authUser(userFind,
+				new User(null, id, password, null, null, null, null, null, null));
+		Boolean authUser = (Boolean) result.get("result");
+		if (!authUser) {
+			// 返回用户名或密码错误，修改密码失败
+			result.put("result", false);
+			result.put("message", "原用户名或密码错误，请检查！");
+			return result;
+		}
+		userMapper.updatePassword(id, newPassword);
+		result.put("result", true);
+		result.put("message", "更新密码成功！");
+		return result;
+	}
+
+	private Map<String, Object> authUser(User userFind, User userNew) {
+		String message = null;
+		boolean success = true;
+
+		if (userFind == null) { // 系统中没查到用户输入的用户名的相关信息
+			message = "用户名不存在或已被禁用！";
+			success = false;
+		} else if (!userFind.getPassword().equals(userNew.getPassword())) { // 用户名或密码输入不正确
+			message = "用户名或密码不正确！";
+			success = false;
+		} else {
+			success = true;
+		}
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("message", message);
+		map.put("success", success);
+		return map;
 	}
 
 }

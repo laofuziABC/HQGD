@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.hqgd.pms.domain.EquipmentInfo;
-import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.User;
 
 public interface IEquipmentService {
@@ -17,12 +16,8 @@ public interface IEquipmentService {
 
 	EquipmentInfo select(String equipmentId);
 
-	List<EquipmentInfo> selectAll(String userId);
+	List<EquipmentInfo> selectAll();
 
-	List<EquipmentParam> selectEquipmentParam(String equipmentId);
-
-	Boolean setEquipmentParam(EquipmentParam equipmentParam, User loginUser);
-
-	Map<String, Object> updateParam(EquipmentParam equipmentParam, User loginUser);
+	List<EquipmentInfo> selectAllByUser(String userId);
 
 }
