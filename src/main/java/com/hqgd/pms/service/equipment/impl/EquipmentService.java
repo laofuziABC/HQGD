@@ -14,9 +14,7 @@ import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.common.HttpProtocolHandler;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
-import com.hqgd.pms.dao.equipment.EquipmentParamMapper;
 import com.hqgd.pms.domain.EquipmentInfo;
-import com.hqgd.pms.domain.EquipmentParam;
 import com.hqgd.pms.domain.GeoCode;
 import com.hqgd.pms.domain.GeoCodeInfo;
 import com.hqgd.pms.domain.User;
@@ -27,8 +25,6 @@ public class EquipmentService implements IEquipmentService {
 
 	@Resource
 	private EquipmentInfoMapper equipmentInfoMapper;
-	@Resource
-	private EquipmentParamMapper equipmentParamMapper;
 	@Resource
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 	private static final String baseUrl = "https://restapi.amap.com/v3/geocode/geo?";
@@ -62,7 +58,6 @@ public class EquipmentService implements IEquipmentService {
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		return resultMap;
 	}
-
 
 	private GeoCode geocode(String address, String city) {
 		String url = baseUrl + "key=" + key + "&address=" + address + "&city=" + city;
@@ -107,45 +102,54 @@ public class EquipmentService implements IEquipmentService {
 	}
 
 	@Override
-	public List<EquipmentInfo> selectAll(String param) {
-		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllEquipmentByUser(param);
+	public List<EquipmentInfo> selectAllByUser(String userId) {
+		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllEquipmentByUser(userId);
 		return equipmentInfoList;
 	}
 
 	@Override
-	public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
-		List<EquipmentParam> equipmentParamList = equipmentParamMapper.selectEquipmentParam(equipmentId);
-		return equipmentParamList;
+	public List<EquipmentInfo> selectAll() {
+		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAll();
+		return equipmentInfoList;
 	}
 
-	@Override
-	public Boolean setEquipmentParam(EquipmentParam equipmentParam, User loginUser) {
-		equipmentParam.setCreator(loginUser.getUserName());
-		equipmentParam.setCreateTime(new Date());
-		equipmentParam.setUpdater(loginUser.getUserName());
-		equipmentParam.setUpdateTime(new Date());
-		int i = equipmentParamMapper.setEquipmentParam(equipmentParam);
-		Boolean result = (i == 0) ? false : true;
-		// Map<String, Object> resultMap = new HashMap<String, Object>();
-		// resultMap.put("success", result);
-		// resultMap.put("resultCode", "00000007");
-		// resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		// resultMap.put("message", "");
-		return result;
-	}
+	// @Override
+	// public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
+	// List<EquipmentParam> equipmentParamList =
+	// equipmentParamMapper.selectEquipmentParam(equipmentId);
+	// return equipmentParamList;
+	// }
 
-	@Override
-	public Map<String, Object> updateParam(EquipmentParam equipmentParam, User loginUser) {
-		equipmentParam.setUpdater(loginUser.getUserName());
-		equipmentParam.setUpdateTime(new Date());
-		int i = equipmentParamMapper.updateParam(equipmentParam);
-		Boolean result = (i == 0) ? false : true;
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", result);
-		resultMap.put("resultCode", "00000008");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "");
-		return resultMap;
-	}
+	// @Override
+	// public Boolean setEquipmentParam(EquipmentParam equipmentParam, User
+	// loginUser) {
+	// equipmentParam.setCreator(loginUser.getUserName());
+	// equipmentParam.setCreateTime(new Date());
+	// equipmentParam.setUpdater(loginUser.getUserName());
+	// equipmentParam.setUpdateTime(new Date());
+	// int i = equipmentParamMapper.setEquipmentParam(equipmentParam);
+	// Boolean result = (i == 0) ? false : true;
+	// // Map<String, Object> resultMap = new HashMap<String, Object>();
+	// // resultMap.put("success", result);
+	// // resultMap.put("resultCode", "00000007");
+	// // resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+	// // resultMap.put("message", "");
+	// return result;
+	// }
+
+	// @Override
+	// public Map<String, Object> updateParam(EquipmentParam equipmentParam, User
+	// loginUser) {
+	// equipmentParam.setUpdater(loginUser.getUserName());
+	// equipmentParam.setUpdateTime(new Date());
+	// int i = equipmentParamMapper.updateParam(equipmentParam);
+	// Boolean result = (i == 0) ? false : true;
+	// Map<String, Object> resultMap = new HashMap<String, Object>();
+	// resultMap.put("success", result);
+	// resultMap.put("resultCode", "00000008");
+	// resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+	// resultMap.put("message", "");
+	// return resultMap;
+	// }
 
 }

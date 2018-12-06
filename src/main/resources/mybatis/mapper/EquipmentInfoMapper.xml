@@ -17,9 +17,6 @@
     <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <!-- <resultMap id="Maps" type="com.hqgd.pms.domain.Maps">
-  <result column="LNG_LAT" jdbcType="VARCHAR" property="lngLat" />
-  </resultMap> -->
   <sql id="Base_Column_List">
     EQUIPMENT_ID, EQUIPMENT_NAME, USER_NAME, USER_ID, FRAME_STRU, ICON, CHANNEL_TEM, 
     ADDRESS, LNG_LAT, POSTAL_CODE, CREATOR, CREATE_TIME, UPDATER, UPDATE_TIME
