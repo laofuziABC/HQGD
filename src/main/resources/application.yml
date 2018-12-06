@@ -5,7 +5,9 @@ mybatis:
   config: classpath:/mybatis/mybatis-config.xml
   typeAliasesPackage: com.hqgd.pms.domain
   mapperLocations: classpath:/mybatis/mapper/*.xml
-  
+logging:
+  level:
+     com.hqgd.pms.dao : debug  
 
 #spring:
 #  datasource:

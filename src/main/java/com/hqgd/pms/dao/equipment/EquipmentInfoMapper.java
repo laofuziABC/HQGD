@@ -26,5 +26,9 @@ public interface EquipmentInfoMapper {
 	int selectEquipCh(String equipmentId);
 	
 	List<String> selectLngLat();
+
+	List<EquipmentInfo> selectAllEquipmentByAddress(String adcode);
+
+	EquipmentInfo selectByEquipmentName(String equipmentName);
 	
 }

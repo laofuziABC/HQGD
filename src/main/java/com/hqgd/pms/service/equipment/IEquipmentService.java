@@ -20,4 +20,8 @@ public interface IEquipmentService {
 
 	List<EquipmentInfo> selectAllByUser(String userId);
 
+	List<EquipmentInfo> selectAllByAddress(String code);
+
+	EquipmentInfo selectByEquipmentName(String equipmentName);
+
 }

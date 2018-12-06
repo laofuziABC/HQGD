@@ -46,7 +46,9 @@ public class EquipmentService implements IEquipmentService {
 			String latlon = geoCode.getLocation();
 			String adcode = geoCode.getAdcode();
 			equipmentInfo.setLngLat(latlon);
-			equipmentInfo.setPostalCode(adcode);
+			equipmentInfo.setAdcode(adcode);
+			equipmentInfo.setCadcode(adcode.substring(0, 4));
+			equipmentInfo.setPadcode(adcode.substring(0, 2));
 			int i = equipmentInfoMapper.insert(equipmentInfo);
 			result = (i == 0) ? false : true;
 			resultMap.put("message", "添加设备成功");
@@ -111,6 +113,18 @@ public class EquipmentService implements IEquipmentService {
 	public List<EquipmentInfo> selectAll() {
 		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAll();
 		return equipmentInfoList;
+	}
+
+	@Override
+	public List<EquipmentInfo> selectAllByAddress(String adcode) {
+		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllEquipmentByAddress(adcode);
+		return equipmentInfoList;
+	}
+
+	@Override
+	public EquipmentInfo selectByEquipmentName(String equipmentName) {
+		EquipmentInfo equipmentInfo = equipmentInfoMapper.selectByEquipmentName(equipmentName);
+		return equipmentInfo;
 	}
 
 	// @Override

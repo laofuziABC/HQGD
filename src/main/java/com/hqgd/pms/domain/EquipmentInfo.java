@@ -3,6 +3,8 @@ package com.hqgd.pms.domain;
 import java.util.Date;
 
 public class EquipmentInfo {
+    private Integer id;
+
     private String equipmentId;
 
     private String equipmentName;
@@ -11,17 +13,21 @@ public class EquipmentInfo {
 
     private String userId;
 
-    private String frameStru;
-
-    private String icon;
-
     private String channelTem;
 
     private String address;
 
+    private String adcode;
+
+    private String cadcode;
+
+    private String padcode;
+
     private String lngLat;
 
-    private String postalCode;
+    private String frameStru;
+
+    private String icon;
 
     private String creator;
 
@@ -30,18 +36,16 @@ public class EquipmentInfo {
     private String updater;
 
     private Date updateTime;
-    
-    
 
-    public String getLngLat() {
-		return lngLat;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setLngLat(String lngLat) {
-		this.lngLat = lngLat;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getEquipmentId() {
+    public String getEquipmentId() {
         return equipmentId;
     }
 
@@ -73,22 +77,6 @@ public class EquipmentInfo {
         this.userId = userId == null ? null : userId.trim();
     }
 
-    public String getFrameStru() {
-        return frameStru;
-    }
-
-    public void setFrameStru(String frameStru) {
-        this.frameStru = frameStru == null ? null : frameStru.trim();
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon == null ? null : icon.trim();
-    }
-
     public String getChannelTem() {
         return channelTem;
     }
@@ -105,12 +93,52 @@ public class EquipmentInfo {
         this.address = address == null ? null : address.trim();
     }
 
-    public String getPostalCode() {
-        return postalCode;
+    public String getAdcode() {
+        return adcode;
     }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode == null ? null : postalCode.trim();
+    public void setAdcode(String adcode) {
+        this.adcode = adcode == null ? null : adcode.trim();
+    }
+
+    public String getCadcode() {
+        return cadcode;
+    }
+
+    public void setCadcode(String cadcode) {
+        this.cadcode = cadcode == null ? null : cadcode.trim();
+    }
+
+    public String getPadcode() {
+        return padcode;
+    }
+
+    public void setPadcode(String padcode) {
+        this.padcode = padcode == null ? null : padcode.trim();
+    }
+
+    public String getLngLat() {
+        return lngLat;
+    }
+
+    public void setLngLat(String lngLat) {
+        this.lngLat = lngLat == null ? null : lngLat.trim();
+    }
+
+    public String getFrameStru() {
+        return frameStru;
+    }
+
+    public void setFrameStru(String frameStru) {
+        this.frameStru = frameStru == null ? null : frameStru.trim();
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon == null ? null : icon.trim();
     }
 
     public String getCreator() {
