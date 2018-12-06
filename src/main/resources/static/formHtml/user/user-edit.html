@@ -70,7 +70,7 @@
 				if(userId == null){$(".hideInfo").show(); }
 				else{ $(".hideInfo").hide(); }
 				//数据回显
-				$.ajax({
+				/* $.ajax({
 					url: "user/select",
 					type: "post",
 					data: {"userId": userId},
@@ -85,7 +85,7 @@
 						$("#isdel").val(data.isdel);
 						$("#comments").val(data.comments);
 					}
-				});
+				}); */
 			});
 			//提交用户信息
 			function submitUserInfo(){
