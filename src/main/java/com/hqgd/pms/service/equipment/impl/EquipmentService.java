@@ -102,8 +102,8 @@ public class EquipmentService implements IEquipmentService {
 	}
 
 	@Override
-	public List<EquipmentInfo> selectAllByUser(String userId) {
-		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllEquipmentByUser(userId);
+	public List<EquipmentInfo> selectAllByUser(String userName) {
+		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllEquipmentByUser(userName);
 		return equipmentInfoList;
 	}
 

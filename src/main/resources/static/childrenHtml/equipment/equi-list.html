@@ -32,9 +32,9 @@
 			<table class="table table-striped table-hover table-bordered" id="sample_editable_1">
 				<thead>
 					<tr> 
-						<th>序号</th>			<th>设备名称</th>	<th>所属用户</th>	<th>创建时间</th>
-						<th>更新时间</th>	<th>更新人</th>		<th>安装地址</th>	<th>地区编码</th>
-						<th>坐标</th>			<th>帧结构</th>		<th>操作</th>
+						<th>序号</th>			<th>设备名称</th>	<th>安装地址</th>	<th>地区编码</th>
+						<th>经纬度</th>			<th>帧结构</th>	<th>所属用户</th>	<th>创建时间</th>
+						<th>更新时间</th>	<th>更新者</th>	<th>操作</th>
 					</tr>
 				</thead>
 				<tbody id="equipmentList"></tbody>
@@ -74,14 +74,14 @@
 							equipList+="<tr>";
 							equipList+="<td>"+(i+1)+"</td>";
 							equipList+="<td>"+data[i].equipmentName+"</td>";
-							equipList+="<td>"+data[i].userName+"</td>";
-							equipList+="<td>"+parent.formatDateToString(new Date(data[i].createTime))+"</td>";
-							equipList+="<td>"+parent.formatDateToString(new Date(data[i].updateTime))+"</td>";
-							equipList+="<td>"+data[i].updater+"</td>";
 							equipList+="<td>"+data[i].address+"</td>";
 							equipList+="<td>"+data[i].postalCode+"</td>";
 							equipList+="<td>"+data[i].latLon+"</td>";
 							equipList+="<td>"+data[i].frameStru+"</td>";
+							equipList+="<td>"+data[i].userName+"</td>";
+							equipList+="<td>"+parent.formatDateToString(new Date(data[i].createTime))+"</td>";
+							equipList+="<td>"+parent.formatDateToString(new Date(data[i].updateTime))+"</td>";
+							equipList+="<td>"+data[i].updater+"</td>";
 							equipList+="<td class=\"center\">";
 							equipList+="<a class=\"details\" href=\"#\" onclick=\"getChannelDetails('"+data[i].equipmentId+"');\">通道详情</a>&nbsp;";
 							equipList+="<a class=\"edit\" href=\"#\" onclick=\"getEquiEdit('"+data[i].equipmentId+"');\">编辑</a>&nbsp;";
