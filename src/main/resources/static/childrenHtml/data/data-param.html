@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>选择设备查询条件</title>
+	</head>
+	<body>
+		<!-- 左侧设备查询【开始】 -->
+		<div style="margin: 5px 0px;">
+			<input type="text" id="interEqui" placeholder="请输入设备名称或编号"  value="" onfocus="javascript: this.value=null;"/>
+			<button  class="btn blue" onclick="searchByEqui();"><i class="icon-search"></i></button>
+			<button class="btn green" onclick="showParams();">分组</button>
+		</div>
+		<div id="showParams" style="display: none;">
+			<button class="btn blue" onclick="showParamBox(1);" style="margin-right: 8%;"><i class="icon-user"></i>&nbsp;按用户查询设备</button>
+			<button class="btn blue" onclick="showParamBox(2);"><i class="icon-leaf"></i>&nbsp;按地区查询设备</button>
+			<div id="userParam" class="search-param" style="display: none;">
+				<input type="text" placeholder="请输入用户查询"  onfocus="javascript: this.value=null;" id="interUser"/>
+				<button  class="btn blue" onclick="getEquiByUser();"><i class="icon-search"></i></button>
+			</div>
+			<div id="addrParam" class="search-param" style="display: none;">
+				<select><option>选择省</option></select>
+				<select><option>选择市</option></select>
+				<select><option>选择区</option></select>
+				<button  class="btn blue" onclick="getEquiByAddr();"><i class="icon-search"></i></button>
+			</div>
+		</div>
+		<div>
+			<dl id="equipResultList">
+				<dd>设备名称</dd><dd>设备名称</dd><dd>设备名称</dd><dd>设备名称</dd><dd>设备名称</dd>
+				<dd>设备名称</dd><dd>设备名称</dd><dd>设备名称</dd><dd>设备名称</dd><dd>设备名称</dd>
+			</dl>
+			<!-- 翻页插件 -->
+			<div>
+				<div class="list-page-tail page-down" id="pager" style="margin: auto;"></div>
+			</div>
+		</div>
+		
+		
+		<!-- 左侧设备查询【结束】 -->
+		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				/* getEquiResultList(); */
+			});
+			/* 全局常量【开始】 */
+			var userParam=document.getElementById("userParam");
+			var addrParam=document.getElementById("addrParam");
+			/* 全局常量【结束】 */
+			//打开筛选区域
+			function showParams(){
+				var target = document.getElementById("showParams");
+				if(target.style.display=="none"){ target.style.display="block"; }
+				else{ target.style.display="none"; }
+			}
+			//加载设备列表
+			function getEquiResultList(){
+				$.ajax({
+					url: "equipment/selectAll",
+					type: "post",
+					dataType: "json",
+					success: function(result){
+						var data = result.data;
+						var resultList = "";
+						equiId=data[0].equipmentId
+						for(let i=0; i<data.length; i++){
+							resultList+="<dd onclick=\"getEquiData('"+data[i].equipmentId+"');\">"+data[i].equipmentName+"</dd>";
+						}
+						//根据设备列表，初始化第一台设备的展示信息
+						$("#equipResultList").html(resultList);
+						getEquiData(equiId);
+					}
+				});
+			}
+			//根据设备主键，获取数据展示信息
+			function getEquiData(param){
+				equiId=param.trim();
+				$("#right-view").load("childrenHtml/data/data-show.html");
+			}
+			//
+			function showParamBox(param){
+				var formHtml="";
+				
+				if(param==1){
+					userParam.style.display="block";
+					addrParam.style.display="none";
+				}
+				else if(param==2){
+					addrParam.style.display="block";
+					userParam.style.display="none";
+				}else{
+					userParam.style.display="none";
+					addrParam.style.display="none";
+				}
+			}
+			function getEquiByUser(){
+				userParam.style.display="none";
+				addrParam.style.display="none";
+			}
+			function getEquiByAddr(){
+				userParam.style.display="none";
+				addrParam.style.display="none";
+			}
+		</script>
+	</body>
+</html>
