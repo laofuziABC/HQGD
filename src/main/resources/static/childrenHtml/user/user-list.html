@@ -125,9 +125,10 @@
 			}
 			//用户密码初始化
 			function initUserPassword(param){
+				userId=param;
 				if(confirm("确认将该用户的密码初始化？")){
 					$.ajax({
-						url: "user/initPassword",
+						url: "user/initUserPassword",
 						type: "post",
 						data: {"userId": param},
 						dataType: "json",
@@ -174,7 +175,11 @@
 			}
 			//修改用户密码
 			function updatePsw(){
-				alert("更改密码");
+				let title = "修改密码";
+				let url = "formHtml/user/updatePass.html";
+				var params = {"width": 600, "height": 250, "userId": param};
+				parent.openModal(title, url, params);
+				
 			}
 		</script>
 	</body>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>更新密码</title>
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<meta content="" name="description" />
+		<meta content="" name="author" />
+		<style type="text/css">
+			#userForm{width: 100%; height: 100%;}
+			#userForm table{width: 100%; height: 100%}
+			#userForm table .normal{width: 100%; height: 40px;}
+			#userForm table .unnormal{width: 100%;}
+			#userForm .normal .info_text{width: 30%; margin: 0px; padding: 0px; font-size: 18px; text-align: right;}
+			#userForm .normal .right_input{width: 100%; height: 40px; margin: 0px; padding: 0px; font-size: 16px; text-align: center; }
+			#userForm select option{font-size: 16px; text-align: center; }
+			#userForm .normal .innerButton{width: 40%; height: 35px; margin: auto 30%; font-size: 16px; background-color: #00B848; color: #FFFFFF; border: 0px; border-radius: 4px;}
+			#channelsInfo{width: 90%; margin: 2px auto;}
+			#channelsInfo span {width: 125px; height: 90%; font-size: 16px; text-align: center; float: left; border: 1px solid #D3D3D3;}
+			#channelsInfo .chan_info{width: 100%; height: 30px;}
+			#channelsInfo .chan_info input{width: 125px; height: 29px; padding: 0px;}
+			#channelsInfo .chan_info .chan_button{width: 90px; height: 28px; margin: 0px 15px; background-color: #27A9E3; color: #FFFFFF; border: 0px; border-radius: 4px;}
+			#userForm .outerButton{width: 24%; height: 35px; margin: 10px 38%; background-color: #00B848; border: 0px; border-radius: 4px; color: #FFFFFF; font-size: 16px;}
+		</style>
+		
+	</head>
+	<body>
+		<div class="content">
+			<form action="#" method="post" id="userForm">
+				<table id="userInfoTable">
+					<tr style="display: none;">
+						<td class="info_text">用户主键：</td>
+						<td><input type="text" class="right_input" value="" id="userId" name="id"/></td>
+						<td class="info_text"></td>
+					</tr>
+					<tr class="normal hideInfo">
+						<td class="info_text">原始密码<span style="color: red;">*</span>：</td>
+						<td><input type="password" class="right_input" value="" id="oldpassword" name="oldpassword" /></td>
+						<td class="info_text"></td>
+					</tr>
+					<tr class="normal hideInfo">
+						<td class="info_text">新密码<span style="color: red;">*</span>：</td>
+						<td><input type="password" class="right_input" value="" id="newPassword" name="newPassword" /></td>
+						<td class="info_text"></td>
+					</tr>
+					<tr class="normal hideInfo">
+						<td class="info_text">确认新密码<span style="color: red;">*</span>：</td>
+						<td><input type="password" class="right_input" value="" id="confirm"/></td>
+						<td class="info_text"></td>
+					</tr>
+					
+				</table>
+				<input type="button" value="提 &nbsp; 交" class="outerButton" onclick="submitUserInfo();"/>
+			</form>
+			
+		</div>
+		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$(".hideInfo").hide();
+				if(userId == null){$(".hideInfo").show(); }
+				else{ $(".hideInfo").hide(); }
+				//数据回显
+				/* $.ajax({
+					url: "user/select",
+					type: "post",
+					data: {"userId": userId},
+					dataType: "json",
+					success: function(data){
+						//回显用户基本信息
+						$("#userId").val(data.id);
+						$("#username").val(data.userName);
+						$("#loginName").val(data.userName);
+						$("#password").val(data.password);
+						$("#confirm").val(data.password);
+						$("#isdel").val(data.isdel);
+						$("#comments").val(data.comments);
+					}
+				}); */
+			});
+			//提交用户信息
+			function submitUserInfo(){
+				var param = $("#userForm").serialize();
+				var oldpassword = $("#oldpassword").val();
+				var newPassword = $("#newPassword").val();
+				var confirm = $("#confirm").val();
+				alert(param);
+				if(oldpassword.trim() == ""){
+					alert("原始密码不能为空！");
+				}else if(newPassword.trim() == ""){
+					alert("新密码不能为空！");
+				}else if(confirm.trim() == ""){
+					alert("请确认密码！");
+				}else if(newPassword != confirm){
+					alert("新密码确认不一致！");
+				}else{
+					$.ajax({
+						url: "user/updatePassword",
+						type: "post",
+						data: param,
+						dataType: "json",
+						success: function(result){
+							if(result.success){ alert("修改密码成功！"); }
+							else{ alert("修改密码失败！"); }
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

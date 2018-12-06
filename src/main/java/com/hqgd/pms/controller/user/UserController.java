@@ -29,7 +29,7 @@ public class UserController {
 	@ResponseBody
 	public String add(Model model, User user, HttpServletRequest request, HttpServletResponse response) {
 		User userLog = (User) request.getSession(true).getAttribute("user");
-//		User userLog = user;
+		// User userLog = user;
 		Map<String, Object> result = userService.add(user, userLog);
 		String json = new Gson().toJson(result).toString();
 		return json;
@@ -50,11 +50,11 @@ public class UserController {
 			throws IOException {
 		User userLog = (User) request.getSession(true).getAttribute("user");
 		// User userLog = user;
-//		Map<String, Object> result = userService.update(user, userLog);
+		// Map<String, Object> result = userService.update(user, userLog);
 		Map<String, Object> result = new HashMap<String, Object>();
-		if(user.getId() == null) {
+		if (user.getId() == null) {
 			result = userService.add(user, userLog);
-		}else {
+		} else {
 			result = userService.update(user, userLog);
 		}
 		String json = new Gson().toJson(result).toString();
@@ -66,10 +66,10 @@ public class UserController {
 	@ResponseBody
 	public String select(Model model, String userId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		
-		if(userId == null) {
+
+		if (userId == null) {
 			return null;
-		}else {
+		} else {
 			User user = userService.select(userId);
 			String json = new Gson().toJson(user).toString();
 			return json;
@@ -86,4 +86,24 @@ public class UserController {
 
 	}
 
+	@RequestMapping(value = "initUserPassword")
+	@ResponseBody
+	public String initUserPassword(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		String userId = request.getParameter("userId");
+		Map<String, Object> result = new HashMap<String, Object>();
+		result = userService.initUserPassword(userId);
+		String json = new Gson().toJson(result).toString();
+		return json;
+	}
+
+	@RequestMapping(value = "updatePassword")
+	@ResponseBody
+	public String updatePassword(String id, String oldpassword, String newPassword) {
+
+		Map<String, Object> result = new HashMap<>();
+		result = userService.updatePassword(id, oldpassword, newPassword);
+		String json = new Gson().toJson(result).toString();
+		return json;
+	}
 }
