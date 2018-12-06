@@ -112,6 +112,7 @@
 	<script>
 		jQuery(document).ready(function() {
 		   App.init();
+		   loadContext(100);
 		});
 		
 		//获取页面参数
@@ -126,11 +127,13 @@
 		}
 		//根据roleId加载侧边菜单栏——roleId=1，管理员；其余都为普通用户
 		var roleId =getParam("roleId");
+		var userId=getParam("userId");
+		alert(userId);
 		var menuHtml="";
 		menuHtml+="<li><div class=\"sidebar-toggler hidden-phone\"></div></li>";
 		if(roleId == 1){
-			menuHtml+="<li class=\"start active\">";
-			menuHtml+="<a href=\"index.html?roleId=1\">";
+			menuHtml+="<li class=\"start active\" onclick=\"loadContext(100);\">";
+			menuHtml+="<a >";
 			menuHtml+="<i class=\"icon-home\"></i> ";
 			menuHtml+="<span class=\"title\">首页</span>";
 			menuHtml+="<span class=\"selected\"></span>";
@@ -286,6 +289,7 @@
 		
 		<!-- 关联侧边栏和展示内容【开始】 -->
 		function loadContext(param){
+			alert("123");
 			//先清空页面原有内容
 			$("#page-content").empty();
 			//再引入新的界面
@@ -295,6 +299,9 @@
 				$("#page-content").load("childrenHtml/equipment/equi-list.html");
 			}else if(param==301){
 				$("#page-content").load("childrenHtml/data/equi-data-list.html");
+			}else if(param==100){
+				$("#page-content").load("childrenHtml/map/map.html"); 
+				// window.location.href="childrenHtml/map/map.html";
 			}else{
 				equiId=param;
 				$("#page-content").load("childrenHtml/data/data-list.html");

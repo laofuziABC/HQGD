@@ -177,7 +177,9 @@
 			function updatePsw(){
 				let title = "修改密码";
 				let url = "formHtml/user/updatePass.html";
-				var params = {"width": 600, "height": 250, "userId": param};
+				var userId=parent.getParam("userId");
+				alert(userId);
+				var params = {"width": 600, "height": 250, "userId": userId};
 				parent.openModal(title, url, params);
 				
 			}
