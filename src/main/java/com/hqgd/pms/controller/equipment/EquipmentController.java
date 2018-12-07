@@ -102,10 +102,7 @@ public class EquipmentController {
 	@ResponseBody
 	public void selectAllByUser(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("查询该用户下所有设备开始");
-		User user = (User) request.getSession(true).getAttribute("user");
-//		String userId = user.getId().toString();
-		String userName = user.getUserName();
-		// String userId = "1";
+		String userName = request.getParameter("userName");
 		List<EquipmentInfo> equipmentList = equipmentService.selectAllByUser(userName);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
