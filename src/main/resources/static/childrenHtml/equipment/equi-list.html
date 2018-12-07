@@ -22,7 +22,7 @@
 			<!-- 按钮列 -->
 			<div>
 				<div style="margin: 10px 0px;">
-					<button class="btn green" onclick="getEquiEdit();">新增设备&nbsp;<i class="icon-plus"></i></button>
+					<button class="btn green" onclick="getEquiEdit(null);">新增设备&nbsp;<i class="icon-plus"></i></button>
 					<button class="btn blue" onclick="javascript: parent.openAlertInfo(12345);" style="margin: 0px 10px;">导出列表</button>
 					<input type="text" id="searchByName" placeholder="请输入设备名称查询" style="height: 30px;" value="" onfocus="javascript: this.value=null;"/>
 					<button  class="btn blue" onclick="searchResult();"><i class="icon-search"></i></button>
@@ -75,15 +75,15 @@
 							equipList+="<td>"+(i+1)+"</td>";
 							equipList+="<td>"+data[i].equipmentName+"</td>";
 							equipList+="<td>"+data[i].address+"</td>";
-							equipList+="<td>"+data[i].adCode+"</td>";
-							equipList+="<td>"+data[i].latLon+"</td>";
+							equipList+="<td>"+data[i].adcode+"</td>";
+							equipList+="<td>"+data[i].lnglat+"</td>";
 							equipList+="<td>"+data[i].frameStru+"</td>";
 							equipList+="<td>"+data[i].userName+"</td>";
 							equipList+="<td>"+parent.formatDateToString(new Date(data[i].createTime))+"</td>";
 							equipList+="<td>"+parent.formatDateToString(new Date(data[i].updateTime))+"</td>";
 							equipList+="<td>"+data[i].updater+"</td>";
 							equipList+="<td class=\"center\">";
-							equipList+="<a class=\"details\" href=\"#\" onclick=\"getChannelDetails('"+data[i].equipmentId+"');\">通道详情</a>&nbsp;";
+							/* equipList+="<a class=\"details\" href=\"#\" onclick=\"getChannelDetails('"+data[i].equipmentId+"');\">通道详情</a>&nbsp;"; */
 							equipList+="<a class=\"edit\" href=\"#\" onclick=\"getEquiEdit('"+data[i].equipmentId+"');\">编辑</a>&nbsp;";
 							equipList+="<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"+data[i].equipmentId+"');\">删除</a>&nbsp;";
 							equipList+="</td>";
@@ -94,12 +94,12 @@
 				});
 			}
 			//查看设备详情
-			function getChannelDetails(param){
+			/* function getChannelDetails(param){
 				let title="设备通道详情";
 				let url = "formHtml/equipment/channel-details.html";
 				var params={"width": 700, "height": 800, "equipmentId": param};
 				parent.openModal(title, url, params);
-			}
+			} */
 			//编辑或者新增设备信息
 			function getEquiEdit(param){
 				let title;

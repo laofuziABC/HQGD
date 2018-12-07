@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>欢迎登录！</title>
+	<title>和其光电！</title>
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -167,6 +167,7 @@
 		}
 		$("#page-sidebar-menu").html(menuHtml);
 		/* 获取侧边栏普通用户设备列表【开始】 */
+		if(roleId != 1){
 		$.ajax({
 			url:"equipment/selectAllByUser",
 			type: "post",
@@ -182,6 +183,7 @@
 				$("#equipments").append(equiMenu);
 			}
 		});
+		}
 		/* 获取侧边栏普通用户设备列表【结束】 */
 	</script>
 	<script type="text/javascript">

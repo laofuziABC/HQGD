@@ -20,6 +20,7 @@ import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.equipment.IEquipmentService;
+import com.hqgd.pms.service.user.IUserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 public class EquipmentController {
 	@Autowired
 	IEquipmentService equipmentService;
+	@Autowired
+	IUserService userService;
 
 	@RequestMapping(value = "/add")
 	public void add(Model model,EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +63,11 @@ public class EquipmentController {
 			HttpServletResponse response) throws IOException {
 		log.info("更新设备开始");
 		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Map<String, Object> resultMap = equipmentService.update(equipmentInfo, loginUser);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		if(equipmentInfo.getEquipmentId() == null || equipmentInfo.getEquipmentId() == "") {
+			resultMap = equipmentService.add(equipmentInfo, loginUser);
+		}
+		resultMap = equipmentService.update(equipmentInfo, loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("更新设备结束");
@@ -149,6 +156,35 @@ public class EquipmentController {
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询所有设备结束");
+	}
+	
+	/**
+	 * 编辑设备信息
+	 * @param model
+	 * @param equipmentId
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/editEquiInfo")
+	public void editEquiInfo(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		log.info("查询设备开始");
+		EquipmentInfo equipmentInfo = new EquipmentInfo();
+		if(equipmentId != null && !equipmentId.equals("")) {
+			equipmentInfo = equipmentService.select(equipmentId);
+		}
+		List<User> userList = userService.selectAll();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000004");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		resultMap.put("data", equipmentInfo);
+		resultMap.put("userList", userList);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询设备结束");
 	}
 
 //	@RequestMapping(value = "/equipmentParam")
