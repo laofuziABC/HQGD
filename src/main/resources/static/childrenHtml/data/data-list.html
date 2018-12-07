@@ -73,27 +73,29 @@
 								<form action="#" id="timeRangeForm" class="form-horizontal">
 									<table style="margin: auto 10%;">
 										<tr>
-											<td style="width: 350px;">
-												<label class="control-label" style="width:80px; font-size: 18px;">起始时间:</label>
+											<td style="width: 280px;">
+												<label class="control-label" style="width:90px; font-size: 18px;">起始时间：</label>
 												<div class="controls" style="margin-left: 80px;">
 													<div class="input-append date form_datetime">
 														<input size="18" type="text" value="" class="m-wrap datetimePicker" id="chartStartTime" style="width: 150px;"/>
-														<span class="add-on"><i class="icon-calendar"></i></span>
+														<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 													</div>
 												</div>
 											</td>
-											<td style="width: 350px;">
-												<label class="control-label" style="width:80px; font-size: 18px;">终止时间:</label>
+											<td style="width: 280px;">
+												<label class="control-label" style="width:90px; font-size: 18px;">终止时间：</label>
 												<div class="controls" style="margin-left: 80px;">
 													<div class="input-append date form_datetime">
 														<input size="18" type="text" value="" class="m-wrap datetimePicker" id="chartEndTime" style="width: 150px;"/>
-														<span class="add-on"><i class="icon-calendar"></i></span>
+														<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 													</div>
 												</div>
 											</td>
 											<td>
-												<input type="button" onclick="getChartData();" value="查 询"  style="width:80px; height: 34px; background-color:#E5E5E5; font-size: 18px; border:0px; border-radius: 3px;"/>
-												<input type="reset" value="重 置"  style="width:80px; height: 34px; background-color:#E5E5E5; font-size: 18px; border:0px; border-radius: 3px;" />
+											    <button  class="btn green" onclick="getChartData();">查  询</button>
+											    <button  type="reset" class="btn green" ">重  置</button>
+												<!-- <input type="button" onclick="getChartData();" value="查 询"  style="width:80px; height: 34px; background-color:#E5E5E5; font-size: 18px; border:0px; border-radius: 3px;"/>
+												<input type="reset" value="重 置"  style="width:80px; height: 34px; background-color:#E5E5E5; font-size: 18px; border:0px; border-radius: 3px;" /> -->
 											</td>
 										</tr>
 									</table>
@@ -110,60 +112,60 @@
 						<!--当前设备各通道历史监测温度表【结束】-->
 						<!--所有历史数据【开始】-->
 						<div id="tab_3_3" class="tab-pane" style="width: 1220px; padding: 20px 0 0 80px;">
-							<div class="clearfix">
-								<!--便捷操作工具栏【开始】-->
+							<!-- <div class="clearfix">
+								便捷操作工具栏【开始】
 								<div class="btn-group pull-right">
-									<button class="btn dropdown-toggle" onclick="report()" >导出Excel<!-- <i class="icon-angle-down"></i> --></button>
-									<!-- <ul class="dropdown-menu pull-right">
+									<button class="btn dropdown-toggle" onclick="report()" >导出Excel<i class="icon-angle-down"></i></button>
+									<ul class="dropdown-menu pull-right">
 										<li><a href="#">打印</a></li>
 										<li><a href="#">保存为PDF</a></li>
 										<li><a href="#">导出到Excel</a></li>
-									</ul> -->
+									</ul>
 								</div>
-								<!--便捷操作工具栏【结束】-->
-							</div>
+								便捷操作工具栏【结束】
+							</div> -->
 							<!-- 查询参数【开始】 -->
 							<div class="row-fluid">
 								<!-- 筛选条件【开始】 -->
 								<form action="#" id="paramForm" class="form-horizontal">
 									<table>
 										<tr>
-											<td style="width: 300px;">
-												<label class="control-label" style="width:80px; font-size: 18px;">起始时间:</label>
+											<td style="width: 265px;">
+												<label class="control-label" style="width: 90px; font-size: 18px;">起始时间：</label>
 												<div class="controls" style="margin-left: 80px;">
 													<div class="input-append date form_datetime">
 														<input size="18" type="text" value="" class="m-wrap datetimePicker" id="tableStartTime" style="width: 150px; border-radius: 4px;"/>
-														<span class="add-on"><i class="icon-calendar"></i></span>
+														<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 													</div>
 												</div>
 											</td>
-											<td style="width: 300px;">
-												<label class="control-label" style="width:80px; font-size: 18px;">终止时间:</label>
+											<td style="width: 265px;">
+												<label class="control-label" style="width:90px; font-size: 18px;">终止时间：</label>
 												<div class="controls" style="margin-left: 80px;">
 													<div class="input-append date form_datetime">
 														<input size="18" type="text" value="" class="m-wrap datetimePicker" id="tableEndTime" style="width: 150px; border-radius: 4px;"/>
-														<span class="add-on"><i class="icon-calendar"></i></span>
+														<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 													</div>
 												</div>
 											</td>
-											<td style="width: 300px; font-size: 18px;">显示内容:
-												<select id="data-type" onchange="searchNewResult();" style="width: 190px;height: 32px;border-radius: 4px;font-size: 17px; padding: auto;">
-													<option value="0" checked>显示所有数据</option>
-													<option value="1" checked>显示异常数据</option>
+											<td style="width: 245px; font-size: 18px;">显示内容:
+												<select id="data-type" onchange="searchNewResult();" style="width: 150px;height: 32px;border-radius: 4px;font-size: 17px; padding: auto;">
+													<option value="0" checked>所有数据</option>
+													<option value="1" checked>异常数据</option>
 												</select>
 											</td>
-											<td style="width: 300px; font-size: 18px;">每页显示:
-												<select id="page-size" onchange="searchNewResult();" style="width: 190px;height: 32px;border-radius: 4px;font-size: 17px;">
+											<td style="width: 245px; font-size: 18px;">每页显示:
+												<select id="page-size" onchange="searchNewResult();" style="width: 150px;height: 32px;border-radius: 4px;font-size: 17px;">
 													<option value="5">5条</option>
 													<option value="10" selected="selected">10条</option>
 													<option value="20">20条</option>
 													<option value="50">50条</option>
 												</select>
 											</td>
-											<td style="width: 40px; font-size: 18px;">
-												<span onclick="searchResult(1);">
-													<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
-												</span>
+											<td>
+											    <button  class="btn green" onclick="searchResult(1);">查  询</button>
+											    <button  type="reset" class="btn green" ">重  置</button>
+											    <button  class="btn green" onclick="report();">导  出</button>
 											</td>
 										</tr>
 										<!-- <tr>
@@ -246,10 +248,10 @@
 						//设置导航栏【结束】
 						//设置tab1内容：表格
 						var channel = "";
-						channel+="<div class=\"responsive\"style=\"height: 50px; width: 1220px; margin: 0 0 0 80px; padding: 10px 0; background-color: #27A9E3;\">";
+						channel+="<div class=\"responsive\"style=\"height: 40px; width: 1220px; margin: 0 0 0 80px; padding: 10px 0; background-color: #27A9E3;\">";
 						channel+="<table style=\"width: 80%; margin: 15px auto; font-size: 20px; text-align: center;\">";
 						channel+="<tr>";
-						channel+="<td><button class=\"buttonForAction\" onclick=\"setChannelValue(' "+data[0].equipmentId+" ')\">设置设备温度值域</button></td>";
+						/* channel+="<td><button class=\"buttonForAction\" onclick=\"setChannelValue(' "+data[0].equipmentId+" ')\">设置设备温度值域</button></td>"; */
 						channel+="<td><button class=\"buttonForAction\" onclick=\"showBlocks()\">查看当前通道温度(℃)</button></td>";
 						channel+="<td><button class=\"buttonForAction\" onclick=\"showCharts()\">实时监测温度曲线</button></td>";
 						channel+="</tr></table></div>"
@@ -315,7 +317,7 @@
 				}, 6000);
 			}
 			//tab1：加载实时温度监控曲线【结束】
-			//tab1：设定通道温度值域【开始】
+			/* //tab1：设定通道温度值域【开始】
 			function setChannelValue(equipmentId){
 				var param = {
 					"equipmentId":equipmentId.trim(),
@@ -326,7 +328,7 @@
 				let url = "formHtml/data/set-channel-form.html";
 				parent.openModal(title, url, param);
 			}
-			//tab1：设定通道温度值域【结束】
+			//tab1：设定通道温度值域【结束】 */
 			//tab2：绘制折线图【开始】待与后台对接
 			function getChartData(){
 				//获取日期、时间参数
