@@ -3,21 +3,32 @@
 <mapper namespace="com.hqgd.pms.dao.equipment.EquipmentInfoMapper">
   <resultMap id="BaseResultMap" type="com.hqgd.pms.domain.EquipmentInfo">
     <id column="EQUIPMENT_ID" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="ID" jdbcType="INTEGER" property="id" />
     <result column="EQUIPMENT_NAME" jdbcType="VARCHAR" property="equipmentName" />
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
     <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="CHANNEL_TEM" jdbcType="VARCHAR" property="channelTem" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="ADCODE" jdbcType="VARCHAR" property="adcode" />
+    <result column="CADCODE" jdbcType="VARCHAR" property="cadcode" />
+    <result column="PADCODE" jdbcType="VARCHAR" property="padcode" />
+    <result column="LNG_LAT" jdbcType="VARCHAR" property="lngLat" />
+    <result column="FRAME_STRU" jdbcType="VARCHAR" property="frameStru" />
     <result column="ICON" jdbcType="VARCHAR" property="icon" />
-    <result column="REGION" jdbcType="VARCHAR" property="region" />
     <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    EQUIPMENT_ID, EQUIPMENT_NAME, USER_NAME, USER_ID, ICON, REGION, CREATOR, CREATE_TIME, 
-    UPDATER, UPDATE_TIME
+    EQUIPMENT_ID, ID, EQUIPMENT_NAME, USER_NAME, USER_ID, CHANNEL_TEM, ADDRESS, ADCODE, 
+    CADCODE, PADCODE, LNG_LAT, FRAME_STRU, ICON, CREATOR, CREATE_TIME, UPDATER, UPDATE_TIME
   </sql>
-  
+    <select id="selectLngLat" resultType="java.lang.String" >
+    select 
+    LNG_LAT
+    from hq_equipment_info
+  </select>
   <select id="selectTotalChNum" resultType="java.lang.Integer" >
 	SELECT 
   		COUNT(EQUIPMENT_ID) 
@@ -31,18 +42,44 @@
   		hq_equipment_param
   	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
   </select>
-  <select id="selectAllEquipment" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectAllEquipmentByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from hq_equipment_info
     where 1=1 
-     AND USER_ID = #{userId,jdbcType=VARCHAR}
+     AND USER_NAME = #{userName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllEquipmentByAddress"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_info
+    where 1=1
+    <if test="_parameter.length() == 2">
+     and  PADCODE = #{_parameter,jdbcType=VARCHAR}
+    </if> 
+    <if test="_parameter.length() == 4">
+     and  CADCODE = #{_parameter,jdbcType=VARCHAR}
+    </if>
+    <if test="_parameter.length() == 6">
+     and  ADCODE = #{_parameter,jdbcType=VARCHAR}
+    </if> 
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_info
   </select>
   <select id="selectEquipmentByGroup" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from hq_equipment_info
     where GROUP = #{group,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByEquipmentName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_info
+    where EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -55,20 +92,27 @@
     where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.EquipmentInfo">
-    insert into hq_equipment_info (EQUIPMENT_ID, EQUIPMENT_NAME, USER_NAME, 
-      USER_ID, ICON, REGION, 
-      CREATOR, CREATE_TIME, UPDATER, 
-      UPDATE_TIME)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-      #{userId,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into hq_equipment_info (EQUIPMENT_ID, ID, EQUIPMENT_NAME, 
+      USER_NAME, USER_ID, CHANNEL_TEM, 
+      ADDRESS, ADCODE, CADCODE, 
+      PADCODE, LNG_LAT, FRAME_STRU, 
+      ICON, CREATOR, CREATE_TIME, 
+      UPDATER, UPDATE_TIME)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{channelTem,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{adcode,jdbcType=VARCHAR}, #{cadcode,jdbcType=VARCHAR}, 
+      #{padcode,jdbcType=VARCHAR}, #{lngLat,jdbcType=VARCHAR}, #{frameStru,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     insert into hq_equipment_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="equipmentId != null">
         EQUIPMENT_ID,
+      </if>
+      <if test="id != null">
+        ID,
       </if>
       <if test="equipmentName != null">
         EQUIPMENT_NAME,
@@ -79,11 +123,29 @@
       <if test="userId != null">
         USER_ID,
       </if>
+      <if test="channelTem != null">
+        CHANNEL_TEM,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="adcode != null">
+        ADCODE,
+      </if>
+      <if test="cadcode != null">
+        CADCODE,
+      </if>
+      <if test="padcode != null">
+        PADCODE,
+      </if>
+      <if test="lngLat != null">
+        LNG_LAT,
+      </if>
+      <if test="frameStru != null">
+        FRAME_STRU,
+      </if>
       <if test="icon != null">
         ICON,
-      </if>
-      <if test="region != null">
-        REGION,
       </if>
       <if test="creator != null">
         CREATOR,
@@ -102,6 +164,9 @@
       <if test="equipmentId != null">
         #{equipmentId,jdbcType=VARCHAR},
       </if>
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="equipmentName != null">
         #{equipmentName,jdbcType=VARCHAR},
       </if>
@@ -111,11 +176,29 @@
       <if test="userId != null">
         #{userId,jdbcType=VARCHAR},
       </if>
+      <if test="channelTem != null">
+        #{channelTem,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="adcode != null">
+        #{adcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cadcode != null">
+        #{cadcode,jdbcType=VARCHAR},
+      </if>
+      <if test="padcode != null">
+        #{padcode,jdbcType=VARCHAR},
+      </if>
+      <if test="lngLat != null">
+        #{lngLat,jdbcType=VARCHAR},
+      </if>
+      <if test="frameStru != null">
+        #{frameStru,jdbcType=VARCHAR},
+      </if>
       <if test="icon != null">
         #{icon,jdbcType=VARCHAR},
-      </if>
-      <if test="region != null">
-        #{region,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -134,6 +217,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     update hq_equipment_info
     <set>
+      <if test="id != null">
+        ID = #{id,jdbcType=INTEGER},
+      </if>
       <if test="equipmentName != null">
         EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
       </if>
@@ -143,11 +229,29 @@
       <if test="userId != null">
         USER_ID = #{userId,jdbcType=VARCHAR},
       </if>
+      <if test="channelTem != null">
+        CHANNEL_TEM = #{channelTem,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="adcode != null">
+        ADCODE = #{adcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cadcode != null">
+        CADCODE = #{cadcode,jdbcType=VARCHAR},
+      </if>
+      <if test="padcode != null">
+        PADCODE = #{padcode,jdbcType=VARCHAR},
+      </if>
+      <if test="lngLat != null">
+        LNG_LAT = #{lngLat,jdbcType=VARCHAR},
+      </if>
+      <if test="frameStru != null">
+        FRAME_STRU = #{frameStru,jdbcType=VARCHAR},
+      </if>
       <if test="icon != null">
         ICON = #{icon,jdbcType=VARCHAR},
-      </if>
-      <if test="region != null">
-        REGION = #{region,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         CREATOR = #{creator,jdbcType=VARCHAR},
@@ -166,11 +270,18 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     update hq_equipment_info
-    set EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
+    set ID = #{id,jdbcType=INTEGER},
+      EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
       USER_NAME = #{userName,jdbcType=VARCHAR},
       USER_ID = #{userId,jdbcType=VARCHAR},
+      CHANNEL_TEM = #{channelTem,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      ADCODE = #{adcode,jdbcType=VARCHAR},
+      CADCODE = #{cadcode,jdbcType=VARCHAR},
+      PADCODE = #{padcode,jdbcType=VARCHAR},
+      LNG_LAT = #{lngLat,jdbcType=VARCHAR},
+      FRAME_STRU = #{frameStru,jdbcType=VARCHAR},
       ICON = #{icon,jdbcType=VARCHAR},
-      REGION = #{region,jdbcType=VARCHAR},
       CREATOR = #{creator,jdbcType=VARCHAR},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       UPDATER = #{updater,jdbcType=VARCHAR},

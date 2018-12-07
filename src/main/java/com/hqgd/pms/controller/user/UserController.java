@@ -1,6 +1,7 @@
 package com.hqgd.pms.controller.user;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,15 +25,6 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	@RequestMapping("add")
-	@ResponseBody
-	public String add(Model model, User user, HttpServletRequest request, HttpServletResponse response) {
-		User userLog = (User) request.getSession(true).getAttribute("user");
-//		User userLog = user;
-		Map<String, Object> result = userService.add(user, userLog);
-		String json = new Gson().toJson(result).toString();
-		return json;
-	}
 
 	@RequestMapping("delete")
 	@ResponseBody
@@ -43,13 +35,19 @@ public class UserController {
 		return json;
 	}
 
-	@RequestMapping(value = "update")
+	@RequestMapping(value = "update")//新增和编辑用户信息都是此接口
 	@ResponseBody
 	public String update(Model model, User user, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		User userLog = (User) request.getSession(true).getAttribute("user");
 		// User userLog = user;
-		Map<String, Object> result = userService.update(user, userLog);
+		// Map<String, Object> result = userService.update(user, userLog);
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (user.getId() == null) {
+			result = userService.add(user, userLog);
+		} else {
+			result = userService.update(user, userLog);
+		}
 		String json = new Gson().toJson(result).toString();
 		return json;
 
@@ -60,10 +58,13 @@ public class UserController {
 	public String select(Model model, String userId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
-		User user = userService.select(userId);
-		String json = new Gson().toJson(user).toString();
-		return json;
-
+		if (userId == null) {
+			return null;
+		} else {
+			User user = userService.select(userId);
+			String json = new Gson().toJson(user).toString();
+			return json;
+		}
 	}
 
 	@RequestMapping(value = "selectAll")
@@ -76,4 +77,24 @@ public class UserController {
 
 	}
 
+	@RequestMapping(value = "initUserPassword")
+	@ResponseBody
+	public String initUserPassword(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		String userId = request.getParameter("userId");
+		Map<String, Object> result = new HashMap<String, Object>();
+		result = userService.initUserPassword(userId);
+		String json = new Gson().toJson(result).toString();
+		return json;
+	}
+
+	@RequestMapping(value = "updatePassword")
+	@ResponseBody
+	public String updatePassword(String id, String oldpassword, String newPassword) {
+
+		Map<String, Object> result = new HashMap<>();
+		result = userService.updatePassword(id, oldpassword, newPassword);
+		String json = new Gson().toJson(result).toString();
+		return json;
+	}
 }

@@ -14,7 +14,7 @@ var Login = function () {
 	                remember: { required: false }
 	            },
 	            messages: {
-	                username: { required: "登录名必需填写！" },
+	                username: { required: "用户名必需填写！" },
 	                password: { required: "密码必需填写！" }
 	            },
 	            invalidHandler: function (event, validator) { //display error alert on form submit   
@@ -87,12 +87,14 @@ var Login = function () {
 
 	        jQuery('#forget-password').click(function () {
 	            jQuery('.login-form').hide();
-	            jQuery('.forget-form').show();
+	            //jQuery('.forget-form').show();
+	            jQuery('.forget-form1').show();
 	        });
 
 	        jQuery('#back-btn').click(function () {
 	            jQuery('.login-form').show();
-	            jQuery('.forget-form').hide();
+	            //jQuery('.forget-form').hide();
+	            jQuery('.forget-form1').hide();
 	        });
 			
 			//新用户注册表单
@@ -110,7 +112,7 @@ var Login = function () {
 	            },
 
 	            messages: { // custom messages for radio buttons and checkboxes
-	            	username: { required: "登录名必需填写！" },
+	            	username: { required: "用户名必需填写！" },
 	                password: { required: "密码必需填写！" },
 	                rpassword: { equalTo: "两次输入密码不一致！" },
 	                 email: { required: "请输入您的Email", email: "Email格式不正确，请检查！" },

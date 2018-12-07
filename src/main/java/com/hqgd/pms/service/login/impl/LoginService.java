@@ -63,11 +63,10 @@ public class LoginService implements ILoginService {
 			} else {
 				map.put("roleId", "0");
 			}
-			return map;
-
-		} else {
-			return map;
+			map.put("userId", id);
+			map.put("userName", userName);
 		}
+		return map;
 	}
 
 	private Map<String, Object> authUser(User userFind, User userNew) {
@@ -93,21 +92,5 @@ public class LoginService implements ILoginService {
 		return map;
 	}
 
-	public Map<String, Object> updatePassword(String userName, String password, String newPassword) {
-		Map<String, Object> result = new HashMap<>();
-		User userFind = userService.findUserByUserName(userName);
-		Map<String, Object> map = authUser(userFind,
-				new User(null, userName, password, null, null, null, null, null, null));
-		Boolean authUser = (Boolean) map.get("result");
-		if (!authUser) {
-			// 返回用户名或密码错误，修改密码失败
-			result.put("result", false);
-			result.put("message", "原用户名或密码错误，请检查！");
-			return result;
-		}
-
-		userService.updatePassword(userName, newPassword);
-		return null;
-	}
-
+	
 }

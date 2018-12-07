@@ -5,7 +5,9 @@ mybatis:
   config: classpath:/mybatis/mybatis-config.xml
   typeAliasesPackage: com.hqgd.pms.domain
   mapperLocations: classpath:/mybatis/mapper/*.xml
-  
+logging:
+  level:
+     com.hqgd.pms.dao : debug  
 
 #spring:
 #  datasource:
@@ -13,11 +15,18 @@ mybatis:
 #    username: root
 #    password: root
 #    driver-class-name: com.mysql.cj.jdbc.Driver    
+#spring:
+#  datasource:
+#    url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=pms
+#    username: sa
+#    password: root
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 spring:
   datasource:
-    url: jdbc:sqlserver://192.168.0.101:1433;DatabaseName=pms
+    url: jdbc:sqlserver://47.106.225.170:1433;DatabaseName=HQTemp_Cloud
     username: sa
-    password: root
+    password: dailihui0..
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 #    jpa:

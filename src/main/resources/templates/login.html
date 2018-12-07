@@ -16,27 +16,27 @@
 	</head>
 	<body class="login">
 		<!--企业logo-->
-		<div class="logo">
-			<!--<img src="img/hqgd/logo.jpg" alt="企业logo" />--> 
-		</div>
+		<!-- <div class="logo">
+			<img src="img/hqgd/logo.jpg" alt="企业logo" /> 
+		</div> -->
 		<!--页面内容-->
 		<div class="content">
 			<!-- 登录表单【开始】 -->
 			<form class="form-vertical login-form" action="">
-				<h3 class="form-title">用户登录</h3><hr />
+				<h3 class="form-title">系统登录</h3><hr />
 				<!--验证警示框：请输入登录信息-->
 				<div class="alert alert-error hide">
 					<button class="close" data-dismiss="alert"></button>
-					<span>请仔细检查您输入的登录名和密码！</span>
+					<span>请仔细检查您输入的用户名名和密码！</span>
 				</div>
 				<!--登录信息-->
 				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">登录名：</label>
+					<label class="control-label visible-ie8 visible-ie9">用户名：</label>
 					<div class="controls">
 						<div class="input-icon left">
 							<!--<i class="icon-user"></i>-->
 							<i style="background: url(img/icons/r-info-icon1.png) no-repeat center; width: 30px; height: 30px;"></i>
-							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请输入登录名" id="username" name="username" style="height: 33px; font-size: 18px;"/>
+							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请输入用户名" id="username" name="username" style="height: 33px; font-size: 18px;"/>
 						</div>
 					</div>
 				</div>
@@ -63,7 +63,7 @@
 			<!-- 登录表单【结束】 -->        
 	
 			<!-- 忘记密码模块【开始】 -->
-			<form class="form-vertical forget-form" action="">
+			<!-- <form class="form-vertical forget-form" action="">
 				<h3 class="">密码找回</h3><hr />
 				<p>请输入您的Email地址，我们会在核实您的注册信息后，将您的密码初始化。</p>
 				<div class="control-group">
@@ -79,24 +79,37 @@
 					<button type="button" id="back-btn" class="btn">
 						<i class="m-icon-swapleft"></i>&nbsp; 返&nbsp;回
 					</button>
-					<!--<button type="submit" class="btn green pull-right">-->
+					<button type="submit" class="btn green pull-right">
 					<button type="submit" class="btn blue pull-right">
 						提&nbsp;交 &nbsp;<i class="m-icon-swapright m-icon-white"></i>
 					</button>            
 				</div>
-			</form>
+			</form> -->
 			<!-- 忘记密码模块【结束】 -->
+			
+			<!-- 忘记密码模块1【开始】 -->
+			<form class="form-vertical forget-form1" action="">
+				<h3 class="">密码找回</h3><hr />
+				<p>请联系服务方管理人员，联系方式：15129284506</p>
+				<div class="form-actions">
+					<button type="button" id="back-btn" class="btn">
+						<i class="m-icon-swapleft"></i>&nbsp; 返&nbsp;回
+					</button>
+					          
+				</div>
+			</form>
+			<!-- 忘记密码模块1【结束】 -->
 			
 			<!--注册新用户【开始】-->
 			<!-- <form class="form-vertical register-form" action="">
 				<h3 class="">新用户注册</h3><hr />
 				<p>请仔细填写下面的注册信息：</p>
 				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">登录名：</label>
+					<label class="control-label visible-ie8 visible-ie9">用户名：</label>
 					<div class="controls">
 						<div class="input-icon left">
 							<i class="icon-user"></i>
-							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请填写登录名" name="username"/>
+							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请填写用户名" name="username"/>
 						</div>
 					</div>
 				</div>
@@ -202,7 +215,7 @@
 					async: false,
 					success: function(data){
 						if(data.success){
-							window.location.href = "index.html";
+							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName));
 						}else{
 							$('.alert-error', $('.login-form')).html(data.message);
 							$('.alert-error', $('.login-form')).show();

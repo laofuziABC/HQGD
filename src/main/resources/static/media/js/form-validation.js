@@ -183,12 +183,22 @@ var FormValidation = function () {
 
             });
             
+            //apply validation on chosen dropdown value change, this only needed for chosen dropdown integration.
+            $('.chosen, .chosen-with-diselect', form2).change(function () {
+                form2.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+            });
+
+            //apply validation on select2 dropdown value change, this only needed for chosen dropdown integration.
+            $('.select2', form2).change(function () {
+                form2.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+            });
+            
             
             
             /*密码修改表单【开始】*/
            	var updatePwdForm = $('#form_update_password');
-            var error1 = $('.alert-error', updatePwdForm);
-            var success1 = $('.alert-success', updatePwdForm);
+//            var error1 = $('.alert-error', updatePwdForm);
+//            var success1 = $('.alert-success', updatePwdForm);
 
             updatePwdForm.validate({
                 errorElement: 'span', 			//default input error message container
@@ -196,19 +206,9 @@ var FormValidation = function () {
                 focusInvalid: false, 				// do not focus the last invalid input
                 ignore: "",
                 rules: {
-                    password: {
-                        minlength: 2,
-                        required: true
-                    },
-                    new-password: {
-                        minlength: 2,
-                        required: true
-                    },
-                    r-new-password: {
-                        minlength: 2,
-                        required: true,
-                        equaiTo: new-password
-                    }
+                    origion: { minlength: 2, required: true },
+                    password: {minlength: 2, required: true },
+                    confirm: {minlength: 2, required: true, equaiTo: new-password }
                 },
 
                 invalidHandler: function (event, validator) {          
@@ -241,17 +241,54 @@ var FormValidation = function () {
                 }
             });
            /*密码司改表单【结束】*/
+           /* 用户信息表单【开始】 */
+        	var userEditForm = $('#user_edit_form');
+//            var error1 = $('.alert-error', userEditForm);
+//            var success1 = $('.alert-success', userEditForm);
+            updatePwdForm.validate({
+                errorElement: 'span', 			//default input error message container
+                errorClass: 'help-inline', 		// default input error message class
+                focusInvalid: false, 				// do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    username: { minlength: 2, required: true },
+                    loginName: { minlength: 2, required: true },
+                    password: { minlength: 2, required: true },
+                    confirm: { minlength: 2, required: true, equaiTo: password }
+                },
+
+                invalidHandler: function (event, validator) {          
+                    success1.hide();
+                    error1.show();
+                    App.scrollTo(error1, -200);
+                },
+
+                highlight: function (element) {
+                    $(element)
+                    	.closest('.help-inline').removeClass('ok');
+                    $(element)
+                    	.closest('.control-group').removeClass('success').addClass('error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) {
+                    $(element)
+                    	.closest('.control-group').removeClass('error');
+                },
+
+                success: function (label) {
+                    label
+                    	.addClass('valid').addClass('help-inline ok')
+                    	.closest('.control-group').removeClass('error').addClass('success'); // set success class to the control group
+                },
+
+                submitHandler: function (form) {
+                    success1.show();
+                    error1.hide();
+                }
+            });
+           /* 用户信息表单【结束】 */
+
             
-
-            //apply validation on chosen dropdown value change, this only needed for chosen dropdown integration.
-            $('.chosen, .chosen-with-diselect', form2).change(function () {
-                form2.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
-            });
-
-             //apply validation on select2 dropdown value change, this only needed for chosen dropdown integration.
-            $('.select2', form2).change(function () {
-                form2.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
-            });
 
         }
 

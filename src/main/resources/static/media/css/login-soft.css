@@ -43,7 +43,10 @@ Login page
     padding: 0px;
     margin: 0px;
 }
-
+.login .content .forget-form1 {
+    padding: 0px;
+    margin: 0px;
+}
 .login .content .m-wrap {
   width: 249px;
   background-color: #fff;
@@ -61,7 +64,9 @@ Login page
 .login .content .forget-form {
   display: none;
 }
-
+.login .content .forget-form1 {
+  display: none;
+}
 .login .content .register-form {
   display: none;
 }
@@ -86,7 +91,11 @@ Login page
   margin-bottom: 0;
   padding-bottom: 20px;
 }  
-
+.login .content .forget-form1 .form-actions {
+  border: 0;
+  margin-bottom: 0;
+  padding-bottom: 20px;
+} 
 .login .content .register-form .form-actions {
   border: 0;
   margin-bottom: 0;

@@ -1,9 +1,9 @@
 package com.hqgd.pms.service.dataAcquisition.impl;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,14 +45,8 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		// int count = equipmentInfoMapper.selectTotalChNum();
-		// String equipmentId = queryVo.getEquipmentId();
-		// int count1 = equipmentInfoMapper.selectEquipCh(equipmentId);
 		int page = queryVo.getPage();
 		int limit = queryVo.getLimit();
-		// DecimalFormat df = new DecimalFormat("0.00");//格式化小数
-		// String num = df.format((float)limit/count1);//返回的是String类型
-		// double num = (float) limit / count1;
 		int total = limit * page;
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId());
@@ -135,6 +129,11 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.recordExport(param);
+		path = (path == null || path.isEmpty()) ? "C:\\Program Files\\PMS" : path;
+		File file = new File(path);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
 		String classPath = path.replace("%20", " ") + "/" + CommonUtil.getNoFormatTimestamp() + "historicalData.xls";
 		List<String> header = getHeader();
 		List<String> columns = getColumns();

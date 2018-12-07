@@ -5,21 +5,30 @@ import java.util.List;
 import com.hqgd.pms.domain.EquipmentInfo;
 
 public interface EquipmentInfoMapper {
-    int deleteByPrimaryKey(String equipmentId);
+	int deleteByPrimaryKey(String equipmentId);
 
-    int insert(EquipmentInfo record);
+	int insert(EquipmentInfo record);
 
-    int insertSelective(EquipmentInfo record);
+	int insertSelective(EquipmentInfo record);
 
-    EquipmentInfo selectByPrimaryKey(String equipmentId);
+	EquipmentInfo selectByPrimaryKey(String equipmentId);
 
-    int updateByPrimaryKeySelective(EquipmentInfo record);
+	int updateByPrimaryKeySelective(EquipmentInfo record);
 
-    int updateByPrimaryKey(EquipmentInfo record);
-    
-    List<EquipmentInfo> selectAllEquipment(String param);
-    
-    int selectTotalChNum();
+	int updateByPrimaryKey(EquipmentInfo record);
+
+	List<EquipmentInfo> selectAllEquipmentByUser(String userName);
+
+	List<EquipmentInfo> selectAll();
+
+	int selectTotalChNum();
 
 	int selectEquipCh(String equipmentId);
+	
+	List<String> selectLngLat();
+
+	List<EquipmentInfo> selectAllEquipmentByAddress(String adcode);
+
+	EquipmentInfo selectByEquipmentName(String equipmentName);
+	
 }

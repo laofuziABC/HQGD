@@ -101,7 +101,9 @@ var Login = function () {
 	                window.location.href = "index.html";
 	            }
 	        });
-
+	        $('.forget-form1').validate({
+	            
+	        });
 	        $('.forget-form input').keypress(function (e) {
 	            if (e.which == 13) {
 	                if ($('.forget-form').validate().form()) {
@@ -110,15 +112,19 @@ var Login = function () {
 	                return false;
 	            }
 	        });
-
+	        $('.forget-form1 input').keypress(function (e) {
+	            
+	        });
 	        jQuery('#forget-password').click(function () {
 	            jQuery('.login-form').hide();
-	            jQuery('.forget-form').show();
+	            //jQuery('.forget-form').show();
+	            jQuery('.forget-form1').show();
 	        });
 
 	        jQuery('#back-btn').click(function () {
 	            jQuery('.login-form').show();
-	            jQuery('.forget-form').hide();
+	            //jQuery('.forget-form').hide();
+	            jQuery('.forget-form1').hide();
 	        });
 
 	        $('.register-form').validate({
