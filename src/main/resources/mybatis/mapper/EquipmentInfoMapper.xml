@@ -92,13 +92,13 @@
     where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.EquipmentInfo">
-    insert into hq_equipment_info (EQUIPMENT_ID, ID, EQUIPMENT_NAME, 
+    insert into hq_equipment_info (EQUIPMENT_ID, EQUIPMENT_NAME, 
       USER_NAME, USER_ID, CHANNEL_TEM, 
       ADDRESS, ADCODE, CADCODE, 
       PADCODE, LNG_LAT, FRAME_STRU, 
       ICON, CREATOR, CREATE_TIME, 
       UPDATER, UPDATE_TIME)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, #{equipmentName,jdbcType=VARCHAR}, 
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
       #{userName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{channelTem,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{adcode,jdbcType=VARCHAR}, #{cadcode,jdbcType=VARCHAR}, 
       #{padcode,jdbcType=VARCHAR}, #{lngLat,jdbcType=VARCHAR}, #{frameStru,jdbcType=VARCHAR}, 
@@ -110,9 +110,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="equipmentId != null">
         EQUIPMENT_ID,
-      </if>
-      <if test="id != null">
-        ID,
       </if>
       <if test="equipmentName != null">
         EQUIPMENT_NAME,
@@ -164,9 +161,6 @@
       <if test="equipmentId != null">
         #{equipmentId,jdbcType=VARCHAR},
       </if>
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="equipmentName != null">
         #{equipmentName,jdbcType=VARCHAR},
       </if>
@@ -217,9 +211,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     update hq_equipment_info
     <set>
-      <if test="id != null">
-        ID = #{id,jdbcType=INTEGER},
-      </if>
       <if test="equipmentName != null">
         EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
       </if>
@@ -270,7 +261,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     update hq_equipment_info
-    set ID = #{id,jdbcType=INTEGER},
+    set 
       EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
       USER_NAME = #{userName,jdbcType=VARCHAR},
       USER_ID = #{userId,jdbcType=VARCHAR},

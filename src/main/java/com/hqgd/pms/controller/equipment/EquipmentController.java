@@ -1,6 +1,7 @@
 package com.hqgd.pms.controller.equipment;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,12 +95,15 @@ public class EquipmentController {
 			throws IOException {
 		log.info("查询设备开始");
 		EquipmentInfo equipmentInfo = equipmentService.selectByEquipmentName(equipmentName);
+		List<EquipmentInfo> equipmentList = new ArrayList<EquipmentInfo>();
+		equipmentList.add(equipmentInfo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000004");
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
-		resultMap.put("data", equipmentInfo == null ? "null" : equipmentInfo);
+		resultMap.put("data", equipmentList);
+		resultMap.put("total", equipmentList.size());
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询设备结束");

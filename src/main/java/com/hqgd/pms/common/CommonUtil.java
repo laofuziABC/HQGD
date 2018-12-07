@@ -290,10 +290,10 @@ public class CommonUtil {
  
         /* index 为负数 即表示该字符串中 没有该字符 */
         if (strStartIndex < 0) {
-            return "字符串 :---->" + str + "<---- 中不存在 " + strStart + ", 无法截取目标字符串";
+            return str;
         }
         if (strEndIndex < 0) {
-            return "字符串 :---->" + str + "<---- 中不存在 " + strEnd + ", 无法截取目标字符串";
+            return str;
         }
         /* 开始截取 */
         String result = str.substring(strStartIndex, strEndIndex).substring(strStart.length());
