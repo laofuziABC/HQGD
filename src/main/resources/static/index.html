@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>和其光电！</title>
+	<title>欢迎登录！</title>
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -31,45 +31,36 @@
 		#confirmInfo .buttons input{width: 35%; height: 35px; color: #FFFFFF; background-color: #28B779; font-size: 18px;
 									border: 0px; border-radius: 4px; margin: 0 6%;}
 	</style>
+	<!-- <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <style>
+        #mapContainer {height: 100%;width: 100%;}
+        .input-card {width: 25rem;}
+        .input-card .btn { width: 7rem; margin-right: .7rem; }
+        .input-card .btn:last-child { margin-right: 0; }
+    </style> -->
 </head>
 <body class="page-header-fixed">
 	<!-- 设置侧边栏【开始】 -->
 	<div class="page-sidebar nav-collapse collapse">
-		<ul class="page-sidebar-menu" id="page-sidebar-menu">
-			<li><div class="sidebar-toggler hidden-phone"></div></li>
-			<!--设备监控-->
-			<li class="">
-				<a href="#">
-					<i class="icon-th"></i> 
-					<span class="title">监测数据</span>
-					<span class="arrow "></span>
-				</a>
-				<!--二级菜单-->
-				<ul class="sub-menu" id="equipments">
-					<li ><a href="#" onclick="loadContext();">设备一</a></li>
-					<li ><a href="#" onclick="openConfirmInfo('12345');">设备二</a></li>
-					<li ><a href="#" onclick="openAlertInfo(123);">设备三</a></li>
-					<li ><a href="#" onclick="openModal(null,null,null);">……</a></li>
-				</ul>
-			</li>
-		</ul>
+		<!-- 加载菜单 -->
+		<ul class="page-sidebar-menu" id="page-sidebar-menu"></ul>
 	</div>
 	<!-- 设置侧边栏【结束】 -->
 	<!-- 页面内容【开始】 -->
-	<div class="page-content" id="page-content" style="z-index: 5;"></div>
+	<div class="page-content" id="page-content" style="z-index: 5; width: 88%; height: 95%;">
+		<!-- 加载地图 -->
+		<div id="mapContainer" class="map" tabindex="0"></div>
+	</div>
 	<!-- 页面内容【结束】 -->
 	<!-- 页脚区域【开始】 -->
-	<div class="footer">
-		<div class="footer-inner" style="margin: auto 40%;width: 20%;">
+	<div style="position: fixed; left: 45%; top: 95%; width: 15%;">
+		<div style="margin: auto; width: 100%;">
 			2018.11.06 &copy; Metronic by laofuzi.
-		</div>
-		<div class="footer-tools">
-			<span class="go-top">
-				<i class="icon-angle-up"></i>
-			</span>
 		</div>
 	</div>
 	<!-- 页脚区域【结束】 -->
+	
+	
 	<!--模态框以及弹框【开始】-->
 	<div class="page-sidebar nav-collapse collapse" style="none;">
 		<!-- 页面隐藏模态框【开始】-->
@@ -112,7 +103,7 @@
 	<script>
 		jQuery(document).ready(function() {
 		   App.init();
-		   loadContext(100);
+		   /* loadContext(100); */
 		});
 		
 		//获取页面参数
@@ -167,7 +158,6 @@
 		}
 		$("#page-sidebar-menu").html(menuHtml);
 		/* 获取侧边栏普通用户设备列表【开始】 */
-		if(roleId != 1){
 		$.ajax({
 			url:"equipment/selectAllByUser",
 			type: "post",
@@ -183,7 +173,6 @@
 				$("#equipments").append(equiMenu);
 			}
 		});
-		}
 		/* 获取侧边栏普通用户设备列表【结束】 */
 	</script>
 	<script type="text/javascript">
@@ -201,9 +190,8 @@
 				myModal.style.width = (param.width == null)?("1200px"):(param.width+"px");
 				myModal.style.height = (param.height == null)?("900px"):(param.height+"px");
 			}
-			equiId=param.equipmentId;
-			userId=param.userId;
-			alert(equiId+"——"+userId);
+			if(param.equipmentId != "undefined"){equiId=param.equipmentId;}
+			if(param.userId != "undefined"){userId=param.userId;}
 			$("#modal-title").html("");
 			$("#modal-body").html("");
 			$("#modal-title").html(title);
@@ -310,7 +298,105 @@
 		}
 		<!-- 关联侧边栏和展示内容【结束】 -->
 	</script>
+	<!-- 页面地图【开始】 -->
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer"></script>
+	<script type="text/javascript">
+		var cluster, markers = [];
+	    var points= [];
+	    var map = new AMap.Map("mapContainer", {
+	    	mapStyle: 'amap://styles/normal',
+	        resizeEnable: true,
+	        center: [105, 38],
+	        zoom: 5
+	    });
+	    getLngLat();
+	    
+	    function getLngLat(){
+	    	$.ajax({
+				url:"map/getPositions",
+				type:"post",
+				async:false,
+				dataType: "json",
+				success: function(result){
+					points = result.data;
+				}
+			});
+	    }
+	    	
+	    for (var i = 0; i < points.length; i += 1) {
+	        markers.push(new AMap.Marker({
+	            position: points[i].split(','),
+	            content: '<div style="background-color: hsla(180, 100%, 50%, 0.7); height: 24px; width: 24px; border: 1px solid hsl(180, 100%, 40%); border-radius: 12px; box-shadow: hsl(180, 100%, 50%) 0px 0px 1px;"></div>',
+	            offset: new AMap.Pixel(-15, -15)
+	        }))
+	    }
 
+	    var count = markers.length;
+	    var _renderCluserMarker = function (context) {
+	        var factor = Math.pow(context.count / count, 1 / 18);
+	        var div = document.createElement('div');
+	        var Hue = 180 - factor * 180;
+	        var bgColor = 'hsla(' + Hue + ',100%,50%,0.7)';
+	        var fontColor = 'hsla(' + Hue + ',100%,20%,1)';
+	        var borderColor = 'hsla(' + Hue + ',100%,40%,1)';
+	        var shadowColor = 'hsla(' + Hue + ',100%,50%,1)';
+	        div.style.backgroundColor = bgColor;
+	        var size = Math.round(30 + Math.pow(context.count / count, 1 / 5) * 20);
+	        div.style.width = div.style.height = size/1.5 + 'px';
+	        div.style.border = 'solid 1px ' + borderColor;
+	        div.style.borderRadius = size / 2 + 'px';
+	        div.style.boxShadow = '0 0 1px ' + shadowColor;
+	        div.innerHTML = context.count;
+	        div.style.lineHeight = size/1.4 + 'px';
+	        div.style.color = fontColor;
+	        div.style.fontSize = '14px';
+	        div.style.textAlign = 'center';
+	        context.marker.setOffset(new AMap.Pixel(-size / 2, -size / 2));
+	        context.marker.setContent(div)
+	    };
+	    addCluster(2);
+
+	    function addCluster(tag) {
+	        if (cluster) {
+	            cluster.setMap(null);
+	        }
+	        if (tag == 2) {//完全自定义
+	            cluster = new AMap.MarkerClusterer(map, markers, {
+	                gridSize: 80,
+	                renderCluserMarker: _renderCluserMarker
+	            });
+	        } else if (tag == 1) {//自定义图标
+	            var sts = [{
+	                url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+	                size: new AMap.Size(32, 32),
+	                offset: new AMap.Pixel(-16, -16)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/green.png",
+	                size: new AMap.Size(32, 32),
+	                offset: new AMap.Pixel(-16, -16)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
+	                size: new AMap.Size(36, 36),
+	                offset: new AMap.Pixel(-18, -18)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/red.png",
+	                size: new AMap.Size(48, 48),
+	                offset: new AMap.Pixel(-24, -24)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
+	                size: new AMap.Size(48, 48),
+	                offset: new AMap.Pixel(-24, -24)
+	            }];
+	            cluster = new AMap.MarkerClusterer(map, markers, {
+	                styles: sts,
+	                gridSize: 80
+	            });
+	        } else {//默认样式
+	            cluster = new AMap.MarkerClusterer(map, markers, {gridSize: 80});
+	        }
+	    }
+	</script>
+	<!-- 页面地图【结束】 -->
 </body>
 <!-- END BODY -->
 </html>

@@ -65,10 +65,11 @@ public class EquipmentController {
 		log.info("更新设备开始");
 		User loginUser = (User) request.getSession(true).getAttribute("user");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		if(equipmentInfo.getEquipmentId() == null || equipmentInfo.getEquipmentId() == "") {
+		if(equipmentInfo.getEquipmentId() != null && !equipmentInfo.getEquipmentId().equals("")) {
+			resultMap = equipmentService.update(equipmentInfo, loginUser);
+		}else {
 			resultMap = equipmentService.add(equipmentInfo, loginUser);
 		}
-		resultMap = equipmentService.update(equipmentInfo, loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("更新设备结束");

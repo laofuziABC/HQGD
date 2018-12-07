@@ -21,6 +21,7 @@
 			#channelsInfo .chan_info input{width: 125px; height: 29px; padding: 0px;}
 			#channelsInfo .chan_info .chan_button{width: 90px; height: 28px; margin: 0px 15px; background-color: #27A9E3; color: #FFFFFF; border: 0px; border-radius: 4px;}
 			#outerForm .outerButton{width: 24%; height: 35px; margin: 10px 38%; background-color: #00B848; border: 0px; border-radius: 4px; color: #FFFFFF; font-size: 16px;}
+			#padcode, #cadcode, #adcode{width: 86px;}
 		</style>
 	</head>
 	<body>
@@ -41,28 +42,26 @@
 						<td class="info_text">所属用户<span style="color: red;">*</span>：</td>
 						<td>
 							<select class="right_input" id="userId" name="userId">
-								<option value="" checked>—请选择用户—</option>
-								<option value="1">用户列表-1</option>
-								<option value="">用户列表-2</option>
-								<option value="">用户列表-3</option>
-								<option value="">用户列表-4</option>
-								<option value="">用户列表-5</option>
 							</select>
 						</td>
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
-						<td class="info_text">安装地址：</td>
-						<td><input type="text" class="right_input" id="address" name="address"/></td>
+						<td class="info_text">安装地址<span style="color: red;">*</span>：</td>
+						<td><!-- <input type="text" class="right_input" id="address" name="address"/> -->
+							<select id="padcode" name="padcode" onchange="getCities();"><option value="0">选择省</option></select>
+							<select id="cadcode" name="cadcode" onchange="getTowns();"><option value="0">选择市</option></select>
+							<select id="adcode" name="adcode"><option value="0">选择区</option></select>
+						</td>
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
-						<td class="info_text">地区编码<span style="color: red;">*</span>：</td>
+						<td class="info_text">地区编码：</td>
 						<td><input type="text" class="right_input" id="adcode" name="adcode"/></td>
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
-						<td class="info_text">坐标<span style="color: red;">*</span>：</td>
+						<td class="info_text">坐标：</td>
 						<td><input type="text" class="right_input" id="lngLat" name="lngLat"/></td>
 						<td class="info_text"></td>
 					</tr>
@@ -80,8 +79,7 @@
 						<td colspan="3">
 							<div id="channelsInfo">
 								<div class="chan_info">
-									<span>通道名称</span><span>温度上限</span>
-									<span>温度下限</span><!-- <span>操作</span> -->
+									<span>通道名称</span><span>温度上限</span><span>温度下限</span>
 								</div>
 							</div>
 						</td>
@@ -92,15 +90,21 @@
 		</div>
 		
 		<script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+		<script src="js/allCities.js"></script>
 		<script type="text/javascript">
 			$(function(){
+				getEquiInfoForEdit();
+			});
+			//获取数据回显
+			function getEquiInfoForEdit(){
 				$.ajax({
 					url: "equipment/editEquiInfo",
 					type: "post",
-					data: {"equipmentId": (equiId == null)?(null):(equiId.trim())},
+					data: {"equipmentId": (equiId==null)?(null):(equiId.trim())},
 					dataType: "json",
 					success: function(result){
-						//添加用户列表
+						getProvs();
+						//加载用户列表
 						var userList = result.userList;
 						var userHtml = "<option value=\"\" checked>—请选择用户—</option>";
 						for(let i=0; i<userList.length; i++){
@@ -116,10 +120,26 @@
 						$("#adcode").val(data.adcode);
 						$("#lngLat").val(data.lngLat);
 						$("#frameStru").val(data.frameStru);
+						//加载并回显通道信息
+						/* if(data.channelTem.length>10){
+							var info="<div class=\"chan_info\"><span>通道名称</span><span>温度上限</span><span>温度下限</span></div>";
+							var channelTem=data.channelTem.split(",");
+							for(let i=0; i<channelTem.length; i++){
+								var temp = channelTem[i].split("&");
+								var tempChanNum=temp[0].substring(temp[0].indexOf("=")+1);
+								var tempMaxTem=temp[1].substring(temp[1].indexOf("=")+1);
+								var tempMinTem=temp[2].substring(temp[2].indexOf("=")+1);
+								info += "<form id=\"list"+i+"\" class=\"chan_info\">";
+								info+="<input type=\"text\" class=\"chan_input\" name= \"channelNum\" value='"+tempChanNum+"'/>";
+								info+="<input type=\"text\" class=\"chan_input\" name= \"maxTem\" value='"+tempMaxTem+"'/>";
+								info+="<input type=\"text\" class=\"chan_input\" name= \"minTem\" value='"+tempMinTem+"'/>";
+								info+="</form>";
+							}
+							$("#channelsInfo").html(info);
+						} */
 					}
 				});
-			});
-			
+			}
 			//新增通道
 			var i = 0;
 			function addChannel(){
@@ -151,18 +171,14 @@
 				var channelInfos=[];
 				for(let i=1; i<target.length; i++){
 					var chanParam = $("#list"+i).serialize();
-					var temp = chanParam.split("&");
-					let chanInfo={
-						"channelNum":temp[0].substring(temp[0].indexOf("=")+1),
-						"maxTem":temp[1].substring(temp[1].indexOf("=")+1),
-						"minTem":temp[2].substring(temp[2].indexOf("=")+1)
-					};
-					channelInfos.push(chanInfo);
+					channelInfos.push(chanParam);
 				}
 				var params={
-					"equipmentId": $("#equipmentId").val(),
+					"equipmentId":$("#equipmentId").val(),
 					"equipmentName": $("#equipmentName").val(),
 					"userId": $("#userId").val(),
+					/* "userName": $("#userId option:selected").text(), */
+					"userName": "temp",
 					"address": $("#address").val(),
 					"adcode": $("#adcode").val(),
 					"lngLat": $("#lngLat").val(),
@@ -177,10 +193,56 @@
 					success: function(result){
 						if(result.success){ alert("操作成功！"); }
 						else{ alert("操作失败！"); }
+						closeModal();
+						getEquipmentList();
 					}
 				});
-				closeModal();
-				getEquipmentList();
+			}
+		</script>
+		<script type="text/javascript">
+			/* 全局变量【开始】 */
+			var provValueList=[];
+			var cityValueList=[];
+			/* 全局变量【结束】 */
+			//地区级联
+			function getProvs(){
+				var sh = "";
+				sh+="<option value=\"0\">选择省</option>";
+				provValueList=new Array();
+				for(let i=0; i<allCities.length; i++){
+					sh+="<option value='"+allCities[i].value+"'>"+allCities[i].label+"</option>";
+					provValueList.push(allCities[i].value);
+				}
+				$("#padcode").html(sh);
+			}
+			function getCities(){
+				var p = $("#padcode").val();
+				var s="<option value=\"0\">选择市</option>";
+				if(p>0){
+					var i = $.inArray(p,provValueList);
+					var c = allCities[i].children;
+					cityValueList=new Array();
+					for(let j=0; j<c.length; j++){
+						s+="<option value='"+c[j].value+"'>"+c[j].label+"</option>";
+						cityValueList.push(c[j].value);
+					}
+				}
+				$("#cadcode").html(s);
+			}
+			function getTowns(){
+				var p = $("#padcode").val();
+				var c = $("#cadcode").val();
+				var t="<option value=\"0\">选择区</option>";
+				if(p*c>0){
+					var m = $.inArray(p,provValueList);
+					var n = $.inArray(c,cityValueList);
+					var t1 = allCities[m].children;
+					var t2 = t1[n].children;
+					for(let j=0; j<t2.length; j++){
+						t+="<option value='"+t2[j].value+"'>"+t2[j].label+"</option>";
+					}
+				}
+				$("#adcode").html(t);
 			}
 		</script>
 	</body>

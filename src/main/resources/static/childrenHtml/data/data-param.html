@@ -91,8 +91,13 @@
 			}
 			//根据设备主键，获取数据展示信息
 			function getEquiData(param){
-				equiId=param.trim();
-				$("#right-view").load("childrenHtml/data/data-show.html");
+				if(param== null){
+					$("#equipResultList").html("<dd>未查找到设备</dd>");
+					$("#right-view").html("");
+				}else{
+					equiId=param.trim();
+					$("#right-view").load("childrenHtml/data/data-show.html");
+				}
 			}
 			//根据按钮选择展示模块——用户/地区
 			function showParamBox(param){
@@ -197,9 +202,13 @@
 								for(let i=0; i<totalSize; i++){
 									resultList+="<dd onclick=\"getEquiData('"+data[i].equipmentId+"');\">"+data[i].equipmentName+"</dd>";
 								}
+								$("#equipResultList").html(resultList);
+								getEquiData(equiId);
+							}else{
+								$("#equipResultList").html(resultList);
+								getEquiData(null);
 							}
-							$("#equipResultList").html(resultList);
-							getEquiData(equiId);
+							
 							//假分页：默认每页显示pageSize条
 							var pageSize = 3;
 							var totalNum=Math.ceil(totalSize/pageSize);
