@@ -3,12 +3,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>选择设备查询条件</title>
+		<link rel="stylesheet" type="text/css" href="js/pager/pager.css" />
 	</head>
 	<body>
 		<!-- 左侧设备查询【开始】 -->
 		<div style="margin: 5px 0px;">
 			<input type="text" id="interEqui" placeholder="请输入设备名称或编号"  value="" onfocus="javascript: this.value=null;"/>
-			<button  class="btn blue" onclick="searchByEqui();">查询</button>
+			<button  class="btn blue" onclick="searchByEquiName();">查询</button>
 			<button class="btn green" onclick="showParams();">分组</button>
 		</div>
 		<div id="showParams" style="display: none;">
@@ -35,10 +36,10 @@
 				<div class="list-page-tail page-down" id="subPager" style="margin: auto;"></div>
 			</div>
 		</div>
-		
-		
 		<!-- 左侧设备查询【结束】 -->
+		
 		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript" src="js/pager/pager.js"></script>
 		<script src="js/allCities.js"></script>
 		<script type="text/javascript">
 			$(function(){
@@ -59,23 +60,34 @@
 				else{ target.style.display="none"; }
 			}
 			//加载设备列表
+			
 			function getEquiResultList(){
-				$.ajax({
-					url: "equipment/selectAll",
-					type: "post",
-					dataType: "json",
-					success: function(result){
-						var data = result.data;
-						var resultList = "";
-						equiId=data[0].equipmentId
-						for(let i=0; i<data.length; i++){
-							resultList+="<dd onclick=\"getEquiData('"+data[i].equipmentId+"');\">"+data[i].equipmentName+"</dd>";
+				var url="equipment/selectAll";
+				AjaxPost(url,null);
+			}
+			//根据设备名称查询设备列表
+			function searchByEquiName(){
+				var url="equipment/selectByEquipmentName";
+				var equiName=$("#interEqui").val().trim();
+				var param={"equipmentName":equiName};
+				if(equiName != ""){
+					AjaxPost(url,param);
+					/* $.ajax({
+						url: url,
+						type: "post",
+						data: param,
+						dataType: "json",
+						success: function(result){
+							var data = result.data;
+							var resultList="<dd onclick=\"getEquiData('"+data.equipmentId+"');\">"+data.equipmentName+"</dd>";
+							$("#equipResultList").html("");
+							$("#equipResultList").html(resultList);
+							getEquiData(data.equipmentId.trim());
 						}
-						//根据设备列表，初始化第一台设备的展示信息
-						$("#equipResultList").html(resultList);
-						getEquiData(equiId);
-					}
-				});
+					}); */
+				}else{
+					getEquiResultList();
+				}
 			}
 			//根据设备主键，获取数据展示信息
 			function getEquiData(param){
@@ -84,7 +96,6 @@
 			}
 			//根据按钮选择展示模块——用户/地区
 			function showParamBox(param){
-				var formHtml="";
 				if(param==1){
 					userParam.style.display="block";
 					addrParam.style.display="none";
@@ -102,6 +113,12 @@
 			}
 			//根据用户，查找关联设备
 			function getEquiByUser(){
+				var url="equipment/selectAllByUser";
+				var username=$("#interUser").val().trim();
+				var param={"userName":username};
+				if(username != ""){
+					AjaxPost(url,param);
+				}
 				userParam.style.display="none";
 				addrParam.style.display="none";
 			}
@@ -112,10 +129,12 @@
 				var t = $("#town-select").val();
 				var areaCode;
 				if(p==0){
-					parent.openAlertInfo("未选择地区");
+					alert("未选择地区");
 				}else{
-					areaCode=((p>c)?p:c)>t?((p>c)?p:c):t;
-					parent.openAlertInfo(areaCode);
+					areaCode=((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
+					var url="equipment/selectAllByAddress";
+					var param={"adcode":areaCode};
+					AjaxPost(url,param);
 				}
 				userParam.style.display="none";
 				addrParam.style.display="none";
@@ -124,6 +143,7 @@
 			function getProvs(){
 				var sh = "";
 				sh+="<option value=\"0\">选择省</option>";
+				provValueList=new Array();
 				for(let i=0; i<allCities.length; i++){
 					sh+="<option value='"+allCities[i].value+"'>"+allCities[i].label+"</option>";
 					provValueList.push(allCities[i].value);
@@ -136,6 +156,7 @@
 				if(p>0){
 					var i = $.inArray(p,provValueList);
 					var c = allCities[i].children;
+					cityValueList=new Array();
 					for(let j=0; j<c.length; j++){
 						s+="<option value='"+c[j].value+"'>"+c[j].label+"</option>";
 						cityValueList.push(c[j].value);
@@ -148,15 +169,44 @@
 				var c = $("#city-select").val();
 				var t="<option value=\"0\">选择区</option>";
 				if(p*c>0){
-					var i1 = $.inArray(p,provValueList);
-					var i2 = $.inArray(c,cityValueList);
-					var t1 = allCities[i1].children;
-					var t2 = t1[i2].children;
+					var m = $.inArray(p,provValueList);
+					var n = $.inArray(c,cityValueList);
+					var t1 = allCities[m].children;
+					var t2 = t1[n].children;
 					for(let j=0; j<t2.length; j++){
 						t+="<option value='"+t2[j].value+"'>"+t2[j].label+"</option>";
 					}
 				}
 				$("#town-select").html(t);
+			}
+			//封装Ajax异步请求
+			function AjaxPost(url,param){
+				var resultList = "";
+				if(url != null && url != ""){
+					$.ajax({
+						url: url,
+						type: "post",
+						data: param,
+						dataType: "json",
+						success: function(result){
+							var data = result.data;
+							var totalSize = data.length;
+							//根据设备列表，初始化第一台设备的展示信息
+							if(totalSize>0){
+								equiId=data[0].equipmentId;
+								for(let i=0; i<totalSize; i++){
+									resultList+="<dd onclick=\"getEquiData('"+data[i].equipmentId+"');\">"+data[i].equipmentName+"</dd>";
+								}
+							}
+							$("#equipResultList").html(resultList);
+							getEquiData(equiId);
+							//假分页：默认每页显示pageSize条
+							var pageSize = 3;
+							var totalNum=Math.ceil(totalSize/pageSize);
+							$("#subPager").html(pageInfo);
+						}
+					});
+				}
 			}
 		</script>
 	</body>
