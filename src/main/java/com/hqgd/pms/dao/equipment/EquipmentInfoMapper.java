@@ -17,7 +17,7 @@ public interface EquipmentInfoMapper {
 
 	int updateByPrimaryKey(EquipmentInfo record);
 
-	List<EquipmentInfo> selectAllEquipmentByUser(String param);
+	List<EquipmentInfo> selectAllEquipmentByUser(String userName);
 
 	List<EquipmentInfo> selectAll();
 

@@ -127,6 +127,7 @@
 		}
 		//根据roleId加载侧边菜单栏——roleId=1，管理员；其余都为普通用户
 		var roleId =getParam("roleId");
+		var userName =getParam("userName");
 		var menuHtml="";
 		menuHtml+="<li><div class=\"sidebar-toggler hidden-phone\"></div></li>";
 		if(roleId == 1){
@@ -167,9 +168,9 @@
 		$("#page-sidebar-menu").html(menuHtml);
 		/* 获取侧边栏普通用户设备列表【开始】 */
 		$.ajax({
-			url:"equipment/selectAll",
+			url:"equipment/selectAllByUser",
 			type: "post",
-			data:{"param":null},
+			data:{"userName":userName},
 			dataType: "json",
 			success: function(result){
 				let data = result.data;

@@ -45,14 +45,8 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	@Override
 	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		// int count = equipmentInfoMapper.selectTotalChNum();
-		// String equipmentId = queryVo.getEquipmentId();
-		// int count1 = equipmentInfoMapper.selectEquipCh(equipmentId);
 		int page = queryVo.getPage();
 		int limit = queryVo.getLimit();
-		// DecimalFormat df = new DecimalFormat("0.00");//格式化小数
-		// String num = df.format((float)limit/count1);//返回的是String类型
-		// double num = (float) limit / count1;
 		int total = limit * page;
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId());

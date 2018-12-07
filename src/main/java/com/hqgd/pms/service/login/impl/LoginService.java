@@ -64,6 +64,7 @@ public class LoginService implements ILoginService {
 				map.put("roleId", "0");
 			}
 			map.put("userId", id);
+			map.put("userName", userName);
 		}
 		return map;
 	}

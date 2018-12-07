@@ -110,6 +110,7 @@ public class EquipmentController {
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		resultMap.put("data", equipmentList);
+		resultMap.put("total", equipmentList.size());
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询该用户下所有设备结束");
@@ -127,6 +128,7 @@ public class EquipmentController {
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		resultMap.put("data", equipmentList);
+		resultMap.put("total", equipmentList.size());
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询该地区下所有设备结束");
