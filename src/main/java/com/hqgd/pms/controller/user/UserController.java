@@ -1,6 +1,7 @@
 package com.hqgd.pms.controller.user;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.domain.User;
 import com.hqgd.pms.service.user.IUserService;
 
@@ -96,5 +98,33 @@ public class UserController {
 		result = userService.updatePassword(id, oldpassword, newPassword);
 		String json = new Gson().toJson(result).toString();
 		return json;
+	}
+	
+	@RequestMapping("/recordExport")
+	public void recordExport(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		String path = request.getParameter("path");
+		String classPath = userService.execRecordExport(path);
+		try {
+			try {
+				path = new String(classPath.getBytes(), "ISO8859-1");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			response.setContentType("application/vnd.ms-excel;charset=gb2312"); 
+//			response.setContentType("application/octet-stream;charset=ISO8859-1");
+			response.setHeader("Content-Disposition", "attachment;filename=" + path);
+			response.addHeader("Pargam", "no-cache");
+			response.addHeader("Cache-Control", "no-cache");
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			resultMap.put("success", Boolean.TRUE.toString());
+			resultMap.put("resultCode", "00000000");
+			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+			resultMap.put("message", "查询历史数据成功");
+			resultMap.put("data", path);
+			response.getWriter().write(new Gson().toJson(resultMap));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }

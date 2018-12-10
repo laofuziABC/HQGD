@@ -10,7 +10,7 @@
 			<div class="row-fluid" style="width: 95%; height: 10%; margin-left: 1%;">
 				<div>
 					<h3 class="page-title">用户管理&nbsp;
-						<small>此功能用于管理所有用户
+						<small>   <!-- 此功能用于管理所有用户 -->
 							<a href="#" onclick="updatePsw();">修改登录用户密码</a>
 						</small>
 					</h3>
@@ -28,7 +28,7 @@
 			<div>
 				<div style="margin: 10px 0px;">
 					<button class="btn green" onclick="getUserEdit();">新增用户&nbsp;<i class="icon-plus"></i></button>
-					<button class="btn blue" onclick="javascript: parent.openAlertInfo(12345);" style="margin: 0px 10px;">导出列表</button>
+					<button class="btn blue" onclick="report();" style="margin: 0px 10px;">导出列表</button>
 					<input type="text" id="searchByName" placeholder="请输入用户名称查询" style="height: 30px;" value="" onfocus="javascript: this.value=null;"/>
 					<button  class="btn blue" onclick="searchResult();"><i class="icon-search"></i></button>
 				</div>
@@ -143,7 +143,6 @@
 			//搜索用户
 			function searchResult(){
 				var name = $("#searchByName").val().trim();
-				alert(name);
 				if(name != ""){
 					$.ajax({
 						url: "user/searchByUsername",
@@ -151,7 +150,7 @@
 						data: {"username": name},
 						dataType: "json",
 						success: function(result){
-							alert("数据到前台");
+							//alert("数据到前台");
 							var userlist = "";
 							for(let i=0; i<result.length; i++){
 								userlist += "<tr class=\"\">";
@@ -180,6 +179,19 @@
 				var params = {"width": 600, "height": 250};
 				parent.openModal(title, url, params);
 				
+			}
+			//导出
+			function report(){
+				$.ajax({
+					url: "user/recordExport",
+					type: "post",
+						// data: {"path": param},
+					dataType: "json",
+					success: function(result){
+					if(result.success){ alert("导出成功！"); }
+					else{ alert("导出失败！"); }
+					}
+				});
 			}
 		</script>
 	</body>

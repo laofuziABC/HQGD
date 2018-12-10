@@ -8,7 +8,7 @@
 		<div>
 			<div class="row-fluid" style="width: 95%; height: 10%; margin-left: 1%;">
 				<div>
-					<h3 class="page-title">设备管理&nbsp;<small>此功能用于管理当前所有关联设备</small></h3>
+					<h3 class="page-title">设备管理&nbsp;<!-- <small>此功能用于管理当前所有关联设备</small> --></h3>
 				</div>
 				<ul class="breadcrumb">
 					<li><i class="icon-home"></i><span class="icon-angle-right"></span></li>
@@ -23,7 +23,7 @@
 			<div>
 				<div style="margin: 10px 0px;">
 					<button class="btn green" onclick="getEquiEdit(null);">新增设备&nbsp;<i class="icon-plus"></i></button>
-					<button class="btn blue" onclick="javascript: parent.openAlertInfo(12345);" style="margin: 0px 10px;">导出列表</button>
+					<button class="btn blue" onclick="report();" style="margin: 0px 10px;">导出列表</button>
 					<input type="text" id="searchByName" placeholder="请输入设备名称查询" style="height: 30px;" value="" onfocus="javascript: this.value=null;"/>
 					<button  class="btn blue" onclick="searchResult();"><i class="icon-search"></i></button>
 				</div>
@@ -124,6 +124,25 @@
 						}
 					});
 				}
+			}
+			
+			//导出
+			function report() {
+				$.ajax({
+					url : "equipment/recordExport",
+					type : "post",
+					/* data : {
+						"path" : param
+					}, */
+					dataType : "json",
+					success : function(result) {
+						if (result.success) {
+							alert("导出成功！");
+						} else {
+							alert("导出失败！");
+						}
+					}
+				});
 			}
 		</script>
 	</body>

@@ -3,8 +3,6 @@ package com.hqgd.pms.service.equipment;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.User;
 
@@ -25,5 +23,7 @@ public interface IEquipmentService {
 	List<EquipmentInfo> selectAllByAddress(String code);
 
 	EquipmentInfo selectByEquipmentName(String equipmentName);
+
+	String execRecordExport(String path);
 
 }
