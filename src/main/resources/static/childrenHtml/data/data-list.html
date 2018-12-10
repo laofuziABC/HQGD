@@ -92,10 +92,8 @@
 												</div>
 											</td>
 											<td>
-											    <button  class="btn green" onclick="getChartData();">查  询</button>
-											    <button  type="reset" class="btn green" ">重  置</button>
-												<!-- <input type="button" onclick="getChartData();" value="查 询"  style="width:80px; height: 34px; background-color:#E5E5E5; font-size: 18px; border:0px; border-radius: 3px;"/>
-												<input type="reset" value="重 置"  style="width:80px; height: 34px; background-color:#E5E5E5; font-size: 18px; border:0px; border-radius: 3px;" /> -->
+												<input type="button" onclick="getChartData();" value="查 询"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;"/>
+												<input type="reset" value="重 置"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;" />
 											</td>
 										</tr>
 									</table>
@@ -112,18 +110,6 @@
 						<!--当前设备各通道历史监测温度表【结束】-->
 						<!--所有历史数据【开始】-->
 						<div id="tab_3_3" class="tab-pane" style="width: 1220px; padding: 20px 0 0 80px;">
-							<!-- <div class="clearfix">
-								便捷操作工具栏【开始】
-								<div class="btn-group pull-right">
-									<button class="btn dropdown-toggle" onclick="report()" >导出Excel<i class="icon-angle-down"></i></button>
-									<ul class="dropdown-menu pull-right">
-										<li><a href="#">打印</a></li>
-										<li><a href="#">保存为PDF</a></li>
-										<li><a href="#">导出到Excel</a></li>
-									</ul>
-								</div>
-								便捷操作工具栏【结束】
-							</div> -->
 							<!-- 查询参数【开始】 -->
 							<div class="row-fluid">
 								<!-- 筛选条件【开始】 -->
@@ -144,7 +130,6 @@
 												<div class="controls" style="margin-left: 80px;">
 													<div class="input-append date form_datetime">
 														<input size="18" type="text" value="" class="m-wrap datetimePicker" id="tableEndTime" style="width: 150px; border-radius: 4px;"/>
-														<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 													</div>
 												</div>
 											</td>
@@ -163,19 +148,10 @@
 												</select>
 											</td>
 											<td>
-											    <button  class="btn green" onclick="searchResult(1);">查  询</button>
-											    <button  type="reset" class="btn green" ">重  置</button>
-											    <button  class="btn green" onclick="report();">导  出</button>
+												<input type="button" onclick="searchResult(1);" value="查询"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;"/>
+												<input type="button" onclick="report();" value="导出"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;" />
 											</td>
 										</tr>
-										<!-- <tr>
-											<td style="font-size: 18px;">通道号:
-												<input type="text" id="search-by-channel" placeholder="输入通道号查询" style="width: 150px; height: 24px;"/>
-												<span onclick="searchResult(1);">
-													<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
-												</span>
-											</td>
-										</tr> -->
 									</table>
 								</form>
 								<!-- 筛选条件【结束】 -->
