@@ -12,7 +12,7 @@
 			#outerForm table .normal{width: 100%; height: 40px;}
 			#outerForm table .unnormal{width: 100%;}
 			#outerForm .normal .info_text{width: 30%; margin: 0px; padding: 0px; font-size: 18px; text-align: right;}
-			#outerForm .normal .right_input{width: 100%; height: 40px; margin: 0px; padding: 0px; font-size: 16px; text-align: center; }
+			#outerForm .normal .right_input{width: 100%; height: 30px; margin: 0px; padding: 0px; font-size: 16px; text-align: center; }
 			#outerForm select option{font-size: 16px; text-align: center; }
 			#outerForm .normal .innerButton{width: 40%; height: 35px; margin: auto 30%; font-size: 16px; background-color: #00B848; color: #FFFFFF; border: 0px; border-radius: 4px;}
 			#channelsInfo{width: 90%; margin: 2px auto;}
@@ -48,16 +48,12 @@
 					</tr>
 					<tr class="normal">
 						<td class="info_text">安装地址<span style="color: red;">*</span>：</td>
-						<td><!-- <input type="text" class="right_input" id="address" name="address"/> -->
+						<td>
 							<select id="padcode" name="padcode" onchange="getCities();"><option value="0">选择省</option></select>
 							<select id="cadcode" name="cadcode" onchange="getTowns();"><option value="0">选择市</option></select>
 							<select id="adcode" name="adcode"><option value="0">选择区</option></select>
+							<input type="text" class="right_input" id="address" name="address"/>
 						</td>
-						<td class="info_text"></td>
-					</tr>
-					<tr class="normal">
-						<td class="info_text">地区编码：</td>
-						<td><input type="text" class="right_input" id="adcode" name="adcode"/></td>
 						<td class="info_text"></td>
 					</tr>
 					<tr class="normal">
@@ -103,7 +99,6 @@
 					data: {"equipmentId": (equiId==null)?(null):(equiId.trim())},
 					dataType: "json",
 					success: function(result){
-						getProvs();
 						//加载用户列表
 						var userList = result.userList;
 						var userHtml = "<option value=\"\" checked>—请选择用户—</option>";
@@ -117,9 +112,14 @@
 						$("#equipmentName").val(data.equipmentName);
 						$("#userId").val(data.userId);
 						$("#address").val(data.address);
-						$("#adcode").val(data.adcode);
 						$("#lngLat").val(data.lngLat);
 						$("#frameStru").val(data.frameStru);
+						getProvs();
+						$("#padcode").val((data.padcode)*10000);
+						getCities();
+						$("#cadcode").val((data.cadcode)*100);
+						getTowns();
+						$("#adcode").val(data.adcode);
 						//加载并回显通道信息
 						/* if(data.channelTem.length>10){
 							var info="<div class=\"chan_info\"><span>通道名称</span><span>温度上限</span><span>温度下限</span></div>";
@@ -174,17 +174,23 @@
 					channelInfos.push(chanParam);
 				}
 				var params={
-					"equipmentId":$("#equipmentId").val(),
+					/* "equipmentId":$("#equipmentId").val(), */
 					"equipmentName": $("#equipmentName").val(),
 					"userId": $("#userId").val(),
-					/* "userName": $("#userId option:selected").text(), */
-					"userName": "temp",
-					"address": $("#address").val(),
+					"userName": $("#userId option:selected").text(),
+					/* "userName": "temp", */
+					"padcode": $("#padcode").val()/10000,
+					"cadcode": $("#cadcode").val()/100,
 					"adcode": $("#adcode").val(),
+					"address": $("#address").val(),
 					"lngLat": $("#lngLat").val(),
 					"frameStru": $("#frameStru").val(),
 					"channelTem":channelInfos.toString()
 				};
+				alert($("#equipmentId").val() != "" && $("#equipmentId").val()!=null);
+				if($("#equipmentId").val() != "" || $("#equipmentId").val()!=null){
+					params.equipmentId=$("#equipmentId").val();
+				}
 				$.ajax({
 					url: "equipment/update",
 					type: "post",
@@ -193,7 +199,7 @@
 					success: function(result){
 						if(result.success){ alert("操作成功！"); }
 						else{ alert("操作失败！"); }
-						closeModal();
+						/* closeModal(); */
 						getEquipmentList();
 					}
 				});
@@ -216,7 +222,7 @@
 				$("#padcode").html(sh);
 			}
 			function getCities(){
-				var p = $("#padcode").val();
+				var p = $("#padcode option:selected").val();
 				var s="<option value=\"0\">选择市</option>";
 				if(p>0){
 					var i = $.inArray(p,provValueList);
@@ -230,8 +236,8 @@
 				$("#cadcode").html(s);
 			}
 			function getTowns(){
-				var p = $("#padcode").val();
-				var c = $("#cadcode").val();
+				var p = $("#padcode option:selected").val();
+				var c = $("#cadcode option:selected").val();
 				var t="<option value=\"0\">选择区</option>";
 				if(p*c>0){
 					var m = $.inArray(p,provValueList);

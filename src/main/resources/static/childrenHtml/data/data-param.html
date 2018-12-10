@@ -156,7 +156,7 @@
 				$("#prov-select").html(sh);
 			}
 			function getCities(){
-				var p = $("#prov-select").val();
+				var p = $("#prov-select option:selected").val();
 				var s="<option value=\"0\">选择市</option>";
 				if(p>0){
 					var i = $.inArray(p,provValueList);
@@ -170,8 +170,8 @@
 				$("#city-select").html(s);
 			}
 			function getTowns(){
-				var p = $("#prov-select").val();
-				var c = $("#city-select").val();
+				var p = $("#prov-select option:selected").val();
+				var c = $("#city-select option:selected").val();
 				var t="<option value=\"0\">选择区</option>";
 				if(p*c>0){
 					var m = $.inArray(p,provValueList);
