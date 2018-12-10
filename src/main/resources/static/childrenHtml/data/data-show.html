@@ -49,7 +49,6 @@
 											<div class="controls" style="margin-left: 90px;">
 												<div class="input-append date form_datetime">
 													<input size="18" type="text" value="" class="m-wrap datetimePicker" id="chartStartTime" style="width: 150px;"/>
-													<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 												</div>
 											</div>
 										</td>
@@ -58,13 +57,12 @@
 											<div class="controls" style="margin-left: 80px;">
 												<div class="input-append date form_datetime">
 													<input size="18" type="text" value="" class="m-wrap datetimePicker" id="chartEndTime" style="width: 150px;"/>
-													<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 												</div>
 											</div>
 										</td>
 										<td>
-											 <button  class="btn green" onclick="getChartData();">查  询</button>
-											 <button  type="reset" class="btn green" ">重  置</button>
+											<input type="button" onclick="getChartData();" value="查 询"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;"/>
+											<input type="reset" value="重 置"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;" />
 										</td>
 									</tr>
 								</table>
@@ -81,18 +79,6 @@
 					<!--当前设备各通道历史监测温度表【结束】-->
 					<!--所有历史数据【开始】-->
 					<div id="tab_3_3" class="tab-pane" style="width: 99%; padding: 20px 0 0 1%;">
-						<!-- <div class="clearfix">
-							便捷操作工具栏【开始】
-							<div class="btn-group pull-right">
-								<button class="btn dropdown-toggle" onclick="report()" >导出Excel<i class="icon-angle-down"></i></button>
-								<ul class="dropdown-menu pull-right">
-									<li><a href="#">打印</a></li>
-									<li><a href="#">保存为PDF</a></li>
-									<li><a href="#">导出到Excel</a></li>
-								</ul>
-							</div>
-							便捷操作工具栏【结束】
-						</div> -->
 						<!-- 查询参数【开始】 -->
 						<div class="row-fluid2">
 							<!-- 筛选条件【开始】 -->
@@ -104,7 +90,6 @@
 											<div class="controls" style="margin-left: 80px;">
 												<div class="input-append date form_datetime">
 													<input size="18" type="text" value="" class="m-wrap datetimePicker" id="tableStartTime" style="width: 150px; border-radius: 4px;"/>
-													<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 												</div>
 											</div>
 										</td>
@@ -113,7 +98,6 @@
 											<div class="controls" style="margin-left: 80px;">
 												<div class="input-append date form_datetime">
 													<input size="18" type="text" value="" class="m-wrap datetimePicker" id="tableEndTime" style="width: 150px; border-radius: 4px;"/>
-													<!-- <span class="add-on"><i class="icon-calendar"></i></span> -->
 												</div>
 											</div>
 										</td>
@@ -132,19 +116,10 @@
 											</select>
 										</td>
 										<td>
-											    <button  class="btn green" onclick="searchResult(1);">查询</button>
-											    <button  type="reset" class="btn green" ">重置</button>
-											    <button  class="btn green" onclick="report();">导出</button>
+											<input type="button" onclick="searchResult(1);" value="查询"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;"/>
+											<input type="button" onclick="report();" value="导出"  style="width:60px; height: 34px; background-color:#28B779; font-size: 14px; border:0px; border-radius: 3px; color: #FFFFFF;" />
 										</td>
 									</tr>
-									<!-- <tr>
-										<td style="font-size: 18px;">通道号:
-											<input type="text" id="search-by-channel" placeholder="输入通道号查询" style="width: 150px; height: 24px;"/>
-											<span onclick="searchResult(1);">
-												<img alt="搜索" src="img/icons/info-search-icon.jpg" style="width: 40px; height: 40px;">
-											</span>
-										</td>
-									</tr> -->
 								</table>
 							</form>
 							<!-- 筛选条件【结束】 -->
@@ -303,45 +278,37 @@
 				//获取日期、时间参数
 				var startTime = $("#chartStartTime").val();
 				var endTime = $("#chartEndTime").val();
-				if(startTime > endTime){
-					alert("开始时间不能大于结束时间");
-					return false;
-				}
-				if(startTime == ""||endTime == ""){
-					alert("开始时间和结束时间不能为空");
-					return false;
-				}
-				var param = {
-					"equipmentId": equiId,
-					"startTime": startTime ,
-					"endTime": endTime
-				}
-				//渲染图表
-				var lineChart = echarts.init(document.getElementById("line-chart"));
-				lineChart.setOption(lineOption);
-				//异步获取数据
-				$.ajax({
-					url: "dataAcquisition/historicalCurve",
-					type: "post",
-					data: param,
-					dataType: "json",
-					success: function(result){
-						var series = [];
-						var data = result.data;
-						var x = data.receiveTime;
-						var LegendData = data.channelNumArr;
-						var seriesData = data.channelTemArr;
-						for(let i=0; i<LegendData.length; i++){
-							let serie = {"name": LegendData[i], "data": seriesData[i]};
-							series.push(serie);
+				if(startTime > endTime){ alert("开始时间不能大于结束时间"); }
+				else if(startTime == ""||endTime == ""){ alert("开始时间和结束时间不能为空"); }
+				else{
+					var param = { "equipmentId": equiId, "startTime": startTime, "endTime": endTime };
+					//渲染图表
+					var lineChart = echarts.init(document.getElementById("line-chart"));
+					lineChart.setOption(lineOption);
+					//异步获取数据
+					$.ajax({
+						url: "dataAcquisition/historicalCurve",
+						type: "post",
+						data: param,
+						dataType: "json",
+						success: function(result){
+							var series = [];
+							var data = result.data;
+							var x = data.receiveTime;
+							var LegendData = data.channelNumArr;
+							var seriesData = data.channelTemArr;
+							for(let i=0; i<LegendData.length; i++){
+								var serie = {"name": LegendData[i], "data": seriesData[i]};
+								series.push(serie);
+							}
+							lineChart.setOption({
+								xAxis: {data: x },						//横坐标
+								legend: {data: LegendData },	//图例
+								series: series								//系列数值
+							});
 						}
-						lineChart.setOption({
-							xAxis: {data: x },						//横坐标
-							legend: {data: LegendData },	//图例
-							series: series								//系列数值
-						});
-					}
-				});
+					});
+				}
 			}
 			//tab2：绘制折线图【结束】
 			//tab3：加载历史数据列表【开始】
@@ -352,61 +319,64 @@
 					alert("开始时间不能大于结束时间");
 					return false;
 				}
-				if(startTime == ""||endTime == ""){
+				else if(startTime == ""||endTime == ""){
 					alert("开始时间和结束时间不能为空");
 					return false;
 				}
-				var param ={
-					"equipmentId": equiId,
-					"page": pageNo,								//当前页码，相当于pageNum
-					"limit": $("#page-size").val(),		//当前页面大小，相当于pageSize
-					//"content": $("#search-by-channel").val(),
-					//'startTime': (startTime == "")?(formatInitDateToString(new Date())):startTime,
-					"startTime": startTime ,
-					"endTime": endTime,
-					"state": $("#data-type").val()
-				};
-				$.ajax({
-					url:"dataAcquisition/historical",
-					type:"post",
-					data: param,
-					dataType: "json",
-					success: function(result){
-						let data = result.data;
-						var size = ($("#page-size").val()<data.length)?($("#page-size").val()):data.length
-						var historyTable = "";
-						//加载表格内容
-						for(let i=0; i<size; i++){
-							historyTable+="<tr>";
-							historyTable+="<td>"+data[i].equipmentName+"</td>";
-							historyTable+="<td>"+data[i].channelNum+"</td>";
-							historyTable+="<td>"+data[i].opticalFiberPosition+"</td>";
-							historyTable+="<td>"+data[i].temperature+"</td>";
-							historyTable+="<td>"+data[i].pd+"</td>";
-							historyTable+="<td>"+data[i].uv+"</td>";
-							historyTable+="<td>"+data[i].message+"</td>";
-							historyTable+="<td>"+data[i].receiveTime+"</td>";
-							historyTable+="</tr>";
+				else{
+					var param ={
+						"equipmentId": equiId,
+						"page": pageNo,								//当前页码，相当于pageNum
+						"limit": $("#page-size").val(),		//当前页面大小，相当于pageSize
+						//"content": $("#search-by-channel").val(),
+						//'startTime': (startTime == "")?(formatInitDateToString(new Date())):startTime,
+						"startTime": startTime ,
+						"endTime": endTime,
+						"state": $("#data-type").val()
+					};
+					$.ajax({
+						url:"dataAcquisition/historical",
+						type:"post",
+						data: param,
+						dataType: "json",
+						success: function(result){
+							let data = result.data;
+							var size = ($("#page-size").val()<data.length)?($("#page-size").val()):data.length
+							var historyTable = "";
+							//加载表格内容
+							for(let i=0; i<size; i++){
+								historyTable+="<tr>";
+								historyTable+="<td>"+data[i].equipmentName+"</td>";
+								historyTable+="<td>"+data[i].channelNum+"</td>";
+								historyTable+="<td>"+data[i].opticalFiberPosition+"</td>";
+								historyTable+="<td>"+data[i].temperature+"</td>";
+								historyTable+="<td>"+data[i].pd+"</td>";
+								historyTable+="<td>"+data[i].uv+"</td>";
+								historyTable+="<td>"+data[i].message+"</td>";
+								historyTable+="<td>"+data[i].receiveTime+"</td>";
+								historyTable+="</tr>";
+							}
+							$("#history-table-body").empty();
+							$("#history-table-body").append(historyTable);
+							//加载页码
+							totalSize = result.total;
+							pageSize = $("#page-size").val();
+							totalPage = (totalSize%pageSize == 0)?(totalSize/pageSize):(totalSize/pageSize+1);
+							totalPage = parseInt(totalPage);
+							var pageInfo="<a class=\"pre\">上一页</a>";
+							if(currentPage>2){ pageInfo+="<a>"+(currentPage-2)+"</a>"; }
+							if(currentPage>1){ pageInfo+="<a>"+(currentPage-1)+"</a>"; }
+							pageInfo+="<a class=\"active\">"+currentPage+"</a>";
+							if(currentPage<totalPage){ pageInfo+="<a>"+(currentPage+1)+"</a>"; }
+							if(currentPage<totalPage-1){ pageInfo+="<a>"+(currentPage+2)+"</a>"; }
+							pageInfo+="<a class=\"next\">下一页</a>";
+							pageInfo+="<a>共有"+totalPage+"页</a>";
+							$("#pager").html(pageInfo);
+							$("#pager").setActivePage();
 						}
-						$("#history-table-body").empty();
-						$("#history-table-body").append(historyTable);
-						//加载页码
-						totalSize = result.total;
-						pageSize = $("#page-size").val();
-						totalPage = (totalSize%pageSize == 0)?(totalSize/pageSize):(totalSize/pageSize+1);
-						totalPage = parseInt(totalPage);
-						var pageInfo="<a class=\"pre\">上一页</a>";
-						if(currentPage>2){ pageInfo+="<a>"+(currentPage-2)+"</a>"; }
-						if(currentPage>1){ pageInfo+="<a>"+(currentPage-1)+"</a>"; }
-						pageInfo+="<a class=\"active\">"+currentPage+"</a>";
-						if(currentPage<totalPage){ pageInfo+="<a>"+(currentPage+1)+"</a>"; }
-						if(currentPage<totalPage-1){ pageInfo+="<a>"+(currentPage+2)+"</a>"; }
-						pageInfo+="<a class=\"next\">下一页</a>";
-						pageInfo+="<a>共有"+totalPage+"页</a>";
-						$("#pager").html(pageInfo);
-						$("#pager").setActivePage();
-					}
-				});
+					});
+				}
+				
 			}
 			//tab3：加载历史数据列表【结束】
 			
@@ -414,7 +384,7 @@
 			function report(){
 				var startTime = $("#tableStartTime").val();
 				var endTime = $("#tableEndTime").val();
-				alert(startTime + "----"+endTime)
+				alert(startTime + "----"+endTime);
 				if(startTime > endTime){
 					alert("开始时间不能大于结束时间");
 					return false;
