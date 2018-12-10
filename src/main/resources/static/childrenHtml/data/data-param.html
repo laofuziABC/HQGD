@@ -72,19 +72,6 @@
 				var param={"equipmentName":equiName};
 				if(equiName != ""){
 					AjaxPost(url,param);
-					/* $.ajax({
-						url: url,
-						type: "post",
-						data: param,
-						dataType: "json",
-						success: function(result){
-							var data = result.data;
-							var resultList="<dd onclick=\"getEquiData('"+data.equipmentId+"');\">"+data.equipmentName+"</dd>";
-							$("#equipResultList").html("");
-							$("#equipResultList").html(resultList);
-							getEquiData(data.equipmentId.trim());
-						}
-					}); */
 				}else{
 					getEquiResultList();
 				}
