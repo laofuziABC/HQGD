@@ -28,8 +28,8 @@
 		<div class="content">
 			<form action="#" method="post" id="outerForm">
 				<table id="equiInfoTable">
-					<tr style="display: none;">
-						<td class="info_text">设备主键：</td>
+					<tr class="normal" id="unique">
+						<td class="info_text">设备ID：</td>
 						<td><input type="text" class="right_input" id="equipmentId" name="equipmentId"/></td>
 						<td class="info_text"></td>
 					</tr>
@@ -120,43 +120,46 @@
 						$("#cadcode").val((data.cadcode)*100);
 						getTowns();
 						$("#adcode").val(data.adcode);
+						$("#unique").hide();
+						if(data.equipmentId==null){ $("#unique").show(); }
+						else{$("#unique").hide(); }
 						//加载并回显通道信息
-						/* if(data.channelTem.length>10){
-							var info="<div class=\"chan_info\"><span>通道名称</span><span>温度上限</span><span>温度下限</span></div>";
-							var channelTem=data.channelTem.split(",");
+						var channelTem=data.channelTem.split(",");
+						if(channelTem.length>0){
 							for(let i=0; i<channelTem.length; i++){
 								var temp = channelTem[i].split("&");
 								var tempChanNum=temp[0].substring(temp[0].indexOf("=")+1);
 								var tempMaxTem=temp[1].substring(temp[1].indexOf("=")+1);
 								var tempMinTem=temp[2].substring(temp[2].indexOf("=")+1);
-								info += "<form id=\"list"+i+"\" class=\"chan_info\">";
+								var info="";
+								info += "<form id=\"list"+(i+1)+"\" class=\"chan_info\">";
 								info+="<input type=\"text\" class=\"chan_input\" name= \"channelNum\" value='"+tempChanNum+"'/>";
 								info+="<input type=\"text\" class=\"chan_input\" name= \"maxTem\" value='"+tempMaxTem+"'/>";
 								info+="<input type=\"text\" class=\"chan_input\" name= \"minTem\" value='"+tempMinTem+"'/>";
 								info+="</form>";
+								$("#channelsInfo").append(info);
 							}
-							$("#channelsInfo").html(info);
-						} */
+						}
 					}
 				});
 			}
 			//新增通道
-			var i = 0;
+			
 			function addChannel(){
-				if(confirm("为设备添加通道？")){
-					i++;
-					var target = document.getElementById("channelsInfo");
-					if(target.style.display == "none"){
-						target.style.display = "block";
-					}
-					var info = "<form id=\"list"+i+"\" class=\"chan_info\">";
-					info+="<input type=\"text\" class=\"chan_input\" name= \"channelNum\"/>";
-					info+="<input type=\"text\" class=\"chan_input\" name= \"maxTem\"/>";
-					info+="<input type=\"text\" class=\"chan_input\" name= \"minTem\"/>";
-					info+="<input type=\"button\" value=\"删 &nbsp; 除\" onclick=\"removeThisChannel(' list"+i+" ')\" class=\"chan_button\"/>";
-					info+="</form>";
-					$("#channelsInfo").append(info);
+				var indexInfo = document.getElementsByClassName("chan_info");
+				var i = indexInfo.length;
+				var target = document.getElementById("channelsInfo");
+				if(target.style.display == "none"){
+					target.style.display = "block";
 				}
+				var info = "<form id=\"list"+i+"\" class=\"chan_info\">";
+				info+="<input type=\"text\" class=\"chan_input\" name= \"channelNum\"/>";
+				info+="<input type=\"text\" class=\"chan_input\" name= \"maxTem\"/>";
+				info+="<input type=\"text\" class=\"chan_input\" name= \"minTem\"/>";
+				info+="<input type=\"button\" value=\"删 &nbsp; 除\" onclick=\"removeThisChannel(' list"+i+" ')\" class=\"chan_button\"/>";
+				info+="</form>";
+				$("#channelsInfo").append(info);
+				i++;
 			}
 			//移除通道
 			function removeThisChannel(param){
@@ -174,7 +177,7 @@
 					channelInfos.push(chanParam);
 				}
 				var params={
-					/* "equipmentId":$("#equipmentId").val(), */
+					"equipmentId":$("#equipmentId").val(),
 					"equipmentName": $("#equipmentName").val(),
 					"userId": $("#userId").val(),
 					"userName": $("#userId option:selected").text(),
@@ -187,10 +190,6 @@
 					"frameStru": $("#frameStru").val(),
 					"channelTem":channelInfos.toString()
 				};
-				alert($("#equipmentId").val() != "" && $("#equipmentId").val()!=null);
-				if($("#equipmentId").val() != "" || $("#equipmentId").val()!=null){
-					params.equipmentId=$("#equipmentId").val();
-				}
 				$.ajax({
 					url: "equipment/update",
 					type: "post",
@@ -199,7 +198,7 @@
 					success: function(result){
 						if(result.success){ alert("操作成功！"); }
 						else{ alert("操作失败！"); }
-						/* closeModal(); */
+						closeModal();
 						getEquipmentList();
 					}
 				});
