@@ -41,15 +41,15 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User findUserByUserName(String userName) {
-		return userMapper.findUserByUserName(userName);
+	public User selectByUserName(String userName) {
+		return userMapper.selectByUserName(userName);
 	}
 
 	@Override
 	public Map<String, Object> add(User user, User loginUser) {
 		Boolean result = false;
 		String message = "";
-		User userfind = userMapper.findUserByUserName(user.getUserName());
+		User userfind = userMapper.selectByUserName(user.getUserName());
 		if (userfind == null) {
 			user.setUpdater(loginUser.getUserName());
 			user.setCreator(loginUser.getUserName());

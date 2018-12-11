@@ -27,7 +27,6 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-
 	@RequestMapping("delete")
 	@ResponseBody
 	public String delete(Model model, String userId, HttpServletRequest request, HttpServletResponse response) {
@@ -37,7 +36,7 @@ public class UserController {
 		return json;
 	}
 
-	@RequestMapping(value = "update")//新增和编辑用户信息都是此接口
+	@RequestMapping(value = "update") // 新增和编辑用户信息都是此接口
 	@ResponseBody
 	public String update(Model model, User user, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
@@ -64,6 +63,20 @@ public class UserController {
 			return null;
 		} else {
 			User user = userService.select(userId);
+			String json = new Gson().toJson(user).toString();
+			return json;
+		}
+	}
+
+	@RequestMapping(value = "selectByUserName")
+	@ResponseBody
+	public String selectByUserName(Model model, String userName, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+
+		if (userName == null) {
+			return null;
+		} else {
+			User user = userService.selectByUserName(userName);
 			String json = new Gson().toJson(user).toString();
 			return json;
 		}
@@ -99,9 +112,9 @@ public class UserController {
 		String json = new Gson().toJson(result).toString();
 		return json;
 	}
-	
+
 	@RequestMapping("/recordExport")
-	public void recordExport(HttpServletRequest request,HttpServletResponse response) throws Exception {
+	public void recordExport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String path = request.getParameter("path");
 		String classPath = userService.execRecordExport(path);
 		try {
@@ -111,8 +124,8 @@ public class UserController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response.setContentType("application/vnd.ms-excel;charset=gb2312"); 
-//			response.setContentType("application/octet-stream;charset=ISO8859-1");
+			response.setContentType("application/vnd.ms-excel;charset=gb2312");
+			// response.setContentType("application/octet-stream;charset=ISO8859-1");
 			response.setHeader("Content-Disposition", "attachment;filename=" + path);
 			response.addHeader("Pargam", "no-cache");
 			response.addHeader("Cache-Control", "no-cache");

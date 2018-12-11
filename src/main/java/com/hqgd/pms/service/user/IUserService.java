@@ -7,8 +7,6 @@ import com.hqgd.pms.domain.User;
 
 public interface IUserService {
 
-	User findUserByUserName(String username);
-
 	User getUserById(int userId);
 
 	Map<String, Object> add(User user, User userLog);
@@ -28,5 +26,7 @@ public interface IUserService {
 	Map<String, Object> updatePassword(String userId, String password, String newPassword);
 
 	String execRecordExport(String path);
+
+	User selectByUserName(String userName);
 
 }

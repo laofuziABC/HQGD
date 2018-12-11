@@ -18,7 +18,7 @@
     UPDATER, UPDATE_TIME
   </sql>
   
-  <select id="findUserByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from access_control_user
