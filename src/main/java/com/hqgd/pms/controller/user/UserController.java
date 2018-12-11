@@ -2,6 +2,7 @@ package com.hqgd.pms.controller.user;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,12 +73,13 @@ public class UserController {
 	@ResponseBody
 	public String selectByUserName(Model model, String userName, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-
 		if (userName == null) {
 			return null;
 		} else {
+			List<User> userList = new ArrayList<User>();
 			User user = userService.selectByUserName(userName);
-			String json = new Gson().toJson(user).toString();
+			userList.add(user);
+			String json = new Gson().toJson(userList).toString();
 			return json;
 		}
 	}

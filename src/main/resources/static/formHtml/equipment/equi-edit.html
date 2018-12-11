@@ -87,6 +87,7 @@
 		
 		<script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
 		<script src="js/allCities.js"></script>
+		<script type="text/javascript" src="js/AsynAjax.js"></script>
 		<script type="text/javascript">
 			$(function(){
 				getEquiInfoForEdit();
@@ -144,7 +145,6 @@
 				});
 			}
 			//新增通道
-			
 			function addChannel(){
 				var indexInfo = document.getElementsByClassName("chan_info");
 				var i = indexInfo.length;
@@ -190,18 +190,10 @@
 					"frameStru": $("#frameStru").val(),
 					"channelTem":channelInfos.toString()
 				};
-				$.ajax({
-					url: "equipment/update",
-					type: "post",
-					data: params,
-					dataType: "json",
-					success: function(result){
-						if(result.success){ alert("操作成功！"); }
-						else{ alert("操作失败！"); }
-						closeModal();
-						getEquipmentList();
-					}
-				});
+				var url = "equipment/update";
+				POSTAjaxForAlert(url, params, "");
+				loadContext(201);
+				closeModal();
 			}
 		</script>
 		<script type="text/javascript">

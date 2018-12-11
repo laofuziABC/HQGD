@@ -29,7 +29,7 @@
 				<div style="margin: 10px 0px;">
 					<button class="btn green" onclick="getUserEdit();">新增用户&nbsp;<i class="icon-plus"></i></button>
 					<button class="btn blue" onclick="report();" style="margin: 0px 10px;">导出列表</button>
-					<input type="text" id="searchByName" placeholder="请输入用户名称查询" style="height: 30px;" value="" onfocus="javascript: this.value=null;"/>
+					<input type="text" id="searchByName" placeholder="请输入用户名称查询" style="height: 30px;" onfocus="javascript: this.value=null;"/>
 					<button  class="btn blue" onclick="searchResult();"><i class="icon-search"></i></button>
 				</div>
 			</div>
@@ -54,53 +54,17 @@
 			<!-- 用户列表【结束】 -->
 		</div>
 		
-		
 		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
 		<script type="text/javascript" src="js/pager/data_table_pager.js"></script>
+		<script type="text/javascript" src="js/AsynAjax.js"></script>
 		<script>
 			jQuery(document).ready(function() {
 				getUserList();
 			});
 			//获取用户列表
-			var pageNum;
 			function getUserList(){
-				$.ajax({
-					url: "user/selectAll",
-					type: "post",
-					dataType: "json",
-					success: function(result){
-						var userlist = "";
-						//设置分页信息——当前为假分页
-						var totalSize = result.length;
-						var pageSize = 5;
-						var totalNum = Math.ceil(totalSize/pageSize);
-						var startIndex = (pageNum-1)*pageSize;
-						var endIndex = (pageNum*pageSize>totalSize)?totalSize:pageNum*pageSize;
-						for(let i=startIndex; i<endIndex; i++){
-							userlist += "<tr class=\"\">";
-							userlist += "<td>"+(i+1)+"</td>";
-							userlist += "<td>"+result[i].userName+"</td>";
-							userlist += "<td>"+result[i].comments+"</td>";
-							userlist += "<td>"+parent.formatDateToString(new Date(result[i].createTime))+"</td>";
-							userlist += "<td>"+parent.formatDateToString(new Date(result[i].updateTime))+"</td>";
-							userlist += "<td>"+result[i].updater+"</td>";
-							if(result[i].isdel == "N"){userlist += "<td>启用</td>"; }
-							else{userlist += "<td>已删除</td>";}
-							userlist += "<td class=\"center\">";
-							userlist += "<a class=\"edit\" href=\"#\" onclick=\"getUserEdit('"+result[i].id+"');\">编辑</a>&nbsp;";
-							userlist += "<a class=\"delete\" href=\"#\" onclick=\"getUserDelete('"+result[i].id+"');\">删除</a>&nbsp;";
-							userlist += "<a class=\"resetpsw\" href=\"#\" onclick=\"initUserPassword('"+result[i].id+"');\">密码初始化</a>";
-							userlist += "</td>";
-							userlist += "</tr>";
-						}
-						$("#userList").html(userlist);
-						//加载页码
-						
-						/* debugger; */
-						$("#user-list-pager").html(loadPages(pageSize,totalSize,pageNum));
-						$("#user-list-pager").setActivePage(2);
-					}
-				});
+				var url = "user/selectAll";
+				POSTAjaxForUserList(url, null, true);
 			}
 			//添加或者编辑用户
 			function getUserEdit(param){
@@ -114,66 +78,34 @@
 			//删除用户
 			function getUserDelete(param){
 				if(confirm("确定删除此用户？")){
-					$.ajax({
-						url: "user/delete",
-						type: "post",
-						data: {"userId": param},
-						dataType: "json",
-						success: function(result){
-							if(result.success){ alert("删除成功！"); }
-							else{ alert("删除失败！"); }
-							getUserList();
-						}
-					});
+					var url="user/delete";
+					var param={"userId": param};
+					var message="用户删除";
+					POSTAjaxForAlert(url, param, message);
+					getUserList();
 				}
 			}
 			//用户密码初始化
 			function initUserPassword(param){
 				userId=param;
 				if(confirm("确认将该用户的密码初始化？")){
-					$.ajax({
-						url: "user/initUserPassword",
-						type: "post",
-						data: {"userId": param},
-						dataType: "json",
-						success: function(result){
-							if(result.success){ alert("密码初始化成功！"); }
-							else{ alert("密码初始化失败！"); }
-							getUserList();
-						}
-					});
+					var url="user/initUserPassword";
+					var param={"userId": param};
+					var message="用户密码初始化";
+					POSTAjaxForAlert(url, param, message);
+					getUserList();
 				}
 			}
 			//搜索用户
 			function searchResult(){
 				var name = $("#searchByName").val().trim();
 				if(name != ""){
-					$.ajax({
-						url: "user/searchByUsername",
-						type: "post",
-						data: {"username": name},
-						dataType: "json",
-						success: function(result){
-							//alert("数据到前台");
-							var userlist = "";
-							for(let i=0; i<result.length; i++){
-								userlist += "<tr class=\"\">";
-								userlist += "<td>"+(i+1)+"</td>";
-								userlist += "<td>"+result[i].userName+"</td>";
-								if(result[i].isdel == "N"){userlist += "<td>启用</td>"; }
-								else{userlist += "<td>已删除</td>";}
-								userlist += "<td>"+result[i].comments+"</td>";
-								userlist += "<td class=\"center\">";
-								userlist += "<a class=\"details\" href=\"#\" onclick=\"getUserDetails('"+result[i].id+"');\">详情</a>&nbsp;";
-								userlist += "<a class=\"edit\" href=\"#\" onclick=\"getUserEdit('"+result[i].id+"');\">编辑</a>&nbsp;";
-								userlist += "<a class=\"delete\" href=\"#\" onclick=\"getUserDelete('"+result[i].id+"');\">删除</a>&nbsp;";
-								userlist += "<a class=\"resetpsw\" href=\"#\" onclick=\"initUserPassword('"+result[i].id+"');\">密码初始化</a>";
-								userlist += "</td>";
-								userlist += "</tr>";
-							}
-							$("#userList").html(userlist);
-						}
-					});
+					var url = "user/selectByUserName";
+					var param = {"userName":name};
+					POSTAjaxForUserList(url, param, true);
+				}else{
+					var url = "user/selectAll";
+					POSTAjaxForUserList(url, null, true);
 				}
 			}
 			//修改用户密码
@@ -182,20 +114,12 @@
 				let url = "formHtml/user/updatePass.html";
 				var params = {"width": 600, "height": 250};
 				parent.openModal(title, url, params);
-				
 			}
 			//导出
 			function report(){
-				$.ajax({
-					url: "user/recordExport",
-					type: "post",
-						// data: {"path": param},
-					dataType: "json",
-					success: function(result){
-					if(result.success){ alert("导出成功！"); }
-					else{ alert("导出失败！"); }
-					}
-				});
+				var url="user/initUserPassword";
+				var message="导出用户信息";
+				POSTAjaxForAlert(url, null, message);
 			}
 		</script>
 	</body>
