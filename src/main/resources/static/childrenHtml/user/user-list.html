@@ -46,7 +46,7 @@
 					<tr>
 						<td colspan="8" align="center">
 							<!-- 翻页插件 -->
-							<div class="list-page-tail page-down" id="pager" style="margin: auto;"></div>
+							<div class="list-page-tail page-down" id="user-list-pager" style="margin: auto;"></div>
 						</td>
 					</tr>
 				</tfoot>
@@ -56,12 +56,13 @@
 		
 		
 		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
-		<script type="text/javascript" src="js/pager/pager.js" ></script>
+		<script type="text/javascript" src="js/pager/data_table_pager.js"></script>
 		<script>
 			jQuery(document).ready(function() {
 				getUserList();
 			});
 			//获取用户列表
+			var pageNum;
 			function getUserList(){
 				$.ajax({
 					url: "user/selectAll",
@@ -69,7 +70,13 @@
 					dataType: "json",
 					success: function(result){
 						var userlist = "";
-						for(let i=0; i<result.length; i++){
+						//设置分页信息——当前为假分页
+						var totalSize = result.length;
+						var pageSize = 5;
+						var totalNum = Math.ceil(totalSize/pageSize);
+						var startIndex = (pageNum-1)*pageSize;
+						var endIndex = (pageNum*pageSize>totalSize)?totalSize:pageNum*pageSize;
+						for(let i=startIndex; i<endIndex; i++){
 							userlist += "<tr class=\"\">";
 							userlist += "<td>"+(i+1)+"</td>";
 							userlist += "<td>"+result[i].userName+"</td>";
@@ -88,13 +95,10 @@
 						}
 						$("#userList").html(userlist);
 						//加载页码
-						var totalSize = result.length;
-						var totalPage = (totalSize%5 == 0)?(totalSize/5):(totalSize/5+1);
-						totalPage = parseInt(totalPage);
-						/* debugger;
-						var pageHtml = loadAllPage(totalPage);
-						$("#pager").loadAllPage(pageHtml);
-						$("#pager").setActivePage(); */
+						
+						/* debugger; */
+						$("#user-list-pager").html(loadPages(pageSize,totalSize,pageNum));
+						$("#user-list-pager").setActivePage(2);
 					}
 				});
 			}

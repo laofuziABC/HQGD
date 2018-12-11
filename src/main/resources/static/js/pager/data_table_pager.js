@@ -5,12 +5,12 @@
 //设置公共常量【开始】
 var initPageNum=1;
 var initPageSize=10;
-var currentPage=1;
+var pageNum=1;
 var initTotalSize=100;
 var totalNum;
 //设置公共常量【结束】
 //	载入页码区域
-function loadPages(pageSize, totalSize, currentPage){
+function loadPages(pageSize, totalSize, pageNum){
 	pageSize=(pageSize==null)?initPageSize:pageSize;
 	totalSize=(totalSize==null)?initTotalSize:totalSize;
 	//缓存总数和总页数
@@ -20,11 +20,11 @@ function loadPages(pageSize, totalSize, currentPage){
 	totalNum=Math.ceil(totalSize/pageSize);
 	var pageInfo="<a class='pre'>上一页</a>";
 	pageInfo+="<a class='pre'>首页</a>";
-	if(currentPage>2){ pageInfo+="<a>"+(currentPage-2)+"</a>"; }
-	if(currentPage>1){ pageInfo+="<a>"+(currentPage-1)+"</a>"; }
-	pageInfo+="<a class=\"active\">"+currentPage+"</a>";
-	if(currentPage<totalNum){ pageInfo+="<a>"+(currentPage+1)+"</a>"; }
-	if(currentPage<totalNum-1){ pageInfo+="<a>"+(currentPage+2)+"</a>"; }
+	if(pageNum>2){ pageInfo+="<a>"+(pageNum-2)+"</a>"; }
+	if(pageNum>1){ pageInfo+="<a>"+(pageNum-1)+"</a>"; }
+	pageInfo+="<a class=\"active\">"+pageNum+"</a>";
+	if(pageNum<totalNum){ pageInfo+="<a>"+(pageNum+1)+"</a>"; }
+	if(pageNum<totalNum-1){ pageInfo+="<a>"+(pageNum+2)+"</a>"; }
 	pageInfo+="<a class='next'>尾页</a>";
 	pageInfo+="<a class='next'>下一页</a>";
 	pageInfo+="<span class='goto-text'>共"+totalNum+"页，到</span>";
@@ -35,7 +35,7 @@ function loadPages(pageSize, totalSize, currentPage){
 }
 //变更当前活动页
 $.fn.extend({
-	setActivePage: function(){
+	setActivePage: function(fParam){
 		var CP = 1;		//点击的页面排序值ClickPage
 		var AP = $(".list-page-tail > .active").index();								//当前活动的页面排序值ActivePage
 		var FP = $(".list-page-tail > a:contains('首页')").index();				//“首页”的排序值FirstPage
@@ -47,23 +47,26 @@ $.fn.extend({
 		$(".list-page-tail > a").click(this, function(){
 			CP = $(this).index();
 			if(CP!=Useless){
-				if(CP==FP){currentPage=1}
-				else if(CP==LP){currentPage=totalNum}
-				else if(CP == PrevP && AP > (PrevP+2)){ currentPage--; }		//上一页
-				else if(CP == NextP && AP < (NextP-2)){ currentPage++; }		//下一页
-				else if((CP == PrevP && AP == (PrevP+2))||(CP == NextP && AP == (NextP-2))){currentPage=currentPage;}			//排除第一页和最后一页的上一页和下一页操作
+				if(CP==FP){pageNum=1}
+				else if(CP==LP){pageNum=totalNum}
+				else if(CP == PrevP && AP > (PrevP+2)){ pageNum--; }		//上一页
+				else if(CP == NextP && AP < (NextP-2)){ pageNum++; }		//下一页
+				else if((CP == PrevP && AP == (PrevP+2))||(CP == NextP && AP == (NextP-2))){pageNum=pageNum;}			//排除第一页和最后一页的上一页和下一页操作
 				else{		//当前页
-					if(currentPage>=3){ currentPage=CP+currentPage-4;	 }
-					else{ currentPage=CP-1; }
+					if(pageNum>=3){ pageNum=CP+pageNum-4;	 }
+					else{ pageNum=CP-1; }
 				}
 			}else{
 				var enterNum = parseInt($("#enterNum").val());
-				if(enterNum>0 && enterNum<=totalNum){ currentPage=enterNum;}
+				if(enterNum>0 && enterNum<=totalNum){ pageNum=enterNum;}
 				else{alert("请输入页码。"); }
 			}
-			//更改currentPage后，局部刷新结果和分页插件
-			searchResult(currentPage);
-			loadPages(null, null, currentPage);
+			//更改pageNum后，局部刷新结果和分页插件
+			if(fParam==1){searchResult(pageNum);}
+			else if(fParam==2){getUserList();}
+			else if(fParam==3){getEquipmentList();}
+			else if(fParam==4){getEquiResultList();}
+			loadPages(null, null, pageNum);
 		});
 	}
 })

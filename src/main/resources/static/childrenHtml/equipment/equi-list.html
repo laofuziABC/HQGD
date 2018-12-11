@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>设备管理</title>
+		<link type="text/css" href="js/pager/pager.css" rel="stylesheet" />
 	</head>
 	<body style="width: 100%;">
 		<div>
@@ -42,7 +43,7 @@
 					<tr>
 						<td colspan="11" align="center">
 							<!-- 翻页插件 -->
-							<div class="list-page-tail page-down" id="pager" style="margin: auto;"></div>
+							<div class="list-page-tail page-down" id="equi-list-pager" style="margin: auto;"></div>
 						</td>
 					</tr>
 				</tfoot>
@@ -52,16 +53,13 @@
 		
 		
 		<script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
-		<script type="text/javascript" src="media/js/jquery.dataTables.js"></script>
-		<script type="text/javascript" src="media/js/DT_bootstrap.js"></script>
-		
-		<script src="media/js/table-editable.js"></script>
+		<script type="text/javascript" src="js/pager/data_table_pager.js"></script>
 		<script>
 			jQuery(document).ready(function() {
 			   getEquipmentList();
-			  /*  TableEditable.init(); */
 			});
 			//获取所有设备信息列表
+			var pageNum;
 			function getEquipmentList(){
 				$.ajax({
 					url: "equipment/selectAll",
@@ -69,8 +67,14 @@
 					dataType: "json",
 					success: function(result){
 						var data = result.data;
+						//设置分页信息——当前为假分页
 						var equipList = "";
-						for(let i=0; i<data.length; i++){
+						var totalSize = data.length;
+						var pageSize = 5;
+						var totalNum = Math.ceil(totalSize/pageSize);
+						var startIndex = (pageNum-1)*pageSize;
+						var endIndex = (pageNum*pageSize>totalSize)?totalSize:pageNum*pageSize;
+						for(let i=startIndex; i<endIndex; i++){
 							equipList+="<tr>";
 							equipList+="<td>"+(i+1)+"</td>";
 							equipList+="<td>"+data[i].equipmentName+"</td>";
@@ -90,6 +94,9 @@
 							equipList+="</tr>";
 						}
 						$("#equipmentList").html(equipList);
+						//加载页码
+						$("#equi-list-pager").html(loadPages(pageSize,totalSize,pageNum));
+						$("#equi-list-pager").setActivePage(3);
 					}
 				});
 			}
