@@ -173,7 +173,7 @@
 			});
 			/* 获取全局变量——设备主键和分页参数 */
 			equiId=equiId.trim();
-			var currentPage;
+			var pageNum;
 			//tab1：通过设备主键，获取设备通道温度信息【开始】
 			function showBlocks(){
 				$.ajax({
@@ -315,14 +315,8 @@
 			function searchResult(pageNo){
 				var startTime = $("#tableStartTime").val();
 				var endTime = $("#tableEndTime").val();
-				if(startTime > endTime){
-					alert("开始时间不能大于结束时间");
-					return false;
-				}
-				else if(startTime == ""||endTime == ""){
-					alert("开始时间和结束时间不能为空");
-					return false;
-				}
+				if(startTime > endTime){ alert("开始时间不能大于结束时间"); return false; }
+				else if(startTime == ""||endTime == ""){ alert("开始时间和结束时间不能为空"); return false; }
 				else{
 					var param ={
 						"equipmentId": equiId,
@@ -361,49 +355,37 @@
 							//加载页码
 							totalSize = result.total;
 							pageSize = $("#page-size").val();
-							$("#data-show-pager").html(loadPages(pageSize,totalSize,currentPage));
-							$("#data-show-pager").setActivePage();
+							$("#data-show-pager").html(loadPages(pageSize,totalSize,pageNum));
+							$("#data-show-pager").setActivePage(1);
 						}
 					});
 				}
-				
 			}
 			//tab3：加载历史数据列表【结束】
-			
 			//导出数据【开始】
 			function report(){
 				var startTime = $("#tableStartTime").val();
 				var endTime = $("#tableEndTime").val();
 				alert(startTime + "----"+endTime);
-				if(startTime > endTime){
-					alert("开始时间不能大于结束时间");
-					return false;
+				if(startTime > endTime){ alert("开始时间不能大于结束时间"); return false; }
+				else if(startTime == ""||endTime == ""){ alert("开始时间和结束时间不能为空"); return false; }
+				else{
+					var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime, "state": $("#data-type").val() };
+					$.ajax({
+						url:"dataAcquisition/recordExport",
+						type:"post",
+						data: param,
+						dataType: "json",
+						success: function(result){
+							window.open();
+						}
+					});
 				}
-				if(startTime == ""||endTime == ""){
-					alert("开始时间和结束时间不能为空");
-					return false;
-				}
-				var param = {
-					"equipmentId": equiId,
-					"startTime": startTime,
-					"endTime": endTime,
-					"state": $("#data-type").val()
-				}
-				$.ajax({
-					url:"dataAcquisition/recordExport",
-					type:"post",
-					data: param,
-					dataType: "json",
-					success: function(result){
-						window.open();
-						
-					}
-				});
 			}
 			//导出数据【结束】
 			function searchNewResult(){
-				currentPage = 1;
-				searchResult(currentPage);
+				pageNum = 1;
+				searchResult(pageNum);
 			}
 		</script>
 		<!-- 使用JS文件将时间日期格式化 -->

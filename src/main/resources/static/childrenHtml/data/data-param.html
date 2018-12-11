@@ -33,13 +33,13 @@
 			</dl>
 			<!-- 翻页插件 -->
 			<div>
-				<div class="list-page-tail page-down" id="subPager" style="margin: auto;"></div>
+				<div class="list-page-tail page-down" id="sub-list-pager" style="margin: auto;"></div>
 			</div>
 		</div>
 		<!-- 左侧设备查询【结束】 -->
 		
 		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js"></script>
-		<script type="text/javascript" src="js/pager/pager.js"></script>
+		<script type="text/javascript" src="js/pager/data_table_pager.js"></script>
 		<script src="js/allCities.js"></script>
 		<script type="text/javascript">
 			$(function(){
@@ -183,23 +183,30 @@
 						success: function(result){
 							var data = result.data;
 							var totalSize = data.length;
+							
 							//根据设备列表，初始化第一台设备的展示信息
 							if(totalSize>0){
-								equiId=data[0].equipmentId;
-								for(let i=0; i<totalSize; i++){
+								var pageSize = 5;
+								var totalNum = Math.ceil(totalSize/pageSize);
+								var startIndex = (pageNum-1)*pageSize;
+								var endIndex = (pageNum*pageSize>totalSize)?totalSize:pageNum*pageSize;
+								equiId=data[startIndex].equipmentId;
+								for(let i=startIndex; i<endIndex; i++){
 									resultList+="<dd onclick=\"getEquiData('"+data[i].equipmentId+"');\">"+data[i].equipmentName+"</dd>";
 								}
+								/* equiId=data[0].equipmentId;
+								for(let i=0; i<totalSize; i++){
+									resultList+="<dd onclick=\"getEquiData('"+data[i].equipmentId+"');\">"+data[i].equipmentName+"</dd>";
+								} */
 								$("#equipResultList").html(resultList);
 								getEquiData(equiId);
+								//加载页码
+								$("#sub-list-pager").html(loadPages(pageSize,totalSize,pageNum));
+								$("#sub-list-pager").setActivePage(4);
 							}else{
 								$("#equipResultList").html(resultList);
 								getEquiData(null);
 							}
-							
-							//假分页：默认每页显示pageSize条
-							var pageSize = 3;
-							var totalNum=Math.ceil(totalSize/pageSize);
-							$("#subPager").html(pageInfo);
 						}
 					});
 				}
