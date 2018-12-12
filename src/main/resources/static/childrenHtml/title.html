@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>公共头部区域</title>
+	</head>
+	<body>
+		<!-- 页面顶部标题【开始】 -->
+		<a href="#" class="logo">
+			<span class="logo-mini"><img src="vince/images/v01.png"></span>
+			<span class="logo-lg"><img src="vince/images/v01.png">项目</span>
+		</a>
+		<nav class="navbar navbar-static-top">
+			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"></a>
+			<span class="all_title">荧光光纤测温仪温度数据管理平台</span>
+			<div class="navbar-custom-menu">
+				<ul class="nav navbar-nav">
+					<li class="dropdown user user-menu">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<img src="dist/img/user2-160x160.jpg" class="user-image" alt="用户头像">
+							<span class="hidden-xs" id="hidden-xs-username">管理员</span>
+						</a>
+						<ul class="dropdown-menu">
+							<li class="user-header">
+								<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="用户头像">
+								<p id="p-username">姓名：管理员<small>部门：信息部</small></p>
+							</li>
+							<li class="user-footer">
+								<div class="pull-right">
+									<a href="#" class="btn btn-default btn-flat" onclick="loginOut();">退出系统</a>
+								</div>
+							</li>
+          				</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<!-- 页面顶部标题【结束】 -->
+		<script type="text/javascript">
+			$(function(){
+				//获取登录用户，赋值给页面参数
+				var username =parent.getParam("userName");
+				$("#hidden-xs-username").text(username);
+				$("#p-username").text("当前用户："+username);
+			});
+			//退出登录
+			function loginOut(){
+				alert("退出");
+			}
+		</script>
+	</body>
+</html>

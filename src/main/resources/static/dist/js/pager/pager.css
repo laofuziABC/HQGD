@@ -1,0 +1,14 @@
+/* 分页样式【开始】 */
+.list-page-tail {  margin: 5px 0 5px 0; text-align: center; font-size: 0; }
+.list-page-tail a.pre, .list-page-tail a.next {  font-size: 14px; border-color: #e0e0e0; color: #555; padding: 2px 2px; }
+.list-page-tail a { margin: 0 20px 0 0; padding: 2px 6px; min-width: 20px; border: #e0e0e0 1px solid; cursor: pointer; margin: 3px; }
+.list-page-tail a.active, .list-page-tail a:hover { background: #196ff9; border-color: #196ff9; text-decoration: none; color: #fff; }
+.list-page-tail a, .list-page-tail span { display: inline-block; *display: inline;  *zoom: 1; zoom: 1; height: 22px; line-height: 22px; text-align: center; vertical-align: top; font-size: 14px; color: #555; border-radius: 2px; }
+.list-page-tail span.ellipsis { margin: 0 10px 0 5px; }
+.list-page-tail span { padding: 4px 0; }
+.list-page-tail span.goto-text.indent { padding-left: 14px; }
+.list-page-tail span.goto-input input { border: none; width: 32px; height: 100%; margin-top: -4px; text-align: center; outline: none; padding-left: 0; }
+.list-page-tail span.goto-text { margin: 0 4px 0 0; }
+.list-page-tail span.goto-input { margin: 0 7px 0 0; padding: 2px 0; }
+.list-page-tail a.goto-btn { margin: 0; min-width: 20px; }
+/* 分页样式【结束】 */

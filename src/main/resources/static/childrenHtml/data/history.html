@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>历史监测数据</title>
+	</head>
+	<body>
+      	<!-- 上方的统计图【开始】 -->
+      	<ul class="nav nav-tabs">
+			<li><a data-toggle="tab" href="#" onclick="$('#ssjc_right').load('childrenHtml/data/current.html');">当前监测数据</a></li>
+			<li class="active"><a data-toggle="tab" href="#">历史监测数据</a></li>
+		</ul>
+		<div class="ssjc_right_up">
+			<div class="nei">
+				<div class="ssjc_ru_title">
+					<span class="tiaoshijian">开始时间：
+						<input type="text" class="shi datetimePicker" id="xuanshi1" value=""/>
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					</span>
+					<span class="tiaoshijian">结束时间：
+						<input type="text" class="shi datetimePicker" id="xuanshi2" value="">
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					</span>
+					<span class="float_right">
+						<input type="button" class="youcecha" onclick="searchResult(1);" value="查询"  />
+					</span>
+					<div class="clear"></div>
+				</div>
+				<div class="ssjc_ru_table">
+					<div class="echarts_ssjc_one" id="echarts_ssjc_one"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 上方的统计图【结束】 -->
+		<!-- 下方的统计表【开始】 -->
+		<div class="ssjc_right_bottom">
+			<div class="nei">
+				<!-- 筛选条件【开始】 -->
+				<div class="ssjc_ru_title">
+					<span class="tiaoshijian">开始时间：
+						<input type="text" class="shi" id="xuanshi3" value=""/>
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					</span>
+					<span class="tiaoshijian">结束时间：
+						<input type="text" class="shi" id="xuanshi4" value="">
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					</span>
+					<span>显示内容：
+						<select  class="biaoti_select" id="data-type" onchange="searchNewResult();">
+							<option value="0" selected="selected">显示所有数据</option>
+							<option value="1">显示异常数据</option>
+						</select>
+					</span>
+					<span >显示类型：
+						<select  class="biaoti_select" id="page-size" onchange="searchNewResult();">
+							<option value="10" selected="selected">10条</option>
+							<option value="20">20条</option>
+							<option value="30">30条</option>
+							<option value="50">50条</option>
+						</select>
+					</span>
+					<span class="float_right">
+						<input type="button" class="youcecha" onclick="searchResult(1);" value="查询"  />
+						<input type="button" class="youcecha" onclick="report();" value="导出"  />
+					</span>
+					<div class="clear"></div>
+				</div>
+				<!-- 筛选条件【结束】 -->
+				<!-- 数据列表【开始】 -->
+				<p>数据列表</p>
+				<div class="ssjc_rub_table">
+					<table class="tj_table" border="0">
+						<thead>
+							<tr>
+								<td>用户名称</td><td>设备名称</td><td>时间</td><td>功率</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>项目</td><td>冷却泵</td><td>00点</td><td>45</td></tr>
+							<tr><td>项目</td><td>冷却泵</td><td>01点</td><td>61</td></tr>
+							<tr><td>项目</td><td>冷却泵</td><td>02点</td><td>50</td></tr>
+							<tr><td>项目</td><td>冷却泵</td><td>03点</td><td>75</td></tr>
+						</tbody>
+					</table>
+					<!-- 分页插件 -->
+					<div class="t_fanye">
+						<span class="upten"></span>
+						<span class="up"></span>
+						<span class="split"></span>
+						<span class="page_info_one">第 1 / 1 页</span>
+						<span class="split"></span>
+						<span class="dowm"></span>
+						<span class="downten"></span>
+						<span class="page_info_two">页记录数 25</span>
+						<span class="page_info_three">当前1-1条记录，共1条记录</span>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<!-- 数据列表【结束】 -->  
+				<!-- <div class="cheng_ershi"></div> -->
+			</div>
+		</div>
+		<!-- 下方的统计表【结束】 -->
+	</body>
+</html>

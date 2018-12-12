@@ -73,119 +73,28 @@
 		<!-- 浮层【结束】 -->
 		<div class="wrapper">
 			<!-- 页面顶部标题【开始】 -->
-			<header class="main-header">
-				<a href="#" class="logo">
-					<span class="logo-mini"><img src="vince/images/v01.png"></span>
-					<span class="logo-lg"><img src="vince/images/v01.png">项目</span>
-				</a>
-				<nav class="navbar navbar-static-top">
-					<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"></a>
-					<span class="all_title">荧光光纤测温仪温度数据管理平台</span>
-					<div class="navbar-custom-menu">
-						<ul class="nav navbar-nav">
-							<li class="dropdown user user-menu">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<img src="dist/img/user2-160x160.jpg" class="user-image" alt="用户头像">
-									<span class="hidden-xs">管理员</span>
-								</a>
-								<ul class="dropdown-menu">
-									<li class="user-header">
-										<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="缩小版用户头像">
-										<p>姓名：管理员<small>部门：信息部</small></p>
-									</li>
-									<li class="user-footer">
-										<div class="pull-right">
-											<a href="login.html" class="btn btn-default btn-flat">退出系统</a>
-										</div>
-									</li>
-	           					</ul>
-							</li>
-						</ul>
-					</div>
-				</nav>
-		  </header>
+			<header class="main-header" id="main-header">
+			</header>
 			<!-- 页面顶部标题【结束】 -->
 			<!-- 侧边栏【开始】 -->
-			<aside class="main-sidebar">
-				<section class="sidebar">
-					<div class="user-panel">
-						<div class="pull-left image">
-							<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-						</div>
-						<div class="pull-left info">
-							<p>当前用户：管理员</p>
-							<p class="menu_time">登录时间：<span id="nowTime">2016-9-13 16:12:14</span></p>
-						</div>
-					</div>
-					<!-- 加载用户菜单【开始】 -->
-					<ul class="sidebar-menu">
-						<li class="header">用户菜单</li>
-						<li class="active">
-							<a href="index.html"><i class="fa fa-home" style="font-size: 22px"></i> <span>首页</span></a>
-						</li>
-						<li>
-							<a href="ssjc.html"><i class="fa fa-eye"></i> <span>实时监测</span></a>
-						</li>
-						<li>
-							<a href="yxjc.html"><i class="fa fa-print" ></i> <span>运行监测</span></a>
-						</li>
-						<li class="treeview">
-							<a href="#">
-								<i class="fa fa-sliders"></i>
-								<span>负荷响应</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<li><a href="xyxgpj.html"><i class="fa fa-bookmark"></i> 响应效果评价</a></li>
-								<li><a href="fhxyfx.html"><i class="fa fa-bookmark"></i> 负荷响应分析</a></li>
-								<li><a href="xyfagl.html"><i class="fa fa-bookmark"></i> 响应方案管理</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="yjgl.html"><i class="fa fa-bell"></i> <span>预警管理</span></a>
-						</li>
-						<li class="treeview">
-							<a href="#">
-								<i class="fa fa-gears"></i>
-								<span>设备管理</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<li><a href="sbrk.html"><i class="fa fa-bookmark"></i> 设备入库</a></li>
-								<li><a href="sbaz.html"><i class="fa fa-bookmark"></i> 设备安装</a></li>
-								<li><a href="sbjx.html"><i class="fa fa-bookmark"></i> 设备检修</a></li>
-								<li><a href="sbbf.html"><i class="fa fa-bookmark"></i> 设备报废</a></li>
-								<li><a href="sbcx.html"><i class="fa fa-bookmark"></i> 设备查询</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="kzcl.html"><i class="fa fa-magnet"></i> <span>控制策略</span></a>
-						</li>
-						<li>
-							<a href="xtjc.html"><i class="fa fa-map"></i> <span>系统集成</span></a>
-						</li>
-					</ul>
-					<!-- 加载用户菜单【结束】 -->
-				</section>
+			<aside class="main-sidebar" id="main-sidebar">
 			</aside>
 			<!-- 侧边栏【结束】 -->
 			<!-- 页面内容【开始】 -->
-			<div class="content-wrapper">
+			<div class="content-wrapper" id="content-wrapper">
+				<!-- 面包屑【开始】 -->
 				<section class="content-header"> 
 					<ol class="breadcrumb">
 						<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
 					</ol>
 				</section>
+				<!-- 面包屑【结束】 -->
 				<!-- 主体内容【开始】 -->
 			    <div class="content qqq" style="z-index: 5; width: 100%; height: 95%;">
 			    	<!-- 加载地图 -->
 					<div id="mapContainer" class="map" tabindex="0"></div>
 				</div>
-				<!-- 主体内容【开始】 -->
+				<!-- 主体内容【结束】 -->
 			</div>
 			<!-- 页面内容【结束】 -->
 			<footer class="main-footer">
@@ -201,19 +110,47 @@
 		<script src="dist/js/app.min.js"></script>
 		
 		<script src="vince/js/nicescroll.js"></script>
-		<script src="vince/drag/zxx.drag.1.0.js"></script>
 		<script src="dist/js/demo.js"></script>
 		<script src="vince/js/demo.js"></script>
+		
+		<script src="vince/drag/zxx.drag.1.0.js"></script>
 		<!-- 引入JS文档【结束】 -->
 		
-		<!-- <div id="sss" style="display:none; height:200px; width:200px;"></div>
-		<script src="vince/js/echarts.min.js"></script>
 		<script type="text/javascript">
-		var myChart1 = echarts.init(document.getElementById('sss'));
-		option1 = {
-		series: [{data: [247, 179]}]};
-		myChart1.setOption(option1);
-		</script> -->
+			//获取页面参数【开始】
+			function getParam(string) {
+			    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
+			    var l = decodeURI(window.location.search);
+			    var r = l.substr(1).match(reg);
+			    if (r != null){
+			    	var result = decodeURI(r[2]);
+			    	return unescape(result);
+			    }
+			}
+			//获取页面参数【结束】
+			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
+			function formatDateToString(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var H = unifiedFormat(param.getHours());
+				var m = unifiedFormat(param.getMinutes());
+				var s = unifiedFormat(param.getSeconds());
+				var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
+				return result;
+			}
+			function formatInitDateToString(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var result = y+"-"+M+"-"+d+" 00:00:00";
+				return result;
+			}
+			function unifiedFormat(param){
+				return (param<10)?("0"+param):param;
+			}
+			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
+		</script>
 		<!-- 页面地图【开始】 -->
 		<script type="text/javascript"
 			src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer">
@@ -226,6 +163,10 @@
 			myWindow.style.height=0.8*screenWidth+"px";
 			myWindow.style.height=0.905*screenHeight+"px";
 			//设定高度适应屏幕高度【结束】
+			$(function(){
+				$("#main-sidebar").load("childrenHtml/side-menu.html");
+				$("#main-header").load("childrenHtml/title.html");
+			});
 			var cluster, markers = [];
 		    var points= [];
 		    var map = new AMap.Map("mapContainer", {
