@@ -35,8 +35,6 @@ public class LoginController {
 	 */
 	@RequestMapping("/hqgd")
 	public String login(Model model, HttpServletResponse response, HttpServletRequest request) {
-//		return "login";
-//		return "bigdatalogin";
 		return "index";
 	}
 	
