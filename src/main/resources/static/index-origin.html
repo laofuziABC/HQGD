@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>欢迎登录！</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	<!--BootStrap样式-->
+	<link type="text/css" href="media/css/bootstrap.min.css" rel="stylesheet" />
+	<!--字体样式-->
+	<link type="text/css" href="media/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+	<!--表单元素样式-->
+	<link type="text/css" href="media/css/style-metro.css" rel="stylesheet" type="text/css"/>
+	<!--表单、页面、图标样式-->
+	<link type="text/css" href="media/css/style.css" rel="stylesheet" type="text/css"/>
+	<!--页面布局样式-->
+	<link type="text/css" href="media/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+	<!--页面风格样式-->
+	<link type="text/css" href="media/css/light.css" rel="stylesheet" type="text/css" id="style_color"/>
+	<style type="text/css">
+		#portlet-config{width: 400px; height: 400px; margin: auto;}
+		#alertInfo, #confirmInfo{width: 400px; height: 220px; margin: -300% 300%; background: rgba(224, 255, 255, 1);}
+		#alertInfo .info-top-bar, #confirmInfo .info-top-bar{background-color: #28B779; height: 20px; border-radius: 5px 5px 0px 0px;}
+		#alertInfo .info-content, #confirmInfo .info-content{border: 1px solid #28B779;}
+		#alert-info-body{text-align: center;font-size: 20px;padding: 10% 0px;}
+		#alertInfo input{width: 30%; height: 35px; color: #FFFFFF; background-color: #28B779; margin: 3% 35%; font-size: 18px;
+									border: 0px; border-radius: 4px;}
+		#confirm-info-body{text-align: center;font-size: 20px;padding: 10% 0px;}
+		#confirmInfo .buttons{margin: 3% 10%;}
+		#confirmInfo .buttons input{width: 35%; height: 35px; color: #FFFFFF; background-color: #28B779; font-size: 18px;
+									border: 0px; border-radius: 4px; margin: 0 6%;}
+	</style>
+	<!-- <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <style>
+        #mapContainer {height: 100%;width: 100%;}
+        .input-card {width: 25rem;}
+        .input-card .btn { width: 7rem; margin-right: .7rem; }
+        .input-card .btn:last-child { margin-right: 0; }
+    </style> -->
+</head>
+<body class="page-header-fixed">
+	<!-- 设置侧边栏【开始】 -->
+	<div class="page-sidebar nav-collapse collapse">
+		<!-- 加载菜单 -->
+		<ul class="page-sidebar-menu" id="page-sidebar-menu">
+			<li><img alt="logo" src="img/hqgd/logo.jpg" style="margin-top: -10px;"></li>
+			<li><div class="sidebar-toggler hidden-phone"></div></li>
+		</ul>
+	</div>
+	<!-- 设置侧边栏【结束】 -->
+	<!-- 页面内容【开始】 -->
+	<div class="page-content" id="page-content" style="z-index: 5; width: 88%; height: 95%;">
+		<!-- 加载地图 -->
+		<div id="mapContainer" class="map" tabindex="0"></div>
+	</div>
+	<!-- 页面内容【结束】 -->
+	<!-- 页脚区域【开始】 -->
+	<div style="position: fixed; left: 45%; top: 95%; width: 15%;">
+		<div style="margin: auto; width: 100%;">
+			2018.11.06 &copy; Metronic by laofuzi.
+		</div>
+	</div>
+	<!-- 页脚区域【结束】 -->
+	
+	
+	<!--模态框以及弹框【开始】-->
+	<div class="page-sidebar nav-collapse collapse" style="none;">
+		<!-- 页面隐藏模态框【开始】-->
+		<div id="portlet-config" class="modal hide" style="display: none;">
+			<div class="modal-header">
+				<button data-dismiss="modal" class="close" type="button" onclick="closeModal();"></button>
+				<h3 id="modal-title">模态框标题</h3>
+			</div>
+			<div id="modal-body" class="modal-body">模态框内容</div>
+		</div>
+		<!-- 页面隐藏模态框【结束】-->
+	</div>
+	<!--模态框以及弹框【结束】-->
+	
+	<script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+	<script src="media/js/app.js" type="text/javascript"></script>
+	<script>
+		jQuery(document).ready(function() {
+			App.init();
+			setHeight();
+			loadContext(100);
+		});
+		//设定高度适应屏幕高度【开始】
+		var myWindow=document.getElementById("page-content");
+		var screenHeight = window.screen.availHeight;
+		myWindow.style.height=0.905*screenHeight+"px";
+		//设定高度适应屏幕高度【结束】
+		//获取页面参数
+		function getParam(string) {
+		    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
+		    var l = decodeURI(window.location.search);
+		    var r = l.substr(1).match(reg);
+		    if (r != null){
+		    	var result = decodeURI(r[2]);
+		    	return unescape(result);
+		    }
+		}
+		//根据roleId加载侧边菜单栏——roleId=1，管理员；其余都为普通用户
+		var roleId =getParam("roleId");
+		var userName =getParam("userName");
+		var menuHtml="";
+		menuHtml+="<li><img alt=\"logo\" src=\"img/hqgd/logo.jpg\" style=\"margin-top: -10px;\"></li>";
+		menuHtml+="<li><div class=\"sidebar-toggler hidden-phone\"></div></li>";
+		if(roleId == 1){
+			menuHtml+="<li class=\"start active\" onclick=\"loadContext(100);\">";
+			menuHtml+="<a ><i class=\"icon-home\"></i> ";
+			menuHtml+="<span class=\"title\">首页</span><span class=\"selected\"></span>";
+			menuHtml+="</a></li>";
+			menuHtml+="<li class=\"\" onclick=\"loadContext(101);\">";
+			menuHtml+="<a href=\"#\"><i class=\"icon-user\"></i> ";
+			menuHtml+="<span class=\"title\">用户管理</span><span class=\"arrow\"></span>";
+			menuHtml+="</a></li>";
+			menuHtml+="<li class=\"\" onclick=\"loadContext(201);\">";
+			menuHtml+="<a href=\"#\"><i class=\"icon-cogs\"></i> ";
+			menuHtml+="<span class=\"title\">设备管理</span><span class=\"arrow\"></span>";
+			menuHtml+="</a></li>";
+			menuHtml+="<li class=\"\" onclick=\"loadContext(301);\">";
+			menuHtml+="<a href=\"#\"><i class=\"icon-th\"></i> ";
+			menuHtml+="<span class=\"title\">监测数据</span><span class=\"arrow\"></span>";
+			menuHtml+="</a></li>";
+		}else{
+			menuHtml+="<li class=\"active\"><a href=\"#\"><i class=\"icon-th\"></i> ";
+			menuHtml+="<span class=\"title\">监测数据</span><span class=\"arrow\"></span>";
+			menuHtml+="</a><ul class=\"sub-menu\" id=\"equipments\"></ul></li>";
+		}
+		$("#page-sidebar-menu").html(menuHtml);
+		/* 获取侧边栏普通用户设备列表【开始】 */
+		if(roleId != 1){
+		$.ajax({
+			url:"equipment/selectAllByUser",
+			type: "post",
+			data:{"userName":userName},
+			dataType: "json",
+			success: function(result){
+				let data = result.data;
+				var equiMenu = "";
+				for(let i=0; i<data.length; i++){
+					equiMenu+="<li><a href=\"#\" onclick=\"loadContext(' "+data[i].equipmentId+" ');\">"+data[i].equipmentName+"</a></li>"
+				}
+				$("#equipments").empty();
+				$("#equipments").append(equiMenu);
+			}
+		});
+		}
+		/* 获取侧边栏普通用户设备列表【结束】 */
+	</script>
+	<script type="text/javascript">
+		var userId = "";						//用户主键
+		var menuId = "";					//菜单主键
+		var equiId="";						//设备主键
+		/*模态框操作【开始】*/
+		var myModal = document.getElementById("portlet-config");
+		var myAlertInfo = document.getElementById("alertInfo");
+		var myConfirmInfo = document.getElementById("confirmInfo");
+		//打开模态框
+		function openModal(title, url, param){
+			if(myModal.style.display == "none"){
+				myModal.style.display = "block";
+				myModal.style.width = (param.width == null)?("1200px"):(param.width+"px");
+				myModal.style.height = (param.height == null)?("900px"):(param.height+"px");
+			}
+			if(param.equipmentId != "undefined"){equiId=param.equipmentId;}
+			if(param.userId != "undefined"){userId=param.userId;}
+			$("#modal-title").html("");
+			$("#modal-body").html("");
+			$("#modal-title").html(title);
+			$("#modal-body").load(url);
+		}
+		//关闭模态框
+		function closeModal(){
+			if(myModal.style.display == "block"){
+				myModal.style.display = "none";
+			}
+		}
+		//拖拽模态框【开始】
+		 var div = document.getElementById("portlet-config");
+		var dragFlag = false;
+		var x,y;
+		div.onmousedown = function (e) {
+		    e = e || window.event;
+		    x = e.clientX - div.offsetLeft;
+		    y = e.clientY - div.offsetTop;
+		    dragFlag = true;
+		};
+		document.onmousemove = function (e) {
+		    if (dragFlag) {
+		        e = e || window.event;
+		        div.style.left = (e.clientX - x) + "px";
+		        div.style.top  = (e.clientY - y) + "px";
+		    }
+		};
+		document.onmouseup = function (e) {
+		    dragFlag = false;
+		}; 
+		//拖拽模态框【结束】
+		/*模态框操作【结束】*/
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
+		function formatDateToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var H = unifiedFormat(param.getHours());
+			var m = unifiedFormat(param.getMinutes());
+			var s = unifiedFormat(param.getSeconds());
+			var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
+			return result;
+		}
+		function formatInitDateToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var result = y+"-"+M+"-"+d+" 00:00:00";
+			return result;
+		}
+		function unifiedFormat(param){
+			return (param<10)?("0"+param):param;
+		}
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
+		//
+		function setHeight(){
+			var myWindow=document.getElementById("page-content");
+			
+			var myHeight = window.screen.availHeight;
+			alert("我的屏幕高度是："+window.screen.availHeight);
+			myWindow.style.width=0.95*window.screen.availHeight;
+		}
+		//
+		<!-- 关联侧边栏和展示内容【开始】 -->
+		function loadContext(param){
+			//先清空页面原有内容
+			$("#page-content").empty();
+			//再引入新的界面
+			if(param==101){
+				$("#page-content").load("childrenHtml/user/user-list.html");
+			}else if(param==201){
+				$("#page-content").load("childrenHtml/equipment/equi-list.html");
+			}else if(param==301){
+				$("#page-content").load("childrenHtml/data/equi-data-list.html");
+			}else if(param==100){
+				$("#page-content").load("childrenHtml/map/map.html"); 
+			}else{
+				equiId=param;
+				$("#page-content").load("childrenHtml/data/data-list.html");
+			}
+		}
+		<!-- 关联侧边栏和展示内容【结束】 -->
+	</script>
+	<!-- 页面地图【开始】 -->
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer"></script>
+	<script type="text/javascript">
+		var cluster, markers = [];
+	    var points= [];
+	    var map = new AMap.Map("mapContainer", {
+	    	mapStyle: 'amap://styles/normal',
+	        resizeEnable: true,
+	        center: [105, 38],
+	        zoom: 5
+	    });
+	    getLngLat();
+	    
+	    function getLngLat(){
+	    	$.ajax({
+				url:"map/getPositions",
+				type:"post",
+				async:false,
+				dataType: "json",
+				success: function(result){
+					points = result.data;
+				}
+			});
+	    }
+	    	
+	    for (var i = 0; i < points.length; i += 1) {
+	        markers.push(new AMap.Marker({
+	            position: points[i].split(','),
+	            content: '<div style="background-color: hsla(180, 100%, 50%, 0.7); height: 24px; width: 24px; border: 1px solid hsl(180, 100%, 40%); border-radius: 12px; box-shadow: hsl(180, 100%, 50%) 0px 0px 1px;"></div>',
+	            offset: new AMap.Pixel(-15, -15)
+	        }))
+	    }
+
+	    var count = markers.length;
+	    var _renderCluserMarker = function (context) {
+	        var factor = Math.pow(context.count / count, 1 / 18);
+	        var div = document.createElement('div');
+	        var Hue = 180 - factor * 180;
+	        var bgColor = 'hsla(' + Hue + ',100%,50%,0.7)';
+	        var fontColor = 'hsla(' + Hue + ',100%,20%,1)';
+	        var borderColor = 'hsla(' + Hue + ',100%,40%,1)';
+	        var shadowColor = 'hsla(' + Hue + ',100%,50%,1)';
+	        div.style.backgroundColor = bgColor;
+	        var size = Math.round(30 + Math.pow(context.count / count, 1 / 5) * 20);
+	        div.style.width = div.style.height = size/1.5 + 'px';
+	        div.style.border = 'solid 1px ' + borderColor;
+	        div.style.borderRadius = size / 2 + 'px';
+	        div.style.boxShadow = '0 0 1px ' + shadowColor;
+	        div.innerHTML = context.count;
+	        div.style.lineHeight = size/1.4 + 'px';
+	        div.style.color = fontColor;
+	        div.style.fontSize = '14px';
+	        div.style.textAlign = 'center';
+	        context.marker.setOffset(new AMap.Pixel(-size / 2, -size / 2));
+	        context.marker.setContent(div)
+	    };
+	    addCluster(2);
+
+	    function addCluster(tag) {
+	        if (cluster) {
+	            cluster.setMap(null);
+	        }
+	        if (tag == 2) {//完全自定义
+	            cluster = new AMap.MarkerClusterer(map, markers, {
+	                gridSize: 80,
+	                renderCluserMarker: _renderCluserMarker
+	            });
+	        } else if (tag == 1) {//自定义图标
+	            var sts = [{
+	                url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+	                size: new AMap.Size(32, 32),
+	                offset: new AMap.Pixel(-16, -16)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/green.png",
+	                size: new AMap.Size(32, 32),
+	                offset: new AMap.Pixel(-16, -16)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
+	                size: new AMap.Size(36, 36),
+	                offset: new AMap.Pixel(-18, -18)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/red.png",
+	                size: new AMap.Size(48, 48),
+	                offset: new AMap.Pixel(-24, -24)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
+	                size: new AMap.Size(48, 48),
+	                offset: new AMap.Pixel(-24, -24)
+	            }];
+	            cluster = new AMap.MarkerClusterer(map, markers, {
+	                styles: sts,
+	                gridSize: 80
+	            });
+	        } else {//默认样式
+	            cluster = new AMap.MarkerClusterer(map, markers, {gridSize: 80});
+	        }
+	    }
+	</script>
+	<!-- 页面地图【结束】 -->
+</body>
+<!-- END BODY -->
+</html>
