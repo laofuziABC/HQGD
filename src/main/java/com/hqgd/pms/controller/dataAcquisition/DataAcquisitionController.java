@@ -88,6 +88,10 @@ public class DataAcquisitionController {
 		long inTime = System.currentTimeMillis();
 		log.info("查询历史数据曲线开始 " + inTime);
 		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
+		long outTime = System.currentTimeMillis();
+		log.info("查询历史数据曲线结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("接口访问时长为：" + midTime);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
@@ -96,10 +100,7 @@ public class DataAcquisitionController {
 		resultMap.put("data", historicalDataList);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		long outTime = System.currentTimeMillis();
-		log.info("查询历史数据曲线结束：" + outTime);
-		long midTime = outTime - inTime;
-		log.info("接口访问时长为：" + midTime);
+		
 	}
 
 	/**
