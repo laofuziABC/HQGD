@@ -6,7 +6,7 @@ light theme
 Reset and overrides  
 ***/
 body {
-  background-color: #fafafa !important;
+  background-color: #002140 !important;
 }
 /***
 Page header
@@ -34,7 +34,7 @@ Page sidebar
   border-bottom: 1px solid #e2e2e2 !important;
 }
 .page-sidebar {
-  background-color: #fafafa;
+  background-color: #002140;
 }
 .page-sidebar-fixed .page-content {
   border: 0 !important;
@@ -46,7 +46,7 @@ Page sidebar
 
 ul.page-sidebar-menu > li > a {
   border-top: 1px solid #e2e2e2 !important;
-  color: #000 !important;
+  color: #FFFFFF;
   font-weight: 400;
 }
 
@@ -81,7 +81,7 @@ ul.page-sidebar-menu > li.active i {
   display: none;
 }
 ul.page-sidebar-menu > li.active > a{
-  background: #28b779 !important;
+  background: #002140 !important;
   border-top-color: transparent !important;
   color:#fff !important;
 }  
@@ -152,7 +152,7 @@ Sidebar toggler
 ***/
 .sidebar-toggler {  
   /*background-image: url(../../img/sidebar-toggler-light.jpg);*/
-  background-image: url(../image/sidebar-toggler.jpg);							/*更改图标（老夫子 2018.11.06）*/
+  background-image: url(../image/sidebar-toggler.jpg);							/*鏇存敼鍥炬爣锛堣�佸か瀛� 2018.11.06锛�*/
   background-color: #333;
 }
 /* search box bg color on expanded */
