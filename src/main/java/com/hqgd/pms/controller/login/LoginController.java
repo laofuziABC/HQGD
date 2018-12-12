@@ -35,7 +35,7 @@ public class LoginController {
 	 */
 	@RequestMapping("/hqgd")
 	public String login(Model model, HttpServletResponse response, HttpServletRequest request) {
-		return "login-form";
+		return "login";
 	}
 	
 	@RequestMapping("/hqgd/login")
