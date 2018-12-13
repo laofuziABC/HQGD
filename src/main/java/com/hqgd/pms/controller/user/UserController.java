@@ -42,8 +42,6 @@ public class UserController {
 	public String update(Model model, User user, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		User userLog = (User) request.getSession(true).getAttribute("user");
-		// User userLog = user;
-		// Map<String, Object> result = userService.update(user, userLog);
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (user.getId() == null) {
 			result = userService.add(user, userLog);

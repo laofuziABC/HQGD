@@ -1,7 +1,5 @@
 package com.hqgd.pms.domain;
 
-import java.util.Date;
-
 public class EquipmentInfo {
     private Integer id;
 
@@ -31,13 +29,37 @@ public class EquipmentInfo {
 
     private String creator;
 
-    private Date createTime;
+    private String createTime;
 
     private String updater;
 
-    private Date updateTime;
+    private String updateTime;
 
-    public Integer getId() {
+    public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getUpdater() {
+		return updater;
+	}
+
+	public void setUpdater(String updater) {
+		this.updater = updater;
+	}
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -149,27 +171,4 @@ public class EquipmentInfo {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater == null ? null : updater.trim();
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

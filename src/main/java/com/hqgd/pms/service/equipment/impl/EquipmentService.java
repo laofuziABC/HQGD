@@ -3,7 +3,6 @@ package com.hqgd.pms.service.equipment.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +48,8 @@ public class EquipmentService implements IEquipmentService {
 		if (equipFind == null) {
 			equipmentInfo.setUpdater(loginUser.getUserName());
 			equipmentInfo.setCreator(loginUser.getUserName());
-			equipmentInfo.setUpdateTime(new Date());
-			equipmentInfo.setCreateTime(new Date());
+			equipmentInfo.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
+			equipmentInfo.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
 			String address = equipmentInfo.getAddress();
 			String city = CommonUtil.subString(address, "省", "市");
 			GeoCode geoCode = geocode(address, city);
@@ -97,7 +96,7 @@ public class EquipmentService implements IEquipmentService {
 	@Override
 	public Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser) {
 		equipmentInfo.setUpdater(loginUser.getUserName());
-		equipmentInfo.setUpdateTime(new Date());
+		equipmentInfo.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
 		Map<String, Object> resultMap = new HashMap<>();
 		int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
 		Boolean result = (i == 0) ? false : true;

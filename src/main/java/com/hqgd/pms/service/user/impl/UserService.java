@@ -3,7 +3,6 @@ package com.hqgd.pms.service.user.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +52,8 @@ public class UserService implements IUserService {
 		if (userfind == null) {
 			user.setUpdater(loginUser.getUserName());
 			user.setCreator(loginUser.getUserName());
-			user.setUpdateTime(new Date());
-			user.setCreateTime(new Date());
+			user.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
+			user.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
 			user.setIsdel("N");
 			int i = userMapper.insert(user);
 			result = (i == 0) ? false : true;
@@ -80,7 +79,7 @@ public class UserService implements IUserService {
 	@Override
 	public Map<String, Object> update(User user, User loginUser) {
 		user.setUpdater(loginUser.getUserName());
-		user.setUpdateTime(new Date());
+		user.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
 		Map<String, Object> map = new HashMap<>();
 		int i = userMapper.updateByPrimaryKeySelective(user);
 		Boolean result = (i == 0) ? false : true;

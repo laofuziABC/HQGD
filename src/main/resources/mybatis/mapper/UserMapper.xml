@@ -14,8 +14,8 @@
   <!--   <result column="TYPE" jdbcType="INTEGER" property="type" /> -->
   </resultMap>
   <sql id="Base_Column_List">
-    ID, USER_NAME, PASSWORD, COMMENTS, ISDEL, CREATOR, CREATE_TIME, 
-    UPDATER, UPDATE_TIME
+    ID, USER_NAME, PASSWORD, COMMENTS, ISDEL, CONVERT ( VARCHAR ( 100 ), CREATE_TIME, 20 ) AS CREATE_TIME, 
+    UPDATER, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME
   </sql>
   
   <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
