@@ -37,7 +37,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(interceptor()).addPathPatterns("/*")
             .excludePathPatterns("/hqgd")							//登录页
-            .excludePathPatterns("/hqgd/login")							//登录页
+            .excludePathPatterns("/hqgd/login")					//登录
             .excludePathPatterns("/user/*")
             .excludePathPatterns("/equipment/*")
 			.excludePathPatterns("classpath:/static/**");	//静态资源

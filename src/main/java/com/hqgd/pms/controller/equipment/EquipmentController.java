@@ -98,7 +98,9 @@ public class EquipmentController {
 		log.info("查询设备开始");
 		EquipmentInfo equipmentInfo = equipmentService.selectByEquipmentName(equipmentName);
 		List<EquipmentInfo> equipmentList = new ArrayList<EquipmentInfo>();
-		equipmentList.add(equipmentInfo);
+		if(equipmentInfo!=null) {
+			equipmentList.add(equipmentInfo);
+		}
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000004");

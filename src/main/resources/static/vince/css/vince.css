@@ -1,4 +1,4 @@
-/*棣栭〉*/
+/*首页*/
 body{overflow: hidden;}
 *{padding: 0;margin:0;}
 li{list-style: none}
@@ -47,7 +47,7 @@ li{list-style: none}
 .sy_xypm .nei{width:100%;position:relative;}
 @media (max-width: 992px) {.sy_louxin,.sy_xycl,.sy_yhxypm{margin-top:10px;}.sy_louxin .nei{margin-left:0;margin-right:0}	.sy_xycl .nei,.sy_yhxypm .nei{margin-left:0;margin-right:0}	.sy_yhxypm .nei {border-left:none;}	}
 
-/*鐧诲綍椤�*/
+/*登录页*/
 .login{width: 537px;height: 458px;background: #fff;position: absolute;z-index: 99999;left: 500px;top:100px;background: url(../images/login.png);}
 .loginform{position: absolute;width: 250px;height: 138px;top: 249px;left: 140px;}
 .login_user input{height: 30px;width: 228px;line-height: 30px;border:1px solid #b4c5cc;background:#fff;border-radius: 5px;overflow: hidden;padding: 0 10px;color: #666;font-size: 14px;}
@@ -56,7 +56,7 @@ li{list-style: none}
 .login_botton{margin-top: 19px;}
 .login_botton input{width:100px;height: 35px;line-height: 33px;background: #ff7e00 url(../images/icon_06.png)no-repeat 5px 5px;border:1px solid #d96627;border-radius: 5px;overflow: hidden;color: #fff;padding-left: 30px;}
 
-/* 杩愯鐩戞祴 */
+/* 运行监测 */
 .yxjc img{max-width: 100%;display: block;margin: 10px auto;max-height: 100%;}
 .yxjc{position: relative;height: 100%;width: 100%;}
 .yxjc_info{top:20px;left: 20px;width: 140px;float: left;height: 100%;}
@@ -80,8 +80,7 @@ li{list-style: none}
 
 .yxjc_info_right{float: left;}
 
-
-/* 鍝嶅簲鏁堟灉璇勪环 */
+/* 响应效果评价 */
 .xj_left{background: #21242e;}
 .xj_left h4{padding:12px 10px ;margin: 0;font-size: 14px;color: #fff;}
 .xj_left h4 span{float: right;font-size: 13px;color: #999}
@@ -128,7 +127,7 @@ li{list-style: none}
 .xyxgpj_right p{padding: 10px;color: #000;line-height: 26px;}
 .baoxun{margin:0;}
 .baoxun input{height: 26px;width: 60px;background: #1571B0;text-align: center;color: #fff;border:none;margin:10px auto 0 auto;display: block;line-height: 26px;}
-/*鏂扮増鏍峰紡*/
+/*新版样式*/
 .xyxgpj_center .nei{margin: 0 10px;}
 .xyxgpj_title{background: #181b22;line-height: 30px;color: #fff;font-size: 13px;padding:10px 20px;}
 .xyxgpj_con_title{border-top:10px solid #000;min-height: 30px;padding:10px 20px;background: url(../images/icon_30.png)no-repeat 20px 16px;color: #fff;padding-left: 40px;font-size: 13px;line-height: 26px;}
@@ -157,7 +156,7 @@ li{list-style: none}
 @media (max-width: 992px) {.xg_right_one_left{margin-bottom:10px;}.xg_right .nei_left{margin-left: 0}.xm-top{margin-top: 10px}
 .xyxgpj_center .nei{margin: 0 ;}.charqie{border-top:10px solid #000;}.echart_qu{border-top:10px solid #000;}}
 .xyxgpj_baifen{position: absolute;height: 100%;width: 70%;background:#89b329;z-index: 1;}
-/* 瀹炴椂鐩戞祴 */
+/* 实时监测 */
 .ssjc_left{background: #21242e;}
 .ssjc_right .nei{background: #21242e;margin-left: 10px;}
 .ssjc_title{border-bottom:1px solid #43454e;line-height: 40px;}
@@ -185,7 +184,7 @@ li{list-style: none}
 .child_child_fathertree{background: url(../images/icon_09.png) repeat-y;}
 .ssjc_title p{margin: 0;}
 
-/*鏍戝舰瀵艰埅*/
+/*树形导航*/
 .tree {min-height:20px;padding:19px;/*margin-bottom:70px;*/border:1px solid #999;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);-moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)}
 .tree li {list-style-type:none;margin:0;padding:10px 5px 0 5px;position:relative}
 .tree li::before, .tree li::after {content:'';left:-20px;position:absolute;right:auto}
@@ -204,7 +203,7 @@ li{list-style: none}
 .tree ul {margin: 0 0 0 25px;padding: 0;}
 .tree ul.none_margin {margin: 0;padding: 0;}
 .tree_menu em{font-style: normal;}
-/*鏍戝舰瀵艰埅*/
+/*树形导航*/
 .tree_check{position:relative;top:1px!important;margin:0 3px!important;}
 .ssjc_left_bottom{position: absolute;height:40px;width: 100%;bottom: 20px;background: #21242e;padding:10px 0;display: none;}
 .ssjc_left_bottom span{display: block;height: 40px;width: 40px;margin: 0 auto;}
@@ -253,7 +252,7 @@ li{list-style: none}
 .table_fang i{font-style: normal;}
 @media (max-width: 992px) {.ssjc_right_up .nei{margin-left:0;}.xyfagl_one_right{border-top: 10px solid #000;}}
 
-/* 绗﹀悎鐩稿簲鍒嗘瀽 */
+/* 符合相应分析 */
 .float_right{float: right;}
 .float_right .youcecha{margin-right: 10px;height:26px;text-align: center;line-height: 26px;width: 70px;color: #fff;background: #399AD7;border:none;border-radius: 3px;overflow: hidden;}
 .fhxyfx_title{background: #21242e;padding-left: 10px;line-height: 38px;color: #fff;}
@@ -290,7 +289,7 @@ li{list-style: none}
 .fhxyfx_fan{float: right;height: 30px;width: 30px;display: block;background: url(../images/icon_44.png);background-size:100% 100%;cursor: pointer;margin-right: 15px;}
 
 
-/* 棰勮绠＄悊 */
+/* 预警管理 */
 .ssjc_ru_title .left_ten{padding-left: 10px;}
 .ssjc_ru_title .right_ten{padding: 0 10px;}
 .echarts_yjgl_one{height: 270px;margin-top: 10PX;}
@@ -298,7 +297,7 @@ li{list-style: none}
 .yjgl_ru_table{width: 100%;}
 .ssjc_right_bottom .nei{padding-left: 10px;}
 
-/* 鍝嶅簲鏂规 */ 
+/* 响应方案 */ 
 .xyfa_title{min-height: 39px;}
 .xyfa_title .float_right{margin-top:5px;}
 .fuceng{position: fixed;width: 100%;height:400px;background: rgba(22,22,22,0.6);z-index: 999999;top:0;left: 0;display: none}
@@ -325,7 +324,7 @@ li{list-style: none}
 .fuqusave{height: 50px;}
 .fuqusave input{display: block;height: 26px;width: 60px;margin:20px auto;color: #fff;border:1px solid #95c2de;background: #399ad7;}
 
-/* 璁惧鍏ュ簱 */ 
+/* 设备入库 */
 .sbrk_table{border-top:1px solid #4b4e56;margin-top: 20px;padding-top: 10px;}
 .sbrk_table p{font-size: 13px;color: #fff;}
 .sbrk_table li{padding-left: 10px;position: relative;}
@@ -347,7 +346,7 @@ li{list-style: none}
 
 
 
-/* 璁惧瀹夊叏 */ 
+/* 设备安全 */ 
 .sbaz_table{padding-bottom: 15px;}
 .sbaz_table p{padding:0 50px;text-align: center;color: #fff;} 
 .sbaz_table p input{border:1px solid #fff;background: none;padding-left:5px;width: 70px;margin-right: 10px;}
@@ -356,7 +355,7 @@ li{list-style: none}
 .sbaz_table span{margin-top: 10px;display: inline-block;}
 .sbaz_table input{margin-top: 10px;display: inline-block;}
 
-/* 鎺у埗绛栫暐 */ 
+/* 控制策略 */ 
 .float_left{float: left;}
 .float_right{float: right;}
 .fuqubiao p span.rad{width: 120px;}
@@ -366,7 +365,7 @@ li{list-style: none}
 .fuquqiejut{float: left;width: 252px;margin-left: 17px;margin-right: 17px;}
 .fuquqiejut .fuqutable li span{width: 25%;display: inline-block;border-right: 1px solid #5e5e5e;text-align: center;padding:0;}
 
-/* 绯荤粺闆嗘垚 */ 
+/* 系统集成 */ 
 .xtjc{background: #21242e;min-height: 100%;}
 .xtjc_li img{margin: 0 auto;display: block;}
 .xtjc_li p{color: #fff;font-weight: bold;text-align: center;line-height: 3em;}
@@ -375,12 +374,12 @@ li{list-style: none}
 .xtjc_nei img {transition:All 0.7s ease-in-out;-webkit-transition:All 0.7s ease-in-out;-moz-transition:All 0.7s ease-in-out;-o-transition:All 0.7s ease-in-out;}
 .xtjc_nei:hover img{transform:rotate(360deg);-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-o-transform:rotate(360deg);-ms-transform:rotate(360deg);}
 
-/* 鍝嶅簲鏂规绠＄悊 */ 
+/* 响应方案管理 */ 
 .xyfagl_right_bottom .nei{margin: 10px 0;}
 .xyfagl_right_up .nei{margin: 0;margin-bottom: 10px;}
 .xyfagl_right_bottom p{color: #fff;font-size: 14px;line-height: 2em}
 
-/* 涓存椂澧炲姞 */
+/* 临时增加 */
 .content-wrapper{min-height: 200px!important;}
 .chengkuang_120{border-left:1px solid #fff;border-right:1px solid #fff;height:120px;}
 div.lin_add{height: 30px;}
@@ -394,8 +393,8 @@ div.linxian{height: 30px;}
 .kongxian{border:none!important;height: 30px;}
 .tj_table .table_check{display: block;margin: 5px auto;}
 .tiaoshijian{position: relative;height: 39px;float: left;display: block;}
-.tiaoshijian input{line-height:24px;background: none;position: relative;z-index: 2;padding-left: 30px;color: #fff;border:1px solid #fff;height: 24px;margin-top: 8px;}
-.tiaoshijian i{position: absolute;top: 13px;left: 90px;z-index: 1;background: none}
+.tiaoshijian input{line-height:24px;background: none;position: relative;z-index: 2;padding-left: 30px;color: #fff;border:1px solid #fff;height: 24px;}  /* 更改说明：去掉margin-top: 8px; laofuzi 2018.12.13 */
+.tiaoshijian i{position: absolute;top: 9px;left: 90px;z-index: 1;background: none}  /* 更改说明：更改top，从13px改为9px laofuzi 2018.12.13 */
 .biaoti_select{ border: 1px solid #4b4e56;color: #fff;text-align: left;background: none;}
 .ssjc_ru_title .biaoti_select{color: #fff;padding-right:3px;}
 .ssjc_ru_title .biaoti_select option{color: #fff;background: #21242e ;}
@@ -420,7 +419,7 @@ option{background: #21242e;}
 .fuqubiao i{position: absolute;top: 9px;left: 107px;}
 .fuqubiao .shi{padding-left: 24px;line-height: 20px;}
 
-/* 鏂伴椤� */
+/* 新首页 */
 .rezone{width:100%;background:#eee;}
 .requtu{width: 100%;margin:0;overflow:hidden;position: relative;}
 .requtu img{width:100%;}
@@ -465,13 +464,13 @@ option{background: #21242e;}
 .sy_info_right span.lindianjia{color: #3C8DBC;}
 .shoudanxuan{display: inline-block;height: 17px;width: 17px;background:url(../images/icon_46.png);background-size:100% 100%;position: relative;top: 3px;left: 5px;}
 .shoudanxuanwei{display: inline-block;height: 17px;width: 17px;background:url(../images/icon_47.png);background-size:100% 100%;position: relative;top: 3px;left: 5px;}
-/*椤甸潰table鏍峰紡*/
+/*页面table样式*/
 .tj_table{border:none}
 .tj_table thead{border-bottom:1px solid #fff;}
 .tj_table thead tr td{border-right:1px solid #fff;font-weight: bold; }
 .tj_table thead tr td:last-child{border-right: none;}
 .tj_table tbody tr{border-bottom:1px solid #fff;}
-.tj_table tbody tr:last-child{border-bottom:none;}
+/* .tj_table tbody tr:last-child{border-bottom:none;}	 */	/* 更改说明：删掉border-bottom:none; laofuzi 2018.12.13 */
 .tj_table tbody tr td{border-right:1px solid #fff;}
 .tj_table tbody tr td:last-child{border-right: none;}
 .ssjc_rub_table{border:1px solid #fff;}

@@ -94,7 +94,6 @@ function POSTAjaxForEquiList(url,param,mark){
 					equipList+="<td>"+parent.formatDateToString(new Date(data[i].updateTime))+"</td>";
 					equipList+="<td>"+data[i].updater+"</td>";
 					equipList+="<td class=\"center\">";
-					/* equipList+="<a class=\"details\" href=\"#\" onclick=\"getChannelDetails('"+data[i].equipmentId+"');\">通道详情</a>&nbsp;"; */
 					equipList+="<a class=\"edit\" href=\"#\" onclick=\"getEquiEdit('"+data[i].equipmentId+"');\">编辑</a>&nbsp;";
 					equipList+="<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"+data[i].equipmentId+"');\">删除</a>&nbsp;";
 					equipList+="</td>";
@@ -111,6 +110,7 @@ function POSTAjaxForEquiList(url,param,mark){
 	}
 }
 //封装数据监测页面的Ajax异步请求
+var equiId;		//设备主键
 function AjaxPostForEquiSubList(url,param){
 	var resultList = "";
 	if(url != null && url != ""){
@@ -124,22 +124,24 @@ function AjaxPostForEquiSubList(url,param){
 				var totalSize = data.length;
 				//根据设备列表，初始化第一台设备的展示信息
 				if(totalSize>0){
-					var pageSize = 5;
-					var totalNum = Math.ceil(totalSize/pageSize);
-					var startIndex = (pageNum-1)*pageSize;
-					var endIndex = (pageNum*pageSize>totalSize)?totalSize:pageNum*pageSize;
-					/*equiId=data[startIndex].equipmentId;*/
-					for(let i=startIndex; i<endIndex; i++){
+//					var pageSize = 5;
+//					var totalNum = Math.ceil(totalSize/pageSize);
+//					var startIndex = (pageNum-1)*pageSize;
+//					var endIndex = (pageNum*pageSize>totalSize)?totalSize:pageNum*pageSize;
+//					equiId=data[startIndex].equipmentId;
+//					for(let i=startIndex; i<endIndex; i++){
+					equiId=data[0].equipmentId;
+					for(let i=0; i<totalSize; i++){
 						resultList+="<li onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>";
 					}
 					$("#equipResultList").html(resultList);
-					/*getEquiData(equiId);*/
-					//加载页码
-					$("#sub-list-pager").html(loadPages(pageSize,totalSize,pageNum));
-					$("#sub-list-pager").setActivePage(4);
+					getEquiData(equiId);
+//					//加载页码
+//					$("#sub-list-pager").html(loadSubListPages(pageSize,totalSize,pageNum));
+//					$("#sub-list-pager").setSubListPage();
 				}else{
 					$("#equipResultList").html(resultList);
-					/*getEquiData(null);*/
+					getEquiData(null);
 				}
 			}
 		});

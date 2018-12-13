@@ -15716,3 +15716,47 @@ var allCities = [
     ]
   }
 ]
+
+//选择地区值并回显
+var provValueList=[];		//全局变量——省集合
+var cityValueList=[];		//全局变量——市集合
+//地区级联
+function getProvs(){
+	var sh = "";
+	sh+="<option value=\"0\">选择省</option>";
+	provValueList=new Array();
+	for(let i=0; i<allCities.length; i++){
+		sh+="<option value='"+allCities[i].value+"'>"+allCities[i].label+"</option>";
+		provValueList.push(allCities[i].value);
+	}
+	$("#prov-select").html(sh);
+}
+function getCities(){
+	var p = $("#prov-select option:selected").val();
+	var s="<option value=\"0\">选择市</option>";
+	if(p>0){
+		var i = $.inArray(p,provValueList);
+		var c = allCities[i].children;
+		cityValueList=new Array();
+		for(let j=0; j<c.length; j++){
+			s+="<option value='"+c[j].value+"'>"+c[j].label+"</option>";
+			cityValueList.push(c[j].value);
+		}
+	}
+	$("#city-select").html(s);
+}
+function getTowns(){
+	var p = $("#prov-select option:selected").val();
+	var c = $("#city-select option:selected").val();
+	var t="<option value=\"0\">选择区</option>";
+	if(p*c>0){
+		var m = $.inArray(p,provValueList);
+		var n = $.inArray(c,cityValueList);
+		var t1 = allCities[m].children;
+		var t2 = t1[n].children;
+		for(let j=0; j<t2.length; j++){
+			t+="<option value='"+t2[j].value+"'>"+t2[j].label+"</option>";
+		}
+	}
+	$("#town-select").html(t);
+}

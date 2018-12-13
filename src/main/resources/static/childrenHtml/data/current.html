@@ -3,11 +3,82 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>当前监测数据</title>
+		<style type="text/css">
+			#channelDiv .tiaoshijian{font-size: 20px;}
+			#channelsInfo td{font-size: 32px; text-align: center; border: 10px solid #333;}
+			#channelsInfo .green{background-color: #00ff00;}
+			#channelsInfo .yellow{background-color: #ffff00;color: #0000ff;}
+			#channelsInfo .red{background-color: #ff0000;} 
+		</style>
 	</head>
 	<body>
 		<ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#">当前监测数据</a></li>
 			<li><a data-toggle="tab" href="#" onclick="$('#ssjc_right').load('childrenHtml/data/history.html');">历史监测数据</a></li>
 		</ul>
+		<!-- 上方的统计图【开始】 -->
+		<div class="ssjc_right_up">
+			<div class="nei">
+				<div class="ssjc_ru_table">
+					<div class="echarts_ssjc_one" id="chart_current"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 上方的统计图【结束】 -->
+		<!-- 下方的统计表【开始】 -->
+		<div class="ssjc_right_bottom" id="channelDiv">
+			<div class="nei">
+				<div class="ssjc_ru_title">
+					<span class="tiaoshijian">最新通道温度：(单位：℃)</span>
+				</div>
+				<!-- 通道温度【开始】 -->
+				<div class="ssjc_rub_table">
+					<table class="tj_table" border="0" id="channelsInfo">
+					</table>
+			</div>
+		</div>
+		<!-- 通道温度【结束】 -->
+		
+		<script type="text/javascript">
+			$(function(){
+				showBlocks();
+			});
+			function showBlocks(){
+				$.ajax({
+					url:"dataAcquisition/realtime",
+					type:"post",
+					data:{"equipmentId": equiId},
+					dataType: "json",
+					success: function(result){
+						let data = result.data;
+						//设置tab1内容：表格
+						var channel = "";
+						//设置tab1内容：通道温度值
+						let num = data.length;
+						let count = Math.ceil(num/3);
+						//设定高度适应空间【开始】
+						var divH=$(window).height()/3;
+						var trH=divH/count+"px";
+						//设定高度适应空间【结束】
+						for(let i=0; i<count; i++){
+							let startIndex = 3*i;
+							let endIndex = (3*i+3>num)?num:(3*i+3);
+							channel+="<tr style='height:"+trH+"'>";
+							//通道结果每三个循环一回，缘于界面展示效果较规整
+							for(let j=startIndex; j<endIndex; j++){
+								let state=parseFloat(data[j].state);
+								if(state=='0'){channel+="<td class='green'>"; }
+								else if(state=='1'){channel+="<td class='yellow'>"; }
+								else{channel+="<td class='red'>"; }
+								channel+=data[j].opticalFiberPosition+"：<b>"+data[j].temperature+"</b></td>";
+							}
+							channel+="</tr>";
+						}
+						$("#channelsInfo").empty();
+						$("#channelsInfo").append(channel);
+					}
+				});
+			}
+		</script>
 	</body>
 </html>

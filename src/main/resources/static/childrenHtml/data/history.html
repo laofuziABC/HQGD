@@ -12,37 +12,14 @@
 		</ul>
 		<div class="ssjc_right_up">
 			<div class="nei">
-				<div class="ssjc_ru_title">
-					<span class="tiaoshijian">开始时间：
-						<input type="text" class="shi datetimePicker" id="xuanshi1" value=""/>
-						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-					</span>
-					<span class="tiaoshijian">结束时间：
-						<input type="text" class="shi datetimePicker" id="xuanshi2" value="">
-						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-					</span>
-					<span class="float_right">
-						<input type="button" class="youcecha" onclick="searchResult(1);" value="查询"  />
-					</span>
-					<div class="clear"></div>
-				</div>
-				<div class="ssjc_ru_table">
-					<div class="echarts_ssjc_one" id="echarts_ssjc_one"></div>
-				</div>
-			</div>
-		</div>
-		<!-- 上方的统计图【结束】 -->
-		<!-- 下方的统计表【开始】 -->
-		<div class="ssjc_right_bottom">
-			<div class="nei">
 				<!-- 筛选条件【开始】 -->
 				<div class="ssjc_ru_title">
 					<span class="tiaoshijian">开始时间：
-						<input type="text" class="shi" id="xuanshi3" value=""/>
+						<input type="text" class="shi datetimePicker" id="startTime" value="1900-01-01 00:00:00"/>
 						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 					</span>
 					<span class="tiaoshijian">结束时间：
-						<input type="text" class="shi" id="xuanshi4" value="">
+						<input type="text" class="shi datetimePicker" id="endTime" value="2018-12-13 00:00:00">
 						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 					</span>
 					<span>显示内容：
@@ -51,7 +28,7 @@
 							<option value="1">显示异常数据</option>
 						</select>
 					</span>
-					<span >显示类型：
+					<span >页面大小：
 						<select  class="biaoti_select" id="page-size" onchange="searchNewResult();">
 							<option value="10" selected="selected">10条</option>
 							<option value="20">20条</option>
@@ -60,46 +37,108 @@
 						</select>
 					</span>
 					<span class="float_right">
-						<input type="button" class="youcecha" onclick="searchResult(1);" value="查询"  />
+						<input type="button" class="youcecha" onclick="showChartAndTable();" value="查询"  />
 						<input type="button" class="youcecha" onclick="report();" value="导出"  />
 					</span>
-					<div class="clear"></div>
 				</div>
 				<!-- 筛选条件【结束】 -->
+				<div class="ssjc_ru_table">
+					<div class="echarts_ssjc_one" id="chart_history"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 上方的统计图【结束】 -->
+		<!-- 下方的统计表【开始】 -->
+		<div class="ssjc_right_bottom">
+			<div class="nei">
+				
 				<!-- 数据列表【开始】 -->
-				<p>数据列表</p>
 				<div class="ssjc_rub_table">
 					<table class="tj_table" border="0">
 						<thead>
 							<tr>
-								<td>用户名称</td><td>设备名称</td><td>时间</td><td>功率</td>
+								<td style="width: 25%;">设备名称</td> 		<td style="width: 10%;">通道号</td> 	<td style="width: 12.5%;">光纤位置</td>
+								<td style="width: 10%;">温度(单位:℃)</td>	<td style="width: 7.5%;">PD</td> 		<td style="width: 7.5%;">UV</td>
+								<td style="width: 7.5%;">运行状态</td> 		<td style="width: 20%;">采集时间</td> 
 							</tr>
 						</thead>
-						<tbody>
-							<tr><td>项目</td><td>冷却泵</td><td>00点</td><td>45</td></tr>
-							<tr><td>项目</td><td>冷却泵</td><td>01点</td><td>61</td></tr>
-							<tr><td>项目</td><td>冷却泵</td><td>02点</td><td>50</td></tr>
-							<tr><td>项目</td><td>冷却泵</td><td>03点</td><td>75</td></tr>
+						<tbody id="history-table-body">
 						</tbody>
 					</table>
 					<!-- 分页插件 -->
-					<div class="t_fanye">
-						<span class="upten"></span>
-						<span class="up"></span>
-						<span class="split"></span>
-						<span class="page_info_one">第 1 / 1 页</span>
-						<span class="split"></span>
-						<span class="dowm"></span>
-						<span class="downten"></span>
-						<span class="page_info_two">页记录数 25</span>
-						<span class="page_info_three">当前1-1条记录，共1条记录</span>
-						<div class="clear"></div>
-					</div>
+					<div><div class="list-page-tail page-down" id="data-show-pager" style="margin: auto;"></div></div>
 				</div>
 				<!-- 数据列表【结束】 -->  
-				<!-- <div class="cheng_ershi"></div> -->
 			</div>
 		</div>
 		<!-- 下方的统计表【结束】 -->
+		
+		<script type="text/javascript" src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
+		<script type="text/javascript">
+			//封装时间显示格式为“yyyy-mm-dd hh:ii:ss”
+			$('.datetimePicker').datetimepicker({
+				format: 'yyyy-mm-dd hh:ii:ss', language: 'en', pickDate: true, pickTime: true, hourStep: 1, minuteStep: 15, secondStep: 30, inputMask: true
+			});
+			//加载同源数据的统计图和统计表
+			function showChartAndTable(){
+				var startTime=$("#startTime").val();
+				var endTime=$("#endTime").val();
+				if(startTime>endTime){ alert("开始时间不能大于结束时间"); }
+				else if(startTime==""||endTime==""){ alert("开始时间和结束时间不能为空"); }
+				else{
+					searchChartResult();
+					searchTableResult(1);
+				}
+			}
+			//加载历史数据统计图【开始】
+			function searchChartResult(){
+				var param = {"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val() };
+				var url = "dataAcquisition/historicalCurve";
+				drawingHistoryChart(url, param);
+			}
+			//加载历史数据统计图【结束】
+			//加载历史数据列表【开始】
+			function searchTableResult(pageNo){
+				var param ={
+					"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val(), "state": $("#data-type").val(),
+					"page": pageNo,								//当前页码，相当于pageNum
+					"limit": $("#page-size").val()		//当前页面大小，相当于pageSize
+				};
+				$.ajax({
+					url:"dataAcquisition/historical",
+					type:"post",
+					data: param,
+					dataType: "json",
+					success: function(result){
+						let data = result.data;
+						var size = ($("#page-size").val()<data.length)?($("#page-size").val()):data.length
+						var historyTable = "";
+						//加载表格内容
+						for(let i=0; i<size; i++){
+							historyTable+="<tr>";
+							historyTable+="<td>"+data[i].equipmentName+"</td>";
+							historyTable+="<td>"+data[i].channelNum+"</td>";
+							historyTable+="<td>"+data[i].opticalFiberPosition+"</td>";
+							historyTable+="<td>"+data[i].temperature+"</td>";
+							historyTable+="<td>"+data[i].pd+"</td>";
+							historyTable+="<td>"+data[i].uv+"</td>";
+							historyTable+="<td>"+data[i].message+"</td>";
+							historyTable+="<td>"+data[i].receiveTime+"</td>";
+							historyTable+="</tr>";
+						}
+						$("#history-table-body").empty();
+						$("#history-table-body").append(historyTable);
+						//加载页码
+						totalSize = result.total;
+						pageSize = $("#page-size").val();
+						$("#data-show-pager").html(loadPages(pageSize,totalSize,pageNum));
+						$("#data-show-pager").setActivePage(1);
+					}
+				});
+			}
+			//加载历史数据列表【结束】
+		</script>
 	</body>
 </html>

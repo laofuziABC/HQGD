@@ -2,13 +2,12 @@
  * 整合分页插件
  * laofuzi 2018.12.09
  */
-//设置公共常量【开始】
-var initPageNum=1;
+//设置全局变量【开始】
 var initPageSize=10;
-var pageNum=1;
 var initTotalSize=100;
+var pageNum=1;		
 var totalNum;
-//设置公共常量【结束】
+//设置全局变量【结束】
 //	载入页码区域
 function loadPages(pageSize, totalSize, pageNum){
 	pageSize=(pageSize==null)?initPageSize:pageSize;
@@ -62,10 +61,9 @@ $.fn.extend({
 				else{alert("请输入页码。"); }
 			}
 			//更改pageNum后，局部刷新结果和分页插件
-			if(fParam==1){searchResult(pageNum);}
+			if(fParam==1){searchTableResult(pageNum);}
 			else if(fParam==2){getUserList();}
 			else if(fParam==3){getEquipmentList();}
-			else if(fParam==4){getEquiResultList();}
 			loadPages(null, null, pageNum);
 		});
 	}
