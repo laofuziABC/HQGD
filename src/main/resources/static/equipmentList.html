@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=10">
+<title>设备管理</title>
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="dist/css/ionicons.min.css">
+<link rel="stylesheet" href="dist/css/AdminLTE.css">
+<link rel="stylesheet" href="dist/css/skins/_all-skins.css">
+<link rel="stylesheet" href="vince/css/vince.css">
+<link rel="stylesheet" href="vince/biao/css/font-awesome.min.css">
+<!--[if lt IE 9]>
+  <script src="dist/js/html5shiv.min.js"></script>
+  <script src="dist/js/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+	<div class="fuceng">
+		<div class="fuqu">
+			<div class="fuquzone">
+
+				<div class="fuqulogo"></div>
+				<p class="fuqutitle">
+					设备信息 <span class="fuclose">×</span>
+				</p>
+				<form action="#" id="outerForm">
+					<table id="equiInfoTable">
+						<tr style="display: none;">
+							<td class="info_text">设备ID：</td>
+							<td><input type="text" class="right_input" id="equipmentId"
+								name="equipmentId" /></td>
+							<td class="info_text"></td>
+						</tr>
+						<tr class="normal">
+							<td class="info_text">设备名称<span style="color: red;">*</span>：
+							</td>
+							<td><input type="text" class="right_input"
+								placeholder="请输入设备名称" id="equipmentName" name="equipmentName" /></td>
+							<td class="info_text"></td>
+						</tr>
+						<tr class="normal">
+							<td class="info_text">所属用户<span style="color: red;">*</span>：
+							</td>
+							<td><select class="right_input" id="userId" name="userId">
+							</select></td>
+							<td class="info_text"></td>
+						</tr>
+						<tr class="normal">
+							<td class="info_text">安装地址<span style="color: red;">*</span>：
+							</td>
+							<td><select id="padcode" name="padcode"
+								onchange="getCities();"><option value="0">选择省</option></select>
+								<select id="cadcode" name="cadcode" onchange="getTowns();"><option
+										value="0">选择市</option></select> <select id="adcode" name="adcode"><option
+										value="0">选择区</option></select> <input type="text" class="right_input"
+								id="address" name="address" /></td>
+							<td class="info_text"></td>
+						</tr>
+						<tr class="normal">
+							<td class="info_text">坐标：</td>
+							<td><input type="text" class="right_input" id="lngLat"
+								name="lngLat" /></td>
+							<td class="info_text"></td>
+						</tr>
+						<tr class="normal">
+							<td class="info_text">帧结构<span style="color: red;">*</span>：
+							</td>
+							<td><input type="text" class="right_input" id="frameStru"
+								name="frameStru" /></td>
+							<td class="info_text"></td>
+						</tr>
+
+						<tr class="unnormal">
+							<td>
+								<div class="table-responsive">
+									<table class="table table-bordered table-striped" id="mytable">
+										<thead>
+											<tr>
+												<td>通道号</td>
+												<td>温度上限</td>
+												<td>温度下线</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>CH1</td>
+												<td>60</td>
+												<td>10</td>
+											</tr>
+											<tr>
+												<td>CH2</td>
+												<td>50</td>
+												<td>20</td>
+											</tr>
+										</tbody>
+									</table>
+
+
+								</div>
+								<div class="col-md-12" style="padding-bottom: 2em;">
+									<button class="btn btn-info" id="add">
+										<i class="fa fa-plus"></i> 添加新的表格行
+									</button>
+								</div>
+							</td>
+						</tr>
+					</table>
+
+				</form>
+
+				<div class="fuqusave">
+					<input type="button" onclick="submitEquiInfo();" value="保存">
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="wrapper">
+		<header class="main-header">
+			<a href="#" class="logo"> <span class="logo-mini"> <img
+					src="vince/images/v01.png">
+			</span> <span class="logo-lg"><img src="vince/images/v01.png">项目</span>
+			</a>
+			<nav class="navbar navbar-static-top">
+				<a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+					role="button"></a> <span class="all_title">荧光光纤测温仪温度数据管理平台</span>
+				<div class="navbar-custom-menu">
+					<ul class="nav navbar-nav">
+						<li class="dropdown user user-menu"><a href="#"
+							class="dropdown-toggle" data-toggle="dropdown"> <img
+								src="dist/img/user2-160x160.jpg" class="user-image"
+								alt="User Image"> <span class="hidden-xs">管理员</span>
+						</a>
+							<ul class="dropdown-menu">
+								<li class="user-header"><img
+									src="dist/img/user2-160x160.jpg" class="img-circle"
+									alt="User Image">
+									<p>
+										姓名：管理员 <small>部门：信息部</small>
+									</p></li>
+								<li class="user-footer">
+									<div class="pull-right">
+										<a href="login.html" class="btn btn-default btn-flat">退出系统</a>
+									</div>
+								</li>
+							</ul></li>
+
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<aside class="main-sidebar">
+			<section class="sidebar">
+				<div class="user-panel">
+					<div class="pull-left image">
+						<img src="dist/img/user2-160x160.jpg" class="img-circle"
+							alt="User Image">
+					</div>
+					<div class="pull-left info">
+						<p>当前用户：管理员</p>
+						<p class="menu_time">
+							时间：<span id="nowTime">2016-9-13 16:12:14</span>
+						</p>
+					</div>
+				</div>
+
+				<ul class="sidebar-menu">
+					<li class="header">菜单 MENU</li>
+					<li><a href="index.html"> <i class="fa fa-home"
+							style="font-size: 22px"></i> <span>首页</span>
+					</a></li>
+					<li><a href="ssjc.html"> <i class="fa fa-eye"></i> <span>实时监测</span>
+					</a></li>
+					<li><a href="yxjc.html"> <i class="fa fa-print"></i> <span>运行监测</span>
+					</a></li>
+					<li class="treeview"><a href="#"> <i class="fa fa-sliders"></i>
+							<span>负荷响应</span> <span class="pull-right-container"> <i
+								class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+						<ul class="treeview-menu">
+							<li><a href="xyxgpj.html"><i class="fa fa-bookmark"></i>
+									响应效果评价</a></li>
+							<li><a href="fhxyfx.html"><i class="fa fa-bookmark"></i>
+									负荷响应分析</a></li>
+
+							<li><a href="xyfagl.html"><i class="fa fa-bookmark"></i>
+									响应方案管理</a></li>
+						</ul></li>
+
+					<li><a href="yjgl.html"> <i class="fa fa-bell"></i> <span>预警管理</span>
+					</a></li>
+					<li><a href="equipmentList.html"> <i class="fa fa-gears"></i>
+							<span>设备管理</span>
+					</a></li>
+					<li><a href="kzcl.html"> <i
+							class="fa fa-magnet"></i> <span>控制策略</span>
+					</a></li>
+					<li><a href="xtjc.html"> <i class="fa fa-map"></i> <span>系统集成</span>
+					</a></li>
+					<li><a href="userList.html"> <i class="fa fa-map"></i> <span>用户管理</span>
+					</a></li>
+				</ul>
+			</section>
+		</aside>
+		<div class="content-wrapper">
+			<section class="content-header">
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li class="active">设备管理</li>
+				</ol>
+			</section>
+			<div class="content qqq">
+				<div class="yjgl">
+					<div class="ssjc_right_up">
+						<div class="nei">
+
+							<div class="sbaz_table">
+								<p>
+									<span class="float_left"><span>设备名称：</span><input
+										type="text" id="searchByName"></span> <span
+										class="float_right"> <input type="button"
+										onclick="searchResult();" value="查询" class="in_sub"> <input
+										type="button" onclick="report();" value="导出" class="in_sub">
+									</span>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div class="ssjc_right_bottom">
+							<div class="nei">
+								<p></p>
+								<div class="ssjc_rub_table">
+									<table class="tj_table">
+										<thead>
+											<tr>
+												<td>序号</td>
+												<td>设备ID</td>
+												<td>设备名称</td>
+												<td>通道温度</td>
+												<td>安装地址</td>
+												<td>地区编码</td>
+												<td>经纬度</td>
+												<td>帧结构</td>
+												<td>所属用户</td>
+												<!-- <td>创建时间</td> -->
+												<td>更新时间</td>
+												<td>更新者</td>
+												<td>操作</td>
+											</tr>
+
+										</thead>
+										<tbody>
+										<tbody id="equipmentList"></tbody>
+										<tr>
+											<td colspan="12" class="text_al_rig lindianjia"><input
+												type="submit" value="添加设备" class="anniu lindianjia"></td>
+										</tr>
+										<tr></tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="11" align="center">
+													<!-- 翻页插件 -->
+													<div class="list-page-tail page-down" id="pager"
+														style="margin: auto;"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+								<div class="cheng_ershi"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="main-footer">
+			<div class="pull-right hidden-xs">
+				<b></b>
+			</div>
+			<strong>Copyright &copy; 2014-2016</strong>
+		</footer>
+		<div class="control-sidebar-bg"></div>
+	</div>
+	<script type="text/javascript" src="orig/media/js/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="orig/js/pager/pager.js"></script>
+	<!-- <script type="text/javascript" src="orgi/media/js/jquery.dataTables.js"></script> -->
+	<!-- <script type="text/javascript" src="orgi/media/js/DT_bootstrap.js"></script> -->
+	<!-- 新增通道的JS -->
+	<script src="equipment/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="equipment/js/bootstable.js"></script>
+	<script type="text/javascript">
+		$('#mytable').SetEditable({
+			$addButton : $('#add')
+		});
+	</script>
+	<!-- <script src="orgi/media/js/table-editable.js"></script> -->
+	<script>
+		jQuery(document).ready(function() {
+			getEquipmentList();
+			/*  TableEditable.init(); */
+		});
+		//获取所有设备信息列表
+		function getEquipmentList() {
+			$
+					.ajax({
+						url : "equipment/selectAll",
+						type : "post",
+						dataType : "json",
+						success : function(result) {
+							var data = result.data;
+							var equipList = "";
+							for (let i = 0; i < data.length; i++) {
+								equipList += "<tr>";
+								equipList += "<td>" + (i + 1) + "</td>";
+								equipList += "<td>" + data[i].equipmentId
+										+ "</td>";
+								equipList += "<td>" + data[i].equipmentName
+										+ "</td>";
+								equipList += "<td>"
+										+ "<a class=\"edit\" href=\"#\" >通道温度</a>&nbsp;"
+										+ "</td>";
+								equipList += "<td>" + data[i].address + "</td>";
+								equipList += "<td>" + data[i].adcode + "</td>";
+								equipList += "<td>" + data[i].lngLat + "</td>";
+								equipList += "<td>" + data[i].frameStru
+										+ "</td>";
+								equipList += "<td>" + data[i].userName
+										+ "</td>";
+								/* equipList += "<td>" + data[i].createTime
+										+ "</td>"; */
+								equipList += "<td>" + data[i].updateTime
+										+ "</td>";
+								equipList += "<td>" + data[i].updater + "</td>";
+								equipList += "<td class=\"center\">";
+								/* equipList+="<a class=\"details\" href=\"#\" onclick=\"getChannelDetails('"+data[i].equipmentId+"');\">通道详情</a>&nbsp;"; */
+								equipList += "<a class=\"edit\" href=\"#\" >编辑</a>&nbsp;";
+								equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
+										+ data[i].equipmentId
+										+ "');\">删除</a>&nbsp;";
+								equipList += "</td>";
+								equipList += "</tr>";
+							}
+							$("#equipmentList").html(equipList);
+						}
+					});
+		}
+		//查看设备详情
+		/* function getChannelDetails(param){
+			let title="设备通道详情";
+			let url = "formHtml/equipment/channel-details.html";
+			var params={"width": 700, "height": 800, "equipmentId": param};
+			parent.openModal(title, url, params);
+		} */
+		//编辑或者新增设备信息
+		function getEquiEdit(param) {
+			let title;
+			if (param == null) {
+				title = "新增设备";
+			} else {
+				title = "编辑设备";
+			}
+			let url = "formHtml/equipment/equi-edit.html";
+			var params = {
+				"width" : 700,
+				"height" : 800,
+				"equipmentId" : param
+			};
+			parent.openModal(title, url, params);
+		}
+		//删除一条设备信息
+		function getEquiDelete(param) {
+			if (confirm("确定删除此设备？")) {
+				$.ajax({
+					url : "equipment/delete",
+					type : "post",
+					data : {
+						"equipmentId" : param
+					},
+					dataType : "json",
+					success : function(result) {
+						if (result.success) {
+							alert("设备删除成功！");
+						} else {
+							alert("设备删除失败！");
+						}
+						getEquipmentList();
+					}
+				});
+			}
+		}
+		//提交设备信息表单
+		function submitEquiInfo() {
+			var target = document.getElementsByClassName("chan_info");
+			//封装通道名称、温度最大值、温度最小值
+			var channelInfos = [];
+			for (let i = 1; i < target.length; i++) {
+				var chanParam = $("#list" + i).serialize();
+				channelInfos.push(chanParam);
+			}
+			var params = {
+				/* "equipmentId":$("#equipmentId").val(), */
+				"equipmentName" : $("#equipmentName").val(),
+				"userId" : $("#userId").val(),
+				"userName" : $("#userId option:selected").text(),
+				/* "userName": "temp", */
+				"padcode" : $("#padcode").val() / 10000,
+				"cadcode" : $("#cadcode").val() / 100,
+				"adcode" : $("#adcode").val(),
+				"address" : $("#address").val(),
+				"lngLat" : $("#lngLat").val(),
+				"frameStru" : $("#frameStru").val(),
+				"channelTem" : channelInfos.toString()
+			};
+			alert($("#equipmentId").val() != ""
+					&& $("#equipmentId").val() != null);
+			if ($("#equipmentId").val() != ""
+					|| $("#equipmentId").val() != null) {
+				params.equipmentId = $("#equipmentId").val();
+			}
+			$.ajax({
+				url : "equipment/update",
+				type : "post",
+				data : params,
+				dataType : "json",
+				success : function(result) {
+					if (result.success) {
+						alert("操作成功！");
+					} else {
+						alert("操作失败！");
+					}
+					/* closeModal(); */
+					getEquipmentList();
+				}
+			});
+		}
+		//同过设备名称查询设备
+		function searchResult() {
+			var name = $("#searchByName").val().trim();
+			if (name != "") {
+				$
+						.ajax({
+							url : "equipment/selectByEquipmentName",
+							type : "post",
+							data : {
+								"equipmentName" : name
+							},
+							dataType : "json",
+							success : function(result) {
+								var data = result.data;
+								var equipList = "";
+								for (let i = 0; i < data.length; i++) {
+									equipList += "<tr>";
+									equipList += "<td>" + (i + 1) + "</td>";
+									equipList += "<td>" + data[i].equipmentId
+											+ "</td>";
+									equipList += "<td>" + data[i].equipmentName
+											+ "</td>";
+									equipList += "<td>"
+											+ "<input class=\"lindianjia\" value=\"添加设备\" >"
+											+ "</td>";
+									equipList += "<td>" + data[i].address
+											+ "</td>";
+									equipList += "<td>" + data[i].adcode
+											+ "</td>";
+									equipList += "<td>" + data[i].lngLat
+											+ "</td>";
+									equipList += "<td>" + data[i].frameStru
+											+ "</td>";
+									equipList += "<td>" + data[i].userName
+											+ "</td>";
+
+									/* equipList += "<td>" + data[i].createTime
+																		+ "</td>"; */
+									equipList += "<td>" + data[i].updateTime
+											+ "</td>";
+									equipList += "<td>" + data[i].updater
+											+ "</td>";
+									equipList += "<td class=\"center\">";
+									/* equipList+="<a class=\"details\" href=\"#\" onclick=\"getChannelDetails('"+data[i].equipmentId+"');\">通道详情</a>&nbsp;"; */
+									equipList += "<a class=\"edit\" href=\"#\" >编辑</a>&nbsp;";
+									equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
+											+ data[i].equipmentId
+											+ "');\">删除</a>&nbsp;";
+									equipList += "</td>";
+									equipList += "</tr>";
+								}
+								$("#equipmentList").html(equipList);
+							}
+						});
+			}
+		}
+		//导出
+		function report() {
+			$.ajax({
+				url : "equipment/recordExport",
+				type : "post",
+				/* data : {
+					"path" : param
+				}, */
+				dataType : "json",
+				success : function(result) {
+					if (result.success) {
+						alert("导出成功！");
+					} else {
+						alert("导出失败！");
+					}
+				}
+			});
+		}
+	</script>
+
+	<!-- 框架的js -->
+	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="dist/js/app.min.js"></script>
+	<script src="dist/js/demo.js"></script>
+	<script src="vince/js/nicescroll.js"></script>
+	<script src="vince/js/demo.js"></script>
+
+	<script src="vince/datapick/js/moment.js"></script>
+	<script src="vince/datapick/js/daterangepicker.js"></script>
+	<!-- <script type="text/javascript">
+$(document).ready(function() {
+$('#xuanshi1').daterangepicker({ singleDatePicker: true }, function(start, end, label) {
+console.log(start.toISOString(), end.toISOString(), label);});
+$('#xuanshi2').daterangepicker({ singleDatePicker: true }, function(start, end, label) {
+console.log(start.toISOString(), end.toISOString(), label);});
+});
+</script> -->
+	<div id="sss" style="display: none; height: 200px; width: 200px;"></div>
+	<script src="vince/js/echarts.min.js"></script>
+	<script type="text/javascript">
+		var myChart1 = echarts.init(document.getElementById('sss'));
+		option1 = {
+			series : [ {
+				data : [ 247, 179 ]
+			} ]
+		};
+		myChart1.setOption(option1);
+	</script>
+
+</body>
+</html>
+
