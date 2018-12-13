@@ -8,7 +8,7 @@
 <body>
 	<!-- 侧边栏【开始】 -->
 	<section class="sidebar">
-		<div class="user-panel">
+		<!-- <div class="user-panel">
 			<div class="pull-left image">
 				<img src="dist/img/user2-160x160.jpg" class="img-circle"
 					alt="User Image">
@@ -19,10 +19,10 @@
 					时间：<span id="nowTime">2016-9-13 16:12:14</span>
 				</p>
 			</div>
-		</div>
+		</div> -->
 		<!-- 加载用户菜单【开始】 -->
 		<ul class="sidebar-menu">
-			<li class="header">用户菜单</li>
+			<li class="header"></li>
 			<li class="active"><a href="index.html"><i
 					class="fa fa-home" style="font-size: 22px"></i> <span>首页</span></a></li>
 			<li><a href="#"
@@ -45,14 +45,21 @@
 				</ul></li>
 			<li><a href="yjgl.html"><i class="fa fa-bell"></i> <span>预警管理</span></a>
 			</li>
-			<li><a href="equipmentList.html"> <i class="fa fa-gears"></i>
-					<span>设备管理</span>
+			<li><a href="#"
+				onclick="loadMainContent('childrenHtml/equipment/equipmentList.html');">
+					<i class="fa fa-gears"></i> <span>设备管理</span>
 			</a></li>
 			<li><a href="kzcl.html"><i class="fa fa-magnet"></i> <span>控制策略</span></a>
 			</li>
 			<li><a href="xtjc.html"><i class="fa fa-map"></i> <span>系统集成</span></a>
 			</li>
-			<li><a href="userList.html"> <i class="fa fa-map"></i> <span>用户管理</span>
+			<li><a href="#"
+				onclick="loadMainContent('childrenHtml/user/userList.html');"> <i
+					class="fa fa-map"></i> <span>用户管理</span>
+			</a></li>
+			<li><a href="#"
+				onclick="loadMainContent('childrenHtml/system/system.html');"> <i
+					class="fa fa-map"></i> <span>系统设置</span>
 			</a></li>
 		</ul>
 		<!-- 加载用户菜单【结束】 -->
