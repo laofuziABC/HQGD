@@ -40,6 +40,11 @@
 		<!-- 通道温度【结束】 -->
 		
 		<script type="text/javascript">
+			//初始化页面信息
+			$(function(){ if(equiId!=null){ getEquiData(equiId); } });
+			//加载实时监控曲线图【开始】
+			//加载实时监控曲线图【结束】
+			//异步加载通道温度【开始】
 			function showBlocks(){
 				$.ajax({
 					url:"dataAcquisition/realtime",
@@ -76,6 +81,7 @@
 					}
 				});
 			}
+			//异步加载通道温度【结束】
 		</script>
 	</body>
 </html>

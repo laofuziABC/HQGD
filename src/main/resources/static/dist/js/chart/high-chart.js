@@ -20,19 +20,7 @@ function drawingHistoryChart(url, param){
 				var LegendData = data.channelNumArr;
 				var seriesData = data.channelTemArr;
 				xAxis.categories=data.receiveTime;
-				//组装图表series属性的data格式【开始】
-//				var dataArr=[];
-//				for(let m=0; m<seriesData.length; m++){
-//					var tempArr=seriesData[m];
-//					var array=new Array();
-//					for(let n=0; n<tempArr.length; n++){
-//						array.push(parseInt(tempArr[n]));
-//					}
-//					dataArr.push(array);
-//				}
-				//组装图表series属性的data格式【结束】
 				for(let i=0; i<LegendData.length; i++){
-//					var serie = {name: LegendData[i], data: dataArr[i], type:"line" };
 					var serie = {name: LegendData[i], data: seriesData[i], type:"line" };
 					series.push(serie);
 				}

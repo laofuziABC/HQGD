@@ -15,7 +15,7 @@
 				<!-- 筛选条件【开始】 -->
 				<div class="ssjc_ru_title">
 					<span class="tiaoshijian">开始时间：
-						<input type="text" class="shi datetimePicker" id="startTime" value="1990-01-01 00:00:00"/>
+						<input type="text" class="shi datetimePicker" id="startTime" value="1900-01-01 00:00:00"/>
 						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 					</span>
 					<span class="tiaoshijian">结束时间：
@@ -77,10 +77,13 @@
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 		<script type="text/javascript">
-			//封装时间显示格式为“yyyy-mm-dd hh:ii:ss”
+			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【开始】
 			$('.datetimePicker').datetimepicker({
 				format: 'yyyy-mm-dd hh:ii:ss', language: 'en', pickDate: true, pickTime: true, hourStep: 1, minuteStep: 15, secondStep: 30, inputMask: true
 			});
+			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
+			//初始化页面信息
+			$(function(){ if(equiId!=null){ getEquiData(equiId); } });
 			//加载同源数据的统计图和统计表
 			function showChartAndTable(){
 				var startTime=$("#startTime").val();
@@ -115,21 +118,25 @@
 						let data = result.data;
 						var size = ($("#page-size").val()<data.length)?($("#page-size").val()):data.length
 						var historyTable = "";
-						//加载表格内容
-						for(let i=0; i<size; i++){
-							historyTable+="<tr>";
-							historyTable+="<td>"+data[i].equipmentName+"</td>";
-							historyTable+="<td>"+data[i].channelNum+"</td>";
-							historyTable+="<td>"+data[i].opticalFiberPosition+"</td>";
-							historyTable+="<td>"+data[i].temperature+"</td>";
-							historyTable+="<td>"+data[i].pd+"</td>";
-							historyTable+="<td>"+data[i].uv+"</td>";
-							historyTable+="<td>"+data[i].message+"</td>";
-							historyTable+="<td>"+data[i].receiveTime+"</td>";
-							historyTable+="</tr>";
+						if(size>0){
+							//加载表格内容
+							for(let i=0; i<size; i++){
+								historyTable+="<tr>";
+								historyTable+="<td>"+data[i].equipmentName+"</td>";
+								historyTable+="<td>"+data[i].channelNum+"</td>";
+								historyTable+="<td>"+data[i].opticalFiberPosition+"</td>";
+								historyTable+="<td>"+data[i].temperature+"</td>";
+								historyTable+="<td>"+data[i].pd+"</td>";
+								historyTable+="<td>"+data[i].uv+"</td>";
+								historyTable+="<td>"+data[i].message+"</td>";
+								historyTable+="<td>"+data[i].receiveTime+"</td>";
+								historyTable+="</tr>";
+							}
+						}else{
+							historyTable+="<h3 style='color: red;'>未查找到相关信息！</h3>";
+							$("#chart_history").empty();
 						}
-						$("#history-table-body").empty();
-						$("#history-table-body").append(historyTable);
+						$("#history-table-body").html(historyTable);
 						//加载页码
 						totalSize = result.total;
 						pageSize = $("#page-size").val();
