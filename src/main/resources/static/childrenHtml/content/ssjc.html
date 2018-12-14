@@ -157,7 +157,6 @@
 		}
 		//根据设备主键，获取数据展示信息
 		function getEquiData(param){
-			alert("主键是:"+param);
 			if(param==null){
 				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
 				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
@@ -170,8 +169,6 @@
 				}else{
 					showBlocks();
 				}
-				
-				
 			}
 		}
 	</script>

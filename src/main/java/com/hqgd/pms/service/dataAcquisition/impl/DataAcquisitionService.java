@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -88,7 +89,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("时长为：" + midTime);
 
 		List<String> channelNumArr = new ArrayList<>();// 通道号数组
-		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
+		List<List<Float>> channelTemArr = new ArrayList<List<Float>>();// 通道号温度数数组
 		List<String> tem = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		// List<String> state = new ArrayList<>();
@@ -102,10 +103,13 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("处理数据开始：" + inTime);
 		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
 		for (int i = 0; i < historicalDataList.size(); i++) {
-
 			channelNumArr.add(historicalDataList.get(i).getChannelNum());
 			tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-			channelTemArr.add(tem);
+			//避免空指针的情况下，将List<String>更改为List<Float>
+			if(tem!=null) {
+				List<Float> temInteger = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
+				channelTemArr.add(temInteger);
+			}
 			// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
 			// stateArr.add(state);
 		}
