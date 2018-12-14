@@ -80,6 +80,8 @@
 									class="float_right"> <input type="button"
 									onclick="searchResult();" value="查询" class="in_sub"> <input
 									type="button" onclick="report();" value="导出" class="in_sub">
+									<!-- <input type="button" onclick="getUserList();" value="刷新"
+									class="in_sub"> -->
 								</span>
 							<div class="clear"></div>
 
@@ -137,11 +139,19 @@
 	</footer>
 	<div class="control-sidebar-bg"></div>
 	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<script type="text/javascript" src="orig/js/pager/pager.js"></script>
-	<script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="dist/js/app.min.js"></script>
+	<script src="dist/js/demo.js"></script>
+	<script src="vince/js/nicescroll.js"></script>
+	<script src="vince/js/demo.js"></script>
+
+	<script src="vince/datapick/js/moment.js"></script>
+	<script src="vince/datapick/js/daterangepicker.js"></script>
+	<script type="text/javascript">
 			jQuery(document).ready(function() {
 				getUserList();
 			});
+			var globalResult;
 			//获取用户列表
 			function getUserList(){
 				$.ajax({
@@ -149,6 +159,7 @@
 					type: "post",
 					dataType: "json",
 					success: function(result){
+						globalResult=result;
 						var userlist = "";
 						for(let i=0; i<result.length; i++){
 							userlist += "<tr class=\"\">";
@@ -161,7 +172,8 @@
 							if(result[i].isdel == "N"){userlist += "<td>启用</td>"; }
 							else{userlist += "<td>已删除</td>";}
 							userlist += "<td class=\"center\" >";
-							userlist += "<a class=\" lindianjia\" >编辑</a>&nbsp;";
+							/* userlist += "<a class=\" edit\" onclick=\"getUserEdit('"+result[i].id+"');\">编辑</a>&nbsp;"; */
+							userlist += "<a class=\" edit\" onclick=\"getUserEdit('"+i+"');\">编辑</a>&nbsp;";
 							userlist += "<a class=\"delete\" href=\"#\" onclick=\"getUserDelete('"+result[i].id+"');\">删除</a>&nbsp;";
 							userlist += "<a class=\"resetpsw\" href=\"#\" onclick=\"initUserPassword('"+result[i].id+"');\">密码初始化</a>";
 							userlist += "</td>";
@@ -176,14 +188,14 @@
 					}
 				});
 			}
-			//添加或者编辑用户
+			//编辑用户
 			function getUserEdit(param){
-				let title;
-				if(param == null){ title = "新增用户"; }
-				else{ title = "编辑用户"; }
-				let url = "formHtml/user/user-edit.html";
-				var params = {"width": 600, "height": 350, "userId": param};
-				parent.openModal(title, url, params);
+				$(".fuceng").css({"display":"block"});
+				$("#username").val(globalResult[param].userName);
+				$("#password").val(globalResult[param].password);
+				$("#confirm").val(globalResult[param].password);
+				$("#isdel").val(globalResult[param].isdel);
+				$("#comments").val(globalResult[param].comments);
 			}
 			//删除用户
 			function getUserDelete(param){
@@ -280,7 +292,6 @@
 				var password = $("#password").val();
 				var isdel = $("#isdel").val();
 				var comments = $("#comments").val();
-				debugger;
 				if(password.trim() == ""){
 					alert("密码不能为空！");
 				}else if(confirm.trim() == ""){
@@ -301,22 +312,13 @@
 						success: function(result){
 							if(result.success){ alert("操作成功！"); }
 							else{ alert(result.message); }
-							closeModal();
 							getUserList();
 						}
 					});
+					$(".fuceng").css({"display":"none"})
 				}
 			}
 		</script>
-
-	<script src="bootstrap/js/bootstrap.min.js"></script>
-	<script src="dist/js/app.min.js"></script>
-	<script src="dist/js/demo.js"></script>
-	<script src="vince/js/nicescroll.js"></script>
-	<script src="vince/js/demo.js"></script>
-
-	<script src="vince/datapick/js/moment.js"></script>
-	<script src="vince/datapick/js/daterangepicker.js"></script>
 	<div id="sss" style="display: none; height: 200px; width: 200px;"></div>
 	<script src="vince/js/echarts.min.js"></script>
 </body>

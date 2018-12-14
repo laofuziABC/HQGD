@@ -34,7 +34,7 @@ Bootstable
         onAdd: function() {}     //Called when added a new row
     };
     params = $.extend(defaults, options);
-    this.find('thead tr').append('<th name="buttons"></th>');  //encabezado vacío
+    this.find('thead tr').append('<th name="buttons" value="操作" style="background: #399ad7;color: #f6f6f6;">操作</th>');  //encabezado vacío
     this.find('tbody tr').append(colEdicHtml);
 	var $tabedi = this;   //Read reference to the current table, to resolve "this" here.
     //Process "addButton" parameter
@@ -136,9 +136,9 @@ function rowEdit(but) {  //Inicia la edición de una fila
 }
 function rowElim(but) {  //Elimina la fila actual
     var $row = $(but).parents('tr');  //accede a la fila
-    params.onBeforeDelete($row);
+/*    params.onBeforeDelete($row);*/
     $row.remove();
-    params.onDelete();
+/*    params.onDelete();*/
 }
 function rowAddNew(tabId) {  //Agrega fila a la tabla indicada.
 var $tab_en_edic = $("#" + tabId);  //Table to edit

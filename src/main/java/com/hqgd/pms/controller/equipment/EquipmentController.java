@@ -40,7 +40,7 @@ public class EquipmentController {
 	IUserService userService;
 
 	@RequestMapping(value = "/add")
-	public void add(Model model,EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
+	public void add(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("添加设备开始");
 		User loginUser = (User) request.getSession(true).getAttribute("user");
@@ -66,11 +66,7 @@ public class EquipmentController {
 		log.info("更新设备开始");
 		User loginUser = (User) request.getSession(true).getAttribute("user");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		if(equipmentInfo.getEquipmentId() != null && !equipmentInfo.getEquipmentId().equals("")) {
-			resultMap = equipmentService.update(equipmentInfo, loginUser);
-		}else {
-			resultMap = equipmentService.add(equipmentInfo, loginUser);
-		}
+		resultMap = equipmentService.update(equipmentInfo, loginUser);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("更新设备结束");
@@ -93,12 +89,12 @@ public class EquipmentController {
 	}
 
 	@RequestMapping(value = "/selectByEquipmentName")
-	public void selectByEquipmentName(Model model, String equipmentName, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public void selectByEquipmentName(Model model, String equipmentName, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		log.info("查询设备开始");
 		EquipmentInfo equipmentInfo = equipmentService.selectByEquipmentName(equipmentName);
 		List<EquipmentInfo> equipmentList = new ArrayList<EquipmentInfo>();
-		if(equipmentInfo!=null) {
+		if (equipmentInfo != null) {
 			equipmentList.add(equipmentInfo);
 		}
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -112,10 +108,11 @@ public class EquipmentController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询设备结束");
 	}
-	
+
 	@RequestMapping(value = "/selectAllByUser")
 	@ResponseBody
-	public void selectAllByUser(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void selectAllByUser(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		log.info("查询该用户下所有设备开始");
 		String userName = request.getParameter("userName");
 		List<EquipmentInfo> equipmentList = equipmentService.selectAllByUser(userName);
@@ -130,10 +127,11 @@ public class EquipmentController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询该用户下所有设备结束");
 	}
-	
+
 	@RequestMapping(value = "/selectAllByAddress")
 	@ResponseBody
-	public void selectAllByAddress(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void selectAllByAddress(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		log.info("查询该地区下所有设备开始");
 		String adcode = request.getParameter("adcode");
 		List<EquipmentInfo> equipmentList = equipmentService.selectAllByAddress(adcode);
@@ -148,7 +146,7 @@ public class EquipmentController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询该地区下所有设备结束");
 	}
-	
+
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -165,9 +163,10 @@ public class EquipmentController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询所有设备结束");
 	}
-	
+
 	/**
 	 * 编辑设备信息
+	 * 
 	 * @param model
 	 * @param equipmentId
 	 * @param request
@@ -179,7 +178,7 @@ public class EquipmentController {
 			throws IOException {
 		log.info("查询设备开始");
 		EquipmentInfo equipmentInfo = new EquipmentInfo();
-		if(equipmentId != null && !equipmentId.equals("")) {
+		if (equipmentId != null && !equipmentId.equals("")) {
 			equipmentInfo = equipmentService.select(equipmentId);
 		}
 		List<User> userList = userService.selectAll();
@@ -194,9 +193,9 @@ public class EquipmentController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询设备结束");
 	}
-	
+
 	@RequestMapping("/recordExport")
-	public void recordExport(HttpServletRequest request,HttpServletResponse response) throws Exception {
+	public void recordExport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String path = request.getParameter("path");
 		String classPath = equipmentService.execRecordExport(path);
 		try {
@@ -206,8 +205,8 @@ public class EquipmentController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response.setContentType("application/vnd.ms-excel;charset=gb2312"); 
-//			response.setContentType("application/octet-stream;charset=ISO8859-1");
+			response.setContentType("application/vnd.ms-excel;charset=gb2312");
+			// response.setContentType("application/octet-stream;charset=ISO8859-1");
 			response.setHeader("Content-Disposition", "attachment;filename=" + path);
 			response.addHeader("Pargam", "no-cache");
 			response.addHeader("Cache-Control", "no-cache");
@@ -223,44 +222,50 @@ public class EquipmentController {
 		}
 	}
 
-//	@RequestMapping(value = "/equipmentParam")
-//	public void selectEquipmentParam(Model model, String equipmentId, HttpServletRequest request,
-//			HttpServletResponse response) throws IOException {
-//		log.info("查询设备参数开始 ，equipmentId =  " + equipmentId);
-//		List<EquipmentParam> equipmentParam = equipmentService.selectEquipmentParam(equipmentId);
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("success", Boolean.TRUE.toString());
-//		resultMap.put("resultCode", "00000006");
-//		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-//		resultMap.put("message", "");
-//		resultMap.put("data", equipmentParam);
-//		response.setContentType("application/json; charset=UTF-8");
-//		response.getWriter().write(new Gson().toJson(resultMap));
-//		log.info("查询设备参数结束 ");
-//	}
+	// @RequestMapping(value = "/equipmentParam")
+	// public void selectEquipmentParam(Model model, String equipmentId,
+	// HttpServletRequest request,
+	// HttpServletResponse response) throws IOException {
+	// log.info("查询设备参数开始 ，equipmentId = " + equipmentId);
+	// List<EquipmentParam> equipmentParam =
+	// equipmentService.selectEquipmentParam(equipmentId);
+	// Map<String, Object> resultMap = new HashMap<String, Object>();
+	// resultMap.put("success", Boolean.TRUE.toString());
+	// resultMap.put("resultCode", "00000006");
+	// resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+	// resultMap.put("message", "");
+	// resultMap.put("data", equipmentParam);
+	// response.setContentType("application/json; charset=UTF-8");
+	// response.getWriter().write(new Gson().toJson(resultMap));
+	// log.info("查询设备参数结束 ");
+	// }
 
-//	@RequestMapping(value = "/setParam")
-//	public void setEquipmentParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
-//			HttpServletResponse response) throws IOException {
-//		log.info("设置设备参数开始, request = " + request);
-//		User loginUser = (User) request.getSession(true).getAttribute("user");
-//		Boolean rusult = equipmentService.setEquipmentParam(equipmentParam,loginUser);
-//		if(rusult) {
-//			response.sendRedirect("index.html");
-//		}
-////		response.setContentType("application/json; charset=UTF-8");
-////		response.getWriter().write(new Gson().toJson(rusultMap));
-//		log.info("设置设备参数结束 ");
-//	}
-	
-//	@RequestMapping(value = "/updateParam")
-//	public void updateParam(Model model, EquipmentParam equipmentParam, HttpServletRequest request,
-//			HttpServletResponse response) throws IOException {
-//		log.info("更新设备参数开始, request = " + request);
-//		User loginUser = (User) request.getSession(true).getAttribute("user");
-//		Map<String, Object> rusultMap = equipmentService.updateParam(equipmentParam,loginUser);
-//		response.setContentType("application/json; charset=UTF-8");
-//		response.getWriter().write(new Gson().toJson(rusultMap));
-//		log.info("更新设备参数结束 ");
-//	}
+	// @RequestMapping(value = "/setParam")
+	// public void setEquipmentParam(Model model, EquipmentParam equipmentParam,
+	// HttpServletRequest request,
+	// HttpServletResponse response) throws IOException {
+	// log.info("设置设备参数开始, request = " + request);
+	// User loginUser = (User) request.getSession(true).getAttribute("user");
+	// Boolean rusult =
+	// equipmentService.setEquipmentParam(equipmentParam,loginUser);
+	// if(rusult) {
+	// response.sendRedirect("index.html");
+	// }
+	//// response.setContentType("application/json; charset=UTF-8");
+	//// response.getWriter().write(new Gson().toJson(rusultMap));
+	// log.info("设置设备参数结束 ");
+	// }
+
+	// @RequestMapping(value = "/updateParam")
+	// public void updateParam(Model model, EquipmentParam equipmentParam,
+	// HttpServletRequest request,
+	// HttpServletResponse response) throws IOException {
+	// log.info("更新设备参数开始, request = " + request);
+	// User loginUser = (User) request.getSession(true).getAttribute("user");
+	// Map<String, Object> rusultMap =
+	// equipmentService.updateParam(equipmentParam,loginUser);
+	// response.setContentType("application/json; charset=UTF-8");
+	// response.getWriter().write(new Gson().toJson(rusultMap));
+	// log.info("更新设备参数结束 ");
+	// }
 }
