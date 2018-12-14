@@ -39,7 +39,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
-		log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
+//		log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
 		return realTimeDateList;
 	}
 

@@ -94,8 +94,8 @@
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			getEquiResultList();
 			$('#ssjc_right').load('childrenHtml/data/current.html');
+			getEquiResultList();
 		});
 		//打开筛选区域
 		function showParams(){
@@ -157,12 +157,21 @@
 		}
 		//根据设备主键，获取数据展示信息
 		function getEquiData(param){
-			if(param== null){
+			alert("主键是:"+param);
+			if(param==null){
 				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
 				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
 			}else{
 				equiId=param.trim();
-				showBlocks();
+				if($(".nav-tabs >li:contains('当前')").hasClass("active")){
+					showBlocks();
+				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
+					showChartAndTable();
+				}else{
+					showBlocks();
+				}
+				
+				
 			}
 		}
 	</script>
