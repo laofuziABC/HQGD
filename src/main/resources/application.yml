@@ -29,6 +29,13 @@ spring:
     password: dailihui0..
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#spring:
+#  datasource:
+#    url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=HQTemp_Cloud
+#    username: sa
+#    password: root
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 #    jpa:
 #      database: MYSQL
 #  jpa:
