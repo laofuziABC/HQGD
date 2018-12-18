@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="dist/css/skins/_all-skins.css">
 <link rel="stylesheet" href="vince/css/vince.css">
 <link rel="stylesheet" href="vince/biao/css/font-awesome.min.css">
+<link rel="stylesheet" href="dist/js/pager/pager.css">
 <!--[if lt IE 9]>
   <script src="dist/js/html5shiv.min.js"></script>
   <script src="dist/js/respond.min.js"></script>
@@ -143,6 +144,7 @@
 	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<script src="vince/datapick/js/moment.js"></script>
 	<script src="vince/datapick/js/daterangepicker.js"></script>
+	<script src="dist/js/pager/data_table_pager.js"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			getUserList();
@@ -150,7 +152,6 @@
 		var globalResult;
 		//获取用户列表
 		function getUserList() {
-			var pageNum =1;
 			$.ajax({
 						url : "user/selectAll",
 						type : "post",
@@ -168,16 +169,11 @@
 							for (let i = startIndex; i < endIndex; i++) {
 								userlist += "<tr class=\"\">";
 								userlist += "<td>" + (i + 1) + "</td>";
-								userlist += "<td>" + result[i].userName
-										+ "</td>";
-								userlist += "<td>" + result[i].comments
-										+ "</td>";
-								userlist += "<td>" + result[i].createTime
-										+ "</td>";
-								userlist += "<td>" + result[i].updateTime
-										+ "</td>";
-								userlist += "<td>" + result[i].updater
-										+ "</td>";
+								userlist += "<td>"+result[i].userName+"</td>";
+								userlist += "<td>"+result[i].comments+"</td>";
+								userlist += "<td>"+result[i].createTime+"</td>";
+								userlist += "<td>"+result[i].updateTime+"</td>";
+								userlist += "<td>"+result[i].updater+"</td>";
 								if (result[i].isdel == "N") {
 									userlist += "<td>启用</td>";
 								} else {
@@ -185,22 +181,16 @@
 								}
 								userlist += "<td class=\"center\" >";
 								/* userlist += "<a class=\" edit\" onclick=\"getUserEdit('"+result[i].id+"');\">编辑</a>&nbsp;"; */
-								userlist += "<a class=\" edit\" onclick=\"getUserEdit('"
-										+ i + "');\">编辑</a>&nbsp;";
-								userlist += "<a class=\"delete\" href=\"#\" onclick=\"getUserDelete('"
-										+ result[i].id + "');\">删除</a>&nbsp;";
-								userlist += "<a class=\"resetpsw\" href=\"#\" onclick=\"initUserPassword('"
-										+ result[i].id + "');\">密码初始化</a>";
+								userlist += "<a class=\" edit\" onclick=\"getUserEdit('"+result[i].id+"');\">编辑</a>&nbsp;";
+								userlist += "<a class=\"delete\" href=\"#\" onclick=\"getUserDelete('"+result[i].id+"');\">删除</a>&nbsp;";
+								userlist += "<a class=\"resetpsw\" href=\"#\" onclick=\"initUserPassword('"+result[i].id+"');\">密码初始化</a>";
 								userlist += "</td>";
 								userlist += "</tr>";
-
 							}
 							$("#userList").html(userlist);
-							debugger;
 							//加载页码
-							$("#user-show-pager").html(
-									loadPages(pageSize, totalSize, pageNum));
-							$("#user-show-pager").setActivePage(1);
+							$("#user-show-pager").html(loadPages(pageSize, totalSize, pageNum));
+							$("#user-show-pager").setActivePage(2);
 						}
 					});
 		}
@@ -221,9 +211,7 @@
 				$.ajax({
 					url : "user/delete",
 					type : "post",
-					data : {
-						"userId" : param
-					},
+					data : {"userId" : param},
 					dataType : "json",
 					success : function(result) {
 						if (result.success) {
