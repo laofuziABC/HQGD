@@ -78,7 +78,7 @@
 							<p>
 								<span class="float_left"><span>用户名：</span><input
 									type="text" id="searchByName"></span> <span
-									class="float_right"> <input type="button"
+									class="float_right" style="margin-right: 70%;"> <input type="button"
 									onclick="searchResult();" value="查询" class="in_sub"> <input
 									type="button" onclick="report();" value="导出" class="in_sub">
 									<!-- <input type="button" onclick="getUserList();" value="刷新"
@@ -161,7 +161,7 @@
 							var userlist = "";
 							//设置分页信息——当前为假分页
 							var totalSize = result.length;
-							var pageSize = 5;
+							var pageSize = 15;
 							var totalNum = Math.ceil(totalSize / pageSize);
 							var startIndex = (pageNum - 1) * pageSize;
 							var endIndex = (pageNum * pageSize > totalSize) ? totalSize

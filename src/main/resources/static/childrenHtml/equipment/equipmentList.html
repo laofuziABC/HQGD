@@ -13,9 +13,12 @@
 <link rel="stylesheet" href="dist/css/skins/_all-skins.css">
 <link rel="stylesheet" href="vince/css/vince.css">
 <link rel="stylesheet" href="vince/biao/css/font-awesome.min.css">
+<link rel="stylesheet" href="dist/js/pager/pager.css">
 <style type="text/css">
-  	#equipForm option{background-color: #FFFFFF;}
-  </style>
+#equipForm option {
+	background-color: #FFFFFF;
+}
+</style>
 <!-- <link rel="stylesheet"
 	href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet"
@@ -144,7 +147,7 @@
 							<p>
 								<span class="float_left"><span>设备名称：</span><input
 									type="text" id="searchByName"></span> <span
-									class="float_right"> <input type="button"
+									class="float_right" style="margin-right: 70%;"> <input type="button"
 									onclick="searchResult();" value="查询" class="in_sub"> <input
 									type="button" onclick="report();" value="导出" class="in_sub">
 								</span>
@@ -182,16 +185,12 @@
 									</tr>
 									<tr></tr>
 									</tbody>
-									<tfoot>
-										<tr>
-											<td colspan="11" align="center">
-												<!-- 翻页插件 -->
-												<div class="list-page-tail page-down" id="pager"
-													style="margin: auto;"></div>
-											</td>
-										</tr>
-									</tfoot>
 								</table>
+								<!-- 分页插件 -->
+								<div>
+									<div class="list-page-tail page-down" id="equi-show-pager"
+										style="margin: auto;"></div>
+								</div>
 							</div>
 							<div class="cheng_ershi"></div>
 						</div>
@@ -216,7 +215,7 @@
 		});
 	</script>
 	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<script type="text/javascript" src="orig/js/pager/pager.js"></script>
+	<script src="dist/js/pager/data_table_pager.js"></script>
 	<script>
 		jQuery(document).ready(function() {
 			getEquipmentList();
@@ -235,7 +234,14 @@
 							globalData = result.data;
 							var data = result.data;
 							var equipList = "";
-							for (let i = 0; i < data.length; i++) {
+							//设置分页信息——当前为假分页
+							var totalSize = data.length;
+							var pageSize = 15;
+							var totalNum = Math.ceil(totalSize / pageSize);
+							var startIndex = (pageNum - 1) * pageSize;
+							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
+									: pageNum * pageSize;
+							for (let i = startIndex; i < endIndex; i++) {
 								equipList += "<tr>";
 								equipList += "<td>" + (i + 1) + "</td>";
 								equipList += "<td>" + data[i].equipmentId
@@ -264,6 +270,9 @@
 								equipList += "</tr>";
 							}
 							$("#equipmentList").html(equipList);
+							//加载页码
+							$("#equi-show-pager").html(loadPages(pageSize, totalSize, pageNum));
+							$("#equi-show-pager").setActivePage(3);
 						}
 					});
 		}
