@@ -94,15 +94,10 @@
 					type: "post",
 					data:{"username": username, "password": password, "isRemember": isRemember},
 					dataType:"json",
-					/* async: false, */
 					success: function(data){
 						if(data.success){
 							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName));
 						}
-						/* else{
-							$('.alert-error', $('.login-form')).html(data.message);
-							$('.alert-error', $('.login-form')).show();
-						} */
 					}
 				});
 			}

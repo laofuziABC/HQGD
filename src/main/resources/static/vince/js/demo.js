@@ -105,15 +105,15 @@ fucenggao = (pingHeight-$(".fuqu").height())/2;
 $(".fuqu").css({"top":fucenggao,"left":(pingWidth-640)/2}) }
 // 响应方案管理浮层管理控制
 
-
+//更改说明：暂时隐藏fuquwei相关变量
 // 浮层在窗口变化时候的样式变化
-function sy_fucengresize(fufu){
-fuquwei = fufu[0];
-if (fuquwei.offsetLeft > getInner().width - fuquwei.offsetWidth) {
-fuquwei.style.left = getInner().width - fuquwei.offsetWidth + 'px';}
-if (fuquwei.offsetTop > getInner().height - fuquwei.offsetHeight) {
-fuquwei.style.top = getInner().height - fuquwei.offsetHeight + 'px';}
-}
+//function sy_fucengresize(fufu){
+//fuquwei = fufu[0];
+//if (fuquwei.offsetLeft > getInner().width - fuquwei.offsetWidth) {
+//fuquwei.style.left = getInner().width - fuquwei.offsetWidth + 'px';}
+//if (fuquwei.offsetTop > getInner().height - fuquwei.offsetHeight) {
+//fuquwei.style.top = getInner().height - fuquwei.offsetHeight + 'px';}
+//}
 // 浮层在窗口变化时候的样式变化
 
 
@@ -152,7 +152,7 @@ sy_tabel();
 window.addEventListener('resize',function(){
 resizefun();
 sy_tabel();
-sy_fucengresize($(".fuqu"))
+//sy_fucengresize($(".fuqu"))
 })
 
 
@@ -347,14 +347,14 @@ $(".tree_menu").find(".tree").eq(treeji).css({"display":"block"}).siblings().css
 if(hotoneold){
   var oldCoordsone = hotoneold.coords; 
   var oldCoordstwo = hottwoold.coords; 
-  var shujuone = oldCoordsone;
+//  var shujuone = oldCoordsone;
   var shujutwo = oldCoordstwo; 
   adjust();  }
 window.addEventListener('resize',function(){ adjust(); }) 
 function adjust() {   
   pageHeith=$(".rezone").height();
   pageWidth=$(".rezone").width();
-  var eachone = shujuone.split(",");  
+//  var eachone = shujuone.split(",");  
   var eachtwo = shujutwo.split(",");    
   var bili = pageWidth / 1137;
   for (var i = 0; i < eachone.length; i++) {  
