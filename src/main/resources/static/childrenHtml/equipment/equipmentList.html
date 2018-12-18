@@ -404,11 +404,9 @@
 					},
 					dataType : "json",
 					success : function(result) {
-						if (result.success) {
-							alert("设备删除成功！");
-						} else {
+						if (!result.success) {
 							alert("设备删除失败！");
-						}
+						} 
 						getEquipmentList();
 					}
 				});

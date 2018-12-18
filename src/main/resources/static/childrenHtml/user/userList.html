@@ -214,9 +214,7 @@
 					data : {"userId" : param},
 					dataType : "json",
 					success : function(result) {
-						if (result.success) {
-							alert("删除成功！");
-						} else {
+						if (!result.success) {
 							alert("删除失败！");
 						}
 						getUserList();
