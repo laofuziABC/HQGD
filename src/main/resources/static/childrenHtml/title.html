@@ -44,7 +44,20 @@
 			});
 			//退出登录
 			function loginOut(){
-				alert("退出");
+				if(confirm("退出当前登录？")){
+					$.ajax({
+						url:"hqgd/logout",
+						type:"post",
+						dataType:"json",
+						success: function(result){
+							if(result.result){ 
+								alert("操作成功！");
+								window.location.href="/hqgd";
+							}
+							else{ alert("操作失败！");}
+						}
+					});
+				}
 			}
 		</script>
 	</body>
