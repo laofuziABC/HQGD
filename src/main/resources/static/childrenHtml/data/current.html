@@ -5,10 +5,16 @@
 		<title>当前监测数据</title>
 		<style type="text/css">
 			#channelDiv .tiaoshijian{font-size: 20px;}
-			#channelsInfo td{font-size: 32px; text-align: center; border: 10px solid #21242e;}
+			/* #channelsInfo td{font-size: 32px; text-align: center; border: 10px solid #21242e;}
 			#channelsInfo .green{background-color: #00ff00;}
 			#channelsInfo .yellow{background-color: #ffff00;color: #0000ff;}
-			#channelsInfo .red{background-color: #ff0000;} 
+			#channelsInfo .red{background-color: #ff0000;}  */
+			#channelsInfo td{text-align: center; border: 1px solid #ffffff;}
+			#channelsInfo td .span_left{font-size: 25px;}
+			#channelsInfo td .span_right{font-size: 32px;}
+			#channelsInfo .green{background-color: #21242e; color: #00ff00;}
+			#channelsInfo .yellow{background-color: #21242e;color: #ffff00;}
+			#channelsInfo .red{background-color: #21242e; color: #ff0000;} 
 		</style>
 	</head>
 	<body>
@@ -17,7 +23,7 @@
 			<li><a data-toggle="tab" href="#" onclick="$('#ssjc_right').load('childrenHtml/data/history.html');">历史监测数据</a></li>
 		</ul>
 		<!-- 上方的统计图【开始】 -->
-		<div class="ssjc_right_up">
+		<div class="ssjc_right_up" id="chartDiv">
 			<div class="nei">
 				<div class="ssjc_ru_table">
 					<div class="echarts_ssjc_one" id="chart_current"></div>
@@ -39,7 +45,7 @@
 		</div>
 		<!-- 通道温度【结束】 -->
 		
-		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
 		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 		<script type="text/javascript">
 			//初始化页面信息
@@ -49,15 +55,22 @@
 				var url="dataAcquisition/realtime";
 				var param={"equipmentId": equiId};
 				var result = getCurrentChartData(url, param);
-				let data = result.data;
+				var data = (result==null)?null:(result.data);
 				var channel = "";
-				let num = data.length;
+				let num = (data==null)?0:(data.length);
 				if(num>0){
 					let count = Math.ceil(num/3);
-					//设定高度适应空间【开始】
+					//设定尺寸适应容器【开始】
 					var divH=$(window).height()/3;
-					var trH=divH/count+"px";
-					//设定高度适应空间【结束】
+					var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
+					
+					if(count==1){
+						$("#channelDiv").css({"height":($(window).height())*0.4});
+					}
+					
+					var divW=$(window).width()*0.6;
+					var tdW=divW/3+"px;";
+					//设定尺寸适应容器【结束】
 					for(let i=0; i<count; i++){
 						let startIndex = 3*i;
 						let endIndex = (3*i+3>num)?num:(3*i+3);
@@ -65,10 +78,9 @@
 						//通道结果每三个循环一回，缘于界面展示效果较规整
 						for(let j=startIndex; j<endIndex; j++){
 							let state=parseFloat(data[j].state);
-							if(state=='0'){channel+="<td class='green'>"; }
-							else if(state=='1'){channel+="<td class='yellow'>"; }
-							else{channel+="<td class='red'>"; }
-							channel+=data[j].opticalFiberPosition+"：<b>"+data[j].temperature+"</b></td>";
+							if(state==5){channel+="<td class='green' style='width:"+tdW+"'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].temperature+"</span></td>"; }
+							else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].message+"</span></td>"; }
+							else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].message+"</span></td>"; }
 						}
 						channel+="</tr>";
 					}
@@ -78,58 +90,10 @@
 			}
 			//异步加载通道温度【结束】
 			//绘制温度实时监控表【开始】
-			function showChart(){
-				
-				Highcharts.chart('chart_current', {
-				    chart: { type: 'spline', animation: Highcharts.svg, marginRight: 10, backgroundColor: "#21242e",
-				        events: {load: addPoints /* 新增系列的坐标值 */ }
-				    },
-				    time: { useUTC: false },
-				    title: { text: '设备通道温度实时监测', style: {color: '#ffffff'} },
-				    xAxis: { type: 'datetime', tickPixelInterval: 150, labels: {style: {color: '#ffffff'}} },
-				    yAxis: { title: { text: '温度值（℃）' }, labels: {style: {color: '#ffffff'}} },
-				    tooltip: { shared: true },
-				    legend: { enabled: true },
-				    plotOptions: {spline: { marker: { radius: 1, lineWidth: 1 } } },
-				    colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
-				    series: [
-				    	{name: 'CH1', data: getSeriesData(0) },
-				    	{name: 'CH2', data: getSeriesData(1) },
-				    	{name: 'CH3', data: getSeriesData(2) },
-				    	{name: 'CH4', data: getSeriesData(3) },
-				    	{name: 'CH5', data: getSeriesData(4) },
-				    	{name: 'CH6', data: getSeriesData(5) }
-				    ]
-				});
+			function showCurrentContent(){
+				showBlocks();
+				initCurrentChart();
 			}
-			//随机生成坐标值
-			function getSeriesData(num){
-				var data = [], time = (new Date()).getTime(), i;
-				//只展示60个点（一个小时的数据）
-				for (i = -59; i <= 0; i += 1) {
-					data.push({ x: time + i * 3000, y: Math.random()*10+num });
-				}
-				return data;
-			}
-			//新增系列坐标值
-			function addPoints() {
-                var series = this.series;
-                setInterval(function () {
-                    var x = (new Date()).getTime(), 
-                    	y1 = Math.random()*10, 
-                    	y2 = Math.random()*10+1,
-                    	y3 = Math.random()*10+2,
-                    	y4 = Math.random()*10+3, 
-                    	y5 = Math.random()*10+4,
-                    	y6 = Math.random()*10+5;
-                    series[0].addPoint([x, y1], true, true);
-                    series[1].addPoint([x, y2], true, true);
-                    series[2].addPoint([x, y3], true, true);
-                    series[3].addPoint([x, y4], true, true);
-                    series[4].addPoint([x, y5], true, true);
-                    series[5].addPoint([x, y6], true, true);
-                }, 3000);
-            }
 			//绘制温度实时监控表【结束】
 		</script>
 	</body>

@@ -19,7 +19,7 @@
 						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 					</span>
 					<span class="tiaoshijian">结束时间：
-						<input type="text" class="shi datetimePicker" id="endTime" value="2018-12-13 00:00:00">
+						<input type="text" class="shi datetimePicker" id="endTime" value="2018-12-31 00:00:00">
 						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 					</span>
 					<span>显示内容：
@@ -74,7 +74,7 @@
 		<!-- 下方的统计表【结束】 -->
 		
 		<script type="text/javascript" src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
-		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
 		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 		<script type="text/javascript">
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【开始】
@@ -85,7 +85,7 @@
 			//初始化页面信息
 			$(function(){ if(equiId!=null){ getEquiData(equiId); } });
 			//加载同源数据的统计图和统计表
-			function showChartAndTable(){
+			function showHistoryContent(){
 				var startTime=$("#startTime").val();
 				var endTime=$("#endTime").val();
 				if(startTime>endTime){ alert("开始时间不能大于结束时间"); }
@@ -100,6 +100,7 @@
 				var param = {"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val() };
 				var url = "dataAcquisition/historicalCurve";
 				drawingHistoryChart(url, param);
+				//$("#chart_history").highcharts(historyOption);
 			}
 			//加载历史数据统计图【结束】
 			//加载历史数据列表【开始】

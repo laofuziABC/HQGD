@@ -45,15 +45,6 @@
 	<!-- 侧边栏【结束】 -->
 
 	<script type="text/javascript">
-		$(function() {
-			//获取登录用户，赋值给页面参数
-			var username = parent.getParam("userName");
-			$("#nowUser").text("当前用户：" + username);
-			//获取当前时间current_time，组装格式后，赋值给当前登录时间
-			var c_time = new Date();
-			var time_str = parent.formatDateToString(c_time);
-			$("#nowTime").text(time_str);
-		});
 		//关联菜单和页面
 		function loadMainContent(param) {
 			if (param != null) {
