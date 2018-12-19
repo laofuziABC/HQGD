@@ -371,9 +371,9 @@ textarea {
 .button, .uploader__file-label, .uploader__submit-button {
   background-color: white;
   background-color: transparent;
-  border: 2px solid #ff8598;
+  border: 2px solid #399ad7;
   border-radius: 5px;
-  color: #ff8598;
+  color: #399ad7;
   display: block;
   font-size: 0.8em;
   padding: 1em 2em;
@@ -389,12 +389,12 @@ textarea {
 .uploader__file-label:focus,
 .uploader__file-input:focus + .uploader__file-label,
 .uploader__submit-button:focus {
-  background-color: #ff8598;
+  background-color: #399ad7;
   color: white; }
 
 .button--secondary {
-  color: #ff8598;
-  border-color: #ff8598;
+  color: #399ad7;
+  border-color: #399ad7;
   padding: 0.5em 1em;
   max-width: 15em; }
 
@@ -402,7 +402,7 @@ textarea {
 .button--secondary:active,
 .button--secondary:focus,
 .uploader__file-input:focus + .uploader__file-label {
-  background-color: #ff8598;
+  background-color: #399ad7;
   color: white; }
 
 .button--inline {
@@ -413,7 +413,7 @@ textarea {
   width: 100%;
   text-align: center;
   border-radius: 0;
-  background-color: #ff8598;
+  background-color: #399ad7;
   color: white; }
 
 .button--big-bottom:hover, .uploader__submit-button:hover,
@@ -516,7 +516,7 @@ body {
 
 body {
   font-family: "Source Sans Pro", sans-serif;
-  font-size: 1em; }
+  /* font-size: 1em; */ }
 
 h1,
 h2,
@@ -573,7 +573,7 @@ h6 {
   margin-bottom: 3em; }
 
 .site-title {
-  color: #ff8598;
+  color: #399ad7;
   font-size: 0.8em;
   padding: 1.5em 0;
   text-transform: uppercase; }

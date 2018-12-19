@@ -14,7 +14,7 @@
                 dropZone: $(this),
                 fileTypeWhiteList: ['jpg', 'png', 'jpeg', 'gif', 'pdf'],
                 badFileTypeMessage: '对不起，我们不能接受这种类型的文件。',
-                ajaxUrl: '/ajax/upload',
+                ajaxUrl: '/images/add',
                 testMode: false
             }, options);
 
@@ -179,6 +179,7 @@
             }
 
             function uploadSubmitHandler () {
+            	debugger;
                 if (state.fileBatch.length !== 0) {
                     var data = new FormData();
                     for (var i = 0; i < state.fileBatch.length; i++) {

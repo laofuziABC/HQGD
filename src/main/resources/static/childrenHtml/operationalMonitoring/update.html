@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=10">
-<title>用户管理</title>
+<title>上传</title>
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
@@ -15,10 +15,9 @@
 <link rel="stylesheet" href="vince/biao/css/font-awesome.min.css">
 <link rel="stylesheet" href="dist/js/pager/pager.css">
 
-<link rel="stylesheet" type="text/css" href="vince/css/normalize.css" />
-<link rel="stylesheet" type="text/css" href="vince/css/demo.css">
-<link href="dist/css/styles.imageuploader.css" rel="stylesheet"
-	type="text/css">
+<!-- <link rel="stylesheet" type="text/css" href="vince/css/normalize.css" /> -->
+<!-- <link rel="stylesheet" type="text/css" href="vince/css/demo.css"> -->
+<link rel="stylesheet" href="vince/css/styles.imageuploader.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -57,9 +56,7 @@
 						</form>
 					</div>
 				</section>
-				<div class="fuqusave">
-					<input type="button" onclick="submitUserInfo();" value="保存">
-				</div>
+
 			</div>
 		</div>
 	</div>
@@ -80,7 +77,8 @@
 						<div class="sbaz_table">
 							<p>
 								<span class="float_left"><span>图例名称：</span><input
-									type="text" id="searchByName"></span> <span> 分组： <select
+									type="text" id="searchByName"></span> <span
+									style="margin-top: 20px;"> 分组： <select
 									class="biaoti_select">
 										<option value="1">自定义</option>
 										<option value="2">基本</option>
@@ -89,8 +87,8 @@
 								</span><span class="float_right" style="margin-right: 70%;"> <input
 									type="button" onclick="searchResult();" value="查询"
 									class="in_sub"> <input type="button"
-									onclick="report();" value="导出" class="in_sub"> <!-- <input type="button" onclick="getUserList();" value="刷新"
-									class="in_sub"> -->
+									onclick="report();" value="导出" class="in_sub">
+
 								</span>
 							<div class="clear"></div>
 
@@ -151,7 +149,7 @@
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
-			getImageList();
+			//getImageList();
 		});
 		var globalResult;
 		//获取用户列表
@@ -193,7 +191,7 @@
 						}
 					});
 		}
-		//编辑用户
+		//编辑
 		function getImageEdit(param) {
 			$(".fuceng").css({
 				"display" : "block"
@@ -204,7 +202,7 @@
 			$("#isdel").val(globalResult[param].isdel);
 			$("#comments").val(globalResult[param].comments);
 		}
-		//删除用户
+		//删除
 		function getUserDelete(param) {
 			if (confirm("确定删除此用户？")) {
 				$.ajax({
@@ -225,28 +223,7 @@
 				});
 			}
 		}
-		//用户密码初始化
-		function initUserPassword(param) {
-			userId = param;
-			if (confirm("确认将该用户的密码初始化？")) {
-				$.ajax({
-					url : "user/initUserPassword",
-					type : "post",
-					data : {
-						"userId" : param
-					},
-					dataType : "json",
-					success : function(result) {
-						if (result.success) {
-							alert("密码初始化成功！");
-						} else {
-							alert("密码初始化失败！");
-						}
-						getUserList();
-					}
-				});
-			}
-		}
+
 		//搜索用户
 		function searchResult() {
 			var name = $("#searchByName").val().trim();
@@ -295,72 +272,6 @@
 						});
 			}
 		}
-		//修改用户密码
-		function updatePsw() {
-			let title = "修改密码";
-			let url = "formHtml/user/updatePass.html";
-			var params = {
-				"width" : 600,
-				"height" : 250
-			};
-			parent.openModal(title, url, params);
-
-		}
-		//导出
-		function report() {
-			$.ajax({
-				url : "user/recordExport",
-				type : "post",
-				// data: {"path": param},
-				dataType : "json",
-				success : function(result) {
-					if (result.success) {
-						alert("导出成功！");
-					} else {
-						alert("导出失败！");
-					}
-				}
-			});
-		}
-		//提交用户信息
-		function submitUserInfo() {
-			var username = $("#username").val();
-			var confirm = $("#confirm").val();
-			var password = $("#password").val();
-			var isdel = $("#isdel").val();
-			var comments = $("#comments").val();
-			if (password.trim() == "") {
-				alert("密码不能为空！");
-			} else if (confirm.trim() == "") {
-				alert("请确认密码！");
-			} else if (password != confirm) {
-				alert("输入密码前后不一致，请检查！");
-			} else {
-				$.ajax({
-					url : "user/update",
-					type : "post",
-					data : {
-						"userName" : username,
-						"password" : password,
-						"confirm" : confirm,
-						"isdel" : isdel,
-						"comments" : comments
-					},
-					dataType : "json",
-					success : function(result) {
-						if (result.success) {
-							alert("操作成功！");
-						} else {
-							alert(result.message);
-						}
-						getUserList();
-					}
-				});
-				$(".fuceng").css({
-					"display" : "none"
-				})
-			}
-		}
 	</script>
 	<div id="sss" style="display: none; height: 200px; width: 200px;"></div>
 	<script src="vince/js/echarts.min.js"></script>
@@ -371,7 +282,7 @@
 			var options = {};
 			$('.js-uploader__box').uploader({
 				'selectButtonCopy' : '请选择或拖拽文件',
-				'instructionsCopy' : '你可以选择或拖拽多个文件',
+				'instructionsCopy' : '',
 				'submitButtonCopy' : '上传选择的文件',
 				'furtherInstructionsCopy' : '你可以选择或拖拽更多的文件',
 				'secondarySelectButtonCopy' : '选择更多的文件',

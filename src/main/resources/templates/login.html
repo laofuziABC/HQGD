@@ -86,6 +86,7 @@
 		<!-- 用户登录【开始】 -->
 		<script type="text/javascript">
 			function userLoginIn(){
+				debugger;
 				var username = $("#username").val();
 				var password = $("#password").val();
 				var isRemember = $("input[type='checkbox']").is(':checked');
@@ -96,7 +97,6 @@
 					dataType:"json",
 					success: function(data){
 						if(data.success){
-							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName));
 							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName));
 						}
 					}
