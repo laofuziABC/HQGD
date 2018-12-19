@@ -1,69 +1,72 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	  <meta charset="utf-8">
-	  <meta http-equiv="X-UA-Compatible" content="IE=10">
-	  <title>首页</title>
-	  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-	  <link rel="stylesheet" href="dist/css/ionicons.min.css">
-	  <link rel="stylesheet" href="dist/css/AdminLTE.css">
-	  <link rel="stylesheet" href="dist/css/skins/_all-skins.css">
-	  <link rel="stylesheet" href="vince/css/vince.css">
-	  <link rel="stylesheet" href="vince/biao/css/font-awesome.min.css">
-	  <!--[if lt IE 9]>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=10">
+<title>首页</title>
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="dist/css/ionicons.min.css">
+<link rel="stylesheet" href="dist/css/AdminLTE.css">
+<link rel="stylesheet" href="dist/css/skins/_all-skins.css">
+<link rel="stylesheet" href="vince/css/vince.css">
+<link rel="stylesheet" href="vince/biao/css/font-awesome.min.css">
+<!--[if lt IE 9]>
 	  <script src="dist/js/html5shiv.min.js"></script>
 	  <script src="dist/js/respond.min.js"></script>
 	  <![endif]-->
-	</head>
-	<body class="hold-transition skin-blue sidebar-mini">
-		
-		<div class="wrapper">
-			<!-- 页面顶部标题【开始】 -->
-			<header class="main-header" id="main-header">
-			</header>
-			<!-- 页面顶部标题【结束】 -->
-			<!-- 侧边栏【开始】 -->
-			<aside class="main-sidebar" id="main-sidebar">
-			</aside>
-			<!-- 侧边栏【结束】 -->
-			<!-- 页面内容【开始】 -->
-			<div class="content-wrapper" id="content-wrapper">
-				<!-- 面包屑【开始】 -->
-				<!-- <section class="content-header"> 
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+	<div class="wrapper">
+		<!-- 页面顶部标题【开始】 -->
+		<header class="main-header" id="main-header"> </header>
+		<!-- 页面顶部标题【结束】 -->
+		<!-- 侧边栏【开始】 -->
+		<aside class="main-sidebar" id="main-sidebar"></aside>
+		<!-- 侧边栏【结束】 -->
+		<!-- 页面内容【开始】 -->
+		<div class="content-wrapper" id="content-wrapper">
+			<!-- 面包屑【开始】 -->
+			<!-- <section class="content-header"> 
 					<ol class="breadcrumb">
 						<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
 					</ol>
 				</section> -->
-				<!-- 面包屑【结束】 -->
-				<!-- 主体内容【开始】 -->
-			    <div class="content qqq" style="z-index: 5; width: 100%; height: 95%;">
-			    	<!-- 加载地图 -->
-					<div id="mapContainer" class="map" tabindex="0"></div>
-				</div>
-				<!-- 主体内容【结束】 -->
+			<!-- 面包屑【结束】 -->
+			<!-- 主体内容【开始】 -->
+			<div class="content qqq"
+				style="z-index: 5; width: 100%; height: 95%;">
+				<!-- 加载地图 -->
+				<div id="mapContainer" class="map" tabindex="0"></div>
 			</div>
-			<!-- 页面内容【结束】 -->
-			<footer class="main-footer">
-				<div class="pull-right hidden-xs"><b></b></div>
-				<strong>Copyright &copy; 2014-2016</strong>
-			</footer>
-			<div class="control-sidebar-bg"></div>
+			<!-- 主体内容【结束】 -->
 		</div>
-		
-		<!-- 引入JS文档【开始】 -->
-		<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
-		<script src="bootstrap/js/bootstrap.min.js"></script>
-		<script src="dist/js/app.min.js"></script>
-		
-		<script src="vince/js/nicescroll.js"></script>
-		<script src="dist/js/demo.js"></script>
-		<script src="vince/js/demo.js"></script>
-		
-		<script src="vince/drag/zxx.drag.1.0.js"></script>
-		<!-- 引入JS文档【结束】 -->
-		
-		<script type="text/javascript">
+		<!-- 页面内容【结束】 -->
+		<footer class="main-footer">
+			<div class="pull-right hidden-xs">
+				<b></b>
+			</div>
+			<strong>Copyright &copy; 2014-2016</strong>
+		</footer>
+		<div class="control-sidebar-bg"></div>
+	</div>
+
+	<!-- 引入JS文档【开始】 -->
+	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="dist/js/app.min.js"></script>
+
+	<script src="vince/js/nicescroll.js"></script>
+	<script src="dist/js/demo.js"></script>
+	<script src="vince/js/demo.js"></script>
+
+	<script src="vince/drag/zxx.drag.1.0.js"></script>
+	<!-- 引入JS文档【结束】 -->
+
+	<script type="text/javascript">
 			//获取页面参数【开始】
 			function getParam(string) {
 			    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
@@ -98,20 +101,24 @@
 			}
 			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
 		</script>
-		<!-- 页面地图【开始】 -->
-		<script type="text/javascript"
-			src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer">
+	<!-- 页面地图【开始】 -->
+	<script type="text/javascript"
+		src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer">
 		</script>
-		<script type="text/javascript">
+	<script type="text/javascript">
 			//设定高度适应屏幕高度【开始】
 			var myWindow=document.getElementById("mapContainer");
 			var screenHeight = window.screen.availHeight;
 			var screenWidth = window.screen.availWidth;
-			myWindow.style.height=0.8*screenWidth+"px";
-			myWindow.style.height=0.905*screenHeight+"px";
+			myWindow.style.width=screenWidth+"px";
+			myWindow.style.height=screenHeight+"px";
 			//设定高度适应屏幕高度【结束】
+			var roleId =getParam("roleId");
 			$(function(){
-				$("#main-sidebar").load("childrenHtml/side-menu.html");
+				if(roleId=="1"){
+					$("#main-sidebar").load("childrenHtml/side-menu.html");
+				}else{$("#main-sidebar").load("childrenHtml/side-menu1.html");}
+				
 				$("#main-header").load("childrenHtml/title.html");
 			});
 			var cluster, markers = [];
@@ -209,6 +216,6 @@
 		        }
 		    }
 		</script>
-		<!-- 页面地图【结束】 -->
-	</body>
+	<!-- 页面地图【结束】 -->
+</body>
 </html>
