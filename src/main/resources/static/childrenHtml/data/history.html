@@ -23,13 +23,13 @@
 						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 					</span>
 					<span>显示内容：
-						<select  class="biaoti_select" id="data-type" onchange="searchNewResult();">
+						<select  class="biaoti_select" id="data-type" onchange="searchTableResult(1);">
 							<option value="0" selected="selected">显示所有数据</option>
 							<option value="1">显示异常数据</option>
 						</select>
 					</span>
 					<span >页面大小：
-						<select  class="biaoti_select" id="page-size" onchange="searchNewResult();">
+						<select  class="biaoti_select" id="page-size" onchange="searchTableResult(1);">
 							<option value="10" selected="selected">10条</option>
 							<option value="20">20条</option>
 							<option value="30">30条</option>
@@ -37,7 +37,7 @@
 						</select>
 					</span>
 					<span class="float_right">
-						<input type="button" class="youcecha" onclick="showChartAndTable();" value="查询"  />
+						<input type="button" class="youcecha" onclick="showHistoryContent();" value="查询"  />
 						<input type="button" class="youcecha" onclick="report();" value="导出"  />
 					</span>
 				</div>
@@ -105,6 +105,7 @@
 			//加载历史数据统计图【结束】
 			//加载历史数据列表【开始】
 			function searchTableResult(pageNo){
+				debugger;
 				var param ={
 					"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val(), "state": $("#data-type").val(),
 					"page": pageNo,								//当前页码，相当于pageNum
