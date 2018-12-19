@@ -106,7 +106,7 @@
 			}
 		});
 		//关联标签页与内容
-		var timer = setInterval("showCurrentContent()", 10000);
+		var timer = setInterval("showCurrentContent()", 60000);
 		$(".nav-tabs >li:contains('当前')").addClass("active");
 		$("#contents").load("childrenHtml/data/current.html");
 		function changeTabContent(param){
@@ -114,7 +114,7 @@
 				window.clearInterval(timer);
 				$("#contents").load("childrenHtml/data/history.html");
 			}else if(param==1){
-				timer = setInterval("showCurrentContent()", 10000);
+				timer = setInterval("showCurrentContent()", 60000);
 				$("#contents").load("childrenHtml/data/current.html");
 			}else{
 				window.clearInterval(timer);

@@ -22,14 +22,6 @@ var currentOption={
     time: { useUTC: true },
     title: { text: '设备通道温度实时监测', style: {color: '#ffffff'} },
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
-//    xAxis: {type: 'datetime', labels: {style: {color: '#ffffff'}}, 
-//    	formatter:function(){
-//    		var value=this.value;
-//			if(value.length>10){
-//				return "长度"+this.value+"大";
-//			}
-//		}
-//    }
 };
 var  current_xAxis={type: 'datetime', labels: {style: {color: '#ffffff'}, step: 5} };
 //图表1：绘制设备各通道的历史温度曲线
