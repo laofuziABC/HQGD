@@ -39,8 +39,8 @@
   <update id="initUserPassword">
         UPDATE access_control_user SET PASSWORD = '123456' WHERE ID = #{id}
   </update>
-  <update id="updatePassword">
-        UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE ID = #{id}
+  <update id="updatePassword" parameterType="java.lang.String">
+        UPDATE access_control_user SET PASSWORD = #{arg1} WHERE ID = #{arg0}
   </update>
   <update id="deleteByPrimaryKey">
         UPDATE access_control_user SET ISDEL = 'Y' WHERE ID = #{id}

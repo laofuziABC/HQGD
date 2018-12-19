@@ -125,7 +125,7 @@ public class UserService implements IUserService {
 		User userFind = userMapper.selectByPrimaryKey(Integer.valueOf(id));
 		Map<String, Object> result = authUser(userFind,
 				new User(null, id, password, null, null, null, null, null, null));
-		Boolean authUser = (Boolean) result.get("result");
+		Boolean authUser = (Boolean) result.get("success");
 		if (!authUser) {
 			// 返回用户名或密码错误，修改密码失败
 			result.put("result", false);

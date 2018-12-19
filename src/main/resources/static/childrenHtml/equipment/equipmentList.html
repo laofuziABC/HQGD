@@ -218,21 +218,10 @@
 	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<script>
-		//获取页面参数【开始】
-		function getParam(string) {
-			var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");
-			var l = decodeURI(window.location.search);
-			var r = l.substr(1).match(reg);
-			if (r != null) {
-				var result = decodeURI(r[2]);
-				return unescape(result);
-			}
-		}
-		//获取页面参数【结束】
 		jQuery(document).ready(function() {
 			debugger;
-			var roleId = getParam("roleId");
-			var userName = getParam("userName");
+			var roleId = parent.getParam("roleId");
+			var userName = parent.getParam("userName");
 			if (roleId == "1") {
 				getEquipmentList();
 			} else {

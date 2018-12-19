@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,8 +70,8 @@ public class UserController {
 
 	@RequestMapping(value = "selectByUserName")
 	@ResponseBody
-	public String selectByUserName(Model model, String userName, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public String selectByUserName(Model model, String userName, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		if (userName == null) {
 			return null;
 		} else {
@@ -105,7 +106,8 @@ public class UserController {
 
 	@RequestMapping(value = "updatePassword")
 	@ResponseBody
-	public String updatePassword(String id, String oldpassword, String newPassword) {
+	public String updatePassword(@Param("id") String id, @Param("oldpassword") String oldpassword,
+			@Param("newPassword") String newPassword) {
 
 		Map<String, Object> result = new HashMap<>();
 		result = userService.updatePassword(id, oldpassword, newPassword);

@@ -1,64 +1,167 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>公共头部区域</title>
-	</head>
-	<body>
-		<!-- 页面顶部标题【开始】 -->
-		<a href="#" class="logo" style="height:80px;">
-			<span class="logo-lg" ><img src="vince/images/logo.png"style="height:45px;width: 230px;margin-top: 20px;"></span>
-		</a>
-		<nav class="navbar navbar-static-top" style="height:80px;">
-			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button" style="padding-top: 30px;"></a>
-			<span class="all_title" style="font-size: 30px;line-height: 80px;">变压器绕组荧光光纤测温仪温度数据管理平台</span>
-			<div class="navbar-custom-menu">
-				<ul class="nav navbar-nav">
-					<li class="dropdown user user-menu">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="margin-top: 20px;">
-							<img src="dist/img/user2-160x160.jpg" class="user-image" alt="用户头像">
-							<span class="hidden-xs" id="hidden-xs-username">管理员</span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="user-header">
-								<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="用户头像">
-								<p id="p-username">姓名：管理员<small>部门：信息部</small></p>
-							</li>
-							<li class="user-footer">
-								<div class="pull-right">
-									<a href="#" class="btn btn-default btn-flat" onclick="loginOut();">退出系统</a>
-								</div>
-							</li>
-          				</ul>
-					</li>
-				</ul>
+<head>
+<meta charset="UTF-8">
+<title>公共头部区域</title>
+</head>
+<body>
+
+	<div class="fuceng">
+		<div class="fuqu">
+			<div class="fuquzone">
+
+				<div class="fuqulogo"></div>
+				<p class="fuqutitle">
+					更新密码 <span class="fuclose">×</span>
+				</p>
+				<div class="userform" id="userForm">
+					<form action="#" id="outerForm">
+						<table id="userInfoTable">
+							<tr style="display: none;">
+								<td class="info_text">用户主键：</td>
+								<td><input type="text" class="right_input" value=""
+									id="userId" name="id" /></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
+								<td class="info_text">原始密码<span style="color: red;">*</span>：
+								</td>
+								<td><input type="password" class="right_input" value=""
+									id="oldpassword" name="oldpassword" /></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
+								<td class="info_text">新密码<span style="color: red;">*</span>：
+								</td>
+								<td><input type="password" class="right_input" value=""
+									id="newPassword" name="newPassword" /></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
+								<td class="info_text">确认新密码<span style="color: red;">*</span>：
+								</td>
+								<td><input type="password" class="right_input" value=""
+									id="confirm" /></td>
+								<td class="info_text"></td>
+							</tr>
+						</table>
+					</form>
+					<div class="fuqusave">
+						<input type="button" onclick="submitUserInfo();" value="保存">
+					</div>
+				</div>
 			</div>
-		</nav>
-		<!-- 页面顶部标题【结束】 -->
-		<script type="text/javascript">
-			$(function(){
-				//获取登录用户，赋值给页面参数
-				var username =parent.getParam("userName");
-				$("#hidden-xs-username").text(username);
-				$("#p-username").text("当前用户："+username);
-			});
-			//退出登录
-			function loginOut(){
-				if(confirm("退出当前登录？")){
-					$.ajax({
-						url:"hqgd/logout",
-						type:"post",
-						dataType:"json",
-						success: function(result){
-							if(result.result){ 
-								alert("操作成功！");
-								window.location.href="/hqgd";
-							}
-							else{ alert("操作失败！");}
+		</div>
+	</div>
+
+	<!-- 页面顶部标题【开始】 -->
+	<a href="#" class="logo" style="height: 80px;"> <span
+		class="logo-lg"><img src="vince/images/logo.png"
+			style="height: 45px; width: 230px; margin-top: 20px;"></span>
+	</a>
+	<nav class="navbar navbar-static-top" style="height: 80px;">
+		<a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+			role="button" style="padding-top: 30px;"></a> <span class="all_title"
+			style="font-size: 30px; line-height: 80px;">变压器绕组荧光光纤测温仪温度数据管理平台</span>
+		<div class="navbar-custom-menu">
+			<ul class="nav navbar-nav">
+				<li class="dropdown user user-menu"><a href="#"
+					class="dropdown-toggle" data-toggle="dropdown"
+					style="margin-top: 20px;"> <img
+						src="dist/img/user2-160x160.jpg" class="user-image" alt="用户头像">
+						<span class="hidden-xs" id="hidden-xs-username">管理员</span>
+				</a>
+					<ul class="dropdown-menu">
+						<li class="user-header"><img src="dist/img/user2-160x160.jpg"
+							class="img-circle" alt="用户头像">
+							<p id="p-username">
+								姓名：管理员<small>部门：信息部</small>
+							</p></li>
+						<li class="user-footer">
+							<div class="pull-right">
+								<a href="#" class="btn btn-default btn-flat"
+									onclick="updatePassword();">修改密码</a>
+							</div>
+							<div class="pull-right">
+								<a href="#" class="btn btn-default btn-flat"
+									onclick="loginOut();">退出系统</a>
+							</div>
+						</li>
+					</ul></li>
+			</ul>
+		</div>
+	</nav>
+	<!-- 页面顶部标题【结束】 -->
+	<script type="text/javascript">
+		$(function() {
+			//获取登录用户，赋值给页面参数
+			var username = parent.getParam("userName");
+			$("#hidden-xs-username").text(username);
+			$("#p-username").text("当前用户：" + username);
+		});
+		//退出登录
+		function loginOut() {
+			if (confirm("退出当前登录？")) {
+				$.ajax({
+					url : "hqgd/logout",
+					type : "post",
+					dataType : "json",
+					success : function(result) {
+						if (result.result) {
+							alert("操作成功！");
+							window.location.href = "/hqgd";
+						} else {
+							alert("操作失败！");
 						}
-					});
-				}
+					}
+				});
 			}
-		</script>
-	</body>
+		}
+
+		//修改密码
+		$("#userId").val(parent.getParam("userId"));
+
+		function updatePassword() {
+			$(".fuceng").css({
+				"display" : "block"
+			});
+		}
+		function submitUserInfo() {
+			var param = $("#userForm").serialize();
+			var oldpassword = $("#oldpassword").val();
+			var newPassword = $("#newPassword").val();
+			var confirm = $("#confirm").val();
+			if (oldpassword.trim() == "") {
+				alert("原始密码不能为空！");
+			} else if (newPassword.trim() == "") {
+				alert("新密码不能为空！");
+			} else if (confirm.trim() == "") {
+				alert("请确认密码！");
+			} else if (newPassword != confirm) {
+				alert("新密码确认不一致！");
+			} else {
+				$.ajax({
+					url : "user/updatePassword",
+					type : "post",
+					data : {
+						"id" : parent.getParam("userId"),
+						"oldpassword" : oldpassword,
+						"newPassword" : newPassword,
+					},
+					dataType : "json",
+					success : function(result) {
+						if (result.success) {
+							alert("修改密码成功！");
+						} else {
+							alert("修改密码失败！");
+						}
+					}
+				});
+				$(".fuceng").css({
+					"display" : "none"
+				})
+			}
+		}
+	</script>
+</body>
 </html>
