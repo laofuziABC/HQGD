@@ -18,7 +18,7 @@ var historyOption = {
 var history_xAxis={type: 'datetime', labels: {style: {color: '#ffffff'}} };
 //配置当前数据监测统计图
 var currentOption={
-    chart: { type: 'spline', animation: Highcharts.svg, marginRight: 10, backgroundColor: "#21242e", events: {load: addPoints /* 新增系列的坐标值 */ } },
+	chart: { type: 'spline', backgroundColor: "#21242e" },
     time: { useUTC: true },
     title: { text: '设备通道温度实时监测', style: {color: '#ffffff'} },
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
@@ -40,6 +40,7 @@ function drawingHistoryChart(url, param){
 				}
 				historyOption.xAxis=history_xAxis;
 				historyOption.series = series;
+				$("#chart_history").empty();
 				$("#chart_history").highcharts(historyOption);
 			}
 		});
@@ -65,15 +66,12 @@ function initCurrentChart(){
 			}
 			currentOption.xAxis=current_xAxis;
 			currentOption.series = series;
+			$("#chart_current").empty();
 			$("#chart_current").highcharts(currentOption);
 		}
 	});
 }
-function addPoints() {
-    setInterval(function () {
-    	initCurrentChart();
-    }, 60000);
-}
+
 //获取当前通道最新温度值
 function getCurrentChartData(url, param){
 	var resultMap={};
