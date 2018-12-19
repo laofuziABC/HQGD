@@ -43,7 +43,7 @@
 		          		<div class="ssjc_title" id="ssjc_title">
 		          			<input type="text" class="shi" id="interEqui" placeholder="请输入设备名称或编号"  value="" onfocus="javascript: this.value=null;"/>
 		          			<button  class="btn_first" onclick="searchByEquiName();">查询</button>
-							<button class="btn_first" onclick="showParams();">分组</button>
+							<button class="btn_first" onclick="showParams();" id="yincang">分组</button>
 		          		</div>
 		          		<div class="tree_menu">
 		          			<!-- 查询参数【开始】 -->
@@ -78,10 +78,11 @@
 		          	<div class="col-md-10 ssjc_right" id="ssjc_right">
 		          		<!--标签行【开始】-->
 						<ul class="nav nav-tabs">
-							<li class="active"><a data-toggle="tab" href="#" onclick="$('#ssjc_right').load('childrenHtml/data/current.html');">当前监测数据</a></li>
-							<li><a data-toggle="tab" href="#" onclick="$('#ssjc_right').load('childrenHtml/data/history.html');">历史监测数据</a></li>
+							<li><a data-toggle="tab" href="#" onclick="changeTabContent(1);">当前监测数据</a></li>
+							<li><a data-toggle="tab" href="#" onclick="changeTabContent(2);">历史监测数据</a></li>
 						</ul>
 						<!--标签行【结束】-->
+						<div id="contents"></div>
 					</div>
 		    		<!-- 右侧结果信息【结束】 -->
 				</div>
@@ -96,9 +97,29 @@
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			$('#ssjc_right').load('childrenHtml/data/current.html');
-			getEquiResultList();
+			var roleId = parent.getParam("roleId");
+			if(roleId==1){
+				getEquiResultList();
+			}else{
+				$("#yincang").css({"display":"none"});
+				getEquiByUser();
+			}
 		});
+		//关联标签页与内容
+		var timer = setInterval("showCurrentContent()", 60000);
+		$(".nav-tabs >li:contains('当前')").addClass("active");
+		$("#contents").load("childrenHtml/data/current.html");
+		function changeTabContent(param){
+			if(param==2){
+				window.clearInterval(timer);
+				$("#contents").load("childrenHtml/data/history.html");
+			}else if(param==1){
+				timer = setInterval("showCurrentContent()", 60000);
+				$("#contents").load("childrenHtml/data/current.html");
+			}else{
+				window.clearInterval(timer);
+			}
+		}
 		//打开筛选区域
 		function showParams(){
 			var target = document.getElementById("showParams");

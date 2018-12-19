@@ -6,10 +6,6 @@
 	</head>
 	<body>
       	<!-- 上方的统计图【开始】 -->
-      	<ul class="nav nav-tabs">
-			<li><a data-toggle="tab" href="#" onclick="$('#ssjc_right').load('childrenHtml/data/current.html');">当前监测数据</a></li>
-			<li class="active"><a data-toggle="tab" href="#">历史监测数据</a></li>
-		</ul>
 		<div class="ssjc_right_up">
 			<div class="nei">
 				<!-- 筛选条件【开始】 -->
@@ -51,7 +47,6 @@
 		<!-- 下方的统计表【开始】 -->
 		<div class="ssjc_right_bottom">
 			<div class="nei">
-				
 				<!-- 数据列表【开始】 -->
 				<div class="ssjc_rub_table">
 					<table class="tj_table" border="0">
@@ -83,7 +78,12 @@
 			});
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
 			//初始化页面信息
-			$(function(){ if(equiId!=null){ getEquiData(equiId); } });
+			$(function(){
+				if(equiId!=null){
+					getEquiData(equiId); 
+					window.clearInterval(setInterval("showCurrentContent()", 10000));
+				} 
+			});
 			//加载同源数据的统计图和统计表
 			function showHistoryContent(){
 				var startTime=$("#startTime").val();
@@ -105,7 +105,6 @@
 			//加载历史数据统计图【结束】
 			//加载历史数据列表【开始】
 			function searchTableResult(pageNo){
-				debugger;
 				var param ={
 					"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val(), "state": $("#data-type").val(),
 					"page": pageNo,								//当前页码，相当于pageNum

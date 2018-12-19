@@ -5,10 +5,6 @@
 		<title>当前监测数据</title>
 		<style type="text/css">
 			#channelDiv .tiaoshijian{font-size: 20px;}
-			/* #channelsInfo td{font-size: 32px; text-align: center; border: 10px solid #21242e;}
-			#channelsInfo .green{background-color: #00ff00;}
-			#channelsInfo .yellow{background-color: #ffff00;color: #0000ff;}
-			#channelsInfo .red{background-color: #ff0000;}  */
 			#channelsInfo td{text-align: center; border: 1px solid #ffffff;}
 			#channelsInfo td .span_left{font-size: 25px;}
 			#channelsInfo td .span_right{font-size: 32px;}
@@ -18,10 +14,6 @@
 		</style>
 	</head>
 	<body>
-		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#">当前监测数据</a></li>
-			<li><a data-toggle="tab" href="#" onclick="$('#ssjc_right').load('childrenHtml/data/history.html');">历史监测数据</a></li>
-		</ul>
 		<!-- 上方的统计图【开始】 -->
 		<div class="ssjc_right_up" id="chartDiv">
 			<div class="nei">
@@ -94,9 +86,6 @@
 				showBlocks();
 				initCurrentChart();
 			}
-			 setInterval(function () {
-				 showCurrentContent();
-		    }, 60000);
 			//绘制温度实时监控表【结束】
 		</script>
 	</body>
