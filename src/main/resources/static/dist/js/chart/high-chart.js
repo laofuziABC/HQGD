@@ -22,8 +22,16 @@ var currentOption={
     time: { useUTC: true },
     title: { text: '设备通道温度实时监测', style: {color: '#ffffff'} },
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
+//    xAxis: {type: 'datetime', labels: {style: {color: '#ffffff'}}, 
+//    	formatter:function(){
+//    		var value=this.value;
+//			if(value.length>10){
+//				return "长度"+this.value+"大";
+//			}
+//		}
+//    }
 };
-var  current_xAxis={type: 'datetime', labels: {style: {color: '#ffffff'}} };
+var  current_xAxis={type: 'datetime', labels: {style: {color: '#ffffff'}, step: 5} };
 //图表1：绘制设备各通道的历史温度曲线
 function drawingHistoryChart(url, param){
 	if(url!=null){
@@ -33,11 +41,16 @@ function drawingHistoryChart(url, param){
 				var data = result.data;
 				var LegendData = data.channelNumArr;
 				var seriesData = data.channelTemArr;
-				history_xAxis.categories=data.receiveTime;
+				//设定x轴相关配置
+				var totalCount = seriesData[0].length;
+				
 				for(let i=0; i<LegendData.length; i++){
 					var serie = {name: LegendData[i], data: seriesData[i], type:"spline" };
+					totalCount=(totalCount>seriesData[i].length)?totalCount:(seriesData[i].length);
 					series.push(serie);
 				}
+				history_xAxis.categories=data.receiveTime;
+				history_xAxis.labels.step=Math.floor(totalCount/6);
 				historyOption.xAxis=history_xAxis;
 				historyOption.series = series;
 				$("#chart_history").empty();
@@ -59,11 +72,15 @@ function initCurrentChart(){
 			var data = result.data;
 			var LegendData = data.channelNumArr;
 			var seriesData = data.channelTemArr;
-			current_xAxis.categories=data.receiveTime;
+			//设定x轴相关配置
+			var totalCount = seriesData[0].length;
 			for(let i=0; i<LegendData.length; i++){
 				var serie = {name: LegendData[i], data: seriesData[i], type:"spline" };
+				totalCount=(totalCount>seriesData[i].length)?totalCount:(seriesData[i].length);
 				series.push(serie);
 			}
+			current_xAxis.categories=data.receiveTime;
+			current_xAxis.labels.step=Math.floor(totalCount/6);
 			currentOption.xAxis=current_xAxis;
 			currentOption.series = series;
 			$("#chart_current").empty();
