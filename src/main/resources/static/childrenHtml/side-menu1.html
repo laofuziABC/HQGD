@@ -11,12 +11,12 @@
 		<!-- 加载用户菜单【开始】 -->
 		<ul class="sidebar-menu">
 			<li class="header"></li>
-			<li class="active"><a href="index.html"><i
+			<li class="active"><a href="index.html?roleId=0"><i
 					class="fa fa-home" style="font-size: 22px"></i> <span>首页</span></a></li>
 			<li><a href="#"
 				onclick="loadMainContent('childrenHtml/content/ssjc.html');"><i
 					class="fa fa-eye"></i> <span>实时监测</span></a></li>
-			<li><a href="#" onclick="loadMainContent('yxjc.html');"> <i
+			<li><a href="#" onclick="loadMainContent('childrenHtml/operationalMonitoring/yxjc.html');"> <i
 					class="fa fa-print"></i> <span>运行监测</span>
 			</a></li>
 
@@ -41,6 +41,7 @@
 	<script type="text/javascript">
 		//关联菜单和页面
 		function loadMainContent(param) {
+			debugger;
 			if (param != null) {
 				$("#content-wrapper").load(param);
 			}

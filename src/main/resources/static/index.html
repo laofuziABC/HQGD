@@ -114,10 +114,11 @@
 			myWindow.style.height=screenHeight+"px";
 			//设定高度适应屏幕高度【结束】
 			var roleId =getParam("roleId");
+			debugger;
 			$(function(){
-				if(roleId=="1"){
-					$("#main-sidebar").load("childrenHtml/side-menu.html");
-				}else{$("#main-sidebar").load("childrenHtml/side-menu1.html");}
+				if(roleId=="0"){
+					$("#main-sidebar").load("childrenHtml/side-menu1.html");
+				}else{$("#main-sidebar").load("childrenHtml/side-menu.html");}
 				
 				$("#main-header").load("childrenHtml/title.html");
 			});
