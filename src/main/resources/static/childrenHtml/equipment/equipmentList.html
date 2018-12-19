@@ -147,9 +147,10 @@
 							<p>
 								<span class="float_left"><span>设备名称：</span><input
 									type="text" id="searchByName"></span> <span
-									class="float_right" style="margin-right: 70%;"> <input type="button"
-									onclick="searchResult();" value="查询" class="in_sub"> <input
-									type="button" onclick="report();" value="导出" class="in_sub">
+									class="float_right" style="margin-right: 70%;"> <input
+									type="button" onclick="searchResult();" value="查询"
+									class="in_sub"> <input type="button"
+									onclick="report();" value="导出" class="in_sub">
 								</span>
 							<div class="clear"></div>
 						</div>
@@ -217,8 +218,27 @@
 	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<script>
+		//获取页面参数【开始】
+		function getParam(string) {
+			var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");
+			var l = decodeURI(window.location.search);
+			var r = l.substr(1).match(reg);
+			if (r != null) {
+				var result = decodeURI(r[2]);
+				return unescape(result);
+			}
+		}
+		//获取页面参数【结束】
 		jQuery(document).ready(function() {
-			getEquipmentList();
+			debugger;
+			var roleId = getParam("roleId");
+			var userName = getParam("userName");
+			if (roleId == "1") {
+				getEquipmentList();
+			} else {
+				getEquipmentListByUser(userName);
+			}
+
 		});
 		var globalData;
 		var globalUserList = [];
@@ -271,7 +291,65 @@
 							}
 							$("#equipmentList").html(equipList);
 							//加载页码
-							$("#equi-show-pager").html(loadPages(pageSize, totalSize, pageNum));
+							$("#equi-show-pager").html(
+									loadPages(pageSize, totalSize, pageNum));
+							$("#equi-show-pager").setActivePage(3);
+						}
+					});
+		}
+
+		function getEquipmentListByUser(userName) {
+			$
+					.ajax({
+						url : "equipment/selectAllByUser",
+						type : "post",
+						data : {
+							"userName" : userName
+						},
+						dataType : "json",
+						success : function(result) {
+							globalData = result.data;
+							var data = result.data;
+							var equipList = "";
+							//设置分页信息——当前为假分页
+							var totalSize = data.length;
+							var pageSize = 15;
+							var totalNum = Math.ceil(totalSize / pageSize);
+							var startIndex = (pageNum - 1) * pageSize;
+							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
+									: pageNum * pageSize;
+							for (let i = startIndex; i < endIndex; i++) {
+								equipList += "<tr>";
+								equipList += "<td>" + (i + 1) + "</td>";
+								equipList += "<td>" + data[i].equipmentId
+										+ "</td>";
+								equipList += "<td>" + data[i].equipmentName
+										+ "</td>";
+								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
+										+ i + "')\">详情</a></td>";
+								equipList += "<td>" + data[i].address + "</td>";
+								equipList += "<td>" + data[i].adcode + "</td>";
+								equipList += "<td>" + data[i].lngLat + "</td>";
+								equipList += "<td>" + data[i].frameStru
+										+ "</td>";
+								equipList += "<td>" + data[i].userName
+										+ "</td>";
+								equipList += "<td>" + data[i].updateTime
+										+ "</td>";
+								equipList += "<td>" + data[i].updater + "</td>";
+								equipList += "<td class=\"center\">";
+								equipList += "<a class=\" edit\" onclick=\"getEquiEdit('"
+										+ i + "');\">编辑</a>&nbsp;";
+								equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
+										+ data[i].equipmentId
+										+ "');\">删除</a>&nbsp;";
+								equipList += "</td>";
+								equipList += "</tr>";
+							}
+							$("#equipmentList").html(equipList);
+							//加载页码
+							$("#equi-show-pager").html(
+									loadPages(pageSize, totalSize, pageNum));
 							$("#equi-show-pager").setActivePage(3);
 						}
 					});
@@ -406,7 +484,7 @@
 					success : function(result) {
 						if (!result.success) {
 							alert("设备删除失败！");
-						} 
+						}
 						getEquipmentList();
 					}
 				});
