@@ -24,23 +24,6 @@
 				onclick="loadMainContent('childrenHtml/equipment/equipmentList.html');">
 					<i class="fa fa-gears"></i> <span>设备管理</span>
 			</a></li>
-			<li><a href="#"
-				onclick="loadMainContent('childrenHtml/user/userList.html');"> <i
-					class="fa fa-map"></i> <span>用户管理</span>
-			</a></li>
-			<li class="treeview"><a href="#"> <i class="fa fa-sliders"></i>
-					<span>系统集成</span> <span class="pull-right-container"> <i
-						class="fa fa-angle-left pull-right"></i>
-				</span>
-			</a>
-				<ul class="treeview-menu">
-					<li><a href="#" onclick="network();"> <!--onclick="loadMainContent('childrenHtml/graphicDesign/network.html');"> -->
-							<i class="fa fa-bookmark"></i> <span>图形设计</span>
-					</a></li>
-					<li><a href="#"
-						onclick="loadMainContent('childrenHtml/operationalMonitoring/update.html');"><i
-							class="fa fa-bookmark"></i> 上传图例</a></li>
-				</ul></li>
 
 			<!-- 二维码【开始】 -->
 			<div>
@@ -61,10 +44,6 @@
 			if (param != null) {
 				$("#content-wrapper").load(param);
 			}
-		}
-		function network() {
-			debugger;
-			window.location.href = encodeURI(encodeURI("network.html"));
 		}
 	</script>
 </body>
