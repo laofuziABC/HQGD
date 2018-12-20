@@ -58,8 +58,7 @@ function drawingHistoryChart(url, param){
 
 //图表2：绘制设备实时监测曲线图
 function initCurrentChart(){
-//	var startTime = parent.formatInitDateToString(new Date());
-	var startTime = "1900-01-01 00:00:00";
+	var startTime = parent.formatInitDateToString(new Date());
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/historicalCurve";
 	var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime };
