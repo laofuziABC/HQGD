@@ -10,13 +10,21 @@
 			#channelsInfo td .span_right{font-size: 32px;}
 			#channelsInfo .green{background-color: #21242e; color: #00ff00;}
 			#channelsInfo .yellow{background-color: #21242e;color: #ffff00;}
-			#channelsInfo .red{background-color: #21242e; color: #ff0000;} 
+			#channelsInfo .red{background-color: #21242e; color: #ff0000;}
+			#jk_state{margin-top: 1%; text-align: center;}
 		</style>
 	</head>
 	<body>
 		<!-- 上方的统计图【开始】 -->
 		<div class="ssjc_right_up" id="chartDiv">
 			<div class="nei">
+				<div class="ssjc_ru_title">
+					<span class="float_right">
+						<input type="text" class="biaoti_select" id="jk_state" value="状态：监控中"  />
+						<input type="button" class="youcecha" onclick="javascript: parent.changeTabContent(); $('#jk_state').val('状态：已停止');" value="停止监控"  />
+						<input type="button" class="youcecha" onclick="javascript: parent.changeTabContent(1); $('#jk_state').val('状态：监控中');" value="继续监控"  />
+					</span>
+				</div>
 				<div class="ssjc_ru_table">
 					<div class="echarts_ssjc_one" id="chart_current"></div>
 				</div>

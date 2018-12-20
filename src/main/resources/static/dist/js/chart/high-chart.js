@@ -5,7 +5,7 @@
 //设置公共配置项【开始】
 var legend={enabled: true, backgroundColor: '#ffffff'};
 var tooltip={shared: true};
-var yAxis={title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 50 };
+var yAxis={title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 };
 var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
 var xAxis={type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'},
@@ -58,7 +58,8 @@ function drawingHistoryChart(url, param){
 
 //图表2：绘制设备实时监测曲线图
 function initCurrentChart(){
-	var startTime = parent.formatInitDateToString(new Date());
+//	var startTime = parent.formatInitDateToString(new Date());
+	var startTime = "1900-01-01 00:00:00";
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/historicalCurve";
 	var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime };

@@ -109,12 +109,6 @@
 					AjaxPostForEquiSubList(url,param);
 				}
 			}
-			//监听页面，关闭定时器
-			/* window.onbeforeunload=function(e){
-				window.clearInterval(timer);
-				var e = window.event||e;  
-				e.returnValue=("确定离开当前页面吗？");
-			} */
 		});
 		//关联标签页与内容
 		var timer = setInterval("showCurrentContent()", 60000);
