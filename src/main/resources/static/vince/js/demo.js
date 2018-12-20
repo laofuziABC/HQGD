@@ -178,7 +178,7 @@ pingWidth=document.documentElement.clientWidth;
 add_lin();
 $(".qqq").css({"height":pingHeight-166})
 $(".requtu").css({"maxHeight":pingHeight-298})
-$(".content-wrapper").css({"height":pingHeight-90})
+$(".content-wrapper").css({"height":pingHeight-120})
 $(".sidebar-menu").css({"height":pingHeight-106})
 $(".login").css({"left":(pingWidth-537)/2})
 $(".login").css({"top":(pingHeight-458)/2})
