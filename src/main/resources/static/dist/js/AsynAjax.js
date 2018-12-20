@@ -22,7 +22,7 @@ function POSTAjaxForAlert(url,param,message){
 	}
 }
 //异步获取设备/用户列表
-function POSTAjaxForAllResultList(url,param,mark){
+function POSTAjaxForAllResultList(url,param){
 	var allResultList={};
 	if(url!=null && url!=""){
 		$.ajax({
