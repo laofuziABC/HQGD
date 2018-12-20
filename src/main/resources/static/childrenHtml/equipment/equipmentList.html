@@ -367,17 +367,29 @@
 			$("#add").hide();
 			$("#saves").hide();
 			debugger;
-			var v = JSON.parse(globalData[param].channelTem);
-			var channelTemList = "";
-			for (let i = 0; i < v.length; i++) {
+			var bu = "<td name=\"buttons\"><div class=\"btn-group pull-right\"><button id=\"bEdit\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowEdit(this);\"><span class=\"glyphicon glyphicon-pencil\"> </span></button><button id=\"bElim\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowElim(this);\"><span class=\"glyphicon glyphicon-trash\"> </span></button><button id=\"bAcep\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowAcep(this);\"><span class=\"glyphicon glyphicon-ok\"> </span></button><button id=\"bCanc\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowCancel(this);\"><span class=\"glyphicon glyphicon-remove\"> </span></button></div></td>"
+			if (globalData[param].channelTem != undefined) {
+				var v = JSON.parse(globalData[param].channelTem);
+				var channelTemList = "";
+				for (let i = 0; i < v.length; i++) {
+					channelTemList += "<tr>";
+					channelTemList += "<td>" + v[i][0] + "</td>";
+					channelTemList += "<td>" + v[i][1] + "</td>";
+					channelTemList += "<td>" + v[i][2] + "</td>";
+					channelTemList += bu;
+					channelTemList += "</tr>"
+				}
+				$("#channelTemList").html(channelTemList);
+			} else {
+				var channelTemList = "";
 				channelTemList += "<tr>";
-				channelTemList += "<td>" + v[i][0] + "</td>";
-				channelTemList += "<td>" + v[i][1] + "</td>";
-				channelTemList += "<td>" + v[i][2] + "</td>";
+				channelTemList += "<td></td>";
+				channelTemList += "<td></td>";
+				channelTemList += "<td></td>";
+				channelTemList += bu;
 				channelTemList += "</tr>"
+				$("#channelTemList").html(channelTemList);
 			}
-			$("#channelTemList").html(channelTemList);
-
 		}
 
 		//新增
@@ -424,18 +436,30 @@
 			$("#equipForm").show();
 			$("#add").show();
 			$("#saves").show();
+			debugger;
 			var bu = "<td name=\"buttons\"><div class=\"btn-group pull-right\"><button id=\"bEdit\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowEdit(this);\"><span class=\"glyphicon glyphicon-pencil\"> </span></button><button id=\"bElim\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowElim(this);\"><span class=\"glyphicon glyphicon-trash\"> </span></button><button id=\"bAcep\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowAcep(this);\"><span class=\"glyphicon glyphicon-ok\"> </span></button><button id=\"bCanc\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowCancel(this);\"><span class=\"glyphicon glyphicon-remove\"> </span></button></div></td>"
-			var v = JSON.parse(globalData[param].channelTem);
-			var channelTemList = "";
-			for (let i = 0; i < v.length; i++) {
+			if (globalData[param].channelTem != undefined) {
+				var v = JSON.parse(globalData[param].channelTem);
+				var channelTemList = "";
+				for (let i = 0; i < v.length; i++) {
+					channelTemList += "<tr>";
+					channelTemList += "<td>" + v[i][0] + "</td>";
+					channelTemList += "<td>" + v[i][1] + "</td>";
+					channelTemList += "<td>" + v[i][2] + "</td>";
+					channelTemList += bu;
+					channelTemList += "</tr>"
+				}
+				$("#channelTemList").html(channelTemList);
+			} else {
+				var channelTemList = "";
 				channelTemList += "<tr>";
-				channelTemList += "<td>" + v[i][0] + "</td>";
-				channelTemList += "<td>" + v[i][1] + "</td>";
-				channelTemList += "<td>" + v[i][2] + "</td>";
+				channelTemList += "<td></td>";
+				channelTemList += "<td></td>";
+				channelTemList += "<td></td>";
 				channelTemList += bu;
 				channelTemList += "</tr>"
+				$("#channelTemList").html(channelTemList);
 			}
-			$("#channelTemList").html(channelTemList);
 			if (globalUserList == "") {
 				getUserList();
 			}
@@ -494,21 +518,19 @@
 			channelInfos.splice(0, 1);
 			var res = JSON.stringify(channelInfos);
 			var params = {
-				/* "equipmentId":$("#equipmentId").val(), */
+				"equipmentId":$("#equipmentId").val(),
 				"equipmentName" : $("#equipmentName").val(),
 				"userId" : $("#userId").val(),
 				"userName" : $("#userId option:selected").text(),
-				/* "userName": "temp", */
 				"padcode" : $("#padcode").val() / 10000,
 				"cadcode" : $("#cadcode").val() / 100,
 				"adcode" : $("#adcode").val(),
 				"address" : $("#address").val(),
+				"city" : $("#cadcode option:selected").text(),
 				"lngLat" : $("#lngLat").val(),
 				"frameStru" : $("#frameStru").val(),
 				"channelTem" : res
 			};
-			alert($("#equipmentId").val() != ""
-					&& $("#equipmentId").val() != null);
 			if ($("#equipmentId").val() != ""
 					|| $("#equipmentId").val() != null) {
 				params.equipmentId = $("#equipmentId").val();
@@ -523,10 +545,12 @@
 					success : function(result) {
 						if (result.success) {
 							alert("操作成功！");
+							$(".fuceng").css({
+								"display" : "none"
+							})
 						} else {
-							alert("操作失败！");
+							alert(result.message);
 						}
-						/* closeModal(); */
 						getEquipmentList();
 					}
 				});
@@ -539,17 +563,17 @@
 					success : function(result) {
 						if (result.success) {
 							alert("操作成功！");
+							$(".fuceng").css({
+								"display" : "none"
+							})
 						} else {
-							alert("操作失败！");
+							alert(result.message);
 						}
-						/* closeModal(); */
 						getEquipmentList();
 					}
 				});
 			}
-			$(".fuceng").css({
-				"display" : "none"
-			})
+
 		}
 		//通过设备名称查询设备
 		function searchResult() {

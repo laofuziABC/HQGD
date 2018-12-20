@@ -40,11 +40,11 @@ public class EquipmentController {
 	IUserService userService;
 
 	@RequestMapping(value = "/add")
-	public void add(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request, HttpServletResponse response)
+	public void add(Model model, EquipmentInfo equipmentInfo, String city,HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("添加设备开始");
 		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Map<String, Object> resultMap = equipmentService.add(equipmentInfo, loginUser);
+		Map<String, Object> resultMap = equipmentService.add(equipmentInfo, loginUser,city);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("添加设备结束");
@@ -61,12 +61,12 @@ public class EquipmentController {
 	}
 
 	@RequestMapping(value = "/update")
-	public void update(Model model, EquipmentInfo equipmentInfo, HttpServletRequest request,
+	public void update(Model model, EquipmentInfo equipmentInfo,String city, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		log.info("更新设备开始");
 		User loginUser = (User) request.getSession(true).getAttribute("user");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = equipmentService.update(equipmentInfo, loginUser);
+		resultMap = equipmentService.update(equipmentInfo, loginUser,city);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("更新设备结束");
