@@ -40,7 +40,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
-//		log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
+		// log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
 		return realTimeDateList;
 	}
 
@@ -57,6 +57,19 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("total", total);
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
+		for (DataAcquisitionVo d : historicalDataList) {
+			switch (d.getTemperature()) {
+			case "-437":
+				d.setTemperature("故障1");
+				break;
+			case "3000":
+				d.setTemperature("故障2");
+				break;
+			case "2999.9":
+				d.setTemperature("故障3");
+				break;
+			}
+		}
 		return historicalDataList;
 	}
 
@@ -105,8 +118,8 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		for (int i = 0; i < historicalDataList.size(); i++) {
 			channelNumArr.add(historicalDataList.get(i).getChannelNum());
 			tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-			//避免空指针的情况下，将List<String>更改为List<Float>
-			if(tem!=null) {
+			// 避免空指针的情况下，将List<String>更改为List<Float>
+			if (tem != null) {
 				List<Float> temInteger = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
 				channelTemArr.add(temInteger);
 			}
