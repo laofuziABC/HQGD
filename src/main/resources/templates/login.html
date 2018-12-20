@@ -70,7 +70,7 @@
 						<img src="./login/img/1.png" style="vertical-align:bottom;" alt="验证码"/>
 					</div> -->
 					<!-- <button type="submit" onclick="userLoginIn();" >登<span style="width:20px;"></span>录</button> -->
-					<button onclick="userLoginIn();"><span style="font-size: 16px;">登</span><span style="font-size: 16px;">录</span></button>
+					<button onclick="userLoginIn();return false;"><span style="font-size: 16px;">登</span><span style="font-size: 16px;">录</span></button>
 				</form>
 			</div>
 		</div>
@@ -86,21 +86,23 @@
 		<!-- 用户登录【开始】 -->
 		<script type="text/javascript">
 			function userLoginIn(){
-				debugger;
 				var username = $("#username").val();
 				var password = $("#password").val();
 				var isRemember = $("input[type='checkbox']").is(':checked');
 				$.ajax({
 					url: "hqgd/login",
 					type: "post",
+					async:false, 
 					data:{"username": username, "password": password, "isRemember": isRemember},
 					dataType:"json",
 					success: function(data){
+						debugger;
 						if(data.success){
 							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName));
 						}
 					}
 				});
+				
 			}
 		</script>
 		<!-- 用户登录【结束】 -->
