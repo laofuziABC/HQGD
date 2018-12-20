@@ -178,6 +178,8 @@ pingWidth=document.documentElement.clientWidth;
 add_lin();
 $(".qqq").css({"height":pingHeight-166})
 $(".requtu").css({"maxHeight":pingHeight-298})
+//更改说明：更改 $(".content-wrapper").css({"height":pingHeight-90}) 为 $(".content-wrapper").css({"height":pingHeight-120})			laofuzi 2018.12.20
+//$(".content-wrapper").css({"height":pingHeight-90})
 $(".content-wrapper").css({"height":pingHeight-120})
 $(".sidebar-menu").css({"height":pingHeight-106})
 $(".login").css({"left":(pingWidth-537)/2})
@@ -186,7 +188,9 @@ $(".login").css({"top":(pingHeight-458)/2})
 var linyi = $(".xg_right").height();
 var liner = $(".ssjc_right").height();
 if (linyi<pingHeight-166){linyi = pingHeight-166}
-if (liner<pingHeight-166){liner = pingHeight-166}
+//更改说明：更改 liner = pingHeight-166 为 liner = pingHeight-130			laofuzi 2018.12.20
+//if (liner<pingHeight-166){liner = pingHeight-166}
+if (liner<pingHeight-130){liner = pingHeight-130}
 if(pingWidth>990){
 $(".ssjc_left").css({"minHeight":liner})
 }else{$(".ssjc_left").css({"minHeight":'auto'})}
