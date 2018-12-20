@@ -6,17 +6,17 @@
 </head>
 <body>
 
-	<div class="fuceng">
+	<!-- <div class="fuceng1">
 		<div class="fuqu">
 			<div class="fuquzone">
 
 				<div class="fuqulogo"></div>
 				<p class="fuqutitle">
-					更新密码 <span class="fuclose">×</span>
+					更新密码 <span onclick="closetittle();">×</span>
 				</p>
-				<div class="userform" id="userForm">
+				<div class="passform" id="passForm">
 					<form action="#" id="outerForm">
-						<table id="userInfoTable">
+						<table id="passInfoTable">
 							<tr style="display: none;">
 								<td class="info_text">用户主键：</td>
 								<td><input type="text" class="right_input" value=""
@@ -47,12 +47,12 @@
 						</table>
 					</form>
 					<div class="fuqusave">
-						<input type="button" onclick="submitUserInfo();" value="保存">
+						<input type="button" onclick="submitPassInfo();" value="保存">
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 	<!-- 页面顶部标题【开始】 -->
 	<a href="#" class="logo" style="height: 80px;"> <span
@@ -119,15 +119,18 @@
 		}
 
 		//修改密码
-		$("#userId").val(parent.getParam("userId"));
-
+		function closetittle() {
+			debugger;
+			$(".fuceng1").css({
+				"display" : "none"
+			});
+		}
 		function updatePassword() {
-			$(".fuceng").css({
+			$(".fuceng1").css({
 				"display" : "block"
 			});
 		}
-		function submitUserInfo() {
-			var param = $("#userForm").serialize();
+		function submitPassInfo() {
 			var oldpassword = $("#oldpassword").val();
 			var newPassword = $("#newPassword").val();
 			var confirm = $("#confirm").val();
@@ -155,12 +158,16 @@
 						} else {
 							alert("修改密码失败！");
 						}
+						$(".fuqu").css({
+							"display" : "none"
+						})
 					}
 				});
-				$(".fuceng").css({
-					"display" : "none"
-				})
 			}
+			debugger;
+			$(".fuceng1").css({
+				"display" : "none"
+			});
 		}
 	</script>
 </body>

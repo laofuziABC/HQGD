@@ -95,6 +95,8 @@ $(".fuceng").css({"display":"block"})
 furesize()})
 $(".fuclose").click(function(){
 $(".fuceng").css({"display":"none"})})
+$(".fuclose1").click(function(){
+$(".fuceng1").css({"display":"none"})})
 // 浮层开关
 
 
@@ -340,99 +342,99 @@ $(".tree_menu").find(".tree").eq(treeji).css({"display":"block"}).siblings().css
 // 树形导航
 
 
-// 首页热区自适应--Start
-  var hotoneold = document.getElementById("hotone")
-  var hottwoold = document.getElementById("hottwo")
-
-if(hotoneold){
-  var oldCoordsone = hotoneold.coords; 
-  var oldCoordstwo = hottwoold.coords; 
-//  var shujuone = oldCoordsone;
-  var shujutwo = oldCoordstwo; 
-  adjust();  }
-window.addEventListener('resize',function(){ adjust(); }) 
-function adjust() {   
-  pageHeith=$(".rezone").height();
-  pageWidth=$(".rezone").width();
-//  var eachone = shujuone.split(",");  
-  var eachtwo = shujutwo.split(",");    
-  var bili = pageWidth / 1137;
-  for (var i = 0; i < eachone.length; i++) {  
-  eachone[i] = parseInt(eachone[i]*bili*1).toString();
-  i++;  
-  eachone[i] = parseInt(eachone[i]*bili*1).toString();}  
-  var newPositionone = "";  
-  for (var i = 0; i < eachone.length; i++) {  
-  newPositionone += eachone[i];  
-  if (i < eachone.length - 1) {  
-  newPositionone += ",";  
-  }  }  
-  hotoneold.setAttribute("coords", newPositionone); 
-  for (var i = 0; i < eachtwo.length; i++) {  
-  eachtwo[i] = parseInt(eachtwo[i]*bili*1).toString();
-  i++;  
-  eachtwo[i] = parseInt(eachtwo[i]*bili*1).toString();}  
-  var newPositiontwo = "";  
-  for (var i = 0; i < eachtwo.length; i++) {  
-  newPositiontwo += eachtwo[i];  
-  if (i < eachtwo.length - 1) {  
-  newPositiontwo += ",";  
-  }  }  
-  hottwoold.setAttribute("coords", newPositiontwo);
-// 首页热区信息自适应
-$(".requone").css({"top":pageWidth*0.05,"left":pageWidth*0.67})
-$(".requtwo").css({"top":pageWidth*0.13,"left":pageWidth*0.25})
-$("#hotone").hover(
-function(){$(".requone").css({"display":"block"});
-$(".requone").hover(function(){
-$(".requone").css({"display":"block"})
-},function(){
-$(".requone").css({"display":"none"})})},
-function(){$(".requone").css({"display":"none"})})
-$("#hottwo").hover(
-function(){$(".requtwo").css({"display":"block"});
-$(".requtwo").hover(function(){
-$(".requtwo").css({"display":"block"})
-},function(){
-$(".requtwo").css({"display":"none"})})},
-function(){$(".requtwo").css({"display":"none"})})}  
-$("#hotone").click(function(){top.location.href="ssjc.html";})
-$("#hottwo").click(function(){top.location.href="ssjc.html";})
-
-function adjustjian() {   
-  pageHeith=$(".rezone").height();
-  pageWidth=$(".rezone").width()+180;
-  var each = shuju.split(",");    
-  var bili = pageWidth / 1137;
-  for (var i = 0; i < each.length; i++) {  
-  each[i] = parseInt(each[i]*bili*1).toString();
-  i++;  
-  each[i] = parseInt(each[i]*bili*1).toString();}  
-  var newPosition = "";  
-  for (var i = 0; i < each.length; i++) {  
-  newPosition += each[i];  
-  if (i < each.length - 1) {  
-  newPosition += ",";  
-  }  }  
-  qqq.setAttribute("coords", newPosition); }  
-
-function adjustjia() {   
-  pageHeith=$(".rezone").height();
-  pageWidth=$(".rezone").width()-180;
-  var each = shuju.split(",");    
-  var bili = pageWidth / 1137;
-  for (var i = 0; i < each.length; i++) {  
-  each[i] = parseInt(each[i]*bili*1).toString();
-  i++;  
-  each[i] = parseInt(each[i]*bili*1).toString();}  
-  var newPosition = "";  
-  for (var i = 0; i < each.length; i++) {  
-  newPosition += each[i];  
-  if (i < each.length - 1) {  
-  newPosition += ",";  
-  }  }  
-  qqq.setAttribute("coords", newPosition); }  
-// 首页热区自适应--End
+//// 首页热区自适应--Start
+//  var hotoneold = document.getElementById("hotone")
+//  var hottwoold = document.getElementById("hottwo")
+//
+//if(hotoneold){
+//  var oldCoordsone = hotoneold.coords; 
+//  var oldCoordstwo = hottwoold.coords; 
+////  var shujuone = oldCoordsone;
+//  var shujutwo = oldCoordstwo; 
+//  adjust();  }
+//window.addEventListener('resize',function(){ adjust(); }) 
+//function adjust() {   
+//  pageHeith=$(".rezone").height();
+//  pageWidth=$(".rezone").width();
+////  var eachone = shujuone.split(",");  
+//  var eachtwo = shujutwo.split(",");    
+//  var bili = pageWidth / 1137;
+//  for (var i = 0; i < eachone.length; i++) {  
+//  eachone[i] = parseInt(eachone[i]*bili*1).toString();
+//  i++;  
+//  eachone[i] = parseInt(eachone[i]*bili*1).toString();}  
+//  var newPositionone = "";  
+//  for (var i = 0; i < eachone.length; i++) {  
+//  newPositionone += eachone[i];  
+//  if (i < eachone.length - 1) {  
+//  newPositionone += ",";  
+//  }  }  
+//  hotoneold.setAttribute("coords", newPositionone); 
+//  for (var i = 0; i < eachtwo.length; i++) {  
+//  eachtwo[i] = parseInt(eachtwo[i]*bili*1).toString();
+//  i++;  
+//  eachtwo[i] = parseInt(eachtwo[i]*bili*1).toString();}  
+//  var newPositiontwo = "";  
+//  for (var i = 0; i < eachtwo.length; i++) {  
+//  newPositiontwo += eachtwo[i];  
+//  if (i < eachtwo.length - 1) {  
+//  newPositiontwo += ",";  
+//  }  }  
+//  hottwoold.setAttribute("coords", newPositiontwo);
+//// 首页热区信息自适应
+//$(".requone").css({"top":pageWidth*0.05,"left":pageWidth*0.67})
+//$(".requtwo").css({"top":pageWidth*0.13,"left":pageWidth*0.25})
+//$("#hotone").hover(
+//function(){$(".requone").css({"display":"block"});
+//$(".requone").hover(function(){
+//$(".requone").css({"display":"block"})
+//},function(){
+//$(".requone").css({"display":"none"})})},
+//function(){$(".requone").css({"display":"none"})})
+//$("#hottwo").hover(
+//function(){$(".requtwo").css({"display":"block"});
+//$(".requtwo").hover(function(){
+//$(".requtwo").css({"display":"block"})
+//},function(){
+//$(".requtwo").css({"display":"none"})})},
+//function(){$(".requtwo").css({"display":"none"})})}  
+//$("#hotone").click(function(){top.location.href="ssjc.html";})
+//$("#hottwo").click(function(){top.location.href="ssjc.html";})
+//
+//function adjustjian() {   
+//  pageHeith=$(".rezone").height();
+//  pageWidth=$(".rezone").width()+180;
+//  var each = shuju.split(",");    
+//  var bili = pageWidth / 1137;
+//  for (var i = 0; i < each.length; i++) {  
+//  each[i] = parseInt(each[i]*bili*1).toString();
+//  i++;  
+//  each[i] = parseInt(each[i]*bili*1).toString();}  
+//  var newPosition = "";  
+//  for (var i = 0; i < each.length; i++) {  
+//  newPosition += each[i];  
+//  if (i < each.length - 1) {  
+//  newPosition += ",";  
+//  }  }  
+//  qqq.setAttribute("coords", newPosition); }  
+//
+//function adjustjia() {   
+//  pageHeith=$(".rezone").height();
+//  pageWidth=$(".rezone").width()-180;
+//  var each = shuju.split(",");    
+//  var bili = pageWidth / 1137;
+//  for (var i = 0; i < each.length; i++) {  
+//  each[i] = parseInt(each[i]*bili*1).toString();
+//  i++;  
+//  each[i] = parseInt(each[i]*bili*1).toString();}  
+//  var newPosition = "";  
+//  for (var i = 0; i < each.length; i++) {  
+//  newPosition += each[i];  
+//  if (i < each.length - 1) {  
+//  newPosition += ",";  
+//  }  }  
+//  qqq.setAttribute("coords", newPosition); }  
+//// 首页热区自适应--End
 
 
 
