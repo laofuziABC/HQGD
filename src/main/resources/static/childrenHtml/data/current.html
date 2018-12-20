@@ -5,8 +5,8 @@
 		<title>当前监测数据</title>
 		<style type="text/css">
 			#channelDiv .tiaoshijian{font-size: 20px;}
-			#channelsInfo td{text-align: center; border: 1px solid #ffffff;}
-			#channelsInfo td .span_left{font-size: 25px;}
+			#channelsInfo td{text-align: left; border: 1px solid #ffffff;}
+			#channelsInfo td .span_left{font-size: 25px; color: #ffffff;}
 			#channelsInfo td .span_right{font-size: 32px;}
 			#channelsInfo .green{background-color: #21242e; color: #00ff00;}
 			#channelsInfo .yellow{background-color: #21242e;color: #ffff00;}
@@ -53,13 +53,17 @@
 				if(num>0){
 					let count = Math.ceil(num/3);
 					//设定尺寸适应容器【开始】
-					var divH=$(window).height()/3;
-					var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-					
+					//如果只有一排，让容器填充下方位置
 					if(count==1){
 						$("#channelDiv").css({"height":($(window).height())*0.4});
+						//如果只有一个通道，无需设定宽度自适应
+						/* if(num<3){
+							var tdWidth = $(window).width()*0.2;
+							$(".ssjc_rub_table").css({"width": tdWidth*num});
+						} */
 					}
-					
+					var divH=$(window).height()/3;
+					var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
 					var divW=$(window).width()*0.6;
 					var tdW=divW/3+"px;";
 					//设定尺寸适应容器【结束】
