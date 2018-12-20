@@ -64,7 +64,13 @@
 		}
 		function network() {
 			debugger;
-			window.location.href = encodeURI(encodeURI("childrenHtml/graphicDesign/network.html"));
+			//window.location.href = encodeURI(encodeURI("childrenHtml/graphicDesign/network.html"));
+			var screenHeight = window.screen.availHeight;
+			var screenWidth = window.screen.availWidth;
+			var iWidth=screenWidth*0.875+"px;";
+			var iHeight=screenHeight*0.82+"px;";
+			var iframe="<iframe style='width: "+iWidth+"height: "+iHeight+"' src='childrenHtml/graphicDesign/network.html'></iframe>";
+			$("#content-wrapper").html(iframe);
 		}
 	</script>
 </body>
