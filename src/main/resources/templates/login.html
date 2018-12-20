@@ -92,11 +92,10 @@
 				$.ajax({
 					url: "hqgd/login",
 					type: "post",
-					async:false, 
+					//async:false, 
 					data:{"username": username, "password": password, "isRemember": isRemember},
 					dataType:"json",
 					success: function(data){
-						debugger;
 						if(data.success){
 							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName));
 						}
