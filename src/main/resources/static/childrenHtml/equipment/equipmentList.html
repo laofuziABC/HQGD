@@ -463,7 +463,8 @@
 			if (globalUserList == "") {
 				getUserList();
 			}
-			var userHtml = "<option value=\"\" checked>—请选择用户—</option>";
+			var userHtml = "<option value=\"\" checked>"
+					+ globalData[param].userName + "</option>";
 			for (let i = 0; i < globalUserList.length; i++) {
 				userHtml += "<option style=\"color:#E20A0A;\" value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
@@ -471,7 +472,7 @@
 			$("#userId").html(userHtml);
 			$("#equipmentId").val(globalData[param].equipmentId);
 			$("#equipmentName").val(globalData[param].equipmentName);
-			$("#userId").val(globalData[param].userName);
+			/* $("#userId").val(globalData[param].userName); */
 			$("#address").val(globalData[param].address);
 			$("#adcode").val(globalData[param].adcode);
 			$("#lngLat").val(globalData[param].lngLat);
@@ -518,7 +519,7 @@
 			channelInfos.splice(0, 1);
 			var res = JSON.stringify(channelInfos);
 			var params = {
-				"equipmentId":$("#equipmentId").val(),
+				"equipmentId" : $("#equipmentId").val(),
 				"equipmentName" : $("#equipmentName").val(),
 				"userId" : $("#userId").val(),
 				"userName" : $("#userId option:selected").text(),
