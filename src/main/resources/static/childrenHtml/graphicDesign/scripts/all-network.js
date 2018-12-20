@@ -99,8 +99,9 @@ App = {
         } else {
             p = new Ext.Panel({
                 region: 'north',
-                //height: 60,
-                html: '<h1 id="pageh1">Web网络拓扑图 - 多比图形控件演示<h1>'
+                // height: 60,
+               // html: '<h1 id="pageh1">图形设计<h1>'
+                html: ''
             });
         }
 
