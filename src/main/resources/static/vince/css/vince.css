@@ -43,7 +43,7 @@ li{list-style: none}
 .echarts_sy_four{height: 100%;width: 100%;background: #fff;}
 .nei_active{width:50px;}
 .logo-lg img{padding-right: 5px;}
-.all_title{font-size: 22px;color: #fff;line-height: 45px;padding-left: 10px;}
+
 .sy_xypm .nei{width:100%;position:relative;}
 @media (max-width: 992px) {.sy_louxin,.sy_xycl,.sy_yhxypm{margin-top:10px;}.sy_louxin .nei{margin-left:0;margin-right:0}	.sy_xycl .nei,.sy_yhxypm .nei{margin-left:0;margin-right:0}	.sy_yhxypm .nei {border-left:none;}	}
 

@@ -1966,7 +1966,7 @@ pre code {
     width: 25%;
   }
   .col-md-2 {
-    width: 16.66666667%;
+    width: 15%;
   }
   .col-md-1 {
     width: 8.33333333%;
@@ -4164,12 +4164,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-.navbar {
+/* .navbar {
   position: relative;
   min-height: 50px;
   margin-bottom: 20px;
   border: 1px solid transparent;
-}
+}2018-12-25注释，和Adminil.css重复 */
 @media (min-width: 768px) {
   .navbar {
     border-radius: 4px;
