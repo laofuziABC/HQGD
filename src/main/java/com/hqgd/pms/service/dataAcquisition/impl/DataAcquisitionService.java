@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -238,5 +239,46 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		header.add("联系方式");
 		return header;
 	}
+
+	/**
+	 * 获取指定时间段（自开机到当前时间）内的数据点的集合
+	 * channelList: 所有通道名称集合
+	 * 各个通道在具体时间段内的采集温度集合
+	 * 各个通道在集体时间段内的采集时间集合
+	 */
+	@Override
+	public Map<String, Object> getPeriodDataByQuery(QueryParametersVo queryVo) {
+		String equipmentId = queryVo.getEquipmentId().trim();
+		if(equipmentId==null || equipmentId.equals("")){
+			return null;
+		}else {
+			Map<String, Object> param = new HashMap<>();
+			param.put("equipmentId", queryVo.getEquipmentId());
+			param.put("startTime", queryVo.getStartTime());
+			param.put("endTime", queryVo.getEndTime());
+			//使用Map集合封装所有结果
+			Map<String, Object> result = new HashMap<String, Object>();
+			long inTime = System.currentTimeMillis();
+			//获取所有通道集合
+			List<String> channelList = dataAcquisitionVoMapper.selectAllChannels(equipmentId);
+			List<Date> timeList = dataAcquisitionVoMapper.selectAllTimestamp(param);
+			//循环封装各个通道的数据集合
+			List<List> dataList = new ArrayList<List>();
+			for(int i=0; i<channelList.size(); i++) {
+				String channelNum=channelList.get(i).trim();
+				param.put("channelNum", channelNum);
+				List<DataAcquisitionVo> chanDataList = dataAcquisitionVoMapper.selectChanDataByParam(param);
+				dataList.add(chanDataList);
+			}
+			long outTime = System.currentTimeMillis();
+			log.info("查询数据SQL时长为：" + (outTime-inTime));
+			result.put("channelList", channelList);
+			result.put("timeList", timeList);
+			result.put("dataList", dataList);
+			return result;
+		}
+	}
+	
+	
 
 }

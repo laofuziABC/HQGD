@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=10">
-  <title>实时监测</title>
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" type="text/css" href="dist/js/pager/pager.css" />
-  <link rel="stylesheet" type="text/css" href="dist/js/datetime/datetimepicker.css" />
-  <style type="text/css">
-  	#ssjc_title{margin: 10px;}
-  	#ssjc_title button, #userParam button, #addrParam button{height: 26px; text-align: center; line-height: 26px; width: 17%; 
-					color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
-	#ssjc_title input, #userParam input{line-height: 24px; background: none; position: relative; z-index: 2; color: #fff;
-					border: 1px solid #fff; height: 24px; margin-top: 8px; width: 60%; }
-	#showParams{margin: 0; padding: 0;}
-	#showParams .btn_first{margin:10px 0 10px 10%; height: 26px; text-align: center; line-height: 26px; width: 35%; 
-					color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
-  	#addrParam select{width: 25%; background-color: #21242e; font-size: 12px;}
-  	#result_list_div{margin: 10px 0 0 0; padding: 0;}
-  	#equipResultList li{width: 95%; margin: 5px auto; text-align: center;}
-  	#equipResultList li span:hover{width: 100%; font-size: 18px; background-color: #399ad7; cursor: pointer;}
-  	#equipResultList li span{width: 100%;}
-  	#sub-list-pager{margin: 10px auto;}
-  </style>
-</head>
-<body class="hold-transition skin-blue sidebar-mini">
-	<div>
-	    <div>
+	<head>
+	  <meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=10">
+	  <title>实时监测</title>
+	  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	  <link rel="stylesheet" type="text/css" href="dist/js/pager/pager.css" />
+	  <link rel="stylesheet" type="text/css" href="dist/js/datetime/datetimepicker.css" />
+	  <style type="text/css">
+	  	#ssjc_title{margin: 10px;}
+	  	#ssjc_title button, #userParam button, #addrParam button{height: 26px; text-align: center; line-height: 26px; width: 17%; 
+						color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
+		#ssjc_title input, #userParam input{line-height: 24px; background: none; position: relative; z-index: 2; color: #fff;
+						border: 1px solid #fff; height: 24px; margin-top: 8px; width: 135px; }
+		#showParams{margin: 0; padding: 0;}
+		#showParams .btn_first{margin:10px 0 10px 10%; height: 26px; text-align: center; line-height: 26px; width: 35%; 
+						color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
+	  	#addrParam select{width: 25%; background-color: #21242e; font-size: 12px;}
+	  	#result_list_div{margin: 10px 0 0 0; padding: 0;}
+	  	#equipResultList li{width: 95%; margin: 5px auto; text-align: center;}
+	  	#equipResultList li span:hover, #equipResultList li span:checked{width: 100%; font-size: 18px; background-color: #399ad7; cursor: pointer;}
+	  	#equipResultList li span{width: 100%;}
+	  	#sub-list-pager{margin: 10px auto;}
+	  </style>
+	</head>
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="qqq">
 			<div class="ssjc">
 				<div class="row">
 		          	<!-- 左侧设备筛选结果【开始】 -->
@@ -79,117 +78,114 @@
 				</div>
 	    	</div>
 	    </div>
-	</div>
-
-	<script src="vince/js/nicescroll.js"></script>
-	<script src="vince/js/demo.js"></script>
-	<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
-	<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
-	<script type="text/javascript" src="dist/js/AllCities.js"></script>
-	<script type="text/javascript">
-		$(function(){
-			var roleId = parent.getParam("roleId");
-			if(roleId==1){
-				getEquiResultList();
-			}else{
-				$("#yincang").css({"display":"none"});
+		
+		<script src="vince/js/nicescroll.js"></script>
+		<script src="vince/js/demo.js"></script>
+		<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
+		<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
+		<script type="text/javascript" src="dist/js/AllCities.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				var roleId = parent.getParam("roleId");
+				if(roleId==1){
+					getEquiResultList();
+				}else{
+					$("#yincang").css({"display":"none"});
+					var url="equipment/selectAllByUser";
+					var username=parent.getParam("userName");
+					var param={"userName":username};
+					if(username != ""){
+						AjaxPostForEquiSubList(url,param);
+					}
+				}
+			});
+			//关联标签页与内容，控制定时器
+			$(".nav-tabs >li:contains('当前')").addClass("active");
+			$("#contents").load("childrenHtml/data/current.html");
+			function changeTabContent(param){
+				if(param==2){
+					$("#contents").load("childrenHtml/data/history.html");
+				}else if(param==1){
+					$("#contents").load("childrenHtml/data/current.html");
+				}
+				/* else{
+					$("#contents").load("childrenHtml/data/current.html");
+				} */
+			}
+			//打开筛选区域
+			function showParams(){
+				var target = document.getElementById("showParams");
+				if(target.style.display=="none"){ target.style.display="block"; }
+				else{ target.style.display="none"; }
+			}
+			//根据按钮选择展示模块——用户/地区
+			function showParamBox(param){
+				if(param==1){ userParam.style.display="block"; addrParam.style.display="none"; }
+				else if(param==2){ addrParam.style.display="block"; userParam.style.display="none"; getProvs(); getCities(); getTowns(); }
+				else{ userParam.style.display="none"; addrParam.style.display="none"; }
+			}
+			var userParam=document.getElementById("userParam");
+			var addrParam=document.getElementById("addrParam");
+			//加载设备列表
+			function getEquiResultList(){
+				var url="equipment/selectAll";
+				AjaxPostForEquiSubList(url,null);
+			}
+			//根据设备名称查询设备列表
+			function searchByEquiName(){
+				var url="equipment/selectByEquipmentName";
+				var equiName=$("#interEqui").val().trim();
+				var param={"equipmentName":equiName};
+				if(equiName != ""){
+					AjaxPostForEquiSubList(url,param);
+				}else{
+					getEquiResultList();
+				}
+			}
+			//根据用户，查找关联设备
+			function getEquiByUser(){
 				var url="equipment/selectAllByUser";
-				var username=parent.getParam("userName");
+				var username=$("#interUser").val().trim();
 				var param={"userName":username};
 				if(username != ""){
 					AjaxPostForEquiSubList(url,param);
 				}
+				userParam.style.display="none";
+				addrParam.style.display="none";
 			}
-		});
-		//关联标签页与内容
-		var timer = setInterval("showCurrentContent()", 60000);
-		$(".nav-tabs >li:contains('当前')").addClass("active");
-		$("#contents").load("childrenHtml/data/current.html");
-		function changeTabContent(param){
-			if(param==2){
-				window.clearInterval(timer);
-				$("#contents").load("childrenHtml/data/history.html");
-			}else if(param==1){
-				timer = setInterval("showCurrentContent()", 60000);
-				$("#contents").load("childrenHtml/data/current.html");
-			}else{
-				window.clearInterval(timer);
-			}
-		}
-		//打开筛选区域
-		function showParams(){
-			var target = document.getElementById("showParams");
-			if(target.style.display=="none"){ target.style.display="block"; }
-			else{ target.style.display="none"; }
-		}
-		//根据按钮选择展示模块——用户/地区
-		function showParamBox(param){
-			if(param==1){ userParam.style.display="block"; addrParam.style.display="none"; }
-			else if(param==2){ addrParam.style.display="block"; userParam.style.display="none"; getProvs(); getCities(); getTowns(); }
-			else{ userParam.style.display="none"; addrParam.style.display="none"; }
-		}
-		var userParam=document.getElementById("userParam");
-		var addrParam=document.getElementById("addrParam");
-		//加载设备列表
-		function getEquiResultList(){
-			var url="equipment/selectAll";
-			AjaxPostForEquiSubList(url,null);
-		}
-		//根据设备名称查询设备列表
-		function searchByEquiName(){
-			var url="equipment/selectByEquipmentName";
-			var equiName=$("#interEqui").val().trim();
-			var param={"equipmentName":equiName};
-			if(equiName != ""){
-				AjaxPostForEquiSubList(url,param);
-			}else{
-				getEquiResultList();
-			}
-		}
-		//根据用户，查找关联设备
-		function getEquiByUser(){
-			var url="equipment/selectAllByUser";
-			var username=$("#interUser").val().trim();
-			var param={"userName":username};
-			if(username != ""){
-				AjaxPostForEquiSubList(url,param);
-			}
-			userParam.style.display="none";
-			addrParam.style.display="none";
-		}
-		//根据地区，查找区内设备
-		function getEquiByAddr(){
-			var p = $("#prov-select").val();
-			var c = $("#city-select").val();
-			var t = $("#town-select").val();
-			var areaCode;
-			if(p==0){
-				alert("未选择地区");
-			}else{
-				areaCode=((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
-				var url="equipment/selectAllByAddress";
-				var param={"adcode":areaCode};
-				AjaxPostForEquiSubList(url,param);
-			}
-			userParam.style.display="none";
-			addrParam.style.display="none";
-		}
-		//根据设备主键，获取数据展示信息
-		function getEquiData(param){
-			if(param==null){
-				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
-				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
-			}else{
-				equiId=param.trim();
-				if($(".nav-tabs >li:contains('当前')").hasClass("active")){
-					showCurrentContent();
-				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
-					showHistoryContent();
+			//根据地区，查找区内设备
+			function getEquiByAddr(){
+				var p = $("#prov-select").val();
+				var c = $("#city-select").val();
+				var t = $("#town-select").val();
+				var areaCode;
+				if(p==0){
+					alert("未选择地区");
 				}else{
-					showCurrentContent();
+					areaCode=((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
+					var url="equipment/selectAllByAddress";
+					var param={"adcode":areaCode};
+					AjaxPostForEquiSubList(url,param);
+				}
+				userParam.style.display="none";
+				addrParam.style.display="none";
+			}
+			//根据设备主键，获取数据展示信息
+			function getEquiData(param){
+				if(param==null){
+					$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
+					$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
+				}else{
+					equiId=param.trim();
+					if($(".nav-tabs >li:contains('当前')").hasClass("active")){
+						showCurrentContent();
+					}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
+						showHistoryContent();
+					}else{
+						showCurrentContent();
+					}
 				}
 			}
-		}
-	</script>
-</body>
+		</script>
+	</body>
 </html>

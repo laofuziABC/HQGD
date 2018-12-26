@@ -102,6 +102,22 @@ public class DataAcquisitionController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		
 	}
+	
+	/**
+	 * 获取指定时间段（自开机到当前时间）内的数据点的集合
+	 * 用于初始化当前监控图表
+	 * 2018.12.25
+	 */
+	@RequestMapping("/periodDate")
+	public void getPeriodDate(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		long inTime = System.currentTimeMillis();
+		Map<String, Object> resultList = dataAcquisitionService.getPeriodDataByQuery(queryVo);
+		long outTime = System.currentTimeMillis();
+		log.info("接口访问时长为：" + (outTime-inTime));
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultList));
+	}
 
 	/**
 	 * 描述： 作者：姚绒 日期：2018年11月20日 下午1:53:51 @param data @return @throws Exception

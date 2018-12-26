@@ -29,19 +29,8 @@
 		<!-- 侧边栏【结束】 -->
 		<!-- 页面内容【开始】 -->
 		<div class="content-wrapper" id="content-wrapper">
-			<!-- 面包屑【开始】 -->
-			<!-- <section class="content-header"> 
-					<ol class="breadcrumb">
-						<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-					</ol>
-				</section> -->
-			<!-- 面包屑【结束】 -->
-			<!-- 主体内容【开始】 -->
-			<div
-				style="z-index: 5; width: 100%; height: 95%;">
-				<!-- 加载地图 -->
-				<div id="mapContainer" class="map" tabindex="0"></div>
-			</div>
+			<!-- 主体内容【开始】 --><!-- 首页加载地图 -->
+			<div id="mapContainer" class="map" tabindex="0"></div>
 			<!-- 主体内容【结束】 -->
 		</div>
 		<!-- 页面内容【结束】 -->
@@ -49,7 +38,7 @@
 			<div class="pull-right hidden-xs">
 				<b></b>
 			</div>
-			<strong>Copyright &copy; 2018-2028</strong>
+			<strong>Copyright &copy; 2014-2016</strong>
 		</footer>
 		<div class="control-sidebar-bg"></div>
 	</div>
@@ -67,40 +56,40 @@
 	<!-- 引入JS文档【结束】 -->
 
 	<script type="text/javascript">
-			//获取页面参数【开始】
-			function getParam(string) {
-			    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
-			    var l = decodeURI(window.location.search);
-			    var r = l.substr(1).match(reg);
-			    if (r != null){
-			    	var result = decodeURI(r[2]);
-			    	return unescape(result);
-			    }
-			}
-			//获取页面参数【结束】
-			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
-			function formatDateToString(param){
-				var y = param.getFullYear();
-				var M = unifiedFormat(param.getMonth()+1);
-				var d = unifiedFormat(param.getDate());
-				var H = unifiedFormat(param.getHours());
-				var m = unifiedFormat(param.getMinutes());
-				var s = unifiedFormat(param.getSeconds());
-				var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
-				return result;
-			}
-			function formatInitDateToString(param){
-				var y = param.getFullYear();
-				var M = unifiedFormat(param.getMonth()+1);
-				var d = unifiedFormat(param.getDate());
-				var result = y+"-"+M+"-"+d+" 00:00:00";
-				return result;
-			}
-			function unifiedFormat(param){
-				return (param<10)?("0"+param):param;
-			}
-			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
-		</script>
+		//获取页面参数【开始】
+		function getParam(string) {
+		    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
+		    var l = decodeURI(window.location.search);
+		    var r = l.substr(1).match(reg);
+		    if (r != null){
+		    	var result = decodeURI(r[2]);
+		    	return unescape(result);
+		    }
+		}
+		//获取页面参数【结束】
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
+		function formatDateToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var H = unifiedFormat(param.getHours());
+			var m = unifiedFormat(param.getMinutes());
+			var s = unifiedFormat(param.getSeconds());
+			var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
+			return result;
+		}
+		function formatInitDateToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var result = y+"-"+M+"-"+d+" 00:00:00";
+			return result;
+		}
+		function unifiedFormat(param){
+			return (param<10)?("0"+param):param;
+		}
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
+	</script>
 	<!-- 页面地图【开始】 -->
 	<script type="text/javascript"
 		src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer">
@@ -186,37 +175,37 @@
 		                gridSize: 80,
 		                renderCluserMarker: _renderCluserMarker
 		            });
-		        } else if (tag == 1) {//自定义图标
-		            var sts = [{
-		                url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
-		                size: new AMap.Size(32, 32),
-		                offset: new AMap.Pixel(-16, -16)
-		            }, {
-		                url: "https://a.amap.com/jsapi_demos/static/images/green.png",
-		                size: new AMap.Size(32, 32),
-		                offset: new AMap.Pixel(-16, -16)
-		            }, {
-		                url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
-		                size: new AMap.Size(36, 36),
-		                offset: new AMap.Pixel(-18, -18)
-		            }, {
-		                url: "https://a.amap.com/jsapi_demos/static/images/red.png",
-		                size: new AMap.Size(48, 48),
-		                offset: new AMap.Pixel(-24, -24)
-		            }, {
-		                url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
-		                size: new AMap.Size(48, 48),
-		                offset: new AMap.Pixel(-24, -24)
-		            }];
-		            cluster = new AMap.MarkerClusterer(map, markers, {
-		                styles: sts,
-		                gridSize: 80
-		            });
-		        } else {//默认样式
-		            cluster = new AMap.MarkerClusterer(map, markers, {gridSize: 80});
-		        }
-		    }
-		</script>
+		        }else if (tag == 1) {//自定义图标
+	            var sts = [{
+	                url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+	                size: new AMap.Size(32, 32),
+	                offset: new AMap.Pixel(-16, -16)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/green.png",
+	                size: new AMap.Size(32, 32),
+	                offset: new AMap.Pixel(-16, -16)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
+	                size: new AMap.Size(36, 36),
+	                offset: new AMap.Pixel(-18, -18)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/red.png",
+	                size: new AMap.Size(48, 48),
+	                offset: new AMap.Pixel(-24, -24)
+	            }, {
+	                url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
+	                size: new AMap.Size(48, 48),
+	                offset: new AMap.Pixel(-24, -24)
+	            }];
+	            cluster = new AMap.MarkerClusterer(map, markers, {
+	                styles: sts,
+	                gridSize: 80
+	            });
+	        } else {//默认样式
+	            cluster = new AMap.MarkerClusterer(map, markers, {gridSize: 80});
+	        }
+	    }
+	</script>
 	<!-- 页面地图【结束】 -->
 </body>
 </html>

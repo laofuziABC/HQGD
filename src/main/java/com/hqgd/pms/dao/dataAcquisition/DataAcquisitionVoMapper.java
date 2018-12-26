@@ -1,5 +1,6 @@
 package com.hqgd.pms.dao.dataAcquisition;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +28,11 @@ public interface DataAcquisitionVoMapper {
 	Integer selectTotal(Map<String, Object> param);
 
 	List<DataAcquisitionVo> recordExport(Map<String, Object> param);
+
+	List<Date> selectAllTimestamp(Map<String, Object> param);
+	
+	List<String> selectAllChannels(String equipmentId);
+
+	List<DataAcquisitionVo> selectChanDataByParam(Map<String, Object> param);
+	
 }

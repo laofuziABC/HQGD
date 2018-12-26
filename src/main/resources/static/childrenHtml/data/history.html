@@ -68,6 +68,7 @@
 		</div>
 		<!-- 下方的统计表【结束】 -->
 		
+		<script src="vince/js/nicescroll.js"></script>
 		<script type="text/javascript" src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
 		<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
 		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
@@ -100,7 +101,6 @@
 				var param = {"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val() };
 				var url = "dataAcquisition/historicalCurve";
 				drawingHistoryChart(url, param);
-				//$("#chart_history").highcharts(historyOption);
 			}
 			//加载历史数据统计图【结束】
 			//加载历史数据列表【开始】

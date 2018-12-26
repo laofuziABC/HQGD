@@ -20,4 +20,6 @@ public interface IDataAcquisitionService {
 
 	Integer selectTotal(QueryParametersVo queryVo);
 
+	Map<String, Object> getPeriodDataByQuery(QueryParametersVo queryVo);
+
 }
