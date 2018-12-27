@@ -80,21 +80,12 @@
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
 			//初始化页面信息
 			$(function(){
-				//历史数据页面的开始时间和结束时间默认为当天
+				//历史数据页面的开始时间和结束时间默认为当天0点到当前时间
 		        var startTimeInput = document.getElementById("startTime");
 		        var endTimeInput = document.getElementById("endTime");
-		        var date = new Date();
-		        var dateString = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-		        startTimeInput.value = dateString+" 00:00:00";
-		        endTimeInput.value = dateString+" 23:59:59";
-				if(equiId!=null){
-					getEquiData(equiId); 
-					window.clearInterval(setInterval("showCurrentContent()", 10000));
-				} 
+		        startTimeInput.value = parent.formatInitDateToString(new Date());
+		        endTimeInput.value = parent.formatDateToString(new Date());
 			});
-			
-			
-
 			//加载同源数据的统计图和统计表
 			function showHistoryContent(){
 				var startTime=$("#startTime").val();
