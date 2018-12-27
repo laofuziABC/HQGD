@@ -52,43 +52,7 @@
 				var result = getChartData(url, param);
 				var data = (result==null)?null:(result.data);
 				//var data = getChartData(url, param);
-				var channel = "";
-				let num = (data==null)?0:(data.length);
-				if(num>0){
-					//超过6小时提示
-					lTime=new Date(data[0].receiveTime);
-					cTime=new Date();
-					$("#last-time").text("最后监测时间："+data[0].receiveTime);
-					if((cTime-lTime)>(6*3600*1000)){
-						$("#last-time").css({"color":"red"});
-					}
-					//设定尺寸适应容器【开始】
-					let count = Math.ceil(num/3);
-					//如果只有一排，让容器填充下方位置
-					if(count==1){
-						$("#channelDiv").css({"height":($(window).height())*0.45});
-					}
-					var divH=$(window).height()/3;
-					var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-					var divW=$(window).width()*0.6;
-					var tdW=divW/3+"px;";
-					//设定尺寸适应容器【结束】
-					for(let i=0; i<count; i++){
-						let startIndex = 3*i;
-						let endIndex = (3*i+3>num)?num:(3*i+3);
-						channel+="<tr style='height:"+trH+"'>";
-						//通道结果每三个循环一回，缘于界面展示效果较规整
-						for(let j=startIndex; j<endIndex; j++){
-							let state=parseFloat(data[j].state);
-							if(state==5){channel+="<td class='green' style='width:"+tdW+"'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].temperature+"</span></td>"; }
-							else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].message+"</span></td>"; }
-							else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].message+"</span></td>"; }
-						}
-						channel+="</tr>";
-					}
-				}
-				else{channel+="<h3 style='color: red;'>未查找到通道监测信息！</h3>"; }
-				$("#channelsInfo").html(channel);
+				drawCurrentChannels(data);
 			}
 			//异步加载通道温度【结束】
 			//绘制温度实时监控表【开始】

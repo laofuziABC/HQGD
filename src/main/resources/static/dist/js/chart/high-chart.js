@@ -119,7 +119,7 @@ function initCurrentChart(){
 }
 //计算点的坐标，落在图表中
 function addPoints() {
-	var interval = 10000;
+	var interval = 60000;
 	var series = this.series;
 	setInterval(function (){
 		var url="dataAcquisition/realtime";
@@ -127,57 +127,56 @@ function addPoints() {
 		var pointResult = getChartData(url, param);
 		var pointsData = pointResult.data;
 		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
-		var nowTime = (new Date()).getTime();
-		//先判断此点是否在图表中
-//		if(thisPointTime-(START_TIME.getTime())>=0){
-			for(let i=0; i<pointsData.length; i++){
-				var yValue=parseFloat(pointsData[i].temperature);
-				//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-				/*if(thisPointTime-(START_TIME.getTime())>1000*3600*24){series[i].addPoint([thisPointTime, yValue], true, true); }
-				else{series[i].addPoint([thisPointTime, yValue], true, false); }*/
-				if(nowTime-(START_TIME.getTime())>1000*3600*24){series[i].addPoint([nowTime, yValue], true, true); }
-				else{series[i].addPoint([nowTime, yValue], true, false); }
-			}
-//		}
-		
-		var channel = "";
-		let num = (pointsData==null)?0:(pointsData.length);
-		if(num>0){
-			//超过6小时提示
-			lTime=new Date(pointsData[0].receiveTime);
-			cTime=new Date();
-			$("#last-time").text("最后监测时间："+pointsData[0].receiveTime);
-			if((cTime-lTime)>(6*3600*1000)){
-				$("#last-time").css({"color":"red"});
-			}
-			//设定尺寸适应容器【开始】
-			let count = Math.ceil(num/3);
-			//如果只有一排，让容器填充下方位置
-			if(count==1){
-				$("#channelDiv").css({"height":($(window).height())*0.45});
-			}
-			var divH=$(window).height()/3;
-			var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-			var divW=$(window).width()*0.6;
-			var tdW=divW/3+"px;";
-			//设定尺寸适应容器【结束】
-			for(let i=0; i<count; i++){
-				let startIndex = 3*i;
-				let endIndex = (3*i+3>num)?num:(3*i+3);
-				channel+="<tr style='height:"+trH+"'>";
-				//通道结果每三个循环一回，缘于界面展示效果较规整
-				for(let j=startIndex; j<endIndex; j++){
-					let state=parseFloat(pointsData[j].state);
-					if(state==5){channel+="<td class='green' style='width:"+tdW+"'><span class='span_left'>"+pointsData[j].opticalFiberPosition+"：</span><span class='span_right'>"+pointsData[j].temperature+"</span></td>"; }
-					else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"'><span class='span_left'>"+pointsData[j].opticalFiberPosition+"：</span><span class='span_right'>"+pointsData[j].message+"</span></td>"; }
-					else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+pointsData[j].opticalFiberPosition+"：</span><span class='span_right'>"+pointsData[j].message+"</span></td>"; }
-				}
-				channel+="</tr>";
-			}
+		//var nowTime = (new Date()).getTime();
+		//绘制此点在图表中
+		for(let i=0; i<pointsData.length; i++){
+			var yValue=parseFloat(pointsData[i].temperature);
+			//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
+			if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
+			else{series[i].addPoint([thisPointTime, yValue], true, false); }
+			/*if(nowTime-ST_VALUE>ONE_DAY){series[i].addPoint([nowTime, yValue], true, true); }
+			else{series[i].addPoint([nowTime, yValue], true, false); }*/
 		}
-		else{channel+="<h3 style='color: red;'>未查找到通道监测信息！</h3>"; }
-		$("#channelsInfo").html(channel);
-		
-		
+		drawCurrentChannels(pointsData);
 	}, interval);
+}
+
+function drawCurrentChannels(param){
+	var channel = "";
+	let num = (param==null)?0:(param.length);
+	if(num>0){
+		//超过6小时提示
+		lTime=new Date(param[0].receiveTime);
+		cTime=new Date();
+		$("#last-time").text("最后监测时间："+param[0].receiveTime);
+		if((cTime-lTime)>(6*3600*1000)){
+			$("#last-time").css({"color":"red"});
+		}
+		//设定尺寸适应容器【开始】
+		let count = Math.ceil(num/3);
+		//如果只有一排，让容器填充下方位置
+		if(count==1){
+			$("#channelDiv").css({"height":($(window).height())*0.45});
+		}
+		var divH=$(window).height()/3;
+		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
+		var divW=$(window).width()*0.6;
+		var tdW=divW/3+"px;";
+		//设定尺寸适应容器【结束】
+		for(let i=0; i<count; i++){
+			let startIndex = 3*i;
+			let endIndex = (3*i+3>num)?num:(3*i+3);
+			channel+="<tr style='height:"+trH+"'>";
+			//通道结果每三个循环一回，缘于界面展示效果较规整
+			for(let j=startIndex; j<endIndex; j++){
+				let state=parseFloat(param[j].state);
+				if(state==5){channel+="<td class='green' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
+			}
+			channel+="</tr>";
+		}
+	}
+	else{channel+="<h3 style='color: red;'>未查找到通道监测信息！</h3>"; }
+	$("#channelsInfo").html(channel);
 }
