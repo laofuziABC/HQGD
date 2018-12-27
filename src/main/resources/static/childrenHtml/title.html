@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-<title>公共头部区域</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>公共头部区域</title>
+	<style type="text/css">
+		.logo-image{width: 100%; height: 80%;}
+		.navbar{height: 100%;}
+		.navbar .sidebar-toggle{width: 15px; height: 15px;}
+		.navbar .all_title{margin-top: 20%;}
+	</style>
 </head>
 <body>
 
@@ -55,7 +61,7 @@
 		</div>
 	</div> -->
 	<!-- 页面顶部标题【开始】 -->
-	<a href="#" class="logo"> <span class="logo-lg"><img
+	<a href="#" class="logo" style="height: 100%;"> <span class="logo-lg"><img
 			class="logo-image" src="vince/images/logo.png"></span>
 	</a>
 	<nav class="navbar navbar-static-top">
@@ -95,6 +101,9 @@
 			var username = parent.getParam("userName");
 			$("#hidden-xs-username").text(username);
 			$("#p-username").text("当前用户：" + username);
+			//设置标题自适应
+			var divW=$("#mapContainer").width();
+			$(".navbar").css({"width": divW});
 		});
 		//退出登录
 		function loginOut() {

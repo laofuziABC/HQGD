@@ -176,7 +176,9 @@ function resizefun(){
 pingHeight=document.documentElement.clientHeight;
 pingWidth=document.documentElement.clientWidth;
 add_lin();
-$(".qqq").css({"height":pingHeight-166})
+//更改说明：更改 $(".qqq").css({"height":pingHeight-166}) 为 $(".qqq").css({"height":pingHeight-130})			laofuzi 2018.12.21
+//$(".qqq").css({"height":pingHeight-166})
+$(".qqq").css({"height":pingHeight-130})
 $(".requtu").css({"maxHeight":pingHeight-298})
 //更改说明：更改 $(".content-wrapper").css({"height":pingHeight-90}) 为 $(".content-wrapper").css({"height":pingHeight-120})			laofuzi 2018.12.20
 //$(".content-wrapper").css({"height":pingHeight-90})
