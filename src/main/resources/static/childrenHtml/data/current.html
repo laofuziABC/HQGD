@@ -51,7 +51,6 @@
 				var param={"equipmentId": equiId};
 				var result = getChartData(url, param);
 				var data = (result==null)?null:(result.data);
-				//var data = getChartData(url, param);
 				drawCurrentChannels(data);
 			}
 			//异步加载通道温度【结束】

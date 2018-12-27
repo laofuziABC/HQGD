@@ -42,8 +42,6 @@ function getChartData(url, param){
 		success: function(result){resultMap=result;},
 		error: function(){resultMap=null; }
 	});
-//	var data = (resultMap==null)?null:(resultMap.data);
-//	return data;
 	return resultMap;
 }
 /*方法2：异步获取指定时间段内的图表数据
@@ -85,7 +83,6 @@ var NT_VALUE=NOW_TIME.getTime();
 START_TIME=(NT_VALUE-ST_VALUE>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
 //获取并计算常量【结束】
 function initCurrentChart(){
-//	var startTime = "2018-11-25 00:00:00";
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/periodDate";
@@ -126,16 +123,13 @@ function addPoints() {
 		var param={"equipmentId": equiId};
 		var pointResult = getChartData(url, param);
 		var pointsData = pointResult.data;
-//		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
-		var nowTime = (new Date()).getTime();
+		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 		//绘制此点在图表中
 		for(let i=0; i<pointsData.length; i++){
 			var yValue=parseFloat(pointsData[i].temperature);
 			//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-			/*if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
-			else{series[i].addPoint([thisPointTime, yValue], true, false); }*/
-			if(nowTime-ST_VALUE>ONE_DAY){series[i].addPoint([nowTime, yValue], true, true); }
-			else{series[i].addPoint([nowTime, yValue], true, false); }
+			if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
+			else{series[i].addPoint([thisPointTime, yValue], true, false); }
 		}
 		drawCurrentChannels(pointsData);
 	}, interval);
@@ -149,15 +143,11 @@ function drawCurrentChannels(param){
 		lTime=new Date(param[0].receiveTime);
 		cTime=new Date();
 		$("#last-time").text("最后监测时间："+param[0].receiveTime);
-		if((cTime-lTime)>(6*3600*1000)){
-			$("#last-time").css({"color":"red"});
-		}
+		if((cTime-lTime)>(6*3600*1000)){ $("#last-time").css({"color":"red"}); }
 		//设定尺寸适应容器【开始】
 		let count = Math.ceil(num/3);
 		//如果只有一排，让容器填充下方位置
-		if(count==1){
-			$("#channelDiv").css({"height":($(window).height())*0.45});
-		}
+		if(count==1){ $("#channelDiv").css({"height":($(window).height())*0.45}); }
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
 		var divW=$(window).width()*0.6;

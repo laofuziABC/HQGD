@@ -51,12 +51,8 @@ function AjaxPostForEquiSubList(url,param){
 					for(let i=0; i<totalSize; i++){
 						resultList+="<li onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>";
 					}
-					$("#equipResultList").html(resultList);
-//					getEquiData(equiId);
-				}else{
-					$("#equipResultList").html(resultList);
-//					getEquiData(null);
 				}
+				$("#equipResultList").html(resultList);
 			}
 		});
 	}
