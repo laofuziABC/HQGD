@@ -140,10 +140,11 @@ function drawCurrentChannels(param){
 	let num = (param==null)?0:(param.length);
 	if(num>0){
 		//超过6小时提示
-		lTime=new Date(param[0].receiveTime);
-		cTime=new Date();
+		lTime=(new Date(param[0].receiveTime)).getTime();
+		cTime=(new Date()).getTime();
 		$("#last-time").text("最后监测时间："+param[0].receiveTime);
 		if((cTime-lTime)>(6*3600*1000)){ $("#last-time").css({"color":"red"}); }
+		else{$("#last-time").css({"color":"white"});}
 		//设定尺寸适应容器【开始】
 		let count = Math.ceil(num/3);
 		//如果只有一排，让容器填充下方位置
