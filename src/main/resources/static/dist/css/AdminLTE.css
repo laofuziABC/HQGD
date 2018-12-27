@@ -12,14 +12,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 400;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
 }
 /* Layout */
 .wrapper {
   min-height: 100%;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
 }
 .wrapper:before,
 .wrapper:after {
