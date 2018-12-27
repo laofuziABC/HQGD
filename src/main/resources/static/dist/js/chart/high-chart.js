@@ -85,8 +85,8 @@ var NT_VALUE=NOW_TIME.getTime();
 START_TIME=(NT_VALUE-ST_VALUE>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
 //获取并计算常量【结束】
 function initCurrentChart(){
-	var startTime = "2018-11-25 00:00:00";
-//	var startTime = parent.formatDateToString(START_TIME);
+//	var startTime = "2018-11-25 00:00:00";
+	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/periodDate";
 	var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime };
@@ -126,16 +126,16 @@ function addPoints() {
 		var param={"equipmentId": equiId};
 		var pointResult = getChartData(url, param);
 		var pointsData = pointResult.data;
-		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
-		//var nowTime = (new Date()).getTime();
+//		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
+		var nowTime = (new Date()).getTime();
 		//绘制此点在图表中
 		for(let i=0; i<pointsData.length; i++){
 			var yValue=parseFloat(pointsData[i].temperature);
 			//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-			if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
-			else{series[i].addPoint([thisPointTime, yValue], true, false); }
-			/*if(nowTime-ST_VALUE>ONE_DAY){series[i].addPoint([nowTime, yValue], true, true); }
-			else{series[i].addPoint([nowTime, yValue], true, false); }*/
+			/*if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
+			else{series[i].addPoint([thisPointTime, yValue], true, false); }*/
+			if(nowTime-ST_VALUE>ONE_DAY){series[i].addPoint([nowTime, yValue], true, true); }
+			else{series[i].addPoint([nowTime, yValue], true, false); }
 		}
 		drawCurrentChannels(pointsData);
 	}, interval);
