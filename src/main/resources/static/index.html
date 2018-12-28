@@ -98,9 +98,10 @@
 			//设定高度适应屏幕高度【开始】
 			var myWindow=document.getElementById("mapContainer");
 			var screenHeight = window.screen.availHeight;
-			var screenWidth = window.screen.availWidth;
-			myWindow.style.width=screenWidth+"px";
-			myWindow.style.height=screenHeight+"px";
+			var cont_W=$(".main-footer").width()+30;
+			var cont_H= screenHeight*0.79;
+			myWindow.style.width=cont_W+"px";
+			myWindow.style.height=cont_H+"px";
 			//设定高度适应屏幕高度【结束】
 			var roleId =getParam("roleId");
 			var userName =getParam("userName");
