@@ -248,7 +248,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	 */
 	@Override
 	public Map<String, Object> getPeriodDataByQuery(QueryParametersVo queryVo) {
-		String equipmentId = queryVo.getEquipmentId().trim();
+		String equipmentId = queryVo.getEquipmentId();
 		if(equipmentId==null || equipmentId.equals("")){
 			return null;
 		}else {

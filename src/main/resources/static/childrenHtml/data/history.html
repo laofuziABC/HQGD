@@ -13,81 +13,51 @@
 <body>
 	<!-- 上方的统计图【开始】 -->
 	<div class="ssjc_right_up">
-		<div class="nei">
-			<!-- 筛选条件【开始】 -->
-			<!-- <div class="ssjc_ru_title">
-				<span class="tiaoshijian">开始时间： <input type="text"
-					class="shi datetimePicker" id="startTime" /> <i
-					class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-				</span> <span class="tiaoshijian">结束时间： <input type="text"
-					class="shi datetimePicker" id="endTime"> <i
-					class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-				</span> <span>显示内容： <select class="biaoti_select" id="data-type"
-					onchange="searchTableResult(1);">
-						<option value="0" selected="selected">显示所有数据</option>
-						<option value="1">显示异常数据</option>
-				</select>
-				</span> <span>页面大小： <select class="biaoti_select" id="page-size"
-					onchange="searchTableResult(1);">
-						<option value="10" selected="selected">10条</option>
-						<option value="20">20条</option>
-						<option value="30">30条</option>
-						<option value="50">50条</option>
-				</select>
-				</span> <span class="float_right"> <input type="button"
-					class="youcecha" onclick="report();" value="导出" /> <input
-					type="button" class="youcecha" onclick="showHistoryContent();"
-					value="查询" />
-				</span>
-			</div> -->
-			<!-- 筛选条件【结束】 -->
-			<!-- <div class="ssjc_ru_table">
-					<div class="echarts_ssjc_one" id="chart_history"></div>
-				</div> -->
-			<div class="box box-info">
-				<div class="box-header with-border">
-					<div class="ssjc_ru_title">
-						<span class="tiaoshijian">开始时间： <input type="text"
-							class="shi datetimePicker" id="startTime" /> <i
-							class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-						</span> <span class="tiaoshijian">结束时间： <input type="text"
-							class="shi datetimePicker" id="endTime"> <i
-							class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-						</span>
-						<!-- <div class="input-group">
+		<div class="box box-info">
+			<div class="box-header with-border">
+				<div class="ssjc_ru_title">
+					<span class="tiaoshijian">开始时间： <input type="text"
+						class="shi datetimePicker" id="startTime" /> <i
+						class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					</span> <span class="tiaoshijian">结束时间： <input type="text"
+						class="shi datetimePicker" id="endTime"> <i
+						class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					</span>
+					<!-- <div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-clock-o"></i>
 								</div>
 								<input type="text" class="form-control"
 									id="reservationtime" style="width:150px;">
 							</div> -->
-						<!-- /.input group -->
-						<span>显示内容： <select class="biaoti_select" id="data-type"
-							onchange="searchTableResult(1);">
-								<option value="0" selected="selected">显示所有数据</option>
-								<option value="1">显示异常数据</option>
-						</select>
-						</span> <span>页面大小： <select class="biaoti_select" id="page-size"
-							onchange="searchTableResult(1);">
-								<option value="10" selected="selected">10条</option>
-								<option value="20">20条</option>
-								<option value="30">30条</option>
-								<option value="50">50条</option>
-						</select>
-						</span> <span class="float_right"> <input type="button"
-							class="youcecha" onclick="report();" value="导出" /> <input
-							type="button" class="youcecha" onclick="showHistoryContent();"
-							value="查询" />
-						</span>
-					</div>
+					<!-- /.input group -->
+					<span>显示内容： <select class="biaoti_select" id="data-type"
+						onchange="searchTableResult(1);">
+							<option value="0" selected="selected">显示所有数据</option>
+							<option value="1">显示异常数据</option>
+					</select>
+					</span> <span>页面大小： <select class="biaoti_select" id="page-size"
+						onchange="searchTableResult(1);">
+							<option value="10" selected="selected">10条</option>
+							<option value="20">20条</option>
+							<option value="30">30条</option>
+							<option value="50">50条</option>
+					</select>
+					</span> <span class="float_right"> <input type="button"
+						class="youcecha" onclick="report();" value="导出" /> <input
+						type="button" class="youcecha" onclick="showHistoryContent();"
+						value="查询" />
+					</span>
 				</div>
-				<div class="box-body">
-					<div class="chart">
-						<canvas id="lineChart" style="height: 250px"></canvas>
-					</div>
-				</div>
-				<!-- /.box-body -->
 			</div>
+			<div class="box-body">
+				<div class="chart">
+					<div class="ssjc_ru_table">
+						<div class="echarts_ssjc_one" id="chart_history"></div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-body -->
 		</div>
 	</div>
 	<!-- 上方的统计图【结束】 -->
@@ -144,7 +114,6 @@
 			secondStep : 30,
 			inputMask : true
 		});
-		/* $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'yyyy-mm-dd hh:ii:ss' }) */
 		//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
 		//初始化页面信息
 		$(function() {
@@ -153,6 +122,7 @@
 			var endTimeInput = document.getElementById("endTime");
 			startTimeInput.value = parent.formatInitDateToString(new Date());
 			endTimeInput.value = parent.formatDateToString(new Date());
+			showHistoryContent();
 		});
 		//加载同源数据的统计图和统计表
 		function showHistoryContent() {

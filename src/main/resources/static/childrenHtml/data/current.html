@@ -23,17 +23,17 @@
 }
 
 #channelsInfo .green {
-	background-color: #21242e;
+	background-color: #222d32;
 	color: #00ff00;
 }
 
 #channelsInfo .yellow {
-	background-color: #21242e;
+	background-color: #222d32;
 	color: #ffff00;
 }
 
 #channelsInfo .red {
-	background-color: #21242e;
+	background-color: #222d32;
 	color: #ff0000;
 }
 
@@ -41,16 +41,15 @@
 	margin-top: 1%;
 	text-align: center;
 }
+
+#channelsInfo {
+	margin-left: 10px;
+}
 </style>
 </head>
 <body>
 	<!-- 上方的统计图【开始】 -->
-	<div class="ssjc_right_up" id="chartDiv">
-		<!-- <div class="nei">
-				<div class="ssjc_ru_table">
-					<div class="echarts_ssjc_one" id="chart_current"></div>
-				</div>
-			</div> -->
+	<div id="chartDiv">
 		<div class="row">
 			<div class="col-xs-12">
 				<!-- interactive chart -->
@@ -59,12 +58,8 @@
 						<div class="echarts_ssjc_one" id="chart_current"
 							style="height: 350px;"></div>
 					</div>
-					<!-- /.box-body-->
 				</div>
-				<!-- /.box -->
-
 			</div>
-			<!-- /.col -->
 		</div>
 	</div>
 	<!-- 上方的统计图【结束】 -->
@@ -73,7 +68,7 @@
 		<div class="nei">
 			<div class="ssjc_ru_title">
 				<span class="tiaoshijian">最新通道温度：(单位：℃)</span> <span
-					class="tiaoshijian" id="last-time" style="margin-left: 200px;"></span>
+					class="tiaoshijian" id="last-time"></span>
 			</div>
 			<!-- 通道温度【开始】 -->
 			<div class="ssjc_rub_table">
@@ -82,34 +77,37 @@
 			</div>
 		</div>
 		<!-- 通道温度【结束】 -->
-
-		<script src="vince/js/nicescroll.js"></script>
-		<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
-		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
-		<script type="text/javascript">
-			//初始化页面信息
-			$(function() {
-				if (equiId != null) {
-					getEquiData(equiId);
-				}
-			});
-			//异步加载通道温度【开始】
-			function showBlocks() {
-				var url = "dataAcquisition/realtime";
-				var param = {
-					"equipmentId" : equiId
-				};
-				var result = getChartData(url, param);
-				var data = (result == null) ? null : (result.data);
-				drawCurrentChannels(data);
+	</div>
+	<script src="vince/js/nicescroll.js"></script>
+	<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
+	<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
+	<script type="text/javascript">
+		//初始化页面信息
+		$(function() {
+			/* debugger; */
+			if (equiId != null) {
+				getEquiData(equiId);
+				
 			}
-			//异步加载通道温度【结束】
-			//绘制温度实时监控表【开始】
-			function showCurrentContent() {
-				showBlocks();
-				initCurrentChart();
-			}
-			//绘制温度实时监控表【结束】
-		</script>
+			
+		});
+		//异步加载通道温度【开始】
+		function showBlocks() {
+			var url = "dataAcquisition/realtime";
+			var param = {
+				"equipmentId" : equiId
+			};
+			var result = getChartData(url, param);
+			var data = (result == null) ? null : (result.data);
+			drawCurrentChannels(data);
+		}
+		//异步加载通道温度【结束】
+		//绘制温度实时监控表【开始】
+		function showCurrentContent() {
+			showBlocks();
+			initCurrentChart();
+		}
+		//绘制温度实时监控表【结束】
+	</script>
 </body>
 </html>

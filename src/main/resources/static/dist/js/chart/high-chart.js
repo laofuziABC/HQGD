@@ -136,7 +136,6 @@ function addPoints() {
 }
 
 function drawCurrentChannels(param){
-	debugger;
 	var channel = "";
 	let num = (param==null)?0:(param.length);
 	if(num>0){
@@ -152,7 +151,7 @@ function drawCurrentChannels(param){
 		if(count==1){ $("#channelDiv").css({"height":($(window).height())*0.45}); }
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-		var divW=$(window).width()*0.6;
+		var divW=$(window).width()*0.68;
 		var tdW=divW/3+"px;";
 		//设定尺寸适应容器【结束】
 		for(let i=0; i<count; i++){

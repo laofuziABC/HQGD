@@ -43,6 +43,7 @@ function AjaxPostForEquiSubList(url,param){
 			data: param,
 			dataType: "json",
 			success: function(result){
+//				debugger;
 				var data = result.data;
 				var totalSize = data.length;
 				//根据设备列表，初始化第一台设备的展示信息
