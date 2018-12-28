@@ -1,191 +1,276 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	  <meta charset="utf-8">
-	  <meta http-equiv="X-UA-Compatible" content="IE=10">
-	  <title>实时监测</title>
-	  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	  <link rel="stylesheet" type="text/css" href="dist/js/pager/pager.css" />
-	  <link rel="stylesheet" type="text/css" href="dist/js/datetime/datetimepicker.css" />
-	  <style type="text/css">
-	  	#ssjc_title{margin: 10px;}
-	  	#ssjc_title button, #userParam button, #addrParam button{height: 26px; text-align: center; line-height: 26px; width: 17%; 
-						color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
-		#ssjc_title input, #userParam input{line-height: 24px; background: none; position: relative; z-index: 2; color: #fff;
-						border: 1px solid #fff; height: 24px; margin-top: 8px; width: 60%; }
-		#showParams{margin: 0; padding: 0;}
-		#showParams .btn_first{margin:10px 0 10px 10%; height: 26px; text-align: center; line-height: 26px; width: 35%; 
-						color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
-	  	#addrParam select{width: 25%; background-color: #21242e; font-size: 12px;}
-	  	#result_list_div{margin: 10px 0 0 0; padding: 0;}
-	  	#equipResultList li{width: 95%; margin: 5px auto; text-align: center;}
-	  	#equipResultList li span:hover, #equipResultList li span:checked{width: 100%; font-size: 18px; background-color: #399ad7; cursor: pointer;}
-	  	#equipResultList li span{width: 100%;}
-	  	#sub-list-pager{margin: 10px auto;}
-	  </style>
-	</head>
-	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="qqq">
-			<div class="ssjc">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>数据监测</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<!-- Bootstrap 3.3.7 -->
+<link rel="stylesheet"
+	href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	href="../bower_components/font-awesome/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet"
+	href="../bower_components/Ionicons/css/ionicons.min.css">
+<!-- fullCalendar -->
+<link rel="stylesheet"
+	href="../bower_components/fullcalendar/dist/fullcalendar.min.css">
+<link rel="stylesheet"
+	href="../bower_components/fullcalendar/dist/fullcalendar.print.min.css"
+	media="print">
+<!-- Theme style -->
+<link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" type="text/css" href="dist/js/pager/pager.css" />
+<link rel="stylesheet" type="text/css"
+	href="dist/js/datetime/datetimepicker.css" />
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+<!-- Google Font -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1>
+					数据监测 
+				</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li class="active">数据监测</li>
+				</ol>
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
 				<div class="row">
-		          	<!-- 左侧设备筛选结果【开始】 -->
-		          	<div class="col-md-2 ssjc_left">
-		          		<div class="ssjc_title" id="ssjc_title">
-		          			<input type="text" class="shi" id="interEqui" placeholder="请输入设备名称或编号"  value="" onfocus="javascript: this.value=null;"/>
-		          			<button  class="btn_first" onclick="searchByEquiName();">查询</button>
-							<button class="btn_first" onclick="showParams();" id="yincang">分组</button>
-		          		</div>
-		          		<div class="tree_menu">
-		          			<!-- 查询参数【开始】 -->
-		          			<div class="tree well tree_one" id="showParams" style="display: none;">
-			          			<button class="btn_first" onclick="showParamBox(1);">按用户查询</button>
-								<button class="btn_first" onclick="showParamBox(2);">按地区查询</button>
-								<div id="userParam" style="display: none;">
-									<input type="text" placeholder="请输入用户查询"  onfocus="javascript: this.value=null;" id="interUser"/>
-									<button onclick="getEquiByUser();">查询</button>
+					<div class="col-md-3">
+						<div class="box box-solid">
+							<div class="box-body">
+								<div class="input-group">
+									<input id="new-event" type="text" class="form-control"
+										placeholder="请输入设备名称">
+									<div class="input-group-btn">
+										<button type="submit" class="btn btn-primary"
+											onclick="searchByEquiName();">查询</button>
+										<button type="submit" class="btn btn-primary"
+											onclick="showParams();" id="yincang">分组</button>
+									</div>
+									<!-- /btn-group -->
 								</div>
-								<div id="addrParam" style="display: none;">
-									<select id="prov-select" onchange="getCities();"><option value="0">选择省</option></select>
-									<select id="city-select" onchange="getTowns();"><option value="0">选择市</option></select>
-									<select id="town-select"><option value="0">选择区</option></select>
-									<button onclick="getEquiByAddr();">查询</button>
+								<!-- /input-group -->
+								<div class="tree_menu">
+									<!-- 查询参数【开始】 -->
+									<div class="tree well tree_one" id="showParams"
+										style="display: none;">
+										<button class="btn btn-primary" onclick="showParamBox(1);">按用户查询</button>
+										<button class="btn btn-primary" onclick="showParamBox(2);">按地区查询</button>
+										<div id="userParam" style="display: none;">
+											<input type="text" placeholder="请输入用户查询"
+												onfocus="javascript: this.value=null;" id="interUser" />
+											<button class="btn btn-primary" onclick="getEquiByUser();">查询</button>
+										</div>
+										<div id="addrParam" style="display: none;">
+											<select id="prov-select" onchange="getCities();"><option
+													value="0">选择省</option></select> <select id="city-select"
+												onchange="getTowns();"><option value="0">选择市</option></select>
+											<select id="town-select"><option value="0">选择区</option></select>
+											<button class="btn btn-primary" onclick="getEquiByAddr();">查询</button>
+										</div>
+									</div>
+									<!-- 查询参数【结束】 -->
+									<!-- 结果列表【开始】 -->
+									<div class="tree well tree_one" id="result_list_div">
+										<ul class="box-body no-padding nav nav-pills nav-stacked"
+											id="equipResultList">
+											<li><span><em>设备名称</em></span></li>
+										</ul>
+										<!-- 翻页插件 -->
+										<div>
+											<div class="list-page-tail page-down" id="sub-list-pager"></div>
+										</div>
+									</div>
+									<!-- 结果列表【结束】 -->
 								</div>
 							</div>
-							<!-- 查询参数【结束】 -->
-							<!-- 结果列表【开始】 -->
-							<div class="tree well tree_one" id="result_list_div">
-								<ul class="none_margin" id="equipResultList">
-									<li><span><em>设备名称</em></span></li>
-								</ul>
-								<!-- 翻页插件 -->
-								<div><div class="list-page-tail page-down" id="sub-list-pager"></div></div>
-							</div>
-							<!-- 结果列表【结束】 -->
-		          		</div>
-		          	</div>
-		          	<!-- 左侧设备筛选结果【结束】 -->
-		          	<!-- 右侧结果信息【开始】 -->
-		          	<div class="col-md-10 ssjc_right" id="ssjc_right">
-		          		<!--标签行【开始】-->
-						<ul class="nav nav-tabs">
-							<li><a data-toggle="tab" href="#" onclick="changeTabContent(1);">当前监测数据</a></li>
-							<li><a data-toggle="tab" href="#" onclick="changeTabContent(2);">历史监测数据</a></li>
-						</ul>
-						<!--标签行【结束】-->
-						<div id="contents"></div>
+						</div>
 					</div>
-		    		<!-- 右侧结果信息【结束】 -->
+					<!-- /.col -->
+					<div class="col-md-9">
+						<div class="box box-primary">
+							<div class="box-body no-padding">
+								<!--标签行【开始】-->
+								<ul class="nav nav-tabs">
+									<li><a data-toggle="tab" href="#"
+										onclick="changeTabContent(1);">当前监测数据</a></li>
+									<li><a data-toggle="tab" href="#"
+										onclick="changeTabContent(2);">历史监测数据</a></li>
+								</ul>
+								<!--标签行【结束】-->
+								<div id="contents"></div>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /. box -->
+					</div>
+					<!-- /.col -->
 				</div>
-	    	</div>
-	    </div>
-		
-		<script src="vince/js/nicescroll.js"></script>
-		<script src="vince/js/demo.js"></script>
-		<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
-		<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
-		<script type="text/javascript" src="dist/js/AllCities.js"></script>
-		<script type="text/javascript">
-			$(function(){
-				var roleId = parent.getParam("roleId");
-				if(roleId==1){
-					getEquiResultList();
-				}else{
-					$("#yincang").css({"display":"none"});
-					var url="equipment/selectAllByUser";
-					var username=parent.getParam("userName");
-					var param={"userName":username};
-					if(username != ""){
-						AjaxPostForEquiSubList(url,param);
-					}
-				}
-			});
-			//关联标签页与内容，控制定时器
-			$(".nav-tabs >li:contains('当前')").addClass("active");
-			$("#contents").load("childrenHtml/data/current.html");
-			function changeTabContent(param){
-				if(param==2){
-					$("#contents").load("childrenHtml/data/history.html");
-				}else if(param==1){
-					$("#contents").load("childrenHtml/data/current.html");
-				}
-				/* else{
-					$("#contents").load("childrenHtml/data/current.html");
-				} */
-			}
-			//打开筛选区域
-			function showParams(){
-				var target = document.getElementById("showParams");
-				if(target.style.display=="none"){ target.style.display="block"; }
-				else{ target.style.display="none"; }
-			}
-			//根据按钮选择展示模块——用户/地区
-			function showParamBox(param){
-				if(param==1){ userParam.style.display="block"; addrParam.style.display="none"; }
-				else if(param==2){ addrParam.style.display="block"; userParam.style.display="none"; getProvs(); getCities(); getTowns(); }
-				else{ userParam.style.display="none"; addrParam.style.display="none"; }
-			}
-			var userParam=document.getElementById("userParam");
-			var addrParam=document.getElementById("addrParam");
-			//加载设备列表
-			function getEquiResultList(){
-				var url="equipment/selectAll";
-				AjaxPostForEquiSubList(url,null);
-			}
-			//根据设备名称查询设备列表
-			function searchByEquiName(){
-				var url="equipment/selectByEquipmentName";
-				var equiName=$("#interEqui").val().trim();
-				var param={"equipmentName":equiName};
-				if(equiName != ""){
-					AjaxPostForEquiSubList(url,param);
-				}else{
-					getEquiResultList();
-				}
-			}
-			//根据用户，查找关联设备
-			function getEquiByUser(){
+				<!-- /.row -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+		<div class="control-sidebar-bg"></div>
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- jQuery 3 -->
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<!-- Bootstrap 3.3.7 -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<!-- Slimscroll -->
+	<script
+		src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<!-- FastClick -->
+	<script src="../bower_components/fastclick/lib/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../dist/js/demo.js"></script>
+	<!-- fullCalendar -->
+	<script src="../bower_components/moment/moment.js"></script>
+	<script src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+	<!-- Page specific script -->
+	<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
+	<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
+	<script type="text/javascript" src="dist/js/AllCities.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var roleId = parent.getParam("roleId");
+			if(roleId==1){
+				getEquiResultList();
+			}else{
+				$("#yincang").css({"display":"none"});
 				var url="equipment/selectAllByUser";
-				var username=$("#interUser").val().trim();
+				var username=parent.getParam("userName");
 				var param={"userName":username};
 				if(username != ""){
 					AjaxPostForEquiSubList(url,param);
 				}
-				userParam.style.display="none";
-				addrParam.style.display="none";
 			}
-			//根据地区，查找区内设备
-			function getEquiByAddr(){
-				var p = $("#prov-select").val();
-				var c = $("#city-select").val();
-				var t = $("#town-select").val();
-				var areaCode;
-				if(p==0){
-					alert("未选择地区");
+		});
+		//关联标签页与内容
+		var timer = setInterval("showCurrentContent()", 60000);
+		$(".nav-tabs >li:contains('当前')").addClass("active");
+		$("#contents").load("childrenHtml/data/current.html");
+		function changeTabContent(param){
+			if(param==2){
+				window.clearInterval(timer);
+				$("#contents").load("childrenHtml/data/history.html");
+			}else if(param==1){
+				timer = setInterval("showCurrentContent()", 60000);
+				$("#contents").load("childrenHtml/data/current.html");
+			}else{
+				window.clearInterval(timer);
+			}
+		}
+		//打开筛选区域
+		function showParams(){
+			var target = document.getElementById("showParams");
+			if(target.style.display=="none"){ target.style.display="block"; }
+			else{ target.style.display="none"; }
+		}
+		//根据按钮选择展示模块——用户/地区
+		function showParamBox(param){
+			if(param==1){ userParam.style.display="block"; addrParam.style.display="none"; }
+			else if(param==2){ addrParam.style.display="block"; userParam.style.display="none"; getProvs(); getCities(); getTowns(); }
+			else{ userParam.style.display="none"; addrParam.style.display="none"; }
+		}
+		var userParam=document.getElementById("userParam");
+		var addrParam=document.getElementById("addrParam");
+		//加载设备列表
+		function getEquiResultList(){
+			var url="equipment/selectAll";
+			AjaxPostForEquiSubList(url,null);
+		}
+		//根据设备名称查询设备列表
+		function searchByEquiName(){
+			var url="equipment/selectByEquipmentName";
+			var equiName=$("#interEqui").val().trim();
+			var param={"equipmentName":equiName};
+			if(equiName != ""){
+				AjaxPostForEquiSubList(url,param);
+			}else{
+				getEquiResultList();
+			}
+		}
+		//根据用户，查找关联设备
+		function getEquiByUser(){
+			var url="equipment/selectAllByUser";
+			var username=$("#interUser").val().trim();
+			var param={"userName":username};
+			if(username != ""){
+				AjaxPostForEquiSubList(url,param);
+			}
+			userParam.style.display="none";
+			addrParam.style.display="none";
+		}
+		//根据地区，查找区内设备
+		function getEquiByAddr(){
+			var p = $("#prov-select").val();
+			var c = $("#city-select").val();
+			var t = $("#town-select").val();
+			var areaCode;
+			if(p==0){
+				alert("未选择地区");
+			}else{
+				areaCode=((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
+				var url="equipment/selectAllByAddress";
+				var param={"adcode":areaCode};
+				AjaxPostForEquiSubList(url,param);
+			}
+			userParam.style.display="none";
+			addrParam.style.display="none";
+		}
+		//根据设备主键，获取数据展示信息
+		function getEquiData(param){
+			if(param==null){
+				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
+				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
+			}else{
+				equiId=param.trim();
+				if($(".nav-tabs >li:contains('当前')").hasClass("active")){
+					showCurrentContent();
+				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
+					showHistoryContent();
 				}else{
-					areaCode=((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
-					var url="equipment/selectAllByAddress";
-					var param={"adcode":areaCode};
-					AjaxPostForEquiSubList(url,param);
-				}
-				userParam.style.display="none";
-				addrParam.style.display="none";
-			}
-			//根据设备主键，获取数据展示信息
-			function getEquiData(param){
-				if(param==null){
-					$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
-					$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
-				}else{
-					equiId=param.trim();
-					if($(".nav-tabs >li:contains('当前')").hasClass("active")){
-						showCurrentContent();
-					}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
-						showHistoryContent();
-					}else{
-						showCurrentContent();
-					}
+					showCurrentContent();
 				}
 			}
-		</script>
-	</body>
+		}
+	</script>
+</body>
 </html>

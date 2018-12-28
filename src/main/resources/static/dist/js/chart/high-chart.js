@@ -136,6 +136,7 @@ function addPoints() {
 }
 
 function drawCurrentChannels(param){
+	debugger;
 	var channel = "";
 	let num = (param==null)?0:(param.length);
 	if(num>0){

@@ -1,15 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="UTF-8">
-	<title>公共头部区域</title>
-	<style type="text/css">
-		.logo-image{width: 100%; height: 80%;}
-		.navbar{height: 100%;}
-		.navbar .sidebar-toggle{width: 15px; height: 15px;}
-		.navbar .all_title{margin-top: 20%;}
-	</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>公共头部区域</title>
 </head>
 <body>
 
@@ -61,29 +55,39 @@
 		</div>
 	</div> -->
 	<!-- 页面顶部标题【开始】 -->
-	<a href="#" class="logo" style="height: 100%;"> <span class="logo-lg"><img
-			class="logo-image" src="vince/images/logo.png"></span>
+	<a href="index2.html" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
+		<span class="logo-mini"><b>和</b>其</span> <!-- logo for regular state and mobile devices -->
+		<span class="logo-lg"><b>Opt</b>sensor</span>
 	</a>
+
+	<!-- Header Navbar: style can be found in header.less -->
 	<nav class="navbar navbar-static-top">
-		<a href="#" class="sidebar-toggle" data-toggle="offcanvas"
-			role="button"></a> <span class="all_title">变压器绕组荧光光纤测温仪温度数据管理平台</span>
+		<!-- Sidebar toggle button-->
+		<a href="#" class="sidebar-toggle" data-toggle="push-menu"
+			role="button"> <span class="sr-only">Toggle navigation</span>
+		</a>
+		<!-- Navbar Right Menu -->
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
+				<!-- User Account: style can be found in dropdown.less -->
 				<li class="dropdown user user-menu"><a href="#"
 					class="dropdown-toggle" data-toggle="dropdown"> <img
-						src="dist/img/user2-160x160.jpg" class="user-image" alt="用户头像">
-						<span class="hidden-xs" id="hidden-xs-username">管理员</span>
+						src="dist/img/user2-160x160.jpg" class="user-image"
+						alt="User Image"> <span class="hidden-xs"
+						id="hidden-xs-username">管理员</span>
 				</a>
 					<ul class="dropdown-menu">
+						<!-- User image -->
 						<li class="user-header"><img src="dist/img/user2-160x160.jpg"
-							class="img-circle" alt="用户头像">
+							class="img-circle" alt="User Image">
 							<p id="p-username">
 								姓名：管理员<small>部门：信息部</small>
 							</p></li>
+						<!-- Menu Body -->
+						<!-- Menu Footer-->
 						<li class="user-footer">
-							<div class="pull-right">
-								<a href="#" class="btn btn-default btn-flat"
-									onclick="updatePassword();">修改密码</a>
+							<div class="pull-left">
+								<a href="#" class="btn btn-default btn-flat">修改密码</a>
 							</div>
 							<div class="pull-right">
 								<a href="#" class="btn btn-default btn-flat"
@@ -93,6 +97,7 @@
 					</ul></li>
 			</ul>
 		</div>
+
 	</nav>
 	<!-- 页面顶部标题【结束】 -->
 	<script type="text/javascript">
@@ -101,9 +106,6 @@
 			var username = parent.getParam("userName");
 			$("#hidden-xs-username").text(username);
 			$("#p-username").text("当前用户：" + username);
-			//设置标题自适应
-			var divW=$("#mapContainer").width();
-			$(".navbar").css({"width": divW});
 		});
 		//退出登录
 		function loginOut() {

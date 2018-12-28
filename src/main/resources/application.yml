@@ -6,6 +6,7 @@ mybatis:
   typeAliasesPackage: com.hqgd.pms.domain
   mapperLocations: classpath:/mybatis/mapper/*.xml
 logging:
+  path: c:/log
   level:
      com.hqgd.pms.dao : debug  
 
@@ -15,20 +16,6 @@ logging:
 #    username: root
 #    password: root
 #    driver-class-name: com.mysql.cj.jdbc.Driver    
-#spring:
-#  datasource:
-#    url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=pms
-#    username: sa
-#    password: root
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-#spring:
-#  datasource:
-#    url: jdbc:sqlserver://47.106.225.170:1433;DatabaseName=HQTemp_Cloud
-#    username: sa
-#    password: dailihui0..
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 spring:
   datasource:
     url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=HQTemp_Cloud
@@ -36,6 +23,20 @@ spring:
     password: root
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#spring:
+#  datasource:
+#    url: jdbc:sqlserver://47.106.225.170:1433;DatabaseName=HQTemp_Cloud
+#    username: sa
+#    password: dailihui0..
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#spring:
+#  datasource:
+#    url: jdbc:sqlserver://rm-wz9qu0jc3f9cx16a13o.sqlserver.rds.aliyuncs.com:3433;DatabaseName=hqtemp_cloud
+#    username: hqgd
+#    password: Dailihui12580
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 #    jpa:
 #      database: MYSQL
 #  jpa:
