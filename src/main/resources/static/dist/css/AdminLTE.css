@@ -13,7 +13,7 @@ body {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 400;
   overflow-x: auto;
-  overflow-y: auto;
+  /* overflow-y: auto; */		/* 更改说明：去掉纵向的overflow 2018.12.27 */
 }
 /* Layout */
 .wrapper {
