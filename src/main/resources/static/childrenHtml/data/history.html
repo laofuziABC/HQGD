@@ -78,13 +78,18 @@
 				format: 'yyyy-mm-dd hh:ii:ss', language: 'en', pickDate: true, pickTime: true, hourStep: 1, minuteStep: 15, secondStep: 30, inputMask: true
 			});
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
-			//初始化页面信息
 			$(function(){
 				//历史数据页面的开始时间和结束时间默认为当天0点到当前时间
 		        var startTimeInput = document.getElementById("startTime");
 		        var endTimeInput = document.getElementById("endTime");
 		        startTimeInput.value = parent.formatInitDateToString(new Date());
 		        endTimeInput.value = parent.formatDateToString(new Date());
+		      	//初始化页面信息
+		        if(equiId!=null){ getEquiData(equiId); }
+		        else{
+		        	$("#chart_history").highcharts(blankOption);
+		        	$(".ssjc_right_bottom").css({"height":($(window).height())*0.45});
+		        }
 			});
 			//加载同源数据的统计图和统计表
 			function showHistoryContent(){
@@ -106,6 +111,8 @@
 			//加载历史数据统计图【结束】
 			//加载历史数据列表【开始】
 			function searchTableResult(pageNo){
+				//设置DIV高度
+				$(".ssjc_right_bottom").css({"height":($(window).height())*0.45});
 				var param ={
 					"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val(), "state": $("#data-type").val(),
 					"page": pageNo,								//当前页码，相当于pageNum
@@ -136,7 +143,7 @@
 							}
 						}else{
 							historyTable+="<h3 style='color: red;'>未查找到相关信息！</h3>";
-							$("#chart_history").empty();
+							$("#chart_history").highcharts(blankOption);
 						}
 						$("#history-table-body").html(historyTable);
 						//加载页码

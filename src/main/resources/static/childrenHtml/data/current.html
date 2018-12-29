@@ -34,6 +34,8 @@
 				<!-- 通道温度【开始】 -->
 				<div class="ssjc_rub_table">
 					<table class="tj_table" border="0" id="channelsInfo">
+						<tr style="height: 180px;"><td></td><td></td><td></td></tr>
+						<tr style="height: 180px;"><td></td><td></td><td></td></tr>
 					</table>
 			</div>
 		</div>
@@ -44,7 +46,10 @@
 		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 		<script type="text/javascript">
 			//初始化页面信息
-			$(function(){ if(equiId!=null){ getEquiData(equiId); } });
+			$(function(){
+				if(equiId!=null){getEquiData(equiId); }
+				else{$("#chart_current").highcharts(blankOption);}
+			});
 			//异步加载通道温度【开始】
 			function showBlocks(){
 				var url="dataAcquisition/realtime";

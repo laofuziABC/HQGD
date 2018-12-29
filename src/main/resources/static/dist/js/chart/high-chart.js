@@ -26,6 +26,14 @@ var currentOption={
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S %m-%d}' } },
 };
+//配置当空白统计图
+var blankOption={
+	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
+	title: {text: '', style: {color: '#ffffff'}},
+	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
+	xAxis:{type: 'category'},
+	series:[{name: '无数据', data: [], type:"spline", pointInterval: 6e4}]
+}
 
 /**
  * 以下的方法用于同步或者异步获取图表的数据资源
@@ -138,6 +146,8 @@ function addPoints() {
 }
 
 function drawCurrentChannels(param){
+	//设置DIV高度
+	$("#channelDiv").css({"height":($(window).height())*0.45});
 	var channel = "";
 	let num = (param==null)?0:(param.length);
 	if(num>0){
@@ -150,7 +160,6 @@ function drawCurrentChannels(param){
 		//设定尺寸适应容器【开始】
 		let count = Math.ceil(num/3);
 		//如果只有一排，让容器填充下方位置
-		if(count==1){ $("#channelDiv").css({"height":($(window).height())*0.45}); }
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
 		var divW=$(window).width()*0.6;
@@ -169,7 +178,8 @@ function drawCurrentChannels(param){
 			}
 			channel+="</tr>";
 		}
+	}else{
+		channel+="<h3 style='color: red;'>未查找到通道监测信息！</h3>"; 
 	}
-	else{channel+="<h3 style='color: red;'>未查找到通道监测信息！</h3>"; }
 	$("#channelsInfo").html(channel);
 }
