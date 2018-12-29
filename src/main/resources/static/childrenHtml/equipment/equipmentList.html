@@ -85,7 +85,7 @@
 							<tr class="normal">
 								<td class="info_text">所属用户<span style="color: red;">*</span>：
 								</td>
-								<td><select class="right_input" id="userId" name="userId"
+								<td><select class="right_input" id="userName" name="userName"
 									style="height: 24px; width: 174px;">
 								</select></td>
 								<td class="info_text"></td>
@@ -484,7 +484,7 @@
 				userHtml += "<option value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
 			}
-			$("#userId").html(userHtml);
+			$("#userName").html(userHtml);
 			getProvs();
 			$("#padcode").val((globalData[param].padcode) * 10000);
 			getCities();
@@ -498,6 +498,7 @@
 				"display" : "block"
 			});
 			add = false;
+			debugger;
 			$("#equipForm").show();
 			$("#add").show();
 			$("#saves").show();
@@ -530,12 +531,13 @@
 			var userHtml = "<option value=\"\" checked>"
 					+ globalData[param].userName + "</option>";
 			for (let i = 0; i < globalUserList.length; i++) {
-				userHtml += "<option style=\"color:#E20A0A;\" value='"+globalUserList[i].id+"'>"
+				userHtml += "<option value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
 			}
-			$("#userId").html(userHtml);
+			
 			$("#equipmentId").val(globalData[param].equipmentId);
 			$("#equipmentName").val(globalData[param].equipmentName);
+			$("#userName").html(userHtml);
 			/* $("#userId").val(globalData[param].userName); */
 			$("#address").val(globalData[param].address);
 			$("#adcode").val(globalData[param].adcode);
