@@ -97,10 +97,12 @@
 											</div>
 										</div>
 										<div id="addrParam" style="display: none;">
-											<select id="prov-select" onchange="getCities();" class="form-control"><option
-													value="0" >选择省</option></select> <select id="city-select"
-												onchange="getTowns();"class="form-control"><option value="0">选择市</option></select>
-											<select id="town-select"class="form-control"><option value="0">选择区</option></select>
+											<select id="prov-select" onchange="getCities();"
+												class="form-control"><option value="0">选择省</option></select>
+											<select id="city-select" onchange="getTowns();"
+												class="form-control"><option value="0">选择市</option></select>
+											<select id="town-select" class="form-control"><option
+													value="0">选择区</option></select>
 											<button class="btn btn-primary" onclick="getEquiByAddr();">查询</button>
 										</div>
 									</div>
@@ -122,23 +124,36 @@
 						</div>
 					</div>
 					<!-- /.col -->
-					<div class="col-md-9">
+					<!-- <div class="col-md-9">
 						<div class="box box-primary">
 							<div class="box-body no-padding">
-								<!--标签行【开始】-->
+								标签行【开始】
 								<ul class="nav nav-tabs">
 									<li><a data-toggle="tab" href="#"
 										onclick="changeTabContent(1);">当前监测数据</a></li>
 									<li><a data-toggle="tab" href="#"
 										onclick="changeTabContent(2);">历史监测数据</a></li>
 								</ul>
-								<!--标签行【结束】-->
+								标签行【结束】
 								<div id="contents"></div>
 							</div>
-							<!-- /.box-body -->
+							/.box-body
 						</div>
-						<!-- /. box -->
+						/. box
+					</div> -->
+					<!-- 右侧结果信息【开始】 -->
+					<div class="col-md-10 ssjc_right" id="ssjc_right">
+						<!--标签行【开始】-->
+						<ul class="nav nav-tabs">
+							<li><a data-toggle="tab" href="#"
+								onclick="changeTabContent(1);">当前监测数据</a></li>
+							<li><a data-toggle="tab" href="#"
+								onclick="changeTabContent(2);">历史监测数据</a></li>
+						</ul>
+						<!--标签行【结束】-->
+						<div id="contents"></div>
 					</div>
+					<!-- 右侧结果信息【结束】 -->
 					<!-- /.col -->
 				</div>
 				<!-- /.row -->
@@ -175,6 +190,8 @@
 	<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
 	<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
+	<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
+	<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 	<script type="text/javascript">
 			$(function(){
 				var roleId = parent.getParam("roleId");
