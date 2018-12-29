@@ -34,6 +34,9 @@ function POSTAjaxForAllResultList(url,param){
 }
 //封装数据监测页面的Ajax异步请求
 var equiId;		//设备主键
+var userParam=document.getElementById("userParam");
+var addrParam=document.getElementById("addrParam");
+var typeParam=document.getElementById("typeParam");
 function AjaxPostForEquiSubList(url,param){
 	var resultList = "";
 	if(url != null && url != ""){
@@ -56,4 +59,7 @@ function AjaxPostForEquiSubList(url,param){
 			}
 		});
 	}
+	userParam.style.display="none";
+	addrParam.style.display="none";
+	typeParam.style.display="none";
 }

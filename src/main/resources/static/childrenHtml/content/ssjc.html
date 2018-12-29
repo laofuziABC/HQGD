@@ -9,12 +9,12 @@
 	  <link rel="stylesheet" type="text/css" href="dist/js/datetime/datetimepicker.css" />
 	  <style type="text/css">
 	  	#ssjc_title{margin: 10px;}
-	  	#ssjc_title button, #userParam button, #addrParam button{height: 26px; text-align: center; line-height: 26px; width: 17%; 
+	  	#ssjc_title button, #userParam button, #addrParam button, #typeParam button{height: 26px; text-align: center; line-height: 26px; width: 17%; 
 						color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
-		#ssjc_title input, #userParam input{line-height: 24px; background: none; position: relative; z-index: 2; color: #fff;
+		#ssjc_title input, #userParam input, #typeParam select{line-height: 24px; background: none; position: relative; z-index: 2; color: #fff;
 						border: 1px solid #fff; height: 24px; margin-top: 8px; width: 60%; }
 		#showParams{margin: 0; padding: 0;}
-		#showParams .btn_first{margin:10px 0 10px 10%; height: 26px; text-align: center; line-height: 26px; width: 35%; 
+		#showParams .btn_first{margin:10px 0 10px 1%; height: 26px; text-align: center; line-height: 26px; width: 30%; 
 						color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden;}
 	  	#addrParam select{width: 25%; background-color: #21242e; font-size: 12px;}
 	  	#result_list_div{margin: 10px 0 0 0; padding: 0;}
@@ -38,8 +38,9 @@
 		          		<div class="tree_menu">
 		          			<!-- 查询参数【开始】 -->
 		          			<div class="tree well tree_one" id="showParams" style="display: none;">
-			          			<button class="btn_first" onclick="showParamBox(1);">按用户查询</button>
-								<button class="btn_first" onclick="showParamBox(2);">按地区查询</button>
+			          			<button class="btn_first" onclick="showParamBox(1);">按用户</button>
+								<button class="btn_first" onclick="showParamBox(2);">按地区</button>
+								<button class="btn_first" onclick="showParamBox(3);">按类型</button>
 								<div id="userParam" style="display: none;">
 									<input type="text" placeholder="请输入用户查询"  onfocus="javascript: this.value=null;" id="interUser"/>
 									<button onclick="getEquiByUser();">查询</button>
@@ -49,6 +50,16 @@
 									<select id="city-select" onchange="getTowns();"><option value="0">选择市</option></select>
 									<select id="town-select"><option value="0">选择区</option></select>
 									<button onclick="getEquiByAddr();">查询</button>
+								</div>
+								<div id="typeParam" style="display: none;">
+									<select id="equi-type" class="shi">
+										<option value="0" selected="selected">所有类型</option>
+										<option value="1">开关柜</option>
+										<option value="2">干式变压器</option>
+										<option value="3">变压器绕组</option>
+										<option value="4">环网柜</option>
+									</select>
+									<button onclick="getEquiByType();">查询</button>
 								</div>
 							</div>
 							<!-- 查询参数【结束】 -->
@@ -118,14 +129,14 @@
 				if(target.style.display=="none"){ target.style.display="block"; }
 				else{ target.style.display="none"; }
 			}
-			//根据按钮选择展示模块——用户/地区
+			//根据按钮选择展示模块——用户/地区/类型
 			function showParamBox(param){
-				if(param==1){ userParam.style.display="block"; addrParam.style.display="none"; }
-				else if(param==2){ addrParam.style.display="block"; userParam.style.display="none"; getProvs(); getCities(); getTowns(); }
-				else{ userParam.style.display="none"; addrParam.style.display="none"; }
+				if(param==1){ userParam.style.display="block"; addrParam.style.display="none"; typeParam.style.display="none";}
+				else if(param==2){ addrParam.style.display="block"; userParam.style.display="none"; getProvs(); getCities(); getTowns(); typeParam.style.display="none";}
+				else if(param==3){ typeParam.style.display="block"; userParam.style.display="none"; addrParam.style.display="none"; }
+				else{ userParam.style.display="none"; addrParam.style.display="none"; typeParam.style.display="none";}
 			}
-			var userParam=document.getElementById("userParam");
-			var addrParam=document.getElementById("addrParam");
+			
 			//加载设备列表
 			function getEquiResultList(){
 				var url="equipment/selectAll";
@@ -150,8 +161,6 @@
 				if(username != ""){
 					AjaxPostForEquiSubList(url,param);
 				}
-				userParam.style.display="none";
-				addrParam.style.display="none";
 			}
 			//根据地区，查找区内设备
 			function getEquiByAddr(){
@@ -167,8 +176,15 @@
 					var param={"adcode":areaCode};
 					AjaxPostForEquiSubList(url,param);
 				}
-				userParam.style.display="none";
-				addrParam.style.display="none";
+			}
+			//根据设备类型，查找同类型设备
+			function getEquiByType(){
+				var url="equipment/selectAllByType";
+				var equiType=$("#equi-type option:selected").val().trim();
+				var param={"equiType":equiType};
+				if(equiType != 0){
+					AjaxPostForEquiSubList(url,param);
+				}
 			}
 			//根据设备主键，获取数据展示信息
 			function getEquiData(param){
