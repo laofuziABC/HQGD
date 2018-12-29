@@ -82,15 +82,25 @@
 										<button class="btn btn-primary" onclick="showParamBox(1);">按用户查询</button>
 										<button class="btn btn-primary" onclick="showParamBox(2);">按地区查询</button>
 										<div id="userParam" style="display: none;">
-											<input type="text" placeholder="请输入用户查询"
+											<!-- <input type="text" placeholder="请输入用户查询"
 												onfocus="javascript: this.value=null;" id="interUser" />
-											<button class="btn btn-primary" onclick="getEquiByUser();">查询</button>
+											<button class="btn btn-primary" onclick="getEquiByUser();">查询</button> -->
+
+											<div class="input-group">
+												<input id="new-event" type="text" class="form-control"
+													placeholder="请输入用户名">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-primary"
+														onclick="getEquiByUser();">查询</button>
+												</div>
+												<!-- /btn-group -->
+											</div>
 										</div>
 										<div id="addrParam" style="display: none;">
-											<select id="prov-select" onchange="getCities();"><option
-													value="0">选择省</option></select> <select id="city-select"
-												onchange="getTowns();"><option value="0">选择市</option></select>
-											<select id="town-select"><option value="0">选择区</option></select>
+											<select id="prov-select" onchange="getCities();" class="form-control"><option
+													value="0" >选择省</option></select> <select id="city-select"
+												onchange="getTowns();"class="form-control"><option value="0">选择市</option></select>
+											<select id="town-select"class="form-control"><option value="0">选择区</option></select>
 											<button class="btn btn-primary" onclick="getEquiByAddr();">查询</button>
 										</div>
 									</div>

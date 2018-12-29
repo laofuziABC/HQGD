@@ -39,7 +39,7 @@
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="fuceng">
+	<div class="fuceng"style="overflow:scroll">
 		<div class="fuqu" onclick="tuozhuai('.fuqutitle','.fuqu');">
 			<div class="fuquzone">
 				<div class="fuqulogo"></div>
@@ -83,7 +83,7 @@
 		</div>
 	</div>
 
-	<div class="wrapper">
+	<div class="wrapper" style="overflow:scroll" >
 		<div class="content-wrapper">
 			<section class="content-header">
 				<h1>用户管理</h1>
@@ -100,7 +100,18 @@
 
 						<div class="box">
 							<div class="box-header">
-								<h3 class="box-title"></h3>
+								<div class="sbaz_table">
+									<p>
+										<span class="float_left"><span>用户名：</span><input
+											type="text" id="searchByName"></span> <span
+											class="float_right" style="margin-right: 70%;"> <input
+											type="button" onclick="searchResult();" value="查询"
+											class="in_sub"> <input type="button"
+											onclick="report();" value="导出" class="in_sub"> 
+										</span>
+									<div class="clear"></div>
+
+								</div>
 							</div>
 							<!-- /.box-header -->
 							<div class="box-body">
@@ -248,7 +259,7 @@
 			$(".fuceng").css({
 				"display" : "block"
 			});
-
+			document.getElementById("userform").reset();
 		}
 		//编辑用户
 		function getUserEdit(param) {

@@ -4,10 +4,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>公共头部区域</title>
+<link rel="stylesheet" href="vince/css/vince.css">
+<style type="text/css">
+.info_text {
+	padding: 10px;
+}
+.all_title {
+	font-size: 1.7em;
+	color: #ffffff;
+	line-height: 45px;
+}
+</style>
 </head>
 <body>
 
-	<!-- <div class="fuceng1">
+	<div class="fuceng" style="overflow: scroll">
 		<div class="fuqu">
 			<div class="fuquzone">
 
@@ -17,7 +28,7 @@
 				</p>
 				<div class="passform" id="passForm">
 					<form action="#" id="outerForm">
-						<table id="passInfoTable">
+						<table id="passInfoTable" style="margin-left: 30px;">
 							<tr style="display: none;">
 								<td class="info_text">用户主键：</td>
 								<td><input type="text" class="right_input" value=""
@@ -53,10 +64,10 @@
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
 	<!-- 页面顶部标题【开始】 -->
-	<a href="index2.html" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
-		<span class="logo-mini"><b>和</b>其</span> <!-- logo for regular state and mobile devices -->
+	<a class="logo"> <!-- mini logo for sidebar mini 50x50 pixels --> <span
+		class="logo-mini"><b>和</b>其</span> <!-- logo for regular state and mobile devices -->
 		<span class="logo-lg"><b>Opt</b>sensor</span>
 	</a>
 
@@ -64,8 +75,7 @@
 	<nav class="navbar navbar-static-top">
 		<!-- Sidebar toggle button-->
 		<a href="#" class="sidebar-toggle" data-toggle="push-menu"
-			role="button"> <span class="sr-only">Toggle navigation</span>
-		</a>
+			role="button"> </a><span class="all_title">测温仪数据监测平台</span>
 		<!-- Navbar Right Menu -->
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
@@ -87,7 +97,8 @@
 						<!-- Menu Footer-->
 						<li class="user-footer">
 							<div class="pull-left">
-								<a href="#" class="btn btn-default btn-flat">修改密码</a>
+								<a href="#" class="btn btn-default btn-flat"
+									onclick="updatePassword();">修改密码</a>
 							</div>
 							<div class="pull-right">
 								<a href="#" class="btn btn-default btn-flat"
@@ -100,12 +111,16 @@
 
 	</nav>
 	<!-- 页面顶部标题【结束】 -->
+	<script src="vince/js/demo.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			//获取登录用户，赋值给页面参数
 			var username = parent.getParam("userName");
 			$("#hidden-xs-username").text(username);
 			$("#p-username").text("当前用户：" + username);
+			$(".fuceng").css({
+				"display" : "none"
+			});
 		});
 		//退出登录
 		function loginOut() {
@@ -127,13 +142,12 @@
 
 		//修改密码
 		function closetittle() {
-			debugger;
-			$(".fuceng1").css({
+			$(".fuceng").css({
 				"display" : "none"
 			});
 		}
 		function updatePassword() {
-			$(".fuceng1").css({
+			$(".fuceng").css({
 				"display" : "block"
 			});
 		}
@@ -171,8 +185,7 @@
 					}
 				});
 			}
-			debugger;
-			$(".fuceng1").css({
+			$(".fuceng").css({
 				"display" : "none"
 			});
 		}

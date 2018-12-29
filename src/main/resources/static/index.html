@@ -157,13 +157,13 @@
 			var userName =getParam("userName");
 			$("#main-sidebar").load("childrenHtml/side-menu.html");
 			$("#main-header").load("childrenHtml/title.html");
-			/* $(function(){
+			$(function(){
 				if(roleId=="0"){
 					$("#main-sidebar").load("childrenHtml/side-menu1.html");
 				}else{$("#main-sidebar").load("childrenHtml/side-menu.html");}
 				
 				$("#main-header").load("childrenHtml/title.html");
-			}); */
+			});
 			var cluster, markers = [];
 		    var points= [];
 		    var map = new AMap.Map("mapContainer", {
