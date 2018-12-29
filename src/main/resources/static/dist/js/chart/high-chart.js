@@ -163,7 +163,7 @@ function drawCurrentChannels(param){
 				let state=parseFloat(param[j].state);
 				if(state==5){channel+="<td class='green' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 				else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>超温</span></td>"; }
 			}
 			channel+="</tr>";
 		}
