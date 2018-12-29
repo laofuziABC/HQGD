@@ -25,6 +25,7 @@ import com.hqgd.pms.common.ExcelFormat;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
+import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
 
@@ -41,7 +42,24 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
-		// log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
+		if (realTimeDateList.size() > 0) {
+			EquipmentInfo e = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
+			String s = e.getChannelTem();
+			s = s.substring(2, s.length() - 2);
+			String[] arr = s.split("\\],\\[");
+			for (int i = 0; i < realTimeDateList.size(); i++) {
+				String[] ta = arr[i].split(",");
+				String cn = ta[0].substring(1, ta[0].length() - 1);
+				String max = ta[1].substring(1, ta[1].length() - 1);
+				String min = ta[2].substring(1, ta[2].length() - 1);
+				String t = realTimeDateList.get(i).getTemperature();
+				String channelNum = realTimeDateList.get(i).getChannelNum();
+				if (t != "3000" && t != "-437" && t != "2999.9"&&t != "2999" && channelNum.equals(cn)
+						&& (Float.valueOf(t) < Float.valueOf(min) || Float.valueOf(t) > Float.valueOf(max))) {
+					realTimeDateList.get(i).setState("9");
+				}
+			}
+		}
 		return realTimeDateList;
 	}
 
@@ -263,7 +281,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			List<String> channelList = dataAcquisitionVoMapper.selectAllChannels(equipmentId);
 			List<Date> timeList = dataAcquisitionVoMapper.selectAllTimestamp(param);
 			//循环封装各个通道的数据集合
-			List<List> dataList = new ArrayList<List>();
+			List<List<DataAcquisitionVo>> dataList = new ArrayList<List<DataAcquisitionVo>>();
 			for(int i=0; i<channelList.size(); i++) {
 				String channelNum=channelList.get(i).trim();
 				param.put("channelNum", channelNum);
