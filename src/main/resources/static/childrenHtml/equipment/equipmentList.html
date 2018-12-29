@@ -58,6 +58,18 @@
 								<td class="info_text"></td>
 							</tr>
 							<tr class="normal">
+								<td class="info_text" style="width: 130px;">设备类型<span
+									style="color: red;">*</span>：
+								</td>
+								<td><select id="equipmentType" name="equipmentType"
+									class="form-control select2" style="width: 100%;">
+										<option selected="selected">干变</option>
+										<option>开关柜</option>
+										<option>绕组</option>
+								</select></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
 								<td class="info_text">所属用户<span style="color: red;">*</span>：
 								</td>
 								<td><select class="right_input" id="userId" name="userId"
@@ -166,13 +178,13 @@
 											<td>序号</td>
 											<td>设备ID</td>
 											<td>设备名称</td>
+											<td>设备类型</td>
 											<td>通道温度</td>
 											<td>安装地址</td>
 											<td>地区编码</td>
 											<td>经纬度</td>
 											<td>帧结构</td>
 											<td>所属用户</td>
-											<!-- <td>创建时间</td> -->
 											<td>更新时间</td>
 											<td>更新者</td>
 											<td>操作</td>
@@ -181,7 +193,7 @@
 									<tbody>
 									<tbody id="equipmentList"></tbody>
 									<tr>
-										<td colspan="12" class="text_al_rig lindianjia"><input
+										<td colspan="13" class="text_al_rig lindianjia"><input
 											type="submit" onclick="addEquip();" value="添加设备"
 											class="anniu lindianjia"></td>
 									</tr>
@@ -258,6 +270,7 @@
 										+ "</td>";
 								equipList += "<td>" + data[i].equipmentName
 										+ "</td>";
+								equipList += "<td>" + data[i].type + "</td>";
 								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 										+ i + "')\">详情</a></td>";
 								equipList += "<td>" + data[i].address + "</td>";
@@ -315,6 +328,7 @@
 										+ "</td>";
 								equipList += "<td>" + data[i].equipmentName
 										+ "</td>";
+								equipList += "<td>" + data[i].type + "</td>";
 								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 										+ i + "')\">详情</a></td>";
 								equipList += "<td>" + data[i].address + "</td>";
@@ -367,7 +381,6 @@
 			$("#equipForm").hide();
 			$("#add").hide();
 			$("#saves").hide();
-			debugger;
 			var bu = "<td name=\"buttons\"><div class=\"btn-group pull-right\"><button id=\"bEdit\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowEdit(this);\"><span class=\"glyphicon glyphicon-pencil\"> </span></button><button id=\"bElim\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowElim(this);\"><span class=\"glyphicon glyphicon-trash\"> </span></button><button id=\"bAcep\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowAcep(this);\"><span class=\"glyphicon glyphicon-ok\"> </span></button><button id=\"bCanc\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowCancel(this);\"><span class=\"glyphicon glyphicon-remove\"> </span></button></div></td>"
 			if (globalData[param].channelTem != undefined) {
 				var v = JSON.parse(globalData[param].channelTem);
@@ -399,7 +412,6 @@
 				"display" : "block"
 			});
 			add = true;
-			debugger;
 			$("#equipForm").show();
 			$("#add").show();
 			$("#saves").show();
@@ -437,7 +449,6 @@
 			$("#equipForm").show();
 			$("#add").show();
 			$("#saves").show();
-			debugger;
 			var bu = "<td name=\"buttons\"><div class=\"btn-group pull-right\"><button id=\"bEdit\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowEdit(this);\"><span class=\"glyphicon glyphicon-pencil\"> </span></button><button id=\"bElim\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowElim(this);\"><span class=\"glyphicon glyphicon-trash\"> </span></button><button id=\"bAcep\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowAcep(this);\"><span class=\"glyphicon glyphicon-ok\"> </span></button><button id=\"bCanc\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowCancel(this);\"><span class=\"glyphicon glyphicon-remove\"> </span></button></div></td>"
 			if (globalData[param].channelTem != undefined) {
 				var v = JSON.parse(globalData[param].channelTem);
@@ -473,6 +484,7 @@
 			$("#userId").html(userHtml);
 			$("#equipmentId").val(globalData[param].equipmentId);
 			$("#equipmentName").val(globalData[param].equipmentName);
+			$("#type").val(globalData[param].type);
 			/* $("#userId").val(globalData[param].userName); */
 			$("#address").val(globalData[param].address);
 			$("#adcode").val(globalData[param].adcode);
@@ -522,6 +534,7 @@
 			var params = {
 				"equipmentId" : $("#equipmentId").val(),
 				"equipmentName" : $("#equipmentName").val(),
+				"type" : $("#type").val(),
 				"userId" : $("#userId").val(),
 				"userName" : $("#userId option:selected").text(),
 				"padcode" : $("#padcode").val() / 10000,
@@ -600,6 +613,8 @@
 									equipList += "<td>" + data[i].equipmentId
 											+ "</td>";
 									equipList += "<td>" + data[i].equipmentName
+											+ "</td>";
+									equipList += "<td>" + data[i].type
 											+ "</td>";
 									equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 											+ i + "')\">详情</a></td>";
