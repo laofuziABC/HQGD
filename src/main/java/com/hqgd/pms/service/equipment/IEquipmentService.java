@@ -26,4 +26,6 @@ public interface IEquipmentService {
 
 	String execRecordExport(String path);
 
+	List<EquipmentInfo> selectAllByType(String type);
+
 }

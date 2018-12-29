@@ -146,7 +146,24 @@ public class EquipmentController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询该地区下所有设备结束");
 	}
-
+	@RequestMapping(value = "/selectAllByType")
+	@ResponseBody
+	public void selectAllByType(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		log.info("查询该地区下所有设备开始");
+		String type = request.getParameter("type");
+		List<EquipmentInfo> equipmentList = equipmentService.selectAllByType(type);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000005");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		resultMap.put("data", equipmentList);
+		resultMap.put("total", equipmentList.size());
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询该地区下所有设备结束");
+	}
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {

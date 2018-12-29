@@ -5,6 +5,7 @@
     <id column="EQUIPMENT_ID" jdbcType="VARCHAR" property="equipmentId" />
     <result column="ID" jdbcType="INTEGER" property="id" />
     <result column="EQUIPMENT_NAME" jdbcType="VARCHAR" property="equipmentName" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
     <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
     <result column="CHANNEL_TEM" jdbcType="VARCHAR" property="channelTem" />
@@ -21,7 +22,7 @@
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    EQUIPMENT_ID, ID, EQUIPMENT_NAME, USER_NAME, USER_ID, CHANNEL_TEM, ADDRESS, ADCODE, 
+    EQUIPMENT_ID, ID, EQUIPMENT_NAME,TYPE, USER_NAME, USER_ID, CHANNEL_TEM, ADDRESS, ADCODE, 
     CADCODE, PADCODE, LNG_LAT, FRAME_STRU, ICON, CREATOR, CONVERT ( VARCHAR ( 100 ), CREATE_TIME, 20 ) AS CREATE_TIME, 
     UPDATER, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME
   </sql>
@@ -93,13 +94,13 @@
     where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.EquipmentInfo">
-    insert into hq_equipment_info (EQUIPMENT_ID, EQUIPMENT_NAME, 
+    insert into hq_equipment_info (EQUIPMENT_ID, EQUIPMENT_NAME,TYPE, 
       USER_NAME, USER_ID, CHANNEL_TEM, 
       ADDRESS, ADCODE, CADCODE, 
       PADCODE, LNG_LAT, FRAME_STRU, 
       ICON, CREATOR, CREATE_TIME, 
       UPDATER, UPDATE_TIME)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
       #{userName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{channelTem,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{adcode,jdbcType=VARCHAR}, #{cadcode,jdbcType=VARCHAR}, 
       #{padcode,jdbcType=VARCHAR}, #{lngLat,jdbcType=VARCHAR}, #{frameStru,jdbcType=VARCHAR}, 
@@ -114,6 +115,9 @@
       </if>
       <if test="equipmentName != null">
         EQUIPMENT_NAME,
+      </if>
+      <if test="type != null">
+        TYPE,
       </if>
       <if test="userName != null">
         USER_NAME,
@@ -165,6 +169,9 @@
       <if test="equipmentName != null">
         #{equipmentName,jdbcType=VARCHAR},
       </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
@@ -215,6 +222,9 @@
       <if test="equipmentName != null">
         EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
       </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
       <if test="userName != null">
         USER_NAME = #{userName,jdbcType=VARCHAR},
       </if>
@@ -264,6 +274,7 @@
     update hq_equipment_info
     set 
       EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
       USER_NAME = #{userName,jdbcType=VARCHAR},
       USER_ID = #{userId,jdbcType=VARCHAR},
       CHANNEL_TEM = #{channelTem,jdbcType=VARCHAR},

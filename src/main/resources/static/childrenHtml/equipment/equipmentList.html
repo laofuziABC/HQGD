@@ -45,7 +45,7 @@
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="fuceng"style="overflow:scroll">
+	<div class="fuceng" style="overflow: scroll">
 		<div class="fuqu">
 			<div class="fuquzone">
 
@@ -68,6 +68,18 @@
 								</td>
 								<td><input type="text" class="right_input"
 									placeholder="请输入设备名称" id="equipmentName" name="equipmentName" /></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
+								<td class="info_text" style="width: 130px;">设备类型<span
+									style="color: red;">*</span>：
+								</td>
+								<td><select id="equipmentType" name="equipmentType" class="form-control select2"
+									style="width: 100%;">
+										<option selected="selected">干变</option>
+										<option>开关柜</option>
+										<option>绕组</option>
+								</select></td>
 								<td class="info_text"></td>
 							</tr>
 							<tr class="normal">
@@ -182,6 +194,7 @@
 											<td>序号</td>
 											<td>设备ID</td>
 											<td>设备名称</td>
+											<td>设备类型</td>
 											<td>通道温度</td>
 											<td>安装地址</td>
 											<td>地区编码</td>
@@ -308,6 +321,8 @@
 										+ "</td>";
 								equipList += "<td>" + data[i].equipmentName
 										+ "</td>";
+										equipList += "<td>" + data[i].type
+										+ "</td>";
 								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 										+ i + "')\">详情</a></td>";
 								equipList += "<td>" + data[i].address + "</td>";
@@ -364,6 +379,8 @@
 								equipList += "<td>" + data[i].equipmentId
 										+ "</td>";
 								equipList += "<td>" + data[i].equipmentName
+										+ "</td>";
+										equipList += "<td>" + data[i].type
 										+ "</td>";
 								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 										+ i + "')\">详情</a></td>";
@@ -577,6 +594,7 @@
 				"city" : $("#cadcode option:selected").text(),
 				"lngLat" : $("#lngLat").val(),
 				"frameStru" : $("#frameStru").val(),
+				"type" : $("#equipmentType").val(),
 				"channelTem" : res
 			};
 			if ($("#equipmentId").val() != ""
@@ -646,6 +664,8 @@
 									equipList += "<td>" + data[i].equipmentId
 											+ "</td>";
 									equipList += "<td>" + data[i].equipmentName
+											+ "</td>";
+											equipList += "<td>" + data[i].type
 											+ "</td>";
 									equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 											+ i + "')\">详情</a></td>";
