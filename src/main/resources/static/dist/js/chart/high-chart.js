@@ -124,12 +124,14 @@ function addPoints() {
 		var pointResult = getChartData(url, param);
 		var pointsData = pointResult.data;
 		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
-		//绘制此点在图表中
-		for(let i=0; i<pointsData.length; i++){
-			var yValue=parseFloat(pointsData[i].temperature);
-			//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-			if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
-			else{series[i].addPoint([thisPointTime, yValue], true, false); }
+		//判断此点是否在图表中，再绘制此点
+		if(thisPointTime>ST_VALUE){
+			for(let i=0; i<pointsData.length; i++){
+				var yValue=parseFloat(pointsData[i].temperature);
+				//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
+				if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
+				else{series[i].addPoint([thisPointTime, yValue], true, false); }
+			}
 		}
 		drawCurrentChannels(pointsData);
 	}, interval);

@@ -45,20 +45,23 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		if (realTimeDateList.size() > 0) {
 			EquipmentInfo e = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
 			String s = e.getChannelTem();
-			s = s.substring(2, s.length() - 2);
-			String[] arr = s.split("\\],\\[");
-			for (int i = 0; i < realTimeDateList.size(); i++) {
-				String[] ta = arr[i].split(",");
-				String cn = ta[0].substring(1, ta[0].length() - 1);
-				String max = ta[1].substring(1, ta[1].length() - 1);
-				String min = ta[2].substring(1, ta[2].length() - 1);
-				String t = realTimeDateList.get(i).getTemperature();
-				String channelNum = realTimeDateList.get(i).getChannelNum();
-				if (t != "3000" && t != "-437" && t != "2999.9" && channelNum.equals(cn)
-						&& (Float.valueOf(t) < Float.valueOf(min) || Float.valueOf(t) > Float.valueOf(max))) {
-					realTimeDateList.get(i).setState("9");
+			if(s!=null && !s.equals("")) {
+				s = s.substring(2, s.length() - 2);
+				String[] arr = s.split("\\],\\[");
+				for (int i = 0; i < realTimeDateList.size(); i++) {
+					String[] ta = arr[i].split(",");
+					String cn = ta[0].substring(1, ta[0].length() - 1);
+					String max = ta[1].substring(1, ta[1].length() - 1);
+					String min = ta[2].substring(1, ta[2].length() - 1);
+					String t = realTimeDateList.get(i).getTemperature();
+					String channelNum = realTimeDateList.get(i).getChannelNum();
+					if (t != "3000" && t != "-437" && t != "2999.9" && channelNum.equals(cn)
+							&& (Float.valueOf(t) < Float.valueOf(min) || Float.valueOf(t) > Float.valueOf(max))) {
+						realTimeDateList.get(i).setState("9");
+					}
 				}
 			}
+			
 		}
 		return realTimeDateList;
 	}
