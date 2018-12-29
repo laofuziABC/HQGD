@@ -87,7 +87,7 @@
 											<button class="btn btn-primary" onclick="getEquiByUser();">查询</button> -->
 
 											<div class="input-group">
-												<input id="new-event" type="text" class="form-control"
+												<input id="userParam" type="text" class="form-control"
 													placeholder="请输入用户名">
 												<div class="input-group-btn">
 													<button type="submit" class="btn btn-primary"
@@ -124,35 +124,31 @@
 						</div>
 					</div>
 					<!-- /.col -->
-					<!-- <div class="col-md-9">
+					<div class="col-md-9">
 						<div class="box box-primary">
 							<div class="box-body no-padding">
-								标签行【开始】
 								<ul class="nav nav-tabs">
 									<li><a data-toggle="tab" href="#"
 										onclick="changeTabContent(1);">当前监测数据</a></li>
 									<li><a data-toggle="tab" href="#"
 										onclick="changeTabContent(2);">历史监测数据</a></li>
 								</ul>
-								标签行【结束】
 								<div id="contents"></div>
 							</div>
-							/.box-body
 						</div>
-						/. box
-					</div> -->
+					</div>
 					<!-- 右侧结果信息【开始】 -->
-					<div class="col-md-10 ssjc_right" id="ssjc_right">
-						<!--标签行【开始】-->
+					<!-- <div class="col-md-10 ssjc_right" id="ssjc_right">
+						标签行【开始】
 						<ul class="nav nav-tabs">
 							<li><a data-toggle="tab" href="#"
 								onclick="changeTabContent(1);">当前监测数据</a></li>
 							<li><a data-toggle="tab" href="#"
 								onclick="changeTabContent(2);">历史监测数据</a></li>
 						</ul>
-						<!--标签行【结束】-->
+						标签行【结束】
 						<div id="contents"></div>
-					</div>
+					</div> -->
 					<!-- 右侧结果信息【结束】 -->
 					<!-- /.col -->
 				</div>
@@ -197,6 +193,7 @@
 				var roleId = parent.getParam("roleId");
 				if(roleId==1){
 					getEquiResultList();
+					changeTabContent("1");
 				}else{
 					$("#yincang").css({"display":"none"});
 					var url="equipment/selectAllByUser";
