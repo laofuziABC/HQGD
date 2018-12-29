@@ -51,6 +51,13 @@
     where 1=1 
      AND USER_NAME = #{userName,jdbcType=VARCHAR}
   </select>
+  <select id="selectAllByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_info
+    where 1=1 
+     AND TYPE = #{type,jdbcType=VARCHAR}
+  </select>
   <select id="selectAllEquipmentByAddress"  resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
