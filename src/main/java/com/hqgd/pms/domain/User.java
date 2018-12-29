@@ -1,7 +1,5 @@
 package com.hqgd.pms.domain;
 
-import java.util.Date;
-
 public class User {
 
 	public User() {
