@@ -248,6 +248,12 @@ public class EquipmentService implements IEquipmentService {
 		return columns;
 	}
 
+	@Override
+	public List<EquipmentInfo> selectAllByType(String type) {
+		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllByType(type);
+		return equipmentInfoList;
+	}
+
 	// @Override
 	// public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
 	// List<EquipmentParam> equipmentParamList =
