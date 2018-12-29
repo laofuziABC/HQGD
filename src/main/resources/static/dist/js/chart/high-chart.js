@@ -124,12 +124,14 @@ function addPoints() {
 		var pointResult = getChartData(url, param);
 		var pointsData = pointResult.data;
 		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
-		//绘制此点在图表中
-		for(let i=0; i<pointsData.length; i++){
-			var yValue=parseFloat(pointsData[i].temperature);
-			//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-			if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
-			else{series[i].addPoint([thisPointTime, yValue], true, false); }
+		//判断此点是否在图表中，再绘制此点
+		if(thisPointTime>ST_VALUE){
+			for(let i=0; i<pointsData.length; i++){
+				var yValue=parseFloat(pointsData[i].temperature);
+				//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
+				if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
+				else{series[i].addPoint([thisPointTime, yValue], true, false); }
+			}
 		}
 		drawCurrentChannels(pointsData);
 	}, interval);
@@ -151,7 +153,7 @@ function drawCurrentChannels(param){
 		if(count==1){ $("#channelDiv").css({"height":($(window).height())*0.45}); }
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-		var divW=$(window).width()*0.68;
+		var divW=$(window).width()*0.6;
 		var tdW=divW/3+"px;";
 		//设定尺寸适应容器【结束】
 		for(let i=0; i<count; i++){
@@ -163,7 +165,7 @@ function drawCurrentChannels(param){
 				let state=parseFloat(param[j].state);
 				if(state==5){channel+="<td class='green' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 				else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"(超温)</span></td>"; }
 			}
 			channel+="</tr>";
 		}
