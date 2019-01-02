@@ -69,16 +69,13 @@
 		<!-- 下方的统计表【结束】 -->
 		
 		<script src="vince/js/nicescroll.js"></script>
-		<script type="text/javascript" src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
-		<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
-		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 		<script type="text/javascript">
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【开始】
 			$('.datetimePicker').datetimepicker({
 				format: 'yyyy-mm-dd hh:ii:ss', language: 'en', pickDate: true, pickTime: true, hourStep: 1, minuteStep: 15, secondStep: 30, inputMask: true
 			});
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
-			$(function(){
+			/* $(function(){ */
 				//历史数据页面的开始时间和结束时间默认为当天0点到当前时间
 		        var startTimeInput = document.getElementById("startTime");
 		        var endTimeInput = document.getElementById("endTime");
@@ -88,9 +85,9 @@
 		        if(equiId!=null){ getEquiData(equiId); }
 		        else{
 		        	$("#chart_history").highcharts(blankOption);
-		        	$(".ssjc_right_bottom").css({"height":($(window).height())*0.45});
+		        	$(".ssjc_right_bottom").css({"height":($(window).height())*0.4});
 		        }
-			});
+			/* }); */
 			//加载同源数据的统计图和统计表
 			function showHistoryContent(){
 				var startTime=$("#startTime").val();
@@ -112,7 +109,7 @@
 			//加载历史数据列表【开始】
 			function searchTableResult(pageNo){
 				//设置DIV高度
-				$(".ssjc_right_bottom").css({"height":($(window).height())*0.45});
+				$(".ssjc_right_bottom").css({"height":($(window).height())*0.4});
 				var param ={
 					"equipmentId": equiId, "startTime": $("#startTime").val(), "endTime": $("#endTime").val(), "state": $("#data-type").val(),
 					"page": pageNo,								//当前页码，相当于pageNum

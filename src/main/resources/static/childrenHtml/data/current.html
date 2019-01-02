@@ -42,14 +42,7 @@
 		<!-- 通道温度【结束】 -->
 		
 		<script src="vince/js/nicescroll.js"></script>
-		<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
-		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 		<script type="text/javascript">
-			//初始化页面信息
-			$(function(){
-				if(equiId!=null){getEquiData(equiId); }
-				else{$("#chart_current").highcharts(blankOption);}
-			});
 			//异步加载通道温度【开始】
 			function showBlocks(){
 				var url="dataAcquisition/realtime";
@@ -65,6 +58,9 @@
 				initCurrentChart();
 			}
 			//绘制温度实时监控表【结束】
+			//初始化页面信息
+			if(equiId!=null){getEquiData(equiId); }
+			else{$("#chart_current").highcharts(blankOption);}
 		</script>
 	</body>
 </html>

@@ -95,24 +95,30 @@
 		<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
 		<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
 		<script type="text/javascript" src="dist/js/AllCities.js"></script>
+		
+		<script type="text/javascript" src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
+		<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
+		<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
+		
 		<script type="text/javascript">
-			$(function(){
-				var roleId = parent.getParam("roleId");
-				if(roleId==1){
-					getEquiResultList();
-				}else{
-					$("#yincang").css({"display":"none"});
-					var url="equipment/selectAllByUser";
-					var username=parent.getParam("userName");
-					var param={"userName":username};
-					if(username != ""){
-						AjaxPostForEquiSubList(url,param);
-					}
+		
+			var roleId = parent.getParam("roleId");
+			if(roleId==1){
+				getEquiResultList();
+			}else{
+				$("#yincang").css({"display":"none"});
+				var url="equipment/selectAllByUser";
+				var username=parent.getParam("userName");
+				var param={"userName":username};
+				if(username != ""){
+					AjaxPostForEquiSubList(url,param);
 				}
-			});
-			//关联标签页与内容，控制定时器
+			}
+			//初始化标签页与内容
 			$(".nav-tabs >li:contains('当前')").addClass("active");
 			$("#contents").load("childrenHtml/data/current.html");
+			$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
+			//切换标签页
 			function changeTabContent(param){
 				if(param==2){
 					$("#contents").load("childrenHtml/data/history.html");
@@ -182,7 +188,7 @@
 				var url="equipment/selectAllByType";
 				var equiType=$("#equi-type option:selected").text().trim();
 				var param={"type":equiType};
-				if(equiType != 0){
+				if(equiType != "所有类型"){
 					AjaxPostForEquiSubList(url,param);
 				}
 			}
