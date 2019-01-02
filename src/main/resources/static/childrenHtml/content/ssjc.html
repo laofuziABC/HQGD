@@ -179,9 +179,10 @@
 			}
 			//根据设备类型，查找同类型设备
 			function getEquiByType(){
+				debugger;
 				var url="equipment/selectAllByType";
-				var equiType=$("#equi-type option:selected").val().trim();
-				var param={"equiType":equiType};
+				var equiType=$("#equi-type option:selected").text().trim();
+				var param={"type":equiType};
 				if(equiType != 0){
 					AjaxPostForEquiSubList(url,param);
 				}

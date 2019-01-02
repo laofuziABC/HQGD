@@ -13,53 +13,53 @@
 </head>
 <body>
 
-	<!-- <div class="fuceng1">
-		<div class="fuqu">
-			<div class="fuquzone">
+	<div class="fuceng" id="updatepass">
+			<div class="fuqu">
+				<div class="fuquzone">
 
-				<div class="fuqulogo"></div>
-				<p class="fuqutitle">
-					更新密码 <span onclick="closetittle();">×</span>
-				</p>
-				<div class="passform" id="passForm">
-					<form action="#" id="outerForm">
-						<table id="passInfoTable">
-							<tr style="display: none;">
-								<td class="info_text">用户主键：</td>
-								<td><input type="text" class="right_input" value=""
-									id="userId" name="id" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">原始密码<span style="color: red;">*</span>：
-								</td>
-								<td><input type="password" class="right_input" value=""
-									id="oldpassword" name="oldpassword" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">新密码<span style="color: red;">*</span>：
-								</td>
-								<td><input type="password" class="right_input" value=""
-									id="newPassword" name="newPassword" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">确认新密码<span style="color: red;">*</span>：
-								</td>
-								<td><input type="password" class="right_input" value=""
-									id="confirm" /></td>
-								<td class="info_text"></td>
-							</tr>
-						</table>
-					</form>
-					<div class="fuqusave">
-						<input type="button" onclick="submitPassInfo();" value="保存">
+					<div class="fuqulogo"></div>
+					<p class="fuqutitle">
+						更新密码 <span onclick="closetittle();">×</span>
+					</p>
+					<div class="passform" id="passForm">
+						<form action="#" id="outerForm">
+							<table id="passInfoTable" style="margin-left: 30px;">
+								<tr style="display: none;">
+									<td class="info_text">用户主键：</td>
+									<td><input type="text" class="right_input" value=""
+										id="userId" name="id" /></td>
+									<td class="info_text"></td>
+								</tr>
+								<tr class="normal">
+									<td class="info_text">原始密码<span style="color: red;">*</span>：
+									</td>
+									<td><input type="password" class="right_input" value=""
+										id="oldpassword" name="oldpassword" /></td>
+									<td class="info_text"></td>
+								</tr>
+								<tr class="normal">
+									<td class="info_text">新密码<span style="color: red;">*</span>：
+									</td>
+									<td><input type="password" class="right_input" value=""
+										id="newPassword" name="newPassword" /></td>
+									<td class="info_text"></td>
+								</tr>
+								<tr class="normal">
+									<td class="info_text">确认新密码<span style="color: red;">*</span>：
+									</td>
+									<td><input type="password" class="right_input" value=""
+										id="confirm" /></td>
+									<td class="info_text"></td>
+								</tr>
+							</table>
+						</form>
+						<div class="fuqusave">
+							<input type="button" onclick="submitPassInfo();" value="保存">
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div> -->
 	<!-- 页面顶部标题【开始】 -->
 	<a href="#" class="logo" style="height: 100%;"> <span class="logo-lg"><img
 			class="logo-image" src="vince/images/logo.png"></span>
@@ -104,6 +104,7 @@
 			//设置标题自适应
 			var divW=$(".main-footer").width()+30;
 			$(".navbar").css({"width": divW});
+			
 		});
 		//退出登录
 		function loginOut() {
@@ -124,14 +125,14 @@
 		}
 
 		//修改密码
+		//修改密码
 		function closetittle() {
-			debugger;
-			$(".fuceng1").css({
+			$(".fuceng").css({
 				"display" : "none"
 			});
 		}
 		function updatePassword() {
-			$(".fuceng1").css({
+			$("#updatepass").css({
 				"display" : "block"
 			});
 		}

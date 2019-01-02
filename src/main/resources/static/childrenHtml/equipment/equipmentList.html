@@ -32,7 +32,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
-	<div class="fuceng">
+	<div class="fuceng" id="equipmentfuceng">
 		<div class="fuqu">
 			<div class="fuquzone">
 
@@ -61,18 +61,19 @@
 								<td class="info_text" style="width: 130px;">设备类型<span
 									style="color: red;">*</span>：
 								</td>
-								<td><select id="equipmentType" name="equipmentType"
-									class="form-control select2" style="width: 100%;">
-										<option selected="selected">干变</option>
-										<option>开关柜</option>
-										<option>绕组</option>
+								<td><select id=type name="type"
+									class="right_input" style="height: 24px; width: 174px;">
+										<option value="1" selected="selected">开关柜</option>
+										<option value="2">干式变压器</option>
+										<option value="3">变压器绕组</option>
+										<option value="4">环网柜</option>
 								</select></td>
 								<td class="info_text"></td>
 							</tr>
 							<tr class="normal">
 								<td class="info_text">所属用户<span style="color: red;">*</span>：
 								</td>
-								<td><select class="right_input" id="userId" name="userId"
+								<td><select class="right_input" id="userName" name="userName"
 									style="height: 24px; width: 174px;">
 								</select></td>
 								<td class="info_text"></td>
@@ -232,7 +233,6 @@
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<script>
 		jQuery(document).ready(function() {
-			debugger;
 			var roleId = parent.getParam("roleId");
 			var userName = parent.getParam("userName");
 			if (roleId == "1") {
@@ -366,7 +366,6 @@
 				dataType : "json",
 				async : false,
 				success : function(result) {
-					debugger;
 					globalUserList = result;
 
 				}
@@ -375,7 +374,7 @@
 
 		//温度值域
 		function getChan(param) {
-			$(".fuceng").css({
+			$("#equipmentfuceng").css({
 				"display" : "block"
 			});
 			$("#equipForm").hide();
@@ -408,7 +407,7 @@
 
 		//新增
 		function addEquip() {
-			$(".fuceng").css({
+			$("#equipmentfuceng").css({
 				"display" : "block"
 			});
 			add = true;
@@ -432,7 +431,7 @@
 				userHtml += "<option value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
 			}
-			$("#userId").html(userHtml);
+			$("#userName").html(userHtml);
 			getProvs();
 			$("#padcode").val((globalData[param].padcode) * 10000);
 			getCities();
@@ -442,7 +441,7 @@
 		}
 		//编辑
 		function getEquiEdit(param) {
-			$(".fuceng").css({
+			$("#equipmentfuceng").css({
 				"display" : "block"
 			});
 			add = false;
@@ -475,17 +474,17 @@
 			if (globalUserList == "") {
 				getUserList();
 			}
-			var userHtml = "<option value=\"\" checked>"
+			debugger;
+			var userHtml = "<option value='"+globalData[param].userId+"' checked>"
 					+ globalData[param].userName + "</option>";
 			for (let i = 0; i < globalUserList.length; i++) {
-				userHtml += "<option style=\"color:#E20A0A;\" value='"+globalUserList[i].id+"'>"
+				userHtml += "<option  value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
 			}
-			$("#userId").html(userHtml);
+			$("#userName").html(userHtml);
 			$("#equipmentId").val(globalData[param].equipmentId);
 			$("#equipmentName").val(globalData[param].equipmentName);
 			$("#type").val(globalData[param].type);
-			/* $("#userId").val(globalData[param].userName); */
 			$("#address").val(globalData[param].address);
 			$("#adcode").val(globalData[param].adcode);
 			$("#lngLat").val(globalData[param].lngLat);
@@ -534,9 +533,9 @@
 			var params = {
 				"equipmentId" : $("#equipmentId").val(),
 				"equipmentName" : $("#equipmentName").val(),
-				"type" : $("#type").val(),
-				"userId" : $("#userId").val(),
-				"userName" : $("#userId option:selected").text(),
+				"type" : $("#type option:selected").text(),
+				"userId" : $("#userName").val(),
+				"userName" : $("#userName option:selected").text(),
 				"padcode" : $("#padcode").val() / 10000,
 				"cadcode" : $("#cadcode").val() / 100,
 				"adcode" : $("#adcode").val(),
@@ -560,7 +559,7 @@
 					success : function(result) {
 						if (result.success) {
 							alert("操作成功！");
-							$(".fuceng").css({
+							$("#equipmentfuceng").css({
 								"display" : "none"
 							})
 						} else {
@@ -578,7 +577,7 @@
 					success : function(result) {
 						if (result.success) {
 							alert("操作成功！");
-							$(".fuceng").css({
+							$("#equipmentfuceng").css({
 								"display" : "none"
 							})
 						} else {

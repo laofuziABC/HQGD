@@ -300,8 +300,7 @@ li{list-style: none}
 /* 响应方案 */ 
 .xyfa_title{min-height: 39px;}
 .xyfa_title .float_right{margin-top:5px;}
-.fuceng{position: fixed;width: 100%;height:400px;background: rgba(22,22,22,0.6);z-index: 999999;top:0;left: 0;display: none}
-.fuceng1{position: fixed;width: 100%;height:400px;background: rgba(22,22,22,0.6);z-index: 999999;top:0;left: 0;display: none}
+.fuceng{position: fixed;width: 100%;height:900px;background: rgba(22,22,22,0.6);z-index: 999999;top:0;left: 0;display: none}
 .fuqu{width: 640px;position: absolute;top:100px;left: 400px;}
 .fuquzone{width: 640px;background: #fff;margin-top: 51px;border-radius: 10px;overflow: hidden;;}
 .fuqulogo{position: absolute;width: 102px;height: 102px;left:269px;top:0px;background: url(../images/icon_25.png);}
