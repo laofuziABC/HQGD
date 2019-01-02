@@ -33,7 +33,18 @@ public class DataAcquisitionVo {
 	private String dutyPerson;
 
 	private String tel;
+
 	private Integer total;
+	
+	private Integer numOfCh;
+
+	public Integer getNumOfCh() {
+		return numOfCh;
+	}
+
+	public void setNumOfCh(Integer numOfCh) {
+		this.numOfCh = numOfCh;
+	}
 
 	public Integer getTotal() {
 		return total;
