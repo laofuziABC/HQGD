@@ -61,8 +61,8 @@
 								<td class="info_text" style="width: 130px;">设备类型<span
 									style="color: red;">*</span>：
 								</td>
-								<td><select id=type name="type"
-									class="right_input" style="height: 24px; width: 174px;">
+								<td><select id=type name="type" class="right_input"
+									style="height: 24px; width: 174px;">
 										<option value="1" selected="selected">开关柜</option>
 										<option value="2">干式变压器</option>
 										<option value="3">变压器绕组</option>
@@ -73,8 +73,8 @@
 							<tr class="normal">
 								<td class="info_text">所属用户<span style="color: red;">*</span>：
 								</td>
-								<td><select class="right_input" id="userName" name="userName"
-									style="height: 24px; width: 174px;">
+								<td><select class="right_input" id="userName"
+									name="userName" style="height: 24px; width: 174px;">
 								</select></td>
 								<td class="info_text"></td>
 							</tr>
@@ -481,10 +481,13 @@
 				userHtml += "<option  value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
 			}
+			var typeHtml = "<option value=\"\" checked>"
+					+ globalData[param].type + "</option>";
+			typeHtml += "<option value=\"1\">开关柜</option><option value=\"2\">干式变压器</option><option value=\"3\">变压器绕组</option><option value=\"4\">环网柜</option>"
+			$("#type").html(typeHtml);
 			$("#userName").html(userHtml);
 			$("#equipmentId").val(globalData[param].equipmentId);
 			$("#equipmentName").val(globalData[param].equipmentName);
-			$("#type").val(globalData[param].type);
 			$("#address").val(globalData[param].address);
 			$("#adcode").val(globalData[param].adcode);
 			$("#lngLat").val(globalData[param].lngLat);
