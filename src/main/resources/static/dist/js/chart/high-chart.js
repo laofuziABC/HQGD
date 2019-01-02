@@ -91,6 +91,7 @@ var NT_VALUE=NOW_TIME.getTime();
 START_TIME=(NT_VALUE-ST_VALUE>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
 //获取并计算常量【结束】
 function initCurrentChart(){
+//	var startTime = parent.formatDateToString("2018-12-01 00:00:00");
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/periodDate";
@@ -100,23 +101,26 @@ function initCurrentChart(){
 	var channelList=result.channelList;
 	var timeList=result.timeList;
 	var dataList=result.dataList;
-	//组装系列值
-	var totalArray=[];
-	for(let i=0; i<dataList.length; i++){
-		var temp = dataList[i];
-		var singleArray=[];
-		for(let j=0; j<timeList.length; j++){
-			var tempTime=(new Date(timeList[j])).getTime();
-			var tempArray = [tempTime, temp[j]];
-			singleArray.push(tempArray);
+	//只有通道数和系列数相等，才可以绘制图表
+	if(channelList.length==dataList.length){
+		//组装系列值
+		var totalArray=[];
+		for(let i=0; i<dataList.length; i++){
+			var temp = dataList[i];
+			var singleArray=[];
+			for(let j=0; j<timeList.length; j++){
+				var tempTime=(new Date(timeList[j])).getTime();
+				var tempArray = [tempTime, temp[j]];
+				singleArray.push(tempArray);
+			}
+			totalArray.push(singleArray);
 		}
-		totalArray.push(singleArray);
-	}
-	//为系列赋值
-	var series=[];
-	for(let i=0; i<channelList.length; i++){
-		var serie = {name: channelList[i], data: totalArray[i], type:"spline", pointInterval: 6e4};
-		series.push(serie);
+		//为系列赋值
+		var series=[];
+		for(let i=0; i<channelList.length; i++){
+			var serie = {name: channelList[i], data: totalArray[i], type:"spline", pointInterval: 6e4};
+			series.push(serie);
+		}
 	}
 	currentOption.series = series;
 	$("#chart_current").empty();
@@ -131,20 +135,22 @@ function addPoints() {
 		var param={"equipmentId": equiId};
 		var pointResult = getChartData(url, param);
 		var pointsData = pointResult.data;
-		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
-		//判断此点是否在图表中，再绘制此点
-		if(thisPointTime>ST_VALUE){
-			for(let i=0; i<pointsData.length; i++){
-				var yValue=parseFloat(pointsData[i].temperature);
-				//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-				if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
-				else{series[i].addPoint([thisPointTime, yValue], true, false); }
+		if(pointsData.length==pointsData[0].numOfCh){
+			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
+			//判断此点是否在图表中，再绘制此点
+			if(thisPointTime>ST_VALUE){
+				for(let i=0; i<pointsData.length; i++){
+					var yValue=parseFloat(pointsData[i].temperature);
+					//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
+					if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
+					else{series[i].addPoint([thisPointTime, yValue], true, false); }
+				}
 			}
+			drawCurrentChannels(pointsData);
 		}
-		drawCurrentChannels(pointsData);
 	}, interval);
 }
-
+//刷新最新通道温度监测结果
 function drawCurrentChannels(param){
 	//设置DIV高度
 	$("#channelDiv").css({"height":($(window).height())*0.45});

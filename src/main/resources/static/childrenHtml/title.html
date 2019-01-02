@@ -102,9 +102,11 @@
 			$("#hidden-xs-username").text(username);
 			$("#p-username").text("当前用户：" + username);
 			//设置标题自适应
-			var divW=$(".main-footer").width()+30;
-			$(".navbar").css({"width": divW});
-			
+			$(".navbar").addEventListener('resize', e => { this.changeDivSize(); }, false);
+			function changeDivSize(){
+				var divW=$(".main-footer").width()+30;
+				$(".navbar").css({"width": divW});
+			}
 		});
 		//退出登录
 		function loginOut() {
