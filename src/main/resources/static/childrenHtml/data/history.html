@@ -6,6 +6,14 @@
 		<link rel="stylesheet" href="../../bower_components/bootstrap-daterangepicker/daterangepicker.css">
 		<link rel="stylesheet" href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 		<link rel="stylesheet" href="../../plugins/timepicker/bootstrap-timepicker.min.css">
+		<style type="text/css">
+		.ssjc_ru_title span {
+		margin:5px;
+		}
+		.ssjc_ru_title {
+		padding:5px;
+		}
+		</style>
 	</head>
 	<body>
 		<!-- 上方的统计图【开始】 -->
@@ -30,8 +38,8 @@
 						</select>
 					</span> 
 					<span class="float_right">
-						<input type="button" class="youcecha" onclick="report();" value="导出" /> 
 						<input type="button" class="youcecha" onclick="showHistoryContent();" value="查询" />
+						<input type="button" class="youcecha" onclick="reportHistory();" value="导出" /> 
 					</span>
 				</div>
 				<!-- 筛选条件【结束】 -->
@@ -163,6 +171,21 @@
 				});
 			}
 			//加载历史数据列表【结束】
+			function reportHistory() {
+				var param = {
+					"equipmentId" : equiId,
+					"startTime" : $("#startTime").val(),
+					"endTime" : $("#endTime").val(),
+				};
+				$.ajax({
+					url : "dataAcquisition/recordExport",
+					type : "post",
+					data : param,
+					dataType : "json",
+					success : function(result) {
+					}
+				});
+			}
 		</script>
 	</body>
 </html>

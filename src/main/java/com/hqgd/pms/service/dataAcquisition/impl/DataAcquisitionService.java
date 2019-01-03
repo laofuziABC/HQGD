@@ -174,7 +174,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.recordExport(param);
-		path = (path == null || path.isEmpty()) ? "C:\\Program Files" : path;
+		path = (path == null || path.isEmpty()) ? "D:\\PMS" : path;
 		File file = new File(path);
 		if (!file.exists()) {
 			file.mkdirs();
