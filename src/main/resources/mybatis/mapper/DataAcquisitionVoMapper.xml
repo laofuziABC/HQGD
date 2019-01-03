@@ -55,7 +55,9 @@ FROM
 	<!-- LEFT JOIN hq_equipment_param AS p ON t.EQUIPMENT_ID = p.EQUIPMENT_ID 
 	AND t.CHANNEL_NUM = p.CHANNEL_NUM  -->
 WHERE
-	t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}  
+	t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+ORDER BY
+	CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
   </select>
   
   <select id="selectHistoricalDataById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
