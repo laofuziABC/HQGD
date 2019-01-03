@@ -9,6 +9,12 @@
 	href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 <link rel="stylesheet"
 	href="../../plugins/timepicker/bootstrap-timepicker.min.css">
+<style>
+.ssjc_ru_title span {
+	margin-left: 10px;
+}
+</style>
+
 </head>
 <body>
 	<!-- 上方的统计图【开始】 -->
@@ -17,11 +23,9 @@
 			<!-- 筛选条件【开始】 -->
 			<div class="ssjc_ru_title">
 				<span class="tiaoshijian">开始时间： <input type="text"
-					class="shi datetimePicker" id="startTime" /> <i
-					class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					class="shi datetimePicker" id="startTime" />
 				</span> <span class="tiaoshijian">结束时间： <input type="text"
-					class="shi datetimePicker" id="endTime"> <i
-					class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					class="shi datetimePicker" id="endTime">
 				</span> <span>显示内容： <select class="biaoti_select" id="data-type"
 					onchange="searchTableResult(1);">
 						<option value="0" selected="selected">显示所有数据</option>
@@ -34,11 +38,10 @@
 						<option value="30">30条</option>
 						<option value="50">50条</option>
 				</select>
-				</span> <span class="float_right"> <input type="button"
-					class="youcecha" onclick="report();" value="导出" /> <input
-					type="button" class="youcecha" onclick="showHistoryContent();"
-					value="查询" />
-				</span>
+				</span> <span class="float_right"><input type="button"
+					class="youcecha" onclick="showHistoryContent();" value="查询" /> <input
+					type="button" id="btn" class="youcecha" onclick="reportHistory();"
+					value="导出" /> </span>
 			</div>
 			<!-- 筛选条件【结束】 -->
 			<div class="ssjc_ru_table">
@@ -49,31 +52,31 @@
 	<!-- 上方的统计图【结束】 -->
 	<!-- 下方的统计表【开始】 -->
 	<!-- <div class="ssjc_right_bottom"> -->
-		<div class="box">
-			<div class="box-body">
-				<table id="example1" class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<td style="width: 25%;">设备名称</td>
-							<td style="width: 10%;">通道号</td>
-							<td style="width: 12.5%;">光纤位置</td>
-							<td style="width: 10%;">温度(单位:℃)</td>
-							<td style="width: 7.5%;">PD</td>
-							<td style="width: 7.5%;">UV</td>
-							<td style="width: 7.5%;">运行状态</td>
-							<td style="width: 20%;">采集时间</td>
-						</tr>
-					</thead>
-					<tbody id="history-table-body">
-					</tbody>
-				</table>
-				<div>
-					<div class="list-page-tail page-down" id="data-show-pager"
-						style="margin: auto;"></div>
-				</div>
+	<div class="box">
+		<div class="box-body">
+			<table id="example1" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<td style="width: 25%;">设备名称</td>
+						<td style="width: 10%;">通道号</td>
+						<td style="width: 12.5%;">光纤位置</td>
+						<td style="width: 10%;">温度(单位:℃)</td>
+						<td style="width: 7.5%;">PD</td>
+						<td style="width: 7.5%;">UV</td>
+						<td style="width: 7.5%;">运行状态</td>
+						<td style="width: 20%;">采集时间</td>
+					</tr>
+				</thead>
+				<tbody id="history-table-body">
+				</tbody>
+			</table>
+			<div>
+				<div class="list-page-tail page-down" id="data-show-pager"
+					style="margin: auto;"></div>
 			</div>
-			<!-- /.box-body -->
 		</div>
+		<!-- /.box-body -->
+	</div>
 	<!-- </div> -->
 	<!-- 下方的统计表【结束】 -->
 
@@ -87,6 +90,7 @@
 	<script src="vince/js/nicescroll.js"></script>
 	<script type="text/javascript"
 		src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
+	
 	<script type="text/javascript">
 		//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【开始】
 		$('.datetimePicker').datetimepicker({
@@ -99,7 +103,19 @@
 			secondStep : 30,
 			inputMask : true
 		});
-		
+		/* $(function() {
+			$("#btn").click(function(){
+				$("#example1").table2excel({
+					exclude: ".noExl",
+					name: "Excel Document Name",
+					filename: "历史数据",
+					exclude_img: true,
+					exclude_links: true,
+					exclude_inputs: true
+				});
+			});
+			
+		}); */
 		//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
 		/* $(function(){ */
 		//历史数据页面的开始时间和结束时间默认为当天0点到当前时间
@@ -145,9 +161,9 @@
 		//加载历史数据列表【开始】
 		function searchTableResult(pageNo) {
 			//设置DIV高度
-			$(".ssjc_right_bottom").css({
+			/* $(".ssjc_right_bottom").css({
 				"height" : ($(window).height()) * 0.4
-			});
+			}); */
 			var param = {
 				"equipmentId" : equiId,
 				"startTime" : $("#startTime").val(),
@@ -207,6 +223,24 @@
 					});
 		}
 		//加载历史数据列表【结束】
+		 //导出【开始】
+		function reportHistory() {
+			var param = {
+				"equipmentId" : equiId,
+				"startTime" : $("#startTime").val(),
+				"endTime" : $("#endTime").val()
+			};
+			$.ajax({
+				url : "dataAcquisition/recordExport",
+				type : "post",
+				data : param,
+				dataType : "json",
+				success : function(result) {
+
+				}
+			});
+		}
+		//导出【结束】
 	</script>
 </body>
 </html>
