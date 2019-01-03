@@ -11,7 +11,11 @@
 	href="../../plugins/timepicker/bootstrap-timepicker.min.css">
 <style>
 .ssjc_ru_title span {
-	margin-left: 10px;
+	margin: 5px;
+	padding: 5px;
+}
+.ssjc_ru_title {
+	padding: 5px;
 }
 </style>
 
@@ -103,36 +107,28 @@
 			secondStep : 30,
 			inputMask : true
 		});
-		/* $(function() {
-			$("#btn").click(function(){
-				$("#example1").table2excel({
-					exclude: ".noExl",
-					name: "Excel Document Name",
-					filename: "历史数据",
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true
-				});
-			});
-			
-		}); */
+		$(".nav-tabs >li:contains('历史')").addClass("active");
+		$("#chart_history").highcharts(blankOption);
+		$(".ssjc_right_bottom").css({
+			"height" : ($(window).height()) * 0.4
+		});
 		//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
 		/* $(function(){ */
 		//历史数据页面的开始时间和结束时间默认为当天0点到当前时间
-		var startTimeInput = document.getElementById("startTime");
+		/* var startTimeInput = document.getElementById("startTime");
 		var endTimeInput = document.getElementById("endTime");
 		startTimeInput.value = parent.formatInitDateToString(new Date());
-		endTimeInput.value = parent.formatDateToString(new Date());
+		endTimeInput.value = parent.formatDateToString(new Date()); */
 		//初始化页面信息
-		if (equiId != null) {
+		//if (equiId != null) {
 			/* getEquiData(equiId); */
-			showHistoryContent();
-		} else {
-			$("#chart_history").highcharts(blankOption);
-			$(".ssjc_right_bottom").css({
-				"height" : ($(window).height()) * 0.4
-			});
-		}
+		//	showHistoryContent();
+		//} else {
+		//	$("#chart_history").highcharts(blankOption);
+		//	$(".ssjc_right_bottom").css({
+		//		"height" : ($(window).height()) * 0.4
+		//	});
+		//} */
 		/* }); */
 		//加载同源数据的统计图和统计表
 		function showHistoryContent() {
