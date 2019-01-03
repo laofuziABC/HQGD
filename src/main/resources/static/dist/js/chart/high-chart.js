@@ -165,7 +165,7 @@ function addPoints() {
 //刷新最新通道温度监测结果
 function drawCurrentChannels(param){
 	//设置DIV高度
-	$("#channelDiv").css({"height":($(window).height())*0.45});
+	$("#channelDiv").css({"height":($(window).height())*0.4});
 	var channel = "";
 	let num = (param==null)?0:(param.length);
 	if(num>0){
@@ -180,7 +180,7 @@ function drawCurrentChannels(param){
 		//如果只有一排，让容器填充下方位置
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-		var divW=$(window).width()*0.6;
+		var divW=$(window).width()*0.8;
 		var tdW=divW/3+"px;";
 		//设定尺寸适应容器【结束】
 		for(let i=0; i<count; i++){
@@ -190,9 +190,9 @@ function drawCurrentChannels(param){
 			//通道结果每三个循环一回，缘于界面展示效果较规整
 			for(let j=startIndex; j<endIndex; j++){
 				let state=parseFloat(param[j].state);
-				if(state==5){channel+="<td class='green' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
-				else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				if(state==5){channel+="<td class='green' style='width:"+tdW+"; padding: 10px;'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				else if(state==4 || state==3){channel+="<td class='red' style='width:"+tdW+"; padding: 10px;'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].message+"</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"; padding: 10px;'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 			}
 			channel+="</tr>";
 		}
