@@ -45,6 +45,7 @@ function AjaxPostForEquiSubList(url,param){
 			type: "post",
 			data: param,
 			dataType: "json",
+			async:false,
 			success: function(result){
 				var data = result.data;
 				var totalSize = data.length;

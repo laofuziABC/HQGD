@@ -169,7 +169,7 @@ function drawCurrentChannels(param){
 		//如果只有一排，让容器填充下方位置
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-		var divW=$(window).width()*0.6;
+		var divW=$(window).width()*0.8;
 		var tdW=divW/3+"px;";
 		//设定尺寸适应容器【结束】
 		for(let i=0; i<count; i++){
