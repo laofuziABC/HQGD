@@ -273,7 +273,8 @@
 			//初始化标签页与内容
 			$(".nav-tabs >li:contains('当前')").addClass("active");
 			$("#contents").load("childrenHtml/data/current.html");
-			/* $(".ssjc_left").css({"height":$("#content-wrapper").height()-10}); */
+			$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
+			$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
 			//切换标签页
 			function changeTabContent(param){
 				if(param==2){
