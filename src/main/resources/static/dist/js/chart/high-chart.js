@@ -4,7 +4,20 @@
  */
 //设置图表公用配置项【开始】
 var legend={enabled: true, backgroundColor: '#ffffff'};
-var tooltip={shared: true, xDateFormat: '%Y-%m-%d %H:%M:%S'};
+var tooltip={shared: true, useHTML: true,
+		xDateFormat: '%Y-%m-%d %H:%M:%S',
+		pointFormatter: function(){
+			var s='';
+			switch(this.y){
+				case -437: s='<b style="color: red;">- - - - -</b>'; break;
+				case 2999: s='<b style="color: green;">系统调整中</b>'; break;
+				case 3000: s='<b style="color: red;">- - -</b>'; break;
+				default: s='<b style="color: green;">'+this.y+'</b>'; break;
+			}
+			return '<br/><span style="color:'+this.color+'">\u25CF</span>'+this.series.name+'：'+s;
+		},
+	
+};
 var yAxis={title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 };
 var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
@@ -91,7 +104,6 @@ var NT_VALUE=NOW_TIME.getTime();
 START_TIME=(NT_VALUE-ST_VALUE>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
 //获取并计算常量【结束】
 function initCurrentChart(){
-//	var startTime = parent.formatDateToString("2018-12-01 00:00:00");
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/periodDate";
@@ -154,22 +166,21 @@ function addPoints() {
 function drawCurrentChannels(param){
 	//设置DIV高度
 	$("#channelDiv").css({"height":($(window).height())*0.45});
-//	$(".ssjc_left").css({"height":($(".ssjc_right").height())});
 	var channel = "";
 	let num = (param==null)?0:(param.length);
 	if(num>0){
-		//超过6小时提示
+		//超过5分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
 		cTime=(new Date()).getTime();
 		$("#last-time").text("最后监测时间："+param[0].receiveTime);
-		if((cTime-lTime)>(6*3600*1000)){ $("#last-time").css({"color":"red"}); }
-		else{$("#last-time").css({"color":"black"});}
+		if((cTime-lTime)>(5*60*1000)){ $("#last-time").css({"color":"red"}); }
+		else{$("#last-time").css({"color":"#21242e"});}
 		//设定尺寸适应容器【开始】
 		let count = Math.ceil(num/3);
 		//如果只有一排，让容器填充下方位置
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-		var divW=$(window).width()*0.8;
+		var divW=$(window).width()*0.6;
 		var tdW=divW/3+"px;";
 		//设定尺寸适应容器【结束】
 		for(let i=0; i<count; i++){
