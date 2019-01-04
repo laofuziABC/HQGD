@@ -145,7 +145,8 @@ function addPoints() {
 	var param={"equipmentId": equiId};
 	var pointResult = getChartData(url, param);
 	var pointsData = pointResult.data;
-	if(pointsData.length==pointsData[0].numOfCh){
+	//判断获取的温度数量是否与通道数量一致
+	if(pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
 		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 		//判断此点是否在图表中，再绘制此点
 		if(thisPointTime>ST_VALUE){
