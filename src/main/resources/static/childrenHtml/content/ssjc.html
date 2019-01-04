@@ -42,9 +42,11 @@
 	background: #399ad7; border: none; border-radius: 3px; overflow: hidden; }
 #addrParam select { width: 25%; background-color: #21242e; font-size: 12px; }
 */
+.nav-tabs >li.active{background-color: #3c8dbc;}
+.nav-tabs >li.active > a{background-color: #3c8dbc; color: #ffffff; border: 0;}
 #result_list_div { margin: 10px 0 0 0; padding: 0; }
 #equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
-#equipResultList li span:hover, #equipResultList li span:checked { width: 100%; font-size: 18px; background-color: #399ad7; cursor: pointer; }
+#equipResultList li:hover, #equipResultList .checked{ width: 100%; font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
 #equipResultList li span { width: 100%; }
 #sub-list-pager { margin: 10px auto; }
 </style>
@@ -134,8 +136,8 @@
 						<div class="box box-primary">
 							<div class="box-body no-padding">
 								<ul class="nav nav-tabs">
-									<li><a data-toggle="tab" href="#" onclick="changeTabContent(1);">当前监测数据</a></li>
-									<li><a data-toggle="tab" href="#" onclick="changeTabContent(2);">历史监测数据</a></li>
+									<li class=""><a data-toggle="tab" href="#" onclick="changeTabContent(1);">当前监测数据</a></li>
+									<li class=""><a data-toggle="tab" href="#" onclick="changeTabContent(2);">历史监测数据</a></li>
 								</ul>
 								<div id="contents"></div>
 							</div>
@@ -156,6 +158,15 @@
 	<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
 	<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 	<script type="text/javascript">
+		$(function(){
+			//初始化标签页与内容
+			$("#contents").load("childrenHtml/data/current.html");
+			$(".nav-tabs >li:contains('当前')").addClass("active");
+			$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
+			$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
+		});
+	</script>
+	<script type="text/javascript">
 		var roleId = parent.getParam("roleId");
 		if(roleId==1){
 			getEquiResultList();
@@ -168,15 +179,15 @@
 				AjaxPostForEquiSubList(url,param);
 			}
 		}
-		//初始化标签页与内容
-		$("#contents").load("childrenHtml/data/current.html");
-		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
-		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
+		
 		//切换标签页
 		function changeTabContent(param){
+			$(".nav-tabs >li").removeClass("active");
 			if(param==2){
+				$(".nav-tabs >li:contains('历史')").addClass("active");
 				$("#contents").load("childrenHtml/data/history.html");
 			}else if(param==1){
+				$(".nav-tabs >li:contains('当前')").addClass("active");
 				$("#contents").load("childrenHtml/data/current.html");
 			}
 			/* else{
@@ -262,6 +273,12 @@
 				}
 			}
 		}
+		
+		//监听活动设备
+		$("#equipResultList>li").click(function(){
+			$(this).parent().find("li").removeClass("checked");
+			$(this).addClass("checked");
+		});
 	</script>
 </body>
 </html>

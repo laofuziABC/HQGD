@@ -52,7 +52,8 @@ function AjaxPostForEquiSubList(url,param){
 				//根据设备列表，初始化第一台设备的展示信息
 				if(totalSize>0){
 					equiId=data[0].equipmentId;
-					for(let i=0; i<totalSize; i++){
+					resultList+="<li class=\"checked\" onclick=\"getEquiData('"+data[0].equipmentId+"');\"><span><em>"+data[0].equipmentName+"</em></span></li>";
+					for(let i=1; i<totalSize; i++){
 						resultList+="<li onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>";
 					}
 				}
