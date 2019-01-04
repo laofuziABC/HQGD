@@ -190,9 +190,6 @@
 				$(".nav-tabs >li:contains('当前')").addClass("active");
 				$("#contents").load("childrenHtml/data/current.html");
 			}
-			/* else{
-				$("#contents").load("childrenHtml/data/current.html");
-			} */
 		}
 		//打开筛选区域
 		function showParams(){
@@ -268,8 +265,6 @@
 					showCurrentContent();
 				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
 					showHistoryContent();
-				}else{
-					showCurrentContent();
 				}
 			}
 		}
