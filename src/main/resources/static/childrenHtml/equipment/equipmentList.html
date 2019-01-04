@@ -216,15 +216,6 @@
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<!-- page script -->
 	<script>
-		/* $(function() {
-			$('#example1').DataTable(
-					'paging': false,
-				      'lengthChange': false,
-				      'searching'   : false,
-				      'ordering'    : false,
-				      'info'        : false,
-				      'autoWidth'   : false)
-		}) */
 		$("#equipmentfuceng").css({
 			"display" : "none"
 		});
@@ -441,11 +432,8 @@
 			}
 			$("#userName").html(userHtml);
 			getProvs();
-			$("#padcode").val((globalData[param].padcode) * 10000);
 			getCities();
-			$("#cadcode").val((globalData[param].cadcode) * 100);
 			getTowns();
-			$("#adcode").val(globalData[param].adcode);
 		}
 		//编辑
 		function getEquiEdit(param) {
