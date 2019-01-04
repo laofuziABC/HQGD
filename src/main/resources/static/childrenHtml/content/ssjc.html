@@ -46,7 +46,7 @@
 .nav-tabs >li.active > a{background-color: #3c8dbc; color: #ffffff; border: 0;}
 #result_list_div { margin: 10px 0 0 0; padding: 0; }
 #equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
-#equipResultList li:hover, #equipResultList .checked{ width: 100%; font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
+#equipResultList li:hover, #equipResultList .checked{ width: 80%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
 #equipResultList li span { width: 100%; }
 #sub-list-pager { margin: 10px auto; }
 </style>
@@ -182,6 +182,7 @@
 		
 		//切换标签页
 		function changeTabContent(param){
+			debugger;
 			$(".nav-tabs >li").removeClass("active");
 			if(param==2){
 				$(".nav-tabs >li:contains('历史')").addClass("active");
