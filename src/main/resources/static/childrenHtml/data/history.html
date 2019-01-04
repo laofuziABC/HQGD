@@ -95,9 +95,7 @@
 			var endTimeInput = document.getElementById("endTime");
 			startTimeInput.value = parent.formatInitDateToString(new Date());
 			endTimeInput.value = parent.formatDateToString(new Date());
-			//初始化页面信息
-			if(equiId!=null){getEquiData(equiId); }
-			else{$("#chart_history").highcharts(blankOption);}
+			$("#chart_history").highcharts(blankOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
 				var startTime = $("#startTime").val();

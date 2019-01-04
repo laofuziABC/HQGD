@@ -67,7 +67,7 @@
 			<!-- Main content -->
 			<section class="content">
 				<div class="row">
-					<div class="col-md-3"style="width: 15%;">
+					<div class="col-md-3"style="width: 18%;">
 						<div class="box box-solid">
 							<div class="box-body">
 								<div class="input-group">
@@ -132,14 +132,19 @@
 						</div>
 					</div>
 					<!-- /.col -->
-					<div class="col-md-9"style="width: 85%;">
+					<div class="col-md-9"style="width: 82%;">
 						<div class="box box-primary">
 							<div class="box-body no-padding">
 								<ul class="nav nav-tabs">
-									<li class=""><a data-toggle="tab" href="#" onclick="changeTabContent(1);">当前监测数据</a></li>
-									<li class=""><a data-toggle="tab" href="#" onclick="changeTabContent(2);">历史监测数据</a></li>
+									<li class=""><a data-toggle="tab" href="#currenttab" onclick="changeTabContent(1);">当前监测数据</a></li>
+									<li class=""><a data-toggle="tab" href="#historytab" onclick="changeTabContent(2);">历史监测数据</a></li>
 								</ul>
-								<div id="contents"></div>
+								<div class="tab-content">
+									<div id="currenttab">
+									</div>
+									<div id="historytab">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -157,11 +162,17 @@
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
 	<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
 	<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
-	<!-- <script type="text/javascript">
-		$(function(){ -->
-			
-		<!-- });
-	</script> -->
+	<script type="text/javascript">
+		$(function(){
+			//初始化标签页与内容
+			$("#currenttab").load("childrenHtml/data/current.html");
+			$("#historytab").load("childrenHtml/data/history.html");
+			$("#historytab").css({"display" : "none"});
+			$(".nav-tabs >li:contains('当前')").addClass("active");
+			$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
+			$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
+		});
+	</script>
 	<script type="text/javascript">
 		var roleId = parent.getParam("roleId");
 		if(roleId==1){
@@ -175,20 +186,34 @@
 				AjaxPostForEquiSubList(url,param);
 			}
 		}
-		//初始化标签页与内容
-		$("#contents").load("childrenHtml/data/current.html");
-		$(".nav-tabs >li:contains('当前')").addClass("active");
+		/* $("#currenttab").load("childrenHtml/data/current.html");
+		$("#historytab").load("childrenHtml/data/history.html");
+		$("#historytab").css({"display" : "none"}); 
+		$(".nav-tabs >li:contains('当前')").addClass("active");*/
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
 		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
 		//切换标签页
 		function changeTabContent(param){
 			$(".nav-tabs >li").removeClass("active");
+			 var $tabs = this.$container;
 			if(param==2){
-				$(".nav-tabs >li:contains('历史')").addClass("active");
-				$("#contents").load("childrenHtml/data/history.html");
+				/* $(".nav-tabs >li:contains('历史')").addClass("active");
+				$("#contents").load("childrenHtml/data/history.html"); */
+				$("#currenttab").css({
+					"display" : "none"
+				});
+				$("#historytab").css({
+					"display" : "block"
+				});
 			}else if(param==1){
-				$(".nav-tabs >li:contains('当前')").addClass("active");
-				$("#contents").load("childrenHtml/data/current.html");
+				/* $(".nav-tabs >li:contains('当前')").addClass("active");
+				$("#contents").load("childrenHtml/data/current.html"); */
+				$("#historytab").css({
+					"display" : "none"
+				});
+				$("#currenttab").css({
+					"display" : "block"
+				});
 			}
 		}
 		//打开筛选区域
@@ -265,7 +290,9 @@
 					showCurrentContent();
 				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
 					showHistoryContent();
-				}
+				}else{
+					showCurrentContent();
+				}  
 			}
 		}
 		
