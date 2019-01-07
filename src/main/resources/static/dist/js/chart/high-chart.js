@@ -27,7 +27,7 @@ var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#
 var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
 	title: {text: '历史温度曲线', style: {color: '#ffffff'}},
-	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
+	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors, credits: {enabled: false},
 	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'},
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
 	}}
@@ -36,14 +36,14 @@ var historyOption = {
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: setInterval(addPoints, 60000) } },
     title: { text: '实时温度监测', style: {color: '#ffffff'} }, time: { useUTC: false },
-    yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
+    yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits: {enabled: false},
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S %m-%d}' } },
 };
 //配置当空白统计图
 var blankOption={
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
 	title: {text: '', style: {color: '#ffffff'}},
-	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
+	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors, credits: {enabled: false},
 	xAxis:{type: 'category'},
 	series:[{name: '无数据', data: [], type:"spline", pointInterval: 6e4}]
 }
@@ -140,7 +140,7 @@ function initCurrentChart(){
 }
 //计算点的坐标，落在图表中
 function addPoints() {
-	var series = this.series;
+	var myseries = this.series;
 	var url="dataAcquisition/realtime";
 	var param={"equipmentId": equiId};
 	var pointResult = getChartData(url, param);
@@ -148,15 +148,17 @@ function addPoints() {
 	//判断获取的温度数量是否与通道数量一致
 	if(pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
 		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
+		var nowtime = (new Date()).getTime();
 		//判断此点是否在图表中，再绘制此点
-		if(thisPointTime>ST_VALUE){
+		if(thisPointTime>ST_VALUE && nowtime-thisPointTime<1000*60*5){
 			for(let i=0; i<pointsData.length; i++){
 				var yValue=parseFloat(pointsData[i].temperature);
 				//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-				if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
-				else{series[i].addPoint([thisPointTime, yValue], true, false); }
+				if(thisPointTime-ST_VALUE>ONE_DAY){myseries[i].addPoint([thisPointTime, yValue], true, true); }
+				else{myseries[i].addPoint([thisPointTime, yValue], true, false); }
 			}
 		}
+		//点的数量与系列数相等时，再刷新各通道的实时监控温度值
 		drawCurrentChannels(pointsData);
 	}
 }
