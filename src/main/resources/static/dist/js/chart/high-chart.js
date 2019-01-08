@@ -152,7 +152,7 @@ function addPoints() {
 	var pointResult = getChartData(url, param);
 	var pointsData = pointResult.data;
 	//判断获取的温度数量是否与通道数量一致
-	if(pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
+	if(JSON.stringify(pointsData)!="{}" && (pointsData.length==pointsData[0].numOfCh)){
 		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 		var nowtime = (new Date()).getTime();
 		//判断此点是否在图表中，再绘制此点

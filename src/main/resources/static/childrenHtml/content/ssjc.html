@@ -156,7 +156,6 @@
 	<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
 	<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
-	<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
 	<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
 	<script type="text/javascript">
 		var roleId = parent.getParam("roleId");
@@ -264,7 +263,7 @@
 		}
 		//根据设备主键，获取数据展示信息
 		function getEquiData(param){
-			debugger;
+			//debugger;
 			if(param==null){
 				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
 				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
@@ -285,12 +284,13 @@
 					$("#historytab").load("childrenHtml/data/history.html");
 					showCurrentContent();
 				} */
+				showCurrentContent();
 				$("#historytab").css({ "display" : "none" });
 				$("#currenttab").css({ "display" : "block" });
 				$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
 				$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
 				$("#historytab").load("childrenHtml/data/history.html");
-				showCurrentContent();
+				
 			}
 		}
 		//监听活动设备
