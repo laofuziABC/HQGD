@@ -34,7 +34,8 @@ var historyOption = {
 };
 //配置当前数据监测统计图
 var currentOption={
-	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: setInterval(addPoints, 60000) } },
+//	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: setInterval(addPoints, 60000) } },
+	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: timingEvent } },
     title: { text: '实时温度监测', style: {color: '#ffffff'} }, time: { useUTC: false },
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits: {enabled: false},
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S %m-%d}' } },
@@ -73,18 +74,19 @@ function drawingHistoryChart(url, param){
 		success: function(result){
 			var series=[];
 			var data = result.data;
-			var legendData = data.channelNumArr;
-			var seriesData = data.channelTemArr;
-			/*var totalCount = seriesData[0].length;*/
-			var totalCount = 0;
-			for(let i=0; i<legendData.length; i++){
-				var serie = {name: legendData[i], data: seriesData[i], type:"spline"};
-				totalCount=(totalCount>seriesData[i].length)?totalCount:(seriesData[i].length);
-				series.push(serie);
+			if(JSON.stringify(data) != '{}'){
+				var legendData = data.channelNumArr;
+				var seriesData = data.channelTemArr;
+				var totalCount=0;
+				for(let i=0; i<legendData.length; i++){
+					var serie = {name: legendData[i], data: seriesData[i], type:"spline"};
+					totalCount=(totalCount>seriesData[i].length)?totalCount:(seriesData[i].length);
+					series.push(serie);
+				}
+				historyOption.xAxis.categories=data.receiveTime;
+				historyOption.xAxis.tickInterval=Math.floor(totalCount/11);
+				historyOption.series = series;
 			}
-			historyOption.xAxis.categories=data.receiveTime;
-			historyOption.xAxis.tickInterval=Math.floor(totalCount/11);
-			historyOption.series = series;
 			$("#chart_history").empty();
 			$("#chart_history").highcharts(historyOption);
 		}
@@ -140,6 +142,9 @@ function initCurrentChart(){
 	$("#chart_current").highcharts(currentOption);
 }
 //计算点的坐标，落在图表中
+function timingEvent(){
+	setInterval(addPoints, 60000);
+}
 function addPoints() {
 	var myseries = this.series;
 	var url="dataAcquisition/realtime";
