@@ -177,25 +177,30 @@
 		$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
 		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
-		var oldequiId;
-		var newequiId;
+		var oldequiId=equiId;
+		var newequiId=equiId;
 		//切换标签页
 		function changeTabContent(param){
 			$(".nav-tabs >li").removeClass("active");
 			if(param==2){
-				/* $(".nav-tabs >li:contains('历史')").addClass("active"); */
+				$(".nav-tabs >li:contains('历史')").addClass("active");
+				if(oldequiId!=newequiId){
+					$("#historytab").load("childrenHtml/data/history.html");
+				}
 				$("#currenttab").css({"display" : "none" });
 				$("#historytab").css({ "display" : "block" });
 				$("#hh").css({"background-color": "#3c8dbc", "color": "#ffffff", "border": "0"});
 				$("#cc").css({"background-color": "#ffffff", "color": "#3c8dbc", "border": "0"});
 			}else if(param==1){
-				/* $(".nav-tabs >li:contains('当前')").addClass("active");
-				$("#contents").load("childrenHtml/data/current.html"); */
-				/* $(".nav-tabs >li:contains('当前')").addClass("active"); */
+				$(".nav-tabs >li:contains('当前')").addClass("active");
 				$("#historytab").css({ "display" : "none" });
 				$("#currenttab").css({ "display" : "block" });
 				$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
 				$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
+				if(oldequiId!=newequiId){
+					showCurrentContent();
+				}
+				oldequiId=equiId;
 			}
 		}
 		//打开筛选区域
@@ -263,33 +268,19 @@
 		}
 		//根据设备主键，获取数据展示信息
 		function getEquiData(param){
-			//debugger;
 			if(param==null){
 				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
 				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
 			}else{
 				equiId=param.trim();
-				/* newequiId=param.trim();
+				newequiId=param.trim();
 				if($(".nav-tabs >li:contains('当前')").hasClass("active")){
-					$("#historytab").load("childrenHtml/data/history.html");
 					showCurrentContent();
 				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
 					showHistoryContent();
-					showCurrentContent();
 				}else{
-					$("#historytab").css({ "display" : "none" });
-					$("#currenttab").css({ "display" : "block" });
-					$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
-					$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
-					$("#historytab").load("childrenHtml/data/history.html");
 					showCurrentContent();
-				} */
-				showCurrentContent();
-				$("#historytab").css({ "display" : "none" });
-				$("#currenttab").css({ "display" : "block" });
-				$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
-				$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
-				$("#historytab").load("childrenHtml/data/history.html");
+				} 
 				
 			}
 		}

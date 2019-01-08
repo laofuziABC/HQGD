@@ -117,7 +117,7 @@ function initCurrentChart(){
 	var timeList=result.timeList;
 	var dataList=result.dataList;
 	//只有通道数和系列数相等，才可以绘制图表
-	if(channelList.length==dataList.length){
+	if(channelList.length>0&&channelList.length==dataList.length){
 		//组装系列值
 		var totalArray=[];
 		for(let i=0; i<dataList.length; i++){
@@ -136,10 +136,13 @@ function initCurrentChart(){
 			var serie = {name: channelList[i], data: totalArray[i], type:"spline", pointInterval: 6e4};
 			series.push(serie);
 		}
+		currentOption.series = series;
+		$("#chart_current").empty();
+		$("#chart_current").highcharts(currentOption);
+	}else{
+		$("#chart_current").highcharts(blankOption);
 	}
-	currentOption.series = series;
-	$("#chart_current").empty();
-	$("#chart_current").highcharts(currentOption);
+	
 }
 //计算点的坐标，落在图表中
 function timingEvent(){
