@@ -75,7 +75,8 @@ function drawingHistoryChart(url, param){
 			var data = result.data;
 			var legendData = data.channelNumArr;
 			var seriesData = data.channelTemArr;
-			var totalCount = seriesData[0].length;
+			/*var totalCount = seriesData[0].length;*/
+			var totalCount = 0;
 			for(let i=0; i<legendData.length; i++){
 				var serie = {name: legendData[i], data: seriesData[i], type:"spline"};
 				totalCount=(totalCount>seriesData[i].length)?totalCount:(seriesData[i].length);

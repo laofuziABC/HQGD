@@ -175,15 +175,16 @@
 		$("#historytab").load("childrenHtml/data/history.html");
 		$("#historytab").css({"display" : "none"}); 
 		$(".nav-tabs >li:contains('当前')").addClass("active");
+		$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
 		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
+		var oldequiId;
+		var newequiId;
 		//切换标签页
 		function changeTabContent(param){
 			$(".nav-tabs >li").removeClass("active");
-			 /* var $tabs = this.$container; */
 			if(param==2){
-				/* $(".nav-tabs >li:contains('历史')").addClass("active");
-				$("#contents").load("childrenHtml/data/history.html"); */
+				/* $(".nav-tabs >li:contains('历史')").addClass("active"); */
 				$("#currenttab").css({"display" : "none" });
 				$("#historytab").css({ "display" : "block" });
 				$("#hh").css({"background-color": "#3c8dbc", "color": "#ffffff", "border": "0"});
@@ -191,6 +192,7 @@
 			}else if(param==1){
 				/* $(".nav-tabs >li:contains('当前')").addClass("active");
 				$("#contents").load("childrenHtml/data/current.html"); */
+				/* $(".nav-tabs >li:contains('当前')").addClass("active"); */
 				$("#historytab").css({ "display" : "none" });
 				$("#currenttab").css({ "display" : "block" });
 				$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
@@ -262,21 +264,35 @@
 		}
 		//根据设备主键，获取数据展示信息
 		function getEquiData(param){
+			debugger;
 			if(param==null){
 				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
 				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
 			}else{
 				equiId=param.trim();
+				/* newequiId=param.trim();
 				if($(".nav-tabs >li:contains('当前')").hasClass("active")){
+					$("#historytab").load("childrenHtml/data/history.html");
 					showCurrentContent();
 				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
 					showHistoryContent();
-				}else{
 					showCurrentContent();
-				}  
+				}else{
+					$("#historytab").css({ "display" : "none" });
+					$("#currenttab").css({ "display" : "block" });
+					$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
+					$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
+					$("#historytab").load("childrenHtml/data/history.html");
+					showCurrentContent();
+				} */
+				$("#historytab").css({ "display" : "none" });
+				$("#currenttab").css({ "display" : "block" });
+				$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
+				$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
+				$("#historytab").load("childrenHtml/data/history.html");
+				showCurrentContent();
 			}
 		}
-		
 		//监听活动设备
 		$("#equipResultList>li").click(function(){
 			$(this).parent().find("li").removeClass("checked");
