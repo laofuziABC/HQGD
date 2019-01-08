@@ -85,14 +85,14 @@
 
 						<div class="box">
 							<div class="box-header">
-								<div >
+								<div>
 									<p>
 										<span class="float_left"><span>用户名：</span><input
 											type="text" id="searchByName"></span> <span
 											class="float_right" style="margin-right: 70%;"> <input
 											type="button" onclick="searchResult();" value="查询"
 											class="in_sub"> <input type="button"
-											onclick="report();" value="导出" class="in_sub"> 
+											onclick="report();" value="导出" class="in_sub">
 										</span>
 									<div class="clear"></div>
 
@@ -114,6 +114,7 @@
 									</thead>
 									<tbody>
 									<tbody id="userList"></tbody>
+									<tbody id="userListreport" style = "display :none"></tbody>
 									<tr>
 										<td colspan="8" class="text_al_rig lindianjia"><input
 											type="submit" value="添加用户" class="anniu lindianjia"
@@ -329,7 +330,7 @@
 
 		}
 		//导出
-		function report() {
+		/* function report() {
 			$.ajax({
 				url : "user/recordExport",
 				type : "post",
@@ -342,6 +343,36 @@
 						alert("导出失败！");
 					}
 				}
+			});
+		}  */
+
+		function report() {
+			var result = globalResult;
+			var userlist = "<tr><td>序号</td><td>用户名</td><td>用户属性</td><td>创建时间</td><td>更新时间</td>	<td>更新者</td><td>状态</td></tr>";
+			for (let i = 0; i < result.length; i++) {
+				userlist += "<tr class=\"\">";
+				userlist += "<td>" + (i + 1) + "</td>";
+				userlist += "<td>" + result[i].userName + "</td>";
+				userlist += "<td>" + result[i].comments + "</td>";
+				userlist += "<td>" + result[i].createTime + "</td>";
+				userlist += "<td>" + result[i].updateTime + "</td>";
+				userlist += "<td>" + result[i].updater + "</td>";
+				if (result[i].isdel == "N") {
+					userlist += "<td>启用</td>";
+				} else {
+					userlist += "<td>已删除</td>";
+				}
+				userlist += "</tr>";
+			}
+			$("#userListreport").html(userlist);
+			
+			$("#userListreport").table2excel({
+				exclude: ".noExl",
+				name: "Excel Document Name",
+				filename: "用户信息",
+				exclude_img: true,
+				exclude_links: true,
+				exclude_inputs: true
 			});
 		}
 		//提交用户信息

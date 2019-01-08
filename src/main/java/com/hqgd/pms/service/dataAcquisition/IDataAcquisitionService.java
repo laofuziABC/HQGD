@@ -22,4 +22,6 @@ public interface IDataAcquisitionService {
 
 	Map<String, Object> getPeriodDataByQuery(QueryParametersVo queryVo);
 
+	List<DataAcquisitionVo> record(QueryParametersVo data);
+
 }

@@ -304,4 +304,15 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		}
 	}
 
+	@Override
+	public List<DataAcquisitionVo> record(QueryParametersVo queryVo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		param.put("state", queryVo.getState());
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.recordExport(param);
+		return historicalDataList;
+	}
+
 }

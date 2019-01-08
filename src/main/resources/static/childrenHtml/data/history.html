@@ -62,8 +62,8 @@
 								<td style="width: 20%;">采集时间</td>
 							</tr>
 						</thead>
-						<tbody id="history-table-body">
-						</tbody>
+						<tbody id="history-table-body"></tbody>
+						<tbody id="historyreport"style = "display :none"></tbody>
 					</table>
 					<div>
 						<div class="list-page-tail page-down" id="data-show-pager"
@@ -166,20 +166,57 @@
 				});
 			}
 			//加载历史数据列表【结束】
+			
 			function reportHistory() {
 				var param = {
 					"equipmentId" : equiId,
 					"startTime" : $("#startTime").val(),
 					"endTime" : $("#endTime").val(),
+					"state" : $("#data-type").val(),
 				};
 				$.ajax({
-					url : "dataAcquisition/recordExport",
+					url : "dataAcquisition/record",
 					type : "post",
 					data : param,
 					dataType : "json",
 					success : function(result) {
+						var data = result.data;
+						var historyTable = "<tr><td>设备名称</td><td>通道号</td><td>光纤位置</td><td>温度(单位:℃)</td><td>PD</td>"+
+							"<td>UV</td><td>运行状态</td><td>采集时间</td></tr>";
+						if (data.length > 0) {
+							//加载表格内容
+							for (let i = 0; i < data.length; i++) {
+								historyTable += "<tr>";
+								historyTable += "<td>" + data[i].equipmentName
+										+ "</td>";
+								historyTable += "<td>" + data[i].channelNum
+										+ "</td>";
+								historyTable += "<td>"
+										+ data[i].opticalFiberPosition
+										+ "</td>";
+								historyTable += "<td>" + data[i].temperature
+										+ "</td>";
+								historyTable += "<td>" + data[i].pd + "</td>";
+								historyTable += "<td>" + data[i].uv + "</td>";
+								historyTable += "<td>" + data[i].message
+										+ "</td>";
+								historyTable += "<td>" + data[i].receiveTime
+										+ "</td>";
+								historyTable += "</tr>";
+							}
+						}
+						$("#historyreport").html(historyTable);
+						$("#historyreport").table2excel({
+							exclude: ".noExl",
+							name: "Excel Document Name",
+							filename: "历史数据",
+							exclude_img: true,
+							exclude_links: true,
+							exclude_inputs: true
+						});
 					}
 				});
+				
 			}
 		</script>
 	</body>

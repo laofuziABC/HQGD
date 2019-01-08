@@ -187,6 +187,7 @@
 									</thead>
 									<tbody>
 									<tbody id="equipmentList"></tbody>
+									<tbody id="equipmentreport" style = "display :none"></tbody>
 									<tr>
 										<td colspan="12" class="text_al_rig lindianjia"><input
 											type="submit" onclick="addEquip();" value="添加设备"
@@ -209,7 +210,7 @@
 		<div class="control-sidebar-bg"></div>
 	</div>
 	<!-- ./wrapper -->
-	
+
 	<script src="vince/js/demo.js"></script>
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
 	<script type="text/javascript" src="vince/js/bootstable.js"></script>
@@ -470,7 +471,6 @@
 			if (globalUserList == "") {
 				getUserList();
 			}
-			debugger;
 			var userHtml = "<option value='"+globalData[param].userId+"' checked>"
 					+ globalData[param].userName + "</option>";
 			for (let i = 0; i < globalUserList.length; i++) {
@@ -604,7 +604,6 @@
 								globalData = result.data;
 								var data = result.data;
 								var equipList = "";
-								debugger;
 								for (let i = 0; i < data.length; i++) {
 									equipList += "<tr>";
 									equipList += "<td>" + (i + 1) + "</td>";
@@ -649,20 +648,32 @@
 		}
 		//导出
 		function report() {
-			$.ajax({
-				url : "equipment/recordExport",
-				type : "post",
-				/* data : {
-					"path" : param
-				}, */
-				dataType : "json",
-				success : function(result) {
-					if (result.success) {
-						alert("导出成功！");
-					} else {
-						alert("导出失败！");
-					}
-				}
+			var equipList = "<tr><td>设备ID</td><td>设备名称</td><td>设备类型</td><td>通道温度</td><td>安装地址</td><td>地区编码</td><td>经纬度</td><td>帧结构</td>"
+					+ "<td>所属用户</td><td>更新时间</td><td>更新者</td></tr>";
+			var data = globalData;
+			for (let i = 0; i < data.length; i++) {
+				equipList += "<tr>";
+				equipList += "<td>" + data[i].equipmentId + "</td>";
+				equipList += "<td>" + data[i].equipmentName + "</td>";
+				equipList += "<td>" + data[i].type + "</td>";
+				equipList += "<td>" + data[i].channelTem + "</td>";
+				equipList += "<td>" + data[i].address + "</td>";
+				equipList += "<td>" + data[i].adcode + "</td>";
+				equipList += "<td>" + data[i].lngLat + "</td>";
+				equipList += "<td>" + data[i].frameStru + "</td>";
+				equipList += "<td>" + data[i].userName + "</td>";
+				equipList += "<td>" + data[i].updateTime + "</td>";
+				equipList += "<td>" + data[i].updater + "</td>";
+				equipList += "</tr>";
+			}
+			$("#equipmentreport").html(equipList);
+			$("#equipmentreport").table2excel({
+				exclude : ".noExl",
+				name : "Excel Document Name",
+				filename : "设备信息",
+				exclude_img : true,
+				exclude_links : true,
+				exclude_inputs : true
 			});
 		}
 
