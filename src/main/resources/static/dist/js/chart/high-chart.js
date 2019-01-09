@@ -15,8 +15,7 @@ var tooltip={shared: true, useHTML: true,
 				default: s='<b style="color: green;">'+this.y+'</b>'; break;
 			}
 			return '<br/><span style="color:'+this.color+'">\u25CF</span>'+this.series.name+'：'+s;
-		},
-	
+		}
 };
 var yAxis={title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 };
 var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
@@ -34,7 +33,6 @@ var historyOption = {
 };
 //配置当前数据监测统计图
 var currentOption={
-//	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: setInterval(addPoints, 60000) } },
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: timingEvent } },
     title: { text: '实时温度监测', style: {color: '#ffffff'} }, time: { useUTC: false },
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits: {enabled: false},
@@ -117,7 +115,7 @@ function initCurrentChart(){
 	var timeList=result.timeList;
 	var dataList=result.dataList;
 	//只有通道数和系列数相等，才可以绘制图表
-	if(channelList.length>0&&channelList.length==dataList.length){
+	if(channelList.length==dataList.length){
 		//组装系列值
 		var totalArray=[];
 		for(let i=0; i<dataList.length; i++){
@@ -137,25 +135,27 @@ function initCurrentChart(){
 			series.push(serie);
 		}
 		currentOption.series = series;
-		$("#chart_current").empty();
-		$("#chart_current").highcharts(currentOption);
-	}else{
-		$("#chart_current").highcharts(blankOption);
 	}
-	
+	$("#chart_current").empty();
+	Highcharts.chart("chart_current", currentOption);
 }
 //计算点的坐标，落在图表中
 function timingEvent(){
-	setInterval(addPoints, 60000);
+	var  end = setInterval(addPoints, 60000);
+	var start = (end-60000>0) ?(end-60000):0;
+	for(var i=start; i<=end; i++){
+	     clearInterval(i);
+	}
+	var TE=setInterval(addPoints, 60000);
 }
 function addPoints() {
 	var myseries = this.series;
 	var url="dataAcquisition/realtime";
 	var param={"equipmentId": equiId};
 	var pointResult = getChartData(url, param);
-	var pointsData = pointResult.data;
+	var pointsData = (pointResult==null)?null:pointResult.data;
 	//判断获取的温度数量是否与通道数量一致
-	if(JSON.stringify(pointsData)!="{}" && (pointsData.length==pointsData[0].numOfCh)){
+	if(pointsData!=null && JSON.stringify(pointsData)!="{}" && (pointsData.length==pointsData[0].numOfCh)){
 		var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 		var nowtime = (new Date()).getTime();
 		//判断此点是否在图表中，再绘制此点
