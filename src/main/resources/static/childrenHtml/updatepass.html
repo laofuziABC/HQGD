@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>更新密码</title>
+<link rel="stylesheet" href="vince/css/vince.css">
+<style type="text/css">
+.info_text {
+	padding: 10px;
+}
+</style>
+</head>
+<body>
+	<div class="fuceng" style="display: block;" id="passfuceng">
+		<div class="fuqu">
+			<div class="fuquzone">
+
+				<div class="fuqulogo"></div>
+				<p class="fuqutitle">
+					更新密码 <span onclick="close3();">×</span>
+				</p>
+				<div class="passform">
+					<form action="#" >
+						<table id="passInfoTable" style="margin-left: 30px;">
+							<tr style="display: none;">
+								<td class="info_text">用户主键：</td>
+								<td><input type="text" class="right_input" value=""
+									id="userId" name="id" /></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
+								<td class="info_text">原始密码<span style="color: red;">*</span>：
+								</td>
+								<td><input type="password" class="right_input" value=""
+									id="oldpassword" name="oldpassword" /></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
+								<td class="info_text">新密码<span style="color: red;">*</span>：
+								</td>
+								<td><input type="password" class="right_input" value=""
+									id="newPassword" name="newPassword" /></td>
+								<td class="info_text"></td>
+							</tr>
+							<tr class="normal">
+								<td class="info_text">确认新密码<span style="color: red;">*</span>：
+								</td>
+								<td><input type="password" class="right_input" value=""
+									id="confirm" /></td>
+								<td class="info_text"></td>
+							</tr>
+						</table>
+					</form>
+					<div class="fuqusave">
+						<input type="button" onclick="submitPassInfo();" value="保存">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 页面顶部标题【结束】 -->
+	<script src="vince/js/demo.js"></script>
+	<script type="text/javascript">
+		function close3() {
+			$(".fuceng").css({
+				"display" : "none"
+			});
+			parent.updatePass1()
+		}
+		//修改密码
+		function submitPassInfo() {
+			var oldpassword = $("#oldpassword").val();
+			var newPassword = $("#newPassword").val();
+			var confirm = $("#confirm").val();
+			if (oldpassword.trim() == "") {
+				alert("原始密码不能为空！");
+			} else if (newPassword.trim() == "") {
+				alert("新密码不能为空！");
+			} else if (confirm.trim() == "") {
+				alert("请确认密码！");
+			} else if (newPassword != confirm) {
+				alert("新密码确认不一致！");
+			} else {
+				$.ajax({
+					url : "user/updatePassword",
+					type : "post",
+					data : {
+						"id" : parent.getParam("userId"),
+						"oldpassword" : oldpassword,
+						"newPassword" : newPassword,
+					},
+					dataType : "json",
+					success : function(result) {
+						if (result.success) {
+							alert("修改密码成功！");
+						} else {
+							alert("修改密码失败！");
+						}
+					}
+				});
+			}
+			$(".fuceng").css({
+				"display" : "none"
+			});
+		}
+	</script>
+</body>
+</html>

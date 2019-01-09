@@ -27,7 +27,7 @@
 			<div class="fuquzone">
 				<div class="fuqulogo"></div>
 				<p class="fuqutitle">
-					用户信息 <span class="fuclose" onclick="close2();">×</span>
+					用户信息 <span class="fuclose">×</span>
 				</p>
 				<div class="fuqubiao" id="userForm">
 					<p>
@@ -114,7 +114,7 @@
 									</thead>
 									<tbody>
 									<tbody id="userList"></tbody>
-									<tbody id="userListreport" style = "display :none"></tbody>
+									<tbody id="userListreport" style="display: none"></tbody>
 									<tr>
 										<td colspan="8" class="text_al_rig lindianjia"><input
 											type="submit" value="添加用户" class="anniu lindianjia"
@@ -140,6 +140,7 @@
 	<!-- ./wrapper -->
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
 	<script type="text/javascript" src="vince/js/bootstable.js"></script>
+	<script type="text/javascript" src="vince/js/demo.js"></script>
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<!-- page script -->
 	<script>
@@ -365,14 +366,14 @@
 				userlist += "</tr>";
 			}
 			$("#userListreport").html(userlist);
-			
+
 			$("#userListreport").table2excel({
-				exclude: ".noExl",
-				name: "Excel Document Name",
-				filename: "用户信息",
-				exclude_img: true,
-				exclude_links: true,
-				exclude_inputs: true
+				exclude : ".noExl",
+				name : "Excel Document Name",
+				filename : "用户信息",
+				exclude_img : true,
+				exclude_links : true,
+				exclude_inputs : true
 			});
 		}
 		//提交用户信息

@@ -88,6 +88,8 @@
 						if(data.success){
 							LOGIN_TIME=(new Date()).getTime();
 							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName+"&LOGINTIME="+LOGIN_TIME));
+						}else{
+							alert(data.message);
 						}
 					}
 				});
