@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>和其光电</title>
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<meta content="" name="description" />
+		<meta content="" name="author" />
+		<!--BootStrap样式-->
+		<link rel="stylesheet" type="text/css" href="media/css/bootstrap.min.css" />
+		<!--表单元素样式-->
+		<link rel="stylesheet" type="text/css" href="media/css/style-metro.css" />
+		<!--表单、页面、图标样式-->
+		<link rel="stylesheet" type="text/css" href="media/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="media/css/login.css" />
+	</head>
+	<body class="login">
+		<!--企业logo-->
+		<div class="logo">
+			<!--<img src="img/hqgd/logo.jpg" alt="企业logo" />--> 
+		</div>
+		<!--页面内容-->
+		<div class="content">
+			<!-- 登录表单【开始】 -->
+			<form class="form-vertical login-form" action="">
+				<h3 class="form-title">用户登录</h3><hr />
+				<!--验证警示框：请输入登录信息-->
+				<div class="alert alert-error hide">
+					<button class="close" data-dismiss="alert"></button>
+					<span>请仔细检查您输入的登录名和密码！</span>
+				</div>
+				<!--登录信息-->
+				<div class="control-group">
+					<label class="control-label visible-ie8 visible-ie9">登录名：</label>
+					<div class="controls">
+						<div class="input-icon left">
+							<!--<i class="icon-user"></i>-->
+							<i style="background: url(img/icons/r-info-icon1.png) no-repeat center; width: 30px; height: 30px;"></i>
+							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请输入登录名" id="username" name="username" style="height: 33px; font-size: 18px;"/>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label visible-ie8 visible-ie9">密码：</label>
+					<div class="controls">
+						<div class="input-icon left">
+							<i style="background: url(img/icons/r-info-icon2.png) no-repeat center; width: 30px; height: 30px;"></i>
+							<input class="m-wrap placeholder-no-fix" type="password" placeholder="请输入密码" id="password" name="password" style="height: 33px; font-size: 18px;"/>
+						</div>
+					</div>
+				</div>
+				<div class="form-actions">
+					<span style="width: 40%; float: left; font-size: 16px;"><input type="checkbox"/> 记住我</span>
+					<span style="width: 55%; float: right; font-size: 16px;">忘记密码？<a href="javascript:;" class="" id="forget-password">点击找回密码</a></span>
+					<button type="submit" class="btn blue" style="width: 250px; font-size: 18px; margin: 25px 15%;" onclick="userLoginIn();">
+						登&nbsp;&nbsp;录&nbsp;&nbsp;<i class="m-icon-swapright m-icon-white"></i>
+					</button>            
+				</div>
+				<!--<div class="create-account">
+					<p><a href="javascript:;" id="register-btn" class="">新用户注册</a></p>
+				</div>-->
+			</form>
+			<!-- 登录表单【结束】 -->        
+	
+			<!-- 忘记密码模块【开始】 -->
+			<form class="form-vertical forget-form" action="">
+				<h3 class="">密码找回</h3><hr />
+				<p>请输入您的Email地址，我们会在核实您的注册信息后，将您的密码初始化。</p>
+				<div class="control-group">
+					<div class="controls">
+						<div class="input-icon left">
+							<i class="icon-envelope"></i>
+							<input class="m-wrap placeholder-no-fix" type="text" placeholder="Email" name="email" />
+						</div>
+					</div>
+				</div>
+	
+				<div class="form-actions">
+					<button type="button" id="back-btn" class="btn">
+						<i class="m-icon-swapleft"></i>&nbsp; 返&nbsp;回
+					</button>
+					<!--<button type="submit" class="btn green pull-right">-->
+					<button type="submit" class="btn blue pull-right">
+						提&nbsp;交 &nbsp;<i class="m-icon-swapright m-icon-white"></i>
+					</button>            
+				</div>
+			</form>
+			<!-- 忘记密码模块【结束】 -->
+			
+			<!--注册新用户【开始】-->
+			<!-- <form class="form-vertical register-form" action="">
+				<h3 class="">新用户注册</h3><hr />
+				<p>请仔细填写下面的注册信息：</p>
+				<div class="control-group">
+					<label class="control-label visible-ie8 visible-ie9">登录名：</label>
+					<div class="controls">
+						<div class="input-icon left">
+							<i class="icon-user"></i>
+							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请填写登录名" name="username"/>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label visible-ie8 visible-ie9">登录密码：</label>
+					<div class="controls">
+						<div class="input-icon left">
+							<i class="icon-lock"></i>
+							<input class="m-wrap placeholder-no-fix" type="password" id="register_password" placeholder="请填写登录密码" name="password"/>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label visible-ie8 visible-ie9">确认密码：</label>
+					<div class="controls">
+						<div class="input-icon left">
+							<i class="icon-ok"></i>
+							<input class="m-wrap placeholder-no-fix" type="password" placeholder="请再次确认密码" name="rpassword"/>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label visible-ie8 visible-ie9">Email</label>
+					<div class="controls">
+						<div class="input-icon left">
+							<i class="icon-envelope"></i>
+							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请输入Email" name="email"/>
+						</div>
+					</div>
+				</div>
+	
+				<div class="form-actions">
+					<button id="register-back-btn" type="button" class="btn">
+						<i class="m-icon-swapleft"></i>&nbsp;返&nbsp;回
+					</button>
+					<button type="submit" id="register-submit-btn" class="btn green pull-right">
+					<button type="submit" id="register-submit-btn" class="btn blue pull-right">
+						提&nbsp;交&nbsp;<i class="m-icon-swapright m-icon-white"></i>
+					</button>            
+				</div>
+			</form> -->
+		
+		</div>
+		
+		<!--引入JS文件-->
+		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js" ></script>
+		<script type="text/javascript" src="media/js/jquery-migrate-1.2.1.min.js"></script>
+		<!--JQuery-ui-->
+		<script type="text/javascript" src="media/js/jquery-ui-1.10.1.custom.min.js"></script>      
+		<!--BootStrap-->
+		<script type="text/javascript" src="media/js/bootstrap.min.js"></script>
+		<!--滚动条-->
+		<script type="text/javascript" src="media/js/jquery.slimscroll.min.js"></script>
+		<!--容器-->
+		<script type="text/javascript" src="media/js/jquery.blockui.min.js"></script>  
+		<script type="text/javascript" src="media/js/jquery.cookie.min.js"></script>
+		<!-- <script type="text/javascript" src="media/js/jquery.uniform.min.js"></script> -->
+		<!--序列化提交-->
+		<script type="text/javascript" src="media/js/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="media/js/app.js"></script>
+		<script type="text/javascript" src="media/js/login.js"></script>
+		
+		<script>
+			jQuery(document).ready(function() {
+			  App.init();
+			  Login.init();
+			});
+		</script>
+		
+		<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];  
+		_gaq.push(['_setAccount', 'UA-37564768-1']);
+		_gaq.push(['_setDomainName', 'keenthemes.com']);  
+		_gaq.push(['_setAllowLinker', true]);  
+		_gaq.push(['_trackPageview']);  
+		(function() {
+			var ga = document.createElement('script'); 
+			ga.type = 'text/javascript'; 
+			ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';    
+			var s = document.getElementsByTagName('script')[0]; 
+			s.parentNode.insertBefore(ga, s);  })();
+		</script> -->
+		
+		<!--设置页面背景图片-->
+		<script src="media/js/jquery.backstretch.min.js"></script>
+		<script>
+		    $(function() {
+		        $('.login').backstretch("img/hqgd/gfBg.png");
+		    });
+		</script>
+		<!-- 用户登录【开始】 -->
+		<script type="text/javascript">
+			function userLoginIn(){
+				var username = $("#username").val();
+				var password = $("#password").val();
+				var isRemember = $("input[type='checkbox']").is(':checked');
+				$.ajax({
+					url: "hqgd/login",
+					type: "post",
+					data:{"username": username, "password": password, "isRemember": isRemember},
+					dataType:"json",
+					async: false,
+					success: function(data){
+						if(data.success){
+							window.location.href = "index.html";
+						}else{
+							$('.alert-error', $('.login-form')).html(data.message);
+							$('.alert-error', $('.login-form')).show();
+						}
+					}
+				});
+			}
+		</script>
+		<!-- 用户登录【结束】 -->
+	</body>
+</html>

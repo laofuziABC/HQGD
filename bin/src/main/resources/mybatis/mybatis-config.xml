@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 在控制台打印sql日志 -->
+<!--         <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <setting name="logImpl" value="SLF4J" />  -->
+        <!-- 获取数据库自增主键值 -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!-- 使用列别名替换列名，默认为 true -->
+        <setting name="useColumnLabel" value="true"/>
+        <!-- 开启驼峰命名转换：Table(create_time) => Entity(createTime) -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <typeAliases>
+        <typeAlias alias="string" type="java.lang.String" />
+        <typeAlias alias="int" type="java.lang.Integer"/>
+        <typeAlias alias="hashmap" type="java.util.HashMap" />
+        <typeAlias alias="User" type="com.hqgd.pms.domain.User" />
+        <typeAlias alias="DataAcquisitionVo" type="com.hqgd.pms.domain.DataAcquisitionVo" />
+    </typeAliases>
+    
+</configuration>

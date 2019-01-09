@@ -1,0 +1,132 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML lang=en xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<HEAD>
+<TITLE>Web地图控件 Web GIS演示 - 多比控件</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<LINK rel=stylesheet type=text/css href="map/style.css" media=screen>
+<LINK rel=stylesheet type=text/css href="map/highlight.css" media=screen>
+<LINK rel=stylesheet type=text/css href="map/jquery.vector-map.css" media=screen>
+
+<script type="text/javascript" src="scripts/gef/scripts/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="scripts/gef/scripts/all-core.js"></script>
+	
+<SCRIPT type=text/javascript src="map/world-en.js"></SCRIPT>
+<SCRIPT type=text/javascript src="map/gdp-data.js"></SCRIPT>
+
+<SCRIPT type=text/javascript>
+        jQuery(document).ready(function(){
+            //example 2
+            var max = 0,
+                min = Number.MAX_VALUE,
+                cc,
+                startColor = [200, 238, 255],
+                endColor = [0, 100, 145],
+                colors = {},
+                hex;
+            for (cc in gdpData) {
+                if (parseFloat(gdpData[cc]) > max) {
+                    max = parseFloat(gdpData[cc]);
+                }
+                if (gdpData[cc] < min) {
+                    min = parseFloat(gdpData[cc]);
+                }
+            }
+            for (cc in gdpData) {
+                if (gdpData[cc] > 0) {
+                    colors[cc] = '#';
+                    for (var i = 0; i<3; i++) {
+                        hex = Math.round(startColor[i] + (endColor[i] - startColor[i])*(gdpData[cc] / (max - min))).toString(16);
+                        if (hex.length == 1) {
+                            hex = '0'+hex;
+                        }
+                        colors[cc] += (hex.length == 1 ? '0' : '') + hex;
+                    }
+                }
+            }
+            
+            //example 3
+            $('#example-map-3').vectorMap({
+                values: gdpData,
+                scaleColors: ['#C8EEFF', '#006491'],
+                normalizeFunction: 'polynomial',
+                hoverOpacity: 0.7,
+                hoverColor: false,
+				onLabelShow: function(event, label, code){
+				    
+				},
+				onRegionOver: function(event, code){
+				    $("#description div.p").css("display", "none");
+					var country = $("#" + code);
+					if(country.length>0){
+					    country.css("display", "block");
+					}else{
+					     $("#other").css("display", "block");
+					}
+				},
+				onRegionOut: function(event, code){},
+				onRegionClick: function(event, code){}
+
+
+            });
+            
+        });
+    </SCRIPT>
+	
+	<style type="text/css">
+	    div#description{
+		    position:absolute;
+			left:820px;
+			top: 20px;
+			width:200px;
+			border: 2px dashed #00AA00;
+		}
+	    div.p{
+		    display:none;
+		}
+	</style>
+
+
+<META name=GENERATOR content="MSHTML 8.00.7600.16891"></HEAD>
+<BODY>
+<h1>Web GIS演示，采用VML和SVG编写，可以支持IE，Andriod和iPhone等系统</h1>
+<DIV id="example-map-3"></DIV>
+<div id="description">
+	<div id="cn" class="p" style="display:block;">
+        <img src="images/flags/china.jpg">
+		<p>
+		中华人民共和国简称中国，位于欧亚大陆东部，太平洋西岸。中国具有五千年的文明史，是世界四大文明古国之一。陆地面积约960万平方公里，东部和南部大陆海岸线长18400多公里，内海和边海的水域面积约470多万平方公里。海域分布有大小岛屿7600个，其中台湾岛最大，约为35989.76平方公里。陆上国界线长达20000多公里，同14国接壤与6国海上相邻。省级行政区划为4个直辖市、23个省、5个自治区、2个特别行政区，首都北京。
+		</p>
+	</div>
+
+	<div id="tw" class="p">
+        <img src="images/flags/china.jpg">
+		<p>
+		啥都别说了，台湾是我们不可分割的一部分。
+		</p>
+	</div>
+
+	<div id="jp" class="p">
+        <img src="images/flags/china.jpg">
+		<p>
+		啥都别说了，小日本是我们不可分割的一部分。
+		</p>
+	</div>
+
+	<div id="kr" class="p">
+        <img src="images/flags/china.jpg">
+		<p>
+		啥都别说了，棒子领土是我们不可分割的一部分。
+		</p>
+	</div>
+
+	<div id="other" class="p">
+        <img src="images/flags/other.jpg">
+		<p>
+		其他国家，我就不介绍了，我也没有去过。
+		</p>
+	</div>
+
+</div>
+<DIV style="POSITION: absolute; right:0; bottom:20;padding:10px;" >由于演示版的限制，这里只演示了部分功能，需要更多的演示，<a href="/Page-d-key-contact">请联系我们</a></DIV>
+
+</BODY></HTML>

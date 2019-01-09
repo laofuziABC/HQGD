@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>用户管理</title>
+	</head>
+	<body class="page-content">
+		<div class="container-fluid">
+			<!-- 页面标题和导航【开始】-->
+			<div class="row-fluid">
+				<div class="span12">
+					<h3 class="page-title">用户列表&nbsp;<small>此功能用于管理所有用户</small></h3>
+					<!--导航-->
+					<ul class="breadcrumb">
+						<li>
+							<i class="icon-home"></i>
+							<a href="#">首页</a> 
+							<span class="icon-angle-right"></span>
+						</li>
+						<li>
+							<a href="#">用户管理</a>
+							<span class="icon-angle-right"></span>
+						</li>
+						<li><a href="#">用户列表</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- 页面标题和横向导航【结束】-->
+			<!--加载用户列表【开始】-->
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="portlet box blue">
+						<!--用户列表【开始】-->
+						<div class="portlet-body">
+							<div class="clearfix">
+								<!--新增按钮-->
+								<div class="btn-group">
+									<button id="sample_editable_1_new" class="btn green" onclick="getUserEdit();">
+										新增用户&nbsp;<i class="icon-plus"></i>
+									</button>
+								</div>
+								<!--便捷操作工具栏-->
+								<div class="btn-group pull-right">
+									<button class="btn dropdown-toggle" data-toggle="dropdown">更多操作<i class="icon-angle-down"></i>
+									</button>
+									<ul class="dropdown-menu pull-right">
+										<li><a href="#">打印</a></li>
+										<li><a href="#">保存为PDF</a></li>
+										<li><a href="#">导出到Excel</a></li>
+									</ul>
+								</div>
+							</div>
+							<!--表格【开始】-->
+							<table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+								<thead>
+									<tr> 
+										<th></th>
+										<th>登录名</th>
+										<th>所属企业中文名称</th>
+										<th>用户状态</th>
+										<th>更多操作</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr class="">
+										<td>1</td>
+										<td>abc</td>
+										<td>XXX公司</td>
+										<td>启用</td>
+										<td class="center">
+											<a class="details" href="javascript:;" onclick="getUserDetails();">详情</a>&nbsp;
+											<a class="edit" href="javascript:;" onclick="getUserEdit(1);">编辑</a>&nbsp;
+											<a class="delete" href="javascript:;"onclick="getUserDelete();">删除</a>&nbsp;
+											<a class="resetpsw" href="javascript:;" onclick="resetUserPsw();">密码初始化</a>
+										</td>
+									</tr>
+									<tr class="">
+										<td>2</td>
+										<td>123</td>
+										<td>XXX公司</td>
+										<td>禁用</td>
+										<td class="center">
+											<a class="details" href="javascript:;">详情</a>&nbsp;
+											<a class="edit" href="javascript:;">编辑</a>&nbsp;
+											<a class="delete" href="javascript:;">删除</a>&nbsp;
+											<a class="resetpsw" href="javascript:;">密码初始化</a>
+										</td>
+									</tr>
+									<tr class="">
+										<td>3</td>
+										<td>#$@</td>
+										<td>XXX公司</td>
+										<td>禁用</td>
+										<td class="center">
+											<a class="details" href="javascript:;">详情</a>&nbsp;
+											<a class="edit" href="javascript:;">编辑</a>&nbsp;
+											<a class="delete" href="javascript:;">删除</a>&nbsp;
+											<a class="resetpsw" href="javascript:;">密码初始化</a>
+										</td>
+									</tr>
+									<tr class="">
+										<td>4</td>
+										<td>金木水火土</td>
+										<td>XXX有限公司</td>
+										<td>启用</td>
+										<td class="center">
+											<a class="details" href="javascript:;">详情</a>&nbsp;
+											<a class="edit" href="javascript:;">编辑</a>&nbsp;
+											<a class="delete" href="javascript:;">删除</a>&nbsp;
+											<a class="resetpsw" href="javascript:;">密码初始化</a>
+										</td>
+									</tr>
+									<tr class="">
+										<td>5</td>
+										<td>东西南北中</td>
+										<td>XXX有限公司</td>
+										<td>禁用</td>
+										<td class="center">
+											<a class="details" href="javascript:;">详情</a>&nbsp;
+											<a class="edit" href="javascript:;">编辑</a>&nbsp;
+											<a class="delete" href="javascript:;">删除</a>&nbsp;
+											<a class="resetpsw" href="javascript:;">密码初始化</a>
+										</td>
+									</tr>
+									<tr class="">
+										<td>6</td>
+										<td>宫商角徵羽</td>
+										<td>XXX有限公司</td>
+										<td>禁用</td>
+										<td class="center">
+											<a class="details" href="javascript:;">详情</a>&nbsp;
+											<a class="edit" href="javascript:;">编辑</a>&nbsp;
+											<a class="delete" href="javascript:;">删除</a>&nbsp;
+											<a class="resetpsw" href="javascript:;">密码初始化</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!--用户列表【结束】-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--加载用户列表【结束】-->
+		</div>
+		<script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="media/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="media/js/DT_bootstrap.js"></script>
+		
+		<script src="media/js/table-editable.js"></script>    
+		<script>
+			jQuery(document).ready(function() {       
+			   TableEditable.init();
+			});
+		</script>
+		<!--用户的添、删、改初始化密码【开始】-->
+		<script type="application/javascript">
+//			var target = document.getElementById("portlet-config");
+			/*添加/编辑用户*/
+			function getUserEdit(param){
+				if(typeof(param) == 'undefined'){
+//					alert(target.style.display=="none");
+//					if(target.style.display == "none"){
+//						target.style.display = "block";
+//						let title = "新增用户";
+//						let context = "新增用户表单";
+//						$("#modal-title").html(title);
+//						$("#modal-body").load("reset-password.html");
+//						$("#portlet-config").load("childrenHtml/user/update-password.html");
+					parent.openModal("",800,800);
+//					}
+				}else{
+					alert("编辑用户");
+				}
+				
+			}
+			
+			/*查看详情*/
+			function getUserDetails(){
+				alert("查看详情");
+				parent.openModal("",800,800);
+			}
+			
+			/*删除用户*/
+			function getUserDelete(){
+				alert("删除用户");
+			}
+			
+			/*用户密码初始化*/
+			function resetUserPsw(){
+				alert("用户密码初始化");
+			}
+			
+			/*关闭模态框*/
+			function closeModal(){
+				if(target.style.display == "block"){
+					target.style.display = "none";
+				}
+			}
+		</script>
+		<!--用户的添、删、改、查、初始化密码【结束】-->
+	
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-37564768-1']);
+			_gaq.push(['_setDomainName', 'keenthemes.com']);
+			_gaq.push(['_setAllowLinker', true]);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</body>
+</html>

@@ -31,7 +31,7 @@ public class LoginService implements ILoginService {
 		String password = request.getParameter("password").trim();
 		boolean isRemember = Boolean.valueOf(request.getParameter("isRemember"));
 		log.info("登录开始，参数为userName=" + userName + "password=" + password + "isRemember=" + isRemember);
-		User userFind = userService.findUserByUserName(userName);
+		User userFind = userService.selectByUserName(userName);
 		Map<String, Object> map = authUser(userFind,
 				new User(null, userName, password, null, null, null, null, null, null));
 		Boolean authUser = (Boolean) map.get("success");

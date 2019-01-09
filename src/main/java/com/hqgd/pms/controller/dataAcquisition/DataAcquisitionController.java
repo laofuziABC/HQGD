@@ -88,6 +88,10 @@ public class DataAcquisitionController {
 		long inTime = System.currentTimeMillis();
 		log.info("查询历史数据曲线开始 " + inTime);
 		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
+		long outTime = System.currentTimeMillis();
+		log.info("查询历史数据曲线结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("接口访问时长为：" + midTime);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
@@ -96,10 +100,23 @@ public class DataAcquisitionController {
 		resultMap.put("data", historicalDataList);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
+		
+	}
+	
+	/**
+	 * 获取指定时间段（自开机到当前时间）内的数据点的集合
+	 * 用于初始化当前监控图表
+	 * 2018.12.25
+	 */
+	@RequestMapping("/periodDate")
+	public void getPeriodDate(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		long inTime = System.currentTimeMillis();
+		Map<String, Object> resultList = dataAcquisitionService.getPeriodDataByQuery(queryVo);
 		long outTime = System.currentTimeMillis();
-		log.info("查询历史数据曲线结束：" + outTime);
-		long midTime = outTime - inTime;
-		log.info("接口访问时长为：" + midTime);
+		log.info("接口访问时长为：" + (outTime-inTime));
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultList));
 	}
 
 	/**
@@ -128,6 +145,23 @@ public class DataAcquisitionController {
 			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 			resultMap.put("message", "查询历史数据成功");
 			resultMap.put("data", path);
+			response.getWriter().write(new Gson().toJson(resultMap));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/record")
+	public void record(QueryParametersVo data ,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.record(data);
+		try {
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			resultMap.put("success", Boolean.TRUE.toString());
+			resultMap.put("resultCode", "00000000");
+			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+			resultMap.put("message", "");
+			resultMap.put("data", historicalDataList);
+			response.setContentType("application/json; charset=UTF-8");
 			response.getWriter().write(new Gson().toJson(resultMap));
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -1,208 +1,80 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta charset="UTF-8">
 		<title>和其光电</title>
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-		<meta content="" name="description" />
-		<meta content="" name="author" />
-		<!--BootStrap样式-->
-		<link rel="stylesheet" type="text/css" href="media/css/bootstrap.min.css" />
-		<!--表单元素样式-->
-		<link rel="stylesheet" type="text/css" href="media/css/style-metro.css" />
-		<!--表单、页面、图标样式-->
-		<link rel="stylesheet" type="text/css" href="media/css/style.css" />
-		<link rel="stylesheet" type="text/css" href="media/css/login.css" />
+		<link rel="stylesheet" type="text/css" href="login/css/style2.0.css">
+		<style type="text/css">
+			ul li{font-size: 30px;color:#2ec0f6;}
+			.tyg-div{z-index:-1000;float:left;position:absolute;left:5%;top:20%;}
+			.tyg-p{ font-size: 14px; font-family: 'microsoft yahei'; position: absolute; top: 135px; left: 60px; }
+			.tyg-div-denglv{ z-index:1000;float:right;position:absolute;top:20%;right:3%;}
+			.tyg-div-form{ background-color: #23305a; color:#2ec0f6; }
+			.tyg-div-form form {padding:20px;}
+			/* .tyg-div-form form input[type="text"]{ width: 270px; height: 30px; margin: 25px 10px 0px 0px; } */
+			/* .tyg-div-form form input[type="text"], .tyg-div-form form input[type="password"]{ width: 270px; height: 36px; margin: 25px 10px 0px 0px; } */
+			.tyg-div-form form button { cursor: pointer; padding: 0; background: #2ec0f6;
+			    -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 3px; border: 1px solid #2ec0f6;
+			    -moz-box-shadow:  0 15px 30px 0 rgba(255,255,255,.25) inset, 0 2px 7px 0 rgba(0,0,0,.2);
+			    -webkit-box-shadow: 0 15px 30px 0 rgba(255,255,255,.25) inset, 0 2px 7px 0 rgba(0,0,0,.2);
+			    box-shadow: 0 15px 30px 0 rgba(255,255,255,.25) inset, 0 2px 7px 0 rgba(0,0,0,.2);
+			    font-family: 'PT Sans', Helvetica, Arial, sans-serif;  font-size: 14px; font-weight: 700; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.1);
+			    -o-transition: all .2s; -moz-transition: all .2s; -webkit-transition: all .2s; -ms-transition: all .2s; }
+			form button span{margin: auto 10px;}
+		</style>
 	</head>
-	<body class="login">
-		<!--企业logo-->
-		<!-- <div class="logo">
-			<img src="img/hqgd/logo.jpg" alt="企业logo" /> 
-		</div> -->
-		<!--页面内容-->
-		<div class="content">
-			<!-- 登录表单【开始】 -->
-			<form class="form-vertical login-form" action="">
-				<h3 class="form-title">系统登录</h3><hr />
-				<!--验证警示框：请输入登录信息-->
-				<div class="alert alert-error hide">
-					<button class="close" data-dismiss="alert"></button>
-					<span>请仔细检查您输入的用户名名和密码！</span>
+	<body>
+		<div class="tyg-div">
+			<ul>
+		    	<li><div>让</div></li>
+		    	<li><div style="margin-left:20px;">数</div></li>
+		    	<li><div style="margin-left:40px;">据</div></li>
+		    	<li><div style="margin-left:60px;">改</div></li>
+		    	<li><div style="margin-left:80px;">变</div></li>
+		    	<li><div style="margin-left:100px;">生</div></li>
+		    	<li><div style="margin-left:120px;">活</div></li>
+		    </ul>
+		</div> 
+		<div id="contPar" class="contPar">
+			<div id="page1"  style="z-index:1;">
+				<div class="title0">荧光光纤测温仪温度数据管理平台</div>
+				<div class="imgGroug">
+					<ul>
+						<img alt="急速" class="img0 png" src="./login/img/page1_0.png">
+						<img alt="稳定" class="img1 png" src="./login/img/page1_1.png">
+						<img alt="安全" class="img2 png" src="./login/img/page1_2.png">
+					</ul>
 				</div>
-				<!--登录信息-->
-				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">用户名：</label>
-					<div class="controls">
-						<div class="input-icon left">
-							<!--<i class="icon-user"></i>-->
-							<i style="background: url(img/icons/r-info-icon1.png) no-repeat center; width: 30px; height: 30px;"></i>
-							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请输入用户名" id="username" name="username" style="height: 33px; font-size: 18px;"/>
-						</div>
+				<img alt="" class="img3" src="./login/img/page1_3.jpg">
+			</div>
+		</div>
+		<div class="tyg-div-denglv">
+			<div class="tyg-div-form">
+				<form action="#">
+					<h2>登录</h2><p class="tyg-p"></p>
+					<div style="margin:5px 0px;">
+						<input type="text" placeholder="请输入账号..." id="username" name="username"/>
 					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">密码：</label>
-					<div class="controls">
-						<div class="input-icon left">
-							<i style="background: url(img/icons/r-info-icon2.png) no-repeat center; width: 30px; height: 30px;"></i>
-							<input class="m-wrap placeholder-no-fix" type="password" placeholder="请输入密码" id="password" name="password" style="height: 33px; font-size: 18px;"/>
-						</div>
+					<div style="margin:5px 0px;">
+						<input type="password" placeholder="请输入密码..." id="password" name="password" />
 					</div>
-				</div>
-				<div class="form-actions">
-					<span style="width: 40%; float: left; font-size: 16px;"><input type="checkbox"/> 记住我</span>
-					<span style="width: 55%; float: right; font-size: 16px;">忘记密码？<a href="javascript:;" class="" id="forget-password">点击找回密码</a></span>
-					<button type="submit" class="btn blue" style="width: 250px; font-size: 18px; margin: 25px 15%;" onclick="userLoginIn();">
-						登&nbsp;&nbsp;录&nbsp;&nbsp;<i class="m-icon-swapright m-icon-white"></i>
-					</button>            
-				</div>
-				<!--<div class="create-account">
-					<p><a href="javascript:;" id="register-btn" class="">新用户注册</a></p>
-				</div>-->
-			</form>
-			<!-- 登录表单【结束】 -->        
-	
-			<!-- 忘记密码模块【开始】 -->
-			<!-- <form class="form-vertical forget-form" action="">
-				<h3 class="">密码找回</h3><hr />
-				<p>请输入您的Email地址，我们会在核实您的注册信息后，将您的密码初始化。</p>
-				<div class="control-group">
-					<div class="controls">
-						<div class="input-icon left">
-							<i class="icon-envelope"></i>
-							<input class="m-wrap placeholder-no-fix" type="text" placeholder="Email" name="email" />
-						</div>
+					<div class="form-actions">
+						<span style="width: 40%; float: left; font-size: 14px;"><input type="checkbox"/> 记住我</span>
+						<span style="width: 60%; float: right; font-size: 14px;">忘记密码？<a href="javascript:;" class="" id="forget-password">点击找回密码</a></span>
 					</div>
-				</div>
-	
-				<div class="form-actions">
-					<button type="button" id="back-btn" class="btn">
-						<i class="m-icon-swapleft"></i>&nbsp; 返&nbsp;回
-					</button>
-					<button type="submit" class="btn green pull-right">
-					<button type="submit" class="btn blue pull-right">
-						提&nbsp;交 &nbsp;<i class="m-icon-swapright m-icon-white"></i>
-					</button>            
-				</div>
-			</form> -->
-			<!-- 忘记密码模块【结束】 -->
-			
-			<!-- 忘记密码模块1【开始】 -->
-			<form class="form-vertical forget-form1" action="">
-				<h3 class="">密码找回</h3><hr />
-				<p>请联系服务方管理人员，联系方式：15129284506</p>
-				<div class="form-actions">
-					<button type="button" id="back-btn" class="btn">
-						<i class="m-icon-swapleft"></i>&nbsp; 返&nbsp;回
-					</button>
-					          
-				</div>
-			</form>
-			<!-- 忘记密码模块1【结束】 -->
-			
-			<!--注册新用户【开始】-->
-			<!-- <form class="form-vertical register-form" action="">
-				<h3 class="">新用户注册</h3><hr />
-				<p>请仔细填写下面的注册信息：</p>
-				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">用户名：</label>
-					<div class="controls">
-						<div class="input-icon left">
-							<i class="icon-user"></i>
-							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请填写用户名" name="username"/>
-						</div>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">登录密码：</label>
-					<div class="controls">
-						<div class="input-icon left">
-							<i class="icon-lock"></i>
-							<input class="m-wrap placeholder-no-fix" type="password" id="register_password" placeholder="请填写登录密码" name="password"/>
-						</div>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">确认密码：</label>
-					<div class="controls">
-						<div class="input-icon left">
-							<i class="icon-ok"></i>
-							<input class="m-wrap placeholder-no-fix" type="password" placeholder="请再次确认密码" name="rpassword"/>
-						</div>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label visible-ie8 visible-ie9">Email</label>
-					<div class="controls">
-						<div class="input-icon left">
-							<i class="icon-envelope"></i>
-							<input class="m-wrap placeholder-no-fix" type="text" placeholder="请输入Email" name="email"/>
-						</div>
-					</div>
-				</div>
-	
-				<div class="form-actions">
-					<button id="register-back-btn" type="button" class="btn">
-						<i class="m-icon-swapleft"></i>&nbsp;返&nbsp;回
-					</button>
-					<button type="submit" id="register-submit-btn" class="btn green pull-right">
-					<button type="submit" id="register-submit-btn" class="btn blue pull-right">
-						提&nbsp;交&nbsp;<i class="m-icon-swapright m-icon-white"></i>
-					</button>            
-				</div>
-			</form> -->
-		
+					<button onclick="userLoginIn();return false;"><span style="font-size: 16px;">登</span><span style="font-size: 16px;">录</span></button>
+				</form>
+			</div>
 		</div>
 		
-		<!--引入JS文件-->
-		<script type="text/javascript" src="media/js/jquery-1.10.1.min.js" ></script>
-		<script type="text/javascript" src="media/js/jquery-migrate-1.2.1.min.js"></script>
-		<!--JQuery-ui-->
-		<script type="text/javascript" src="media/js/jquery-ui-1.10.1.custom.min.js"></script>      
-		<!--BootStrap-->
-		<script type="text/javascript" src="media/js/bootstrap.min.js"></script>
-		<!--滚动条-->
-		<script type="text/javascript" src="media/js/jquery.slimscroll.min.js"></script>
-		<!--容器-->
-		<script type="text/javascript" src="media/js/jquery.blockui.min.js"></script>  
-		<script type="text/javascript" src="media/js/jquery.cookie.min.js"></script>
-		<!-- <script type="text/javascript" src="media/js/jquery.uniform.min.js"></script> -->
-		<!--序列化提交-->
-		<script type="text/javascript" src="media/js/jquery.validate.min.js"></script>
-		<script type="text/javascript" src="media/js/app.js"></script>
-		<script type="text/javascript" src="media/js/login.js"></script>
-		
-		<script>
-			jQuery(document).ready(function() {
-			  App.init();
-			  Login.init();
-			});
-		</script>
-		
-		<!-- <script type="text/javascript">
-		var _gaq = _gaq || [];  
-		_gaq.push(['_setAccount', 'UA-37564768-1']);
-		_gaq.push(['_setDomainName', 'keenthemes.com']);  
-		_gaq.push(['_setAllowLinker', true]);  
-		_gaq.push(['_trackPageview']);  
-		(function() {
-			var ga = document.createElement('script'); 
-			ga.type = 'text/javascript'; 
-			ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';    
-			var s = document.getElementsByTagName('script')[0]; 
-			s.parentNode.insertBefore(ga, s);  })();
-		</script> -->
-		
-		<!--设置页面背景图片-->
-		<script src="media/js/jquery.backstretch.min.js"></script>
-		<script>
-		    $(function() {
-		        $('.login').backstretch("img/hqgd/gfBg.png");
-		    });
-		</script>
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+		<script type="text/javascript" src="./login/js/com.js"></script>
 		<!-- 用户登录【开始】 -->
 		<script type="text/javascript">
+			var LOGIN_TIME;		//记录登录时间戳
 			function userLoginIn(){
 				var username = $("#username").val();
 				var password = $("#password").val();
@@ -212,16 +84,16 @@
 					type: "post",
 					data:{"username": username, "password": password, "isRemember": isRemember},
 					dataType:"json",
-					async: false,
 					success: function(data){
 						if(data.success){
-							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName));
+							LOGIN_TIME=(new Date()).getTime();
+							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName+"&LOGINTIME="+LOGIN_TIME));
 						}else{
-							$('.alert-error', $('.login-form')).html(data.message);
-							$('.alert-error', $('.login-form')).show();
+							alert(data.message);
 						}
 					}
 				});
+				
 			}
 		</script>
 		<!-- 用户登录【结束】 -->

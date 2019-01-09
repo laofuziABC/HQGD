@@ -1,14 +1,12 @@
 package com.hqgd.pms.domain;
 
-import java.util.Date;
-
 public class User {
 
 	public User() {
 	}
 
 	public User(Integer id, String userName, String password, String comments, String isdel, String creator,
-			Date createTime, String updater, Date updateTime) {
+			String createTime, String updater, String updateTime) {
 		super();
 		this.id = id;
 		this.userName = userName;
@@ -33,11 +31,11 @@ public class User {
 
 	private String creator;
 
-	private Date createTime;
+	private String createTime;
 
 	private String updater;
 
-	private Date updateTime;
+	private String updateTime;
 
 	public Integer getId() {
 		return id;
@@ -87,11 +85,11 @@ public class User {
 		this.creator = creator == null ? null : creator.trim();
 	}
 
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 
@@ -103,11 +101,11 @@ public class User {
 		this.updater = updater == null ? null : updater.trim();
 	}
 
-	public Date getUpdateTime() {
+	public String getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Date updateTime) {
+	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
 }

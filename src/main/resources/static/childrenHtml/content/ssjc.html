@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=10">
+<title>实时监测</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" type="text/css" href="dist/js/pager/pager.css" />
+<link rel="stylesheet" type="text/css" href="dist/js/datetime/datetimepicker.css" />
+<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../bower_components/Ionicons/css/ionicons.min.css">
+<!-- fullCalendar -->
+<link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.min.css">
+<link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print">
+<!-- Theme style -->
+<link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" type="text/css" href="dist/js/pager/pager.css" />
+<link rel="stylesheet" type="text/css" href="dist/js/datetime/datetimepicker.css" />
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+<!-- Google Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style type="text/css">
+/* 
+#ssjc_title { margin: 10px; }
+#ssjc_title button, #userParam button, #addrParam button, #typeParam button{ height: 26px; text-align: center; line-height: 26px;
+	width: 17%; color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden; }
+#ssjc_title input, #userParam input, #typeParam select { line-height: 24px; background: none; position: relative; z-index: 2; color: #fff;
+	border: 1px solid #fff; height: 24px; margin-top: 8px; width: 60%; }
+#showParams { margin: 0; padding: 0; }
+#showParams .btn_first { margin: 10px 0 10px 1%; height: 26px; text-align: center; line-height: 26px; width: 30%; color: #fff;
+	background: #399ad7; border: none; border-radius: 3px; overflow: hidden; }
+#addrParam select { width: 25%; background-color: #21242e; font-size: 12px; }
+*/
+#result_list_div { margin: 10px 0 0 0; padding: 0; }
+#equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
+#equipResultList li:hover, #equipResultList .checked{ width: 80%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
+#equipResultList li span { width: 100%; }
+#sub-list-pager { margin: 10px auto; }
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1>数据监测</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li class="active">数据监测</li>
+				</ol>
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="row">
+					<div class="col-md-3"style="width: 18%;">
+						<div class="box box-solid">
+							<div class="box-body">
+								<div class="input-group">
+									<input id="new-event" type="text" class="form-control" placeholder="请输入设备名称">
+									<div class="input-group-btn">
+										<button type="submit" class="btn btn-primary" onclick="searchByEquiName();">查询</button>
+										<button type="submit" class="btn btn-primary" onclick="showParams();" id="yincang">分组</button>
+									</div>
+									<!-- /btn-group -->
+								</div>
+								<!-- /input-group -->
+								<div class="tree_menu">
+									<!-- 查询参数【开始】 -->
+									<div class="tree well tree_one" id="showParams" style="display: none;">
+										<button class="btn btn-primary" onclick="showParamBox(1);">按用户查询</button>
+										<button class="btn btn-primary" onclick="showParamBox(2);">按地区查询</button>
+										<button class="btn btn-primary" onclick="showParamBox(3);">按类型查询</button>
+										<div id="userParam" style="display: none;">
+											<!-- <input type="text" placeholder="请输入用户查询"
+												onfocus="javascript: this.value=null;" id="interUser" />
+											<button class="btn btn-primary" onclick="getEquiByUser();">查询</button> -->
+
+											<div class="input-group">
+												<input id="userParam" type="text" class="form-control" placeholder="请输入用户名">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-primary" onclick="getEquiByUser();">查询</button>
+												</div>
+												<!-- /btn-group -->
+											</div>
+										</div>
+										<div id="addrParam" style="display: none;">
+											<select id="prov-select" onchange="getCities();" class="form-control"><option value="0">选择省</option></select>
+											<select id="city-select" onchange="getTowns();" class="form-control"><option value="0">选择市</option></select>
+											<select id="town-select" class="form-control"><option value="0">选择区</option></select>
+											<button class="btn btn-primary" onclick="getEquiByAddr();">查询</button>
+										</div>
+										<div class="input-group" id="typeParam" style="display: none;">
+											<select class="form-control" id="equi-type" class="shi">
+												<option value="0" selected="selected">所有类型</option>
+												<option value="1">开关柜</option>
+												<option value="2">干式变压器</option>
+												<option value="3">变压器绕组</option>
+												<option value="4">环网柜</option>
+											</select>
+											<button class="btn btn-primary" onclick="getEquiByType();">查询</button>
+										</div>
+									</div>
+									<!-- 查询参数【结束】 -->
+									<!-- 结果列表【开始】 -->
+									<div class="tree well tree_one" id="result_list_div">
+										<ul style="color: #151414;" class="box-body no-padding nav nav-pills nav-stacked" id="equipResultList">
+											<li><span><em>设备名称</em></span></li>
+										</ul>
+										<!-- 翻页插件 -->
+										<div>
+											<div class="list-page-tail page-down" id="sub-list-pager"></div>
+										</div>
+									</div>
+									<!-- 结果列表【结束】 -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /.col -->
+					<div class="col-md-9"style="width: 82%;">
+						<div class="box box-primary">
+							<div class="box-body no-padding">
+								<ul class="nav nav-tabs">
+									<li class=""><a data-toggle="tab" id="cc" href="#currenttab" onclick="changeTabContent(1);">当前监测数据</a></li>
+									<li class=""><a data-toggle="tab" id="hh" href="#historytab" onclick="changeTabContent(2);">历史监测数据</a></li>
+								</ul>
+								<div class="tab-content">
+									<div id="currenttab"></div>
+									<div id="historytab"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="control-sidebar-bg"></div>
+	</div>
+	<!-- ./wrapper -->
+
+	<script src="vince/js/nicescroll.js"></script>
+	<script src="vince/js/demo.js"></script>
+	<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
+	<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
+	<script type="text/javascript" src="dist/js/AllCities.js"></script>
+	<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
+	<script src="dist/js/app.min.js"></script>
+	<script type="text/javascript">
+		var roleId = parent.getParam("roleId");
+		if(roleId==1){
+			getEquiResultList();
+		}else{
+			$("#yincang").css({"display":"none"});
+			var url="equipment/selectAllByUser";
+			var username=parent.getParam("userName");
+			var param={"userName":username};
+			if(username != ""){
+				AjaxPostForEquiSubList(url,param);
+			}
+		}
+		$("#currenttab").load("childrenHtml/data/current.html");
+		$("#historytab").load("childrenHtml/data/history.html");
+		$("#historytab").css({"display" : "none"}); 
+		$(".nav-tabs >li:contains('当前')").addClass("active");
+		$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
+		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
+		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
+		var oldequiId=equiId;
+		var newequiId=equiId;
+		//切换标签页
+		function changeTabContent(param){
+			$(".nav-tabs >li").removeClass("active");
+			if(param==2){
+				$(".nav-tabs >li:contains('历史')").addClass("active");
+				if(oldequiId!=newequiId){
+					$("#historytab").load("childrenHtml/data/history.html");
+				}
+				$("#currenttab").css({"display" : "none" });
+				$("#historytab").css({ "display" : "block" });
+				$("#hh").css({"background-color": "#3c8dbc", "color": "#ffffff", "border": "0"});
+				$("#cc").css({"background-color": "#ffffff", "color": "#3c8dbc", "border": "0"});
+			}else if(param==1){
+				$(".nav-tabs >li:contains('当前')").addClass("active");
+				$("#historytab").css({ "display" : "none" });
+				$("#currenttab").css({ "display" : "block" });
+				$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
+				$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
+				if(oldequiId!=newequiId){
+					showCurrentContent();
+				}
+				oldequiId=equiId;
+			}
+		}
+		//打开筛选区域
+		function showParams(){
+			var target = document.getElementById("showParams");
+			if(target.style.display=="none"){ target.style.display="block"; }
+			else{ target.style.display="none"; }
+		}
+		//根据按钮选择展示模块——用户/地区/类型
+		function showParamBox(param){
+			if(param==1){ userParam.style.display="block"; addrParam.style.display="none"; typeParam.style.display="none";}
+			else if(param==2){ addrParam.style.display="block"; userParam.style.display="none"; getProvs(); getCities(); getTowns(); typeParam.style.display="none";}
+			else if(param==3){ typeParam.style.display="block"; userParam.style.display="none"; addrParam.style.display="none"; }
+			else{ userParam.style.display="none"; addrParam.style.display="none"; typeParam.style.display="none";}
+		}
+		
+		//加载设备列表
+		function getEquiResultList(){
+			var url="equipment/selectAll";
+			AjaxPostForEquiSubList(url,null);
+		}
+		//根据设备名称查询设备列表
+		function searchByEquiName(){
+			var url="equipment/selectByEquipmentName";
+			var equiName=$("#interEqui").val().trim();
+			var param={"equipmentName":equiName};
+			if(equiName != ""){
+				AjaxPostForEquiSubList(url,param);
+			}else{
+				getEquiResultList();
+			}
+		}
+		//根据用户，查找关联设备
+		function getEquiByUser(){
+			var url="equipment/selectAllByUser";
+			var username=$("#interUser").val().trim();
+			var param={"userName":username};
+			if(username != ""){
+				AjaxPostForEquiSubList(url,param);
+			}
+		}
+		//根据地区，查找区内设备
+		function getEquiByAddr(){
+			var p = $("#prov-select").val();
+			var c = $("#city-select").val();
+			var t = $("#town-select").val();
+			var areaCode;
+			if(p==0){
+				alert("未选择地区");
+			}else{
+				areaCode=((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
+				var url="equipment/selectAllByAddress";
+				var param={"adcode":areaCode};
+				AjaxPostForEquiSubList(url,param);
+			}
+		}
+		//根据设备类型，查找同类型设备
+		function getEquiByType(){
+			var url="equipment/selectAllByType";
+			var equiType=$("#equi-type option:selected").text().trim();
+			var param={"type":equiType};
+			if(equiType != "所有类型"){
+				AjaxPostForEquiSubList(url,param);
+			}
+		}
+		//根据设备主键，获取数据展示信息
+		function getEquiData(param){
+			if(param==null){
+				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
+				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
+			}else{
+				equiId=param.trim();
+				newequiId=param.trim();
+				if($(".nav-tabs >li:contains('当前')").hasClass("active")){
+					showCurrentContent();
+				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
+					showHistoryContent();
+				}else{
+					showCurrentContent();
+				} 
+				
+			}
+		}
+		//监听活动设备
+		$("#equipResultList>li").click(function(){
+			$(this).parent().find("li").removeClass("checked");
+			$(this).addClass("checked");
+		});
+	</script>
+</body>
+</html>

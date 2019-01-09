@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -23,6 +25,7 @@ import com.hqgd.pms.common.ExcelFormat;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
+import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
 
@@ -39,8 +42,34 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
-		log.info("最新时间为：" + realTimeDateList.get(0).getReceiveTime());
-		return realTimeDateList;
+		if (realTimeDateList.size() > 0) {
+			int numOfCh = realTimeDateList.get(0).getNumOfCh();
+			if (realTimeDateList.size() == numOfCh) {
+				EquipmentInfo e = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
+				String s = e.getChannelTem();
+				s = s.substring(2, s.length() - 2);
+				String[] arr = s.split("\\],\\[");
+				if (arr.length == realTimeDateList.size()) {
+					for (int i = 0; i < realTimeDateList.size(); i++) {
+						String[] ta = arr[i].split(",");
+						String cn = ta[0].substring(1, ta[0].length() - 1);
+						String max = ta[1].substring(1, ta[1].length() - 1);
+						String min = ta[2].substring(1, ta[2].length() - 1);
+						String t = realTimeDateList.get(i).getTemperature();
+						String channelNum = realTimeDateList.get(i).getChannelNum();
+						if (!t.equals("3000") && !t.equals("-437") && !t.equals("2999") && channelNum.equals(cn)
+								&& (Float.valueOf(t) < Float.valueOf(min) || Float.valueOf(t) > Float.valueOf(max))) {
+							realTimeDateList.get(i).setState("9");
+						}
+					}
+				}
+
+			}
+			return realTimeDateList;
+		} else {
+			return null;
+		}
+
 	}
 
 	@Override
@@ -56,6 +85,19 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("total", total);
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
+		for (DataAcquisitionVo d : historicalDataList) {
+			switch (d.getTemperature()) {
+			case "-437":
+				d.setTemperature("故障1");
+				break;
+			case "3000":
+				d.setTemperature("故障2");
+				break;
+			case "2999.9":
+				d.setTemperature("故障3");
+				break;
+			}
+		}
 		return historicalDataList;
 	}
 
@@ -88,7 +130,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("时长为：" + midTime);
 
 		List<String> channelNumArr = new ArrayList<>();// 通道号数组
-		List<List<String>> channelTemArr = new ArrayList<>();// 通道号温度数数组
+		List<List<Float>> channelTemArr = new ArrayList<List<Float>>();// 通道号温度数数组
 		List<String> tem = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		// List<String> state = new ArrayList<>();
@@ -102,10 +144,13 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("处理数据开始：" + inTime);
 		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
 		for (int i = 0; i < historicalDataList.size(); i++) {
-
 			channelNumArr.add(historicalDataList.get(i).getChannelNum());
 			tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-			channelTemArr.add(tem);
+			// 避免空指针的情况下，将List<String>更改为List<Float>
+			if (tem != null) {
+				List<Float> temInteger = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
+				channelTemArr.add(temInteger);
+			}
 			// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
 			// stateArr.add(state);
 		}
@@ -129,7 +174,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
 		List<DataAcquisitionVo> recordList = dataAcquisitionVoMapper.recordExport(param);
-		path = (path == null || path.isEmpty()) ? "C:\\Program Files\\PMS" : path;
+		path = (path == null || path.isEmpty()) ? "D:\\PMS" : path;
 		File file = new File(path);
 		if (!file.exists()) {
 			file.mkdirs();
@@ -220,6 +265,54 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		header.add("值班人员");
 		header.add("联系方式");
 		return header;
+	}
+
+	/**
+	 * 获取指定时间段（自开机到当前时间）内的数据点的集合 channelList: 所有通道名称集合 各个通道在具体时间段内的采集温度集合
+	 * 各个通道在集体时间段内的采集时间集合
+	 */
+	@Override
+	public Map<String, Object> getPeriodDataByQuery(QueryParametersVo queryVo) {
+		String equipmentId = queryVo.getEquipmentId();
+		if (equipmentId == null || equipmentId.equals("")) {
+			return null;
+		} else {
+			Map<String, Object> param = new HashMap<>();
+			param.put("equipmentId", queryVo.getEquipmentId());
+			param.put("startTime", queryVo.getStartTime());
+			param.put("endTime", queryVo.getEndTime());
+			// 使用Map集合封装所有结果
+			Map<String, Object> result = new HashMap<String, Object>();
+			long inTime = System.currentTimeMillis();
+			// 获取所有通道集合
+			List<String> channelList = dataAcquisitionVoMapper.selectAllChannels(equipmentId);
+			List<Date> timeList = dataAcquisitionVoMapper.selectAllTimestamp(param);
+			// 循环封装各个通道的数据集合
+			List<List<DataAcquisitionVo>> dataList = new ArrayList<List<DataAcquisitionVo>>();
+			for (int i = 0; i < channelList.size(); i++) {
+				String channelNum = channelList.get(i).trim();
+				param.put("channelNum", channelNum);
+				List<DataAcquisitionVo> chanDataList = dataAcquisitionVoMapper.selectChanDataByParam(param);
+				dataList.add(chanDataList);
+			}
+			long outTime = System.currentTimeMillis();
+			log.info("查询数据SQL时长为：" + (outTime - inTime));
+			result.put("channelList", channelList);
+			result.put("timeList", timeList);
+			result.put("dataList", dataList);
+			return result;
+		}
+	}
+
+	@Override
+	public List<DataAcquisitionVo> record(QueryParametersVo queryVo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		param.put("state", queryVo.getState());
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.recordExport(param);
+		return historicalDataList;
 	}
 
 }

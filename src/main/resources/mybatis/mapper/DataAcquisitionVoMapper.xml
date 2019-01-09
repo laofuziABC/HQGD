@@ -19,10 +19,20 @@
     <result column="MAX_TEM" jdbcType="VARCHAR" property="maxTem" />
     <result column="MIN_TEM" jdbcType="VARCHAR" property="minTem" />
     <result column="TOTAL" jdbcType="INTEGER" property="total" />
+    <result column="NUM_OF_CH" jdbcType="INTEGER" property="numOfCh" />
+  </resultMap>
+  <resultMap id="ChannelResultMap" type="java.lang.String">
+    <result column="CHANNEL_NUM" jdbcType="VARCHAR" property="channelNum" />
+  </resultMap>
+  <resultMap id="TimeResultMap" type="java.util.Date">
+    <result column="RECEIVE_TIME" jdbcType="TIMESTAMP" property="receiveTime" />
+  </resultMap>
+  <resultMap id="TempertureList" type="java.lang.Float">
+    <result column="TEMPERATURE" jdbcType="DECIMAL" property="temperature" />
   </resultMap>
   <sql id="Base_Column_List">
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
-    PD, UV, STATE, MESSAGE, CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS RECEIVE_TIME, DUTY_PERSON, TEL
+    PD, UV, STATE, MESSAGE, CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS RECEIVE_TIME, DUTY_PERSON, TEL,NUM_OF_CH
   </sql>
   <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
    SELECT
@@ -36,6 +46,7 @@
 	t.TEMPERATURE,
 	t.STATE,
 	t.MESSAGE,
+	t.NUM_OF_CH,
 	CONVERT ( VARCHAR ( 100 ), t.RECEIVE_TIME, 20 ) AS RECEIVE_TIME 
 FROM
 	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM hq_equipment_monitor_data GROUP BY EQUIPMENT_ID ) AS temp
@@ -44,7 +55,9 @@ FROM
 	<!-- LEFT JOIN hq_equipment_param AS p ON t.EQUIPMENT_ID = p.EQUIPMENT_ID 
 	AND t.CHANNEL_NUM = p.CHANNEL_NUM  -->
 WHERE
-	t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}  
+	t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+ORDER BY
+	CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
   </select>
   
   <select id="selectHistoricalDataById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
@@ -123,7 +136,7 @@ ORDER BY
     	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
     	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
         AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} FOR XML path ( '' ) 
+        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} ORDER BY RECEIVE_TIME FOR XML path ( '' ) 
     	),
     	1,
     	1,
@@ -139,7 +152,7 @@ ORDER BY
     	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
     	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
         AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} FOR XML path ( '' ) 
+        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} ORDER BY RECEIVE_TIME FOR XML path ( '' ) 
     	),
     	1,
     	1,
@@ -155,7 +168,8 @@ ORDER BY
     GROUP BY
     	CHANNEL_NUM 
     ORDER BY
-    	CHANNEL_NUM ASC
+    	CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
+    	<!-- CHANNEL_NUM ASC -->
   </select>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -333,4 +347,37 @@ ORDER BY
       TEL = #{tel,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+  
+  <!-- 获取所有的通道名称集合 -->
+  <select id="selectAllChannels" parameterType="String" resultMap="ChannelResultMap">
+  	select CHANNEL_NUM 
+  	from hq_equipment_monitor_data 
+  	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		GROUP BY
+			CHANNEL_NUM 
+		ORDER BY
+			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
+  </select>
+  <select id="selectAllTimestamp" parameterType="java.util.Map" resultMap="TimeResultMap">
+	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
+	from hq_equipment_monitor_data 
+	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+  </select>
+  <!-- 获取单一通道在具体时间段内的数据集合 -->
+  <select id="selectChanDataByParam" parameterType="java.util.Map" resultMap="TempertureList">
+ 	select
+ 		TEMPERATURE
+    from hq_equipment_monitor_data
+    where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+		AND CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
+		ORDER BY
+			RECEIVE_TIME ASC
+  </select>
 </mapper>

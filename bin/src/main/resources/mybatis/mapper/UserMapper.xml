@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqgd.pms.dao.user.UserMapper">
+  <resultMap id="BaseResultMap" type="com.hqgd.pms.domain.User">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="COMMENTS" jdbcType="VARCHAR" property="comments" />
+    <result column="ISDEL" jdbcType="VARCHAR" property="isdel" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  <!--   <result column="TYPE" jdbcType="INTEGER" property="type" /> -->
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, USER_NAME, PASSWORD, COMMENTS, ISDEL, CREATOR, CREATE_TIME, 
+    UPDATER, UPDATE_TIME
+  </sql>
+  
+  <select id="findUserByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from access_control_user
+    where USER_NAME = #{userName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectUserRoleType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT 
+  		r.TYPE AS ID
+	FROM
+ 	 	access_control_user u,
+  		access_control_role_user_ref ur,
+  		access_control_role r 
+	WHERE u.ID = ur.USER_ID
+  	  AND ur.ROLE_ID = r.ID
+  	  AND u.ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <update id="updatePassword">
+        UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE USER_NAME = #{userName}
+  </update>
+  <update id="deleteByPrimaryKey">
+        UPDATE access_control_user SET ISDEL = 'Y' WHERE ID = #{id}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from access_control_user
+    where ID = #{id,jdbcType=INTEGER}
+    and ISDEL = 'N'
+  </select>
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from access_control_user
+    where 1=1
+    and ISDEL = 'N'
+  </select>
+  <!-- <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from access_control_user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete> -->
+  <insert id="insert" parameterType="com.hqgd.pms.domain.User">
+    insert into access_control_user (USER_NAME, PASSWORD, 
+      COMMENTS, ISDEL, CREATOR, CREATE_TIME, 
+      UPDATER, UPDATE_TIME)
+    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{comments,jdbcType=VARCHAR}, #{isdel,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hqgd.pms.domain.User">
+    insert into access_control_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        USER_NAME,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="comments != null">
+        COMMENTS,
+      </if>
+      
+      <if test="isdel != null">
+        ISDEL,
+      </if>
+      
+      <if test="creator != null">
+        CREATOR,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updater != null">
+        UPDATER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null">
+        #{comments,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="isdel != null">
+        #{isdel,jdbcType=VARCHAR},
+      </if>
+     
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hqgd.pms.domain.User">
+    update access_control_user
+    <set>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null">
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="isdel != null">
+        ISDEL = #{isdel,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="creator != null">
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        UPDATER = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.User">
+    update access_control_user
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      COMMENTS = #{comments,jdbcType=VARCHAR},
+      
+      ISDEL = #{isdel,jdbcType=VARCHAR},
+      
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATER = #{updater,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

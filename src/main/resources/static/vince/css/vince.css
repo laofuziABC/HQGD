@@ -1,0 +1,53 @@
+
+.ssjc_left{background: #21242e;}
+.ssjc_right .nei{background: #21242e;margin-left: 10px;}
+.ssjc_title{border-bottom:1px solid #43454e;line-height: 40px;}
+.ssjc_title p{padding:0 10px;color: #fff;font-size: 14px;}
+.ssjc_title_right{float: right;}
+.ssjc_title_right span{float: left;padding:0 5px;font-size: 12px;line-height: 43px;cursor: pointer;}
+.ssjc_title_right span.check{color: #72afd2;}
+.ssjc_search{height: 40px;padding:0 10px;}
+.ssjc_search p{color: #fff;font-size: 14px;line-height: 1.6em;padding-top: 10px;}
+.ssjc_search p input{border:1px solid #8a8b90;background: url(../images/icon_07.png) no-repeat ;width: 57%;padding: 0 5px;height: 24px;line-height: 24px;color: #8a8b90;font-size: 12px;background-position:right center;}
+.tree_menu{margin: 10px;color: #fff;margin-bottom: 10px;padding-bottom: 1px;}
+.father_child{height: 18px;}
+.father_child span{height: 18px;width: 18px;display: block;float: left;}
+.father_child span.dianqu{background: url(../images/icon_08.png)-62px -54px}
+.father_child span.check{height: 13px;width: 13px;background: url(../images/icon_08.png)0 -48px;margin-top: 3px;}
+.father_child span.icon{background: url(../images/icon_08.png)-80px -16px;margin-left: 3px;margin-right: 3px;height: 17px;width: 17px;margin-top: 1px;}
+.child_fathertree{position: relative;left:17px;}
+.child_fathertree span.dianqu{background: url(../images/icon_08.png)-44px -18px}
+.child_child_fathertree{position: relative;left:17px;}
+.father_child span.icon{background: url(../images/icon_08.png)-80px -16px;margin-left: 3px;margin-right: 3px;height: 17px;width: 17px;margin-top: 1px;}
+.child_last_tree{position: relative;left:17px;}
+.child_last_tree span.dianqu{background: url(../images/icon_08.png)-28px -18px;height: 18px;width: 18px;display: block;float: left;}
+.child_last_tree span.check{height: 13px;width: 13px;background: url(../images/icon_08.png)0 -48px;margin-top: 3px;float: left;display: block;}
+.child_fathertree{background: url(../images/icon_09.png) repeat-y;}
+.child_child_fathertree{background: url(../images/icon_09.png) repeat-y;}
+.ssjc_title p{margin: 0;}
+
+
+.fuceng{position: fixed;width: 100%;height:900px;background: rgba(22,22,22,0.6);z-index: 999999;top:0;left: 0;display: none}
+.fuqu{width: 640px;position: absolute;top:100px;left: 400px;}
+.fuquzone{width: 640px;background: #fff;margin-top: 51px;border-radius: 10px;overflow: hidden;;}
+.fuqulogo{position: absolute;width: 102px;height: 102px;left:269px;top:0px;background: url(../images/icon_25.png);}
+.fuqutitle{height:60px;background:#eee;padding-left: 30px;color: #399ad7;font-size: 20px;line-height: 60px;font-weight: bold;margin: 0;margin-bottom:20px;}
+.fuqutitle span{float: right;margin-right: 20px;color: #5e5e5e;font-size: 30px;cursor: pointer;margin-top: 20px;line-height: 20px;}
+.fuqubiao{padding:0 30px;margin-top: 10px;}
+.fuqubiao p{font-size: 12px;height: 30px;margin: 0;line-height: 30px;position: relative;}
+.fuqubiao p span{width: 100px;display: inline-block;float: left;}
+.fuqubiao p input{width: 250px;padding-left: 5px;border:1px solid #5e5e5e;display: inline-block;float: left;border-radius: 3px;overflow: hidden;height: 20px;line-height: 20px;margin-top: 5px;}
+.fuquqie{margin: 20px 30px;height:24px;width: 226px;background: url(../images/icon_26.png); line-height: 24px;}
+.fuquqieone,.fuquqietwo{width: 100px;display: inline-block;padding-left: 10px;font-size: 13px;color: #d4cece}
+.fuquxuanbai{color: #fff;}
+.fuquqienei{margin-top: 20px;}
+.fuquqieju{float: left;width: 252px;margin-left: 30px;}
+.fuquqiezuo{margin-right: 20px;}
+.fuquqieju p{color: #399ad7;font-size: 14px;line-height: 20px;font-weight: bold;margin: 0}
+.fuqutable{margin-top: 3px;border:1px solid #5e5e5e;border-radius: 7px;overflow: hidden;}
+.fuqutable li{border:1px solid #5e5e5e;height: 30px;line-height: 28px;font-size: 13px;}
+.fuqutable li span{width: 33%;padding:0 7px;display: inline-block;border-right: 1px solid #5e5e5e;text-align: center;}
+.fuqutable li span:last-child{border:none;}
+.fuqusave{height: 50px;}
+.fuqusave input{display: block;height: 26px;width: 60px;margin:20px auto;color: #fff;border:1px solid #95c2de;background: #399ad7;}
+

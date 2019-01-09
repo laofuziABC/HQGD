@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="no-store" http-equiv="Cache-Control"/>
+    <meta content="no-cache" http-equiv="Pragma"/>
+    <meta content="0" http-equiv="Expires"/>
+    <title>Web工作流设计器 - 流程回放 - 多比控件演示</title>
+	<script type="text/javascript" src="scripts/gef/scripts/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="scripts/gef/scripts/all-core.js"></script>
+	
+
+    <script type="text/javascript">
+REPLAY_TOKEN_IMAGE = 'replay/images/user.png';
+    </script>
+    <script type="text/javascript">
+	window.onload = function(){
+var processDefinition = [{
+    name: null,
+    type: 'start',
+    x: 200,
+    y: 20,
+    w: 80,
+    h: 40,
+    ts: [{
+        name: null,
+        to: 'fork'
+    }]
+}, {
+    name: 'fork',
+    type: 'fork',
+    x: 200,
+    y: 100,
+    w: 80,
+    h: 40,
+    ts: [{
+        name: 'to state1',
+        to: 'state1'
+    }, {
+        name: 'to state2',
+        to: 'state2'
+    }]
+}, {
+    name: 'state1',
+    type: 'state',
+    x: 300,
+    y: 200,
+    w: 80,
+    h: 40,
+    ts: [{
+        name: null,
+        to: 'join'
+    }]
+}, {
+    name: 'state2',
+    type: 'state',
+    x: 100,
+    y: 200,
+    w: 80,
+    h: 40,
+    ts: [{
+        name: null,
+        to: 'join'
+    }]
+}, {
+    name: 'join',
+    type: 'join',
+    x: 200,
+    y: 300,
+    w: 80,
+    h: 40,
+    ts: [{
+        name: null,
+        to: 'state'
+    }]
+}, {
+    name: 'state',
+    type: 'state',
+    x: 200,
+    y: 350,
+    w: 80,
+    h: 40,
+    ts: [{
+        name: null,
+        to: 'end'
+    }]
+}, {
+    name: 'end',
+    type: 'end',
+    x: 200,
+    y: 400,
+    w: 80,
+    h: 40,
+    ts: []
+}];
+
+var historyActivities = [];
+
+var currentActivities = ['state2', 'state'];
+replay = new Replay(
+    processDefinition,
+    historyActivities,
+    currentActivities, document.getElementById("replayground"));
+	}
+    </script>
+    <style type="text/css">
+.activity {
+    position: absolute;
+    border: 2px solid red;
+    background-color: #AAAAAA;
+    filter: Alpha(opacity=50);
+    opacity: 0.5;
+}
+    #replayground{
+	    position:relative;
+	}
+    </style>
+  </head>
+  <body>
+    <h1>Web工作流设计器 - 流程回放 - 多比控件演示</h1>
+    <div id="replayground">
+	
+		<img src="process.png" style="position: absolute; left: 0px; top: 0px;"/>
+		
+		<div class="activity" style="left: 198px; top: 348px; width: 80px; height: 40px;"></div>
+		<div class="activity" style="left: 98px; top: 198px; width: 80px; height: 40px;"></div>
+		<div style="position:absolute;z-index:999999;">
+		  <button onclick="replay.prev()">上一步</button>
+		  <button onclick="replay.next()">下一步</button>
+		  <button onclick="replay.replay()">重新播放</button>
+		</div>
+	</div>
+    
+  </body>
+</html>

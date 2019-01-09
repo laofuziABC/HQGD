@@ -1,0 +1,220 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Web仪表盘 - 基于Web的组态HMI界面演示 - 多比控件</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<LINK rel=stylesheet type=text/css href="gongkong/demo.css" media=screen>
+<LINK rel=stylesheet type=text/css href="gongkong/demo-print.css" media=print>
+
+<script type="text/javascript" src="scripts/gef/scripts/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="scripts/gef/scripts/all-core.js"></script>
+
+<SCRIPT type=text/javascript charset=utf-8> 
+			var label1 = null, label2 = null, label3 = null, label4 = null;	
+			var optsKnob5 = ["WSAS", "ESB", "G-REG", "GS", "BAM"];
+			var timer;
+			var r;
+
+			function onKnobChange1(val) {label1.update(val != 0? Math.round(val) : "0");}		
+			function onKnobChange2(val) {label2.update(val != 0? Math.round(val) : "0");}			
+			function onKnobChange3(val) {label3.update(val != 0? Math.round(val) : "0");}			
+			function onKnobChange4(val) {label4.update(val != 0? Math.round(val) : "0");}			
+			function onKnobChange5(val) {label5.update(optsKnob5[Math.round(val)]);}
+			
+			function drawKnobs(r, offsetX, offsetY) {
+				var k1, k2, k3, k4;
+				new wso2vis.ctrls.Label() .text("请用鼠标调节仪表盘") .fontsize(20) .create(r, offsetX + 280, offsetY + 20); 
+				
+				k1 = new wso2vis.ctrls.Knob() .dialRadius(40) .smallTick(10) .largeTick(10) .minVal(0) .maxVal(100) 
+  										      .snap(true) .create(r, offsetX + 80, offsetY + 120);
+				k1.onChange = onKnobChange1;				
+				label1 = new wso2vis.ctrls.Label() .text("0") .create(r, offsetX + 80, offsetY + 200);
+				
+				k2 = new wso2vis.ctrls.Knob() .dialRadius(40) .smallTick(4) .largeTick(20) .minVal(-100) .maxVal(100) 
+									 	      .startVal(0) .snap(false) .create(r, offsetX + 260, offsetY + 120);
+				k2.onChange = onKnobChange2;
+				label2 = new wso2vis.ctrls.Label() .text("0") .create(r, offsetX + 260, offsetY + 200);
+												
+				k3 = new wso2vis.ctrls.Knob() .dialRadius(30) .smallTick(1) .largeTick(1) 
+										 	  .minVal(0) .maxVal(4) .minAngle(135) .maxAngle(225) 
+										 	  .snap(true) .create(r, offsetX + 80, offsetY + 320);
+				k3.onChange = onKnobChange3;
+				label3 = new wso2vis.ctrls.Label() .text("0") .create(r, offsetX + 80, offsetY + 360);
+				
+				k4 = new wso2vis.ctrls.Knob() .dialRadius(30) .smallTick(5) .largeTick(10) 
+										 	  .minVal(30) .maxVal(80)  .minAngle(135) .maxAngle(225) 
+										 	  .snap(false) .create(r, offsetX + 260, offsetY + 320);
+				k4.onChange = onKnobChange4;		
+				label4 = new wso2vis.ctrls.Label() .text("30") .create(r, offsetX + 260, offsetY + 360);
+				
+				/*k5 = new wso2vis.ctrls.Knob() .dialRadius(40) .minAngle(210) .maxAngle(330) 
+										 	  .selectOpts(optsKnob5) .create(r, offsetX + 500, offsetY + 220);
+				k5.onChange = onKnobChange5;		
+				label5 = new wso2vis.ctrls.Label() .text("WSAS") .create(r, offsetX + 500, offsetY + 300);*/
+				
+			}
+			
+			function drawCircularGauges(r, offsetX, offsetY) {
+				var g1, g2, g3, g5;			
+				
+				function globalTick() {
+					var minVal = 0, maxVal = 100;
+					var val = Math.floor(minVal + Math.random() * (maxVal - minVal))
+					g1.setValue(val);
+					/*g2.setValue(val);
+					g3.setValue(val/25);
+					g4.setValue(50 - val);
+					g5.setValue(val/25);*/
+				};
+				
+				//new wso2vis.ctrls.Label() .text("CIRCULAR GAUGES") .fontsize(20) .create(r, offsetX + 370, offsetY + 20); 
+				
+				g1 = new wso2vis.ctrls.CGauge() .dialRadius(100) .smallTick(1) .largeTick(10) .minVal(0) .maxVal(100) 
+												.ltlen(18) .stlen(15) .needleCenterRadius(10) .needleBottom(20)
+												.labelOffset(15) .labelFontSize(15)
+  										        .create(r, offsetX + 160, offsetY + 200);
+											  
+				g2 = new wso2vis.ctrls.CGauge() .dialRadius(60) .smallTick(4) .largeTick(20) .minVal(0) .maxVal(100)
+												.minAngle(90) .maxAngle(270) 
+  										      .create(r, offsetX + 400, offsetY + 150);
+											  
+				g4 = new wso2vis.ctrls.CGauge() .dialRadius(60) .smallTick(5) .largeTick(10) 
+										 	  .minVal(-50) .maxVal(50)  .minAngle(100) .maxAngle(260) 
+											  .create(r, offsetX + 400, offsetY + 300);								  
+											  
+				/*g3 = new wso2vis.ctrls.CGauge() .dialRadius(30) .smallTick(0.5) .largeTick(1) 
+										 	  .minVal(0) .maxVal(4) .minAngle(135) .maxAngle(225) 
+											  .needleLength(28) .needleCenterRadius(1) .needleBottom(8) .ltlen(4) .stlen(4)
+										 	  .create(r, offsetX + 600, offsetY + 180);	
+
+				g5 = new wso2vis.ctrls.CGauge() .dialRadius(30) .smallTick(0.5) .largeTick(1) 
+										 	  .minVal(0) .maxVal(4) .minAngle(225) .maxAngle(315) 
+											  .needleLength(28) .needleCenterRadius(1) .needleBottom(8) .ltlen(4) .stlen(4)
+										 	  .create(r, offsetX + 620, offsetY + 200);*/				
+				
+				globalTick();
+				
+				timer = setInterval(globalTick, 2000);
+			}
+			
+			function drawLinearGauges(r, offsetX, offsetY) {
+				var g1, g2, g3, g5;		
+				var ledarrays = [];	
+				var l1;
+				
+				function globalTick() {
+					var minVal = 0, maxVal = 100, total = 0, temp = 0;
+					for (var i = 0; i < 5; i++) {
+						var val = Math.floor(minVal + Math.random() * (maxVal - minVal))
+                		ledarrays[i].update(val);
+						total += (100 - val);
+					}
+					g1.setValue(total);
+				};
+				
+				new wso2vis.ctrls.Label() .text("附塔") .fontsize(20) .create(r, offsetX + 310, offsetY + 20); 
+				new wso2vis.ctrls.Label() .text("标尺距离") .fontsize(18) .create(r, offsetX + 310, offsetY + 80); 
+				g1 = new wso2vis.ctrls.LGauge() .dialRadius(100) .minVal(0) .maxVal(500) 												
+												.create(r, offsetX + 160, offsetY + 140);
+				l1 = new wso2vis.ctrls.Label() .text("100") .fontsize(12) .align("start") .create(r, offsetX + 410, offsetY + 250); 
+				l2 = new wso2vis.ctrls.Label() .text("0") .fontsize(12) .align("start") .create(r, offsetX + 410, offsetY + 445); 
+				new wso2vis.ctrls.Label() .text("发动机噪音") .fontsize(18) .create(r, offsetX + 310, offsetY + 210); 
+				ledarrays[0] = new wso2vis.ctrls.LEDArray() .length(200) .count(20) .min(0) .max(100) .create(r, offsetX + 220, offsetY + 240); 
+				ledarrays[1] = new wso2vis.ctrls.LEDArray() .length(200) .count(20) .min(0) .max(100) .create(r, offsetX + 260, offsetY + 240);
+				ledarrays[2] = new wso2vis.ctrls.LEDArray() .length(200) .count(20) .min(0) .max(100) .create(r, offsetX + 300, offsetY + 240);
+				ledarrays[3] = new wso2vis.ctrls.LEDArray() .length(200) .count(20) .min(0) .max(100) .create(r, offsetX + 340, offsetY + 240);
+				ledarrays[4] = new wso2vis.ctrls.LEDArray() .length(200) .count(20) .min(0) .max(100) .create(r, offsetX + 380, offsetY + 240);
+				
+				new wso2vis.ctrls.Label() .text("173.23.233.42") .fontsize(12) .rotation(270) .align("end") .create(r, offsetX + 230, offsetY + 470); 
+				new wso2vis.ctrls.Label() .text("188.238.23.34") .fontsize(12) .rotation(270) .align("end") .create(r, offsetX + 270, offsetY + 470); 
+				new wso2vis.ctrls.Label() .text("245.234.233.52") .fontsize(12) .rotation(270) .align("end") .create(r, offsetX + 310, offsetY + 470); 
+				new wso2vis.ctrls.Label() .text("178.39.48.34") .fontsize(12) .rotation(270) .align("end") .create(r, offsetX + 350, offsetY + 470); 
+				new wso2vis.ctrls.Label() .text("67.34.75.34") .fontsize(12) .rotation(270) .align("end") .create(r, offsetX + 390, offsetY + 470); 
+				
+				globalTick();
+				
+				timer = setInterval(globalTick, 2000);
+			}
+			
+			function drawButtonNSevenSegment(r, offsetX, offsetY) {
+				var ssegs1, ssegs2; 
+				var btn1;
+				var onFlag = true;	
+				var val = 0;
+				var count = 0;
+				var leds = [];
+				var currLED = 0;
+			
+				function onButton () {
+					if (onFlag) {
+						btn1.status(0);
+						clearInterval(timer);
+					}
+					else { 
+						btn1.status(1);
+						timer = setInterval(globalTick, 10);
+					}
+					onFlag = !onFlag;				
+				}
+				
+				function globalTick() {
+					
+					if (count % 10 == 0) {
+						if (currLED == 4) {							
+							currLED = 0;
+							leds[0].lit(true);
+							leds[4].lit(false);
+						}
+						else { 							
+							leds[currLED].lit(false);
+							currLED += 1;
+							leds[currLED].lit(true);
+						}
+					}
+					
+					ssegs2.setValue(val);
+					val += 0.01;					
+					count += 1;
+				};
+				
+				new wso2vis.ctrls.Label() .text("常州化工2号冷却系统") .fontsize(28) .create(r, offsetX + 480, offsetY + 20); 
+				new wso2vis.ctrls.Label() .text("中央冷却塔") .fontsize(12) .create(r, offsetX + 480, offsetY + 330);				
+				new wso2vis.ctrls.Label() .text("冷却液加注中...") .fontsize(12) .create(r, offsetX + 480, offsetY + 520);
+				
+				//ssegs1 = new wso2vis.ctrls.SSegArray() .initialValue(12345678.90) .count(10) .scale(0.7) .create(r, offsetX + 900, offsetY + 100);				
+ 				btn1 = new wso2vis.ctrls.Button() .text("TIMER") .ledspacing(17) .create(r, offsetX + 270, offsetY + 406); btn1.status(1); 
+				ssegs2 = new wso2vis.ctrls.SSegArray() .initialValue(0.00) .count(6) .scale(0.4) .create(r, offsetX + 670, offsetY + 380);				
+				leds[2] = new wso2vis.ctrls.LED() .color("blue") .create(r, offsetX + 380, offsetY + 500); 
+				leds[3] = new wso2vis.ctrls.LED() .color("yellow") .create(r, offsetX + 420, offsetY + 500); 
+				leds[4] = new wso2vis.ctrls.LED() .color("purple") .create(r, offsetX + 460, offsetY + 500); 
+				leds[0] = new wso2vis.ctrls.LED() .color("green") .create(r, offsetX + 500, offsetY + 500); 
+				leds[1] = new wso2vis.ctrls.LED() .color("red") .create(r, offsetX + 540, offsetY + 500); 
+				
+				btn1.onButton = onButton;				
+				
+				timer = setInterval(globalTick, 50);
+			}
+			
+			function clearAll() {
+				r.clear();
+				clearInterval(timer);
+			}
+			
+			window.onload = function () {
+				r = Raphael("holder", 1400, 600);
+				
+				drawKnobs(r, 900, 0);
+				drawCircularGauges(r, 400, 0);
+				drawLinearGauges(r, -100, 0);
+				drawButtonNSevenSegment(r, 200, 0);
+				
+			};
+        </SCRIPT>
+
+<BODY>
+<h1>Web仪表盘演示，采用VML和SVG编写，可以支持IE，Andriod和iPhone等系统</h1>
+<DIV style="POSITION: absolute; FLOAT: left; HEIGHT: 300px" id=holder></DIV>
+<DIV style="POSITION: absolute; right:0; bottom:20;padding:10px;" >由于演示版的限制，这里只列出了部分仪表盘，需要更多的演示，<a href="/Page-d-key-contact">请联系我们</a></DIV>
+
+
+</BODY></HTML>

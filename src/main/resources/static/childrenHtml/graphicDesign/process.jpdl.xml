@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="05-muliplicity" xmlns="http://jbpm.org/4.0/jpdl">
+
+  <start g="200,20,80,40">
+    <transition to="fork"/>
+  </start>
+
+  <fork name="fork" g="200,100,80,40">
+    <transition name="to task1" to="task1"/>
+    <transition name="to task2" to="task2"/>
+  </fork>
+
+  <task name="task1" assignee="guest" g="300,200,80,40">
+    <transition to="join"/>
+  </task>
+
+  <task name="task2" assignee="guest" g="100,200,80,40">
+    <transition to="join"/>
+  </task>
+
+  <join name="join" g="200,300,80,40" multiplicity="1">
+    <transition to="state"/>
+  </join>
+
+  <state name="state" g="200,350,80,40">
+    <transition to="end"/>
+  </state>
+
+  <end name="end" g="200,400,80,40"/>
+
+</process>

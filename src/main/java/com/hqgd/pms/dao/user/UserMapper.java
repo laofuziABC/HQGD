@@ -19,7 +19,7 @@ public interface UserMapper {
     
     User selectUserRoleType(Integer id);
     
-	User findUserByUserName(String userName);
+	User selectByUserName(String userName);
 
 	List<User> selectAll();
 

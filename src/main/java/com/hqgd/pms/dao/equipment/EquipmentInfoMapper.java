@@ -24,11 +24,13 @@ public interface EquipmentInfoMapper {
 	int selectTotalChNum();
 
 	int selectEquipCh(String equipmentId);
-	
+
 	List<String> selectLngLat();
 
 	List<EquipmentInfo> selectAllEquipmentByAddress(String adcode);
 
 	EquipmentInfo selectByEquipmentName(String equipmentName);
-	
+
+	List<EquipmentInfo> selectAllByType(String type);
+
 }
