@@ -54,7 +54,7 @@
 			</section>
 		</div>
 		<!-- /.content-wrapper -->
-
+        <div id="updatepass"></div>
 		<footer class="main-footer">
 			<strong>Copyright &copy; 2018-2028 <a
 				href="https://adminlte.io">Almsaeed Studio</a>.
@@ -106,7 +106,6 @@
 	<!-- AdminLTE for demo purposes -->
 	<script src="dist/js/demo.js"></script>
 	<script src="vince/js/nicescroll.js"></script>
-	<script src="vince/js/demo.js"></script>
 	<script src="vince/drag/zxx.drag.1.0.js"></script>
 	<!-- 在主页面引入HighCharts插件 -->
 	<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
@@ -123,6 +122,12 @@
 		    }
 		}
 		//获取页面参数【结束】
+		function updatePass() {
+			$("#updatepass").load("childrenHtml/updatepass.html");
+		}
+		function updatePass1() {
+			$("#updatepass").empty();
+		}
 		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
 		function formatDateToString(param){
 			var y = param.getFullYear();
