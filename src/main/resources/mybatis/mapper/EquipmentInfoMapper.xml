@@ -26,9 +26,9 @@
     CADCODE, PADCODE, LNG_LAT, FRAME_STRU, ICON, CREATOR, CONVERT ( VARCHAR ( 100 ), CREATE_TIME, 20 ) AS CREATE_TIME, 
     UPDATER, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME
   </sql>
-    <select id="selectLngLat" resultType="java.lang.String" >
+    <select id="selectLngLat" resultMap="BaseResultMap">
     select 
-    LNG_LAT
+    LNG_LAT,EQUIPMENT_ID, EQUIPMENT_NAME
     from hq_equipment_info
   </select>
   <select id="selectTotalChNum" resultType="java.lang.Integer" >

@@ -25,17 +25,10 @@
 <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -54,7 +47,7 @@
 			</section>
 		</div>
 		<!-- /.content-wrapper -->
-        <div id="updatepass"></div>
+		<div id="updatepass"></div>
 		<footer class="main-footer">
 			<strong>Copyright &copy; 2018-2028 <a
 				href="https://adminlte.io">Almsaeed Studio</a>.
@@ -155,6 +148,7 @@
 	<script type="text/javascript"
 		src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer">
 		</script>
+	<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
 	<script type="text/javascript">
 			//设定高度适应屏幕高度【开始】
 			var myWindow=document.getElementById("mapContainer");
@@ -174,6 +168,7 @@
 				
 				$("#main-header").load("childrenHtml/title.html");
 			});
+			 AMapUI.loadUI(['overlay/SimpleInfoWindow'], function(SimpleInfoWindow) {
 			var cluster, markers = [];
 		    var points= [];
 		    var map = new AMap.Map("mapContainer", {
@@ -196,14 +191,19 @@
 				});
 		    }
 		    	
-		    for (var i = 0; i < points.length; i += 1) {
-		        markers.push(new AMap.Marker({
-		            position: points[i].split(','),
+		    /* for (var i = 0; i < points.length; i += 1) { */
+		    $.each(points, function(i, item) { 	
+		    	var marker = new AMap.Marker({
+		            position: points[i].lngLat.split(','),
 		            content: '<div style="background-color: hsla(180, 100%, 50%, 0.7); height: 24px; width: 24px; border: 1px solid hsl(180, 100%, 40%); border-radius: 12px; box-shadow: hsl(180, 100%, 50%) 0px 0px 1px;"></div>',
 		            offset: new AMap.Pixel(-15, -15)
-		        }))
-		    }
-	
+		        })
+		    	var equiId = item.equipmentId; 
+		    	var equiName = item.equipmentName;
+		    	addClickHandler(equiId, equiName,marker); //添加点击事件
+		        markers.push(marker);
+		    });
+		    
 		    var count = markers.length;
 		    var _renderCluserMarker = function (context) {
 		        var factor = Math.pow(context.count / count, 1 / 18);
@@ -268,6 +268,74 @@
 	            cluster = new AMap.MarkerClusterer(map, markers, {gridSize: 80});
 	        }
 	    }
+		    /* var infoWindow = new SimpleInfoWindow({
+		    	infoTitle: '<strong>实时温度</strong>',
+	            infoBody: '<p class="my-desc"></p>',
+	            //基点指向marker的头部位置
+	            offset: new AMap.Pixel(0, -31)
+	        }); */
+		    function addClickHandler(equiId,equiName,marker){
+		    	marker.on("click",function(e){
+		    	openInfo(equiId,equiName,marker,e)}
+		    	);
+		    	}
+		    function openInfo(equiId,equiName,marker,e){
+		    	var channel = "";
+		    	$.ajax({
+					url : "dataAcquisition/realtime",
+					type : "post",
+					data : {
+						"equipmentId" : equiId
+					},
+					dataType : "json",
+					success : function(result) {
+						var data = result.data;
+						debugger;
+						if(data==undefined){
+							channel+="<h5 style='color: red;'>未查找到通道监测信息！</h5>"; 
+						}else{
+							var num =data.length;
+							//超过5分钟提示
+							lTime=(new Date(data[0].receiveTime)).getTime();
+							cTime=(new Date()).getTime();
+							$("#last-time").text("最后监测时间："+data[0].receiveTime);
+							if((cTime-lTime)>(5*60*1000)){ $("#last-time").css({"color":"red"}); }
+							else{$("#last-time").css({"color":"#21242e"});}
+							//设定尺寸适应容器【开始】
+							let count = Math.ceil(num/3);
+							//设定尺寸适应容器【结束】
+							for(let i=0; i<count; i++){
+								let startIndex = 3*i;
+								let endIndex = (3*i+3>num)?num:(3*i+3);
+								channel+="<tr>";
+								//通道结果每三个循环一回，缘于界面展示效果较规整
+								for(let j=startIndex; j<endIndex; j++){
+									let state=parseFloat(data[j].state);
+									if(state==5){
+										var resultMsg=(data[j].temperature==2999)?("系统调整中"):(data[j].temperature);
+										channel+="<td class='green' style='padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+resultMsg+"</span></td>"; 
+									}
+									else if(state==4){channel+="<td class='red' style=' padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>- - - - -</span></td>"; }
+									else if(state==3){channel+="<td class='red' style='padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>- - -</span></td>"; }
+									else{channel+="<td class='yellow' style='padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].temperature+"</span></td>"; }
+								}
+								channel+="</tr>";
+							}
+						}
+						$("#chwin").html(channel);
+					}
+					
+				});
+		    	new SimpleInfoWindow({
+			    	infoTitle: '<strong>'+equiName+'实时温度</strong>',
+		            infoBody: '<p class="my-desc"><span id="last-time"></span><br/><table id="chwin"></table></p>',
+		            //基点指向marker的头部位置
+		            offset: new AMap.Pixel(-45, -31)
+		        }).open(map, marker.getPosition());
+			
+		    	}
+		    
+			 }); 
 	</script>
 	<!-- 页面地图【结束】 -->
 

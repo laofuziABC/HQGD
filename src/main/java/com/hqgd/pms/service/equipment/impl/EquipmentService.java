@@ -57,7 +57,9 @@ public class EquipmentService implements IEquipmentService {
 				resultMap.put("message", "未找到该地址，请输入正确的地址");
 			} else {
 				String latlon = geoCode.getLocation();
-				equipmentInfo.setLngLat(latlon);
+				if(equipmentInfo.getLngLat()==null||equipmentInfo.getLngLat()=="") {
+					equipmentInfo.setLngLat(latlon);
+				}
 				int i = equipmentInfoMapper.insert(equipmentInfo);
 				result = (i == 0) ? false : true;
 				resultMap.put("message", "添加设备成功");
@@ -112,7 +114,9 @@ public class EquipmentService implements IEquipmentService {
 			resultMap.put("message", "未找到该地址，请输入正确的地址");
 		} else {
 			String latlon = geoCode.getLocation();
-			equipmentInfo.setLngLat(latlon);
+			if(equipmentInfo.getLngLat()==null||equipmentInfo.getLngLat()=="") {
+				equipmentInfo.setLngLat(latlon);
+			}
 			int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
 			result = (i == 0) ? false : true;
 			resultMap.put("message", "添加设备失败");
