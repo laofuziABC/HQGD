@@ -16,7 +16,7 @@
 					style="font-size: 22px"></i> <span>首页</span></a></li>
 			<li><a href="#"
 				onclick="loadMainContent('childrenHtml/content/ssjc.html');"><i
-					class="fa fa-eye"></i> <span>实时监测</span></a></li>
+					class="fa fa-eye"></i> <span>数据监测</span></a></li>
 			<!-- <li><a href="#"
 				onclick="loadMainContent('childrenHtml/operationalMonitoring/yxjc.html');">
 					<i class="fa fa-print"></i> <span>运行监测</span>
@@ -29,19 +29,19 @@
 				onclick="loadMainContent('childrenHtml/user/userList.html');"> <i
 					class="fa fa-map"></i> <span>用户管理</span>
 			</a></li>
-			<!-- <li class="treeview"><a href="#"> <i class="fa fa-sliders"></i>
+			<li class="treeview"><a href="#"> <i class="fa fa-sliders"></i>
 					<span>系统集成</span> <span class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span>
 			</a>
 				<ul class="treeview-menu">
-					<li><a href="#" onclick="network();"> onclick="loadMainContent('childrenHtml/graphicDesign/network.html');">
-							<i class="fa fa-bookmark"></i> <span>图形设计</span>
+					<li><a href="#" onclick="network();"> <i
+							class="fa fa-bookmark"></i> <span>图形设计</span>
 					</a></li>
 					<li><a href="#"
 						onclick="loadMainContent('childrenHtml/operationalMonitoring/update.html');"><i
 							class="fa fa-bookmark"></i> 上传图例</a></li>
-				</ul></li> -->
+				</ul></li>
 		</ul>
 	</section>
 	<!-- 侧边栏【结束】 -->
@@ -53,13 +53,11 @@
 			}
 		}
 		function network() {
-			debugger;
-			//window.location.href = encodeURI(encodeURI("childrenHtml/graphicDesign/network.html"));
 			var screenHeight = window.screen.availHeight;
 			var screenWidth = window.screen.availWidth;
 			var iWidth = screenWidth * 0.875 + "px;";
 			var iHeight = screenHeight * 0.82 + "px;";
-			var iframe = "<iframe style='width: "+iWidth+"height: "+iHeight+"' src='childrenHtml/graphicDesign/network.html'></iframe>";
+			var iframe = "<div class=\"wrapper\"><iframe style='width: "+iWidth+"height: "+iHeight+"' src='childrenHtml/graphicDesign/network.html'></iframe></div>";
 			$("#content-wrapper").html(iframe);
 		}
 	</script>

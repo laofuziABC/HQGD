@@ -32,8 +32,9 @@ public class MapController {
 	@ResponseBody
 	@RequestMapping("/getPositions")
 	public void getJson(ServletRequest request, HttpServletRequest hrequest, HttpServletResponse response) throws IOException {
-		
-		List<EquipmentInfo> list = mapService.getLonLats();
+		String roleId = request.getParameter("roleId");
+		String userName = request.getParameter("userName");
+		List<EquipmentInfo> list = mapService.getLonLats(roleId,userName);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");

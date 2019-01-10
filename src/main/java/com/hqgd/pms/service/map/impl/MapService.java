@@ -16,8 +16,12 @@ public class MapService implements IMapService {
 	private EquipmentInfoMapper equipmentInfoMapper;
 
 	@Override
-	public List<EquipmentInfo> getLonLats() {
-		return equipmentInfoMapper.selectLngLat();
+	public List<EquipmentInfo> getLonLats(String roleId,String userName) {
+		if(roleId.equals("1")) {
+			return equipmentInfoMapper.selectLngLat();
+		}else {
+			return equipmentInfoMapper.selectAllEquipmentByUser(userName);
+		}
 	}
 
 }

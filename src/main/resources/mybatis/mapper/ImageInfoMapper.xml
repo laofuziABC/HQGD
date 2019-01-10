@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqgd.pms.dao.image.ImageInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hqgd.pms.domain.ImageInfo">
+    <id column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PATH" jdbcType="VARCHAR" property="path" />
+    <result column="GROUPS" jdbcType="VARCHAR" property="groups" />
+    <result column="SIZE" jdbcType="DOUBLE" property="size" />
+    <result column="AUTHOR" jdbcType="VARCHAR" property="author" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="ISDEL" jdbcType="INTEGER" property="isdel" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    NAME, ID, PATH, GROUPS, SIZE, AUTHOR, UPDATE_TIME, ISDEL
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from s_image_update
+    where NAME = #{name,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from s_image_update
+    where NAME = #{name,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hqgd.pms.domain.ImageInfo">
+    insert into s_image_update (NAME, ID, PATH, 
+      GROUPS, SIZE, AUTHOR, 
+      UPDATE_TIME, ISDEL)
+    values (#{name,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, 
+      #{groups,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{author,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hqgd.pms.domain.ImageInfo">
+    insert into s_image_update
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="path != null">
+        PATH,
+      </if>
+      <if test="groups != null">
+        GROUPS,
+      </if>
+      <if test="size != null">
+        SIZE,
+      </if>
+      <if test="author != null">
+        AUTHOR,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="isdel != null">
+        ISDEL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null">
+        #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=DOUBLE},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null">
+        #{isdel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hqgd.pms.domain.ImageInfo">
+    update s_image_update
+    <set>
+      <if test="id != null">
+        ID = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="path != null">
+        PATH = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null">
+        GROUPS = #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        SIZE = #{size,jdbcType=DOUBLE},
+      </if>
+      <if test="author != null">
+        AUTHOR = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null">
+        ISDEL = #{isdel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where NAME = #{name,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.ImageInfo">
+    update s_image_update
+    set ID = #{id,jdbcType=INTEGER},
+      PATH = #{path,jdbcType=VARCHAR},
+      GROUPS = #{groups,jdbcType=VARCHAR},
+      SIZE = #{size,jdbcType=DOUBLE},
+      AUTHOR = #{author,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      ISDEL = #{isdel,jdbcType=INTEGER}
+    where NAME = #{name,jdbcType=VARCHAR}
+  </update>
+</mapper>

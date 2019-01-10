@@ -3,21 +3,21 @@ package com.hqgd.pms.service.images;
 import java.util.List;
 import java.util.Map;
 
-import com.hqgd.pms.domain.ImagesInfo;
+import com.hqgd.pms.domain.ImageInfo;
 import com.hqgd.pms.domain.User;
 
 public interface IImagesService {
 
-	Map<String, Object> add(ImagesInfo imagesInfo, User loginUser);
+	Map<String, Object> add(ImageInfo imagesInfo, User loginUser);
 
 	Map<String, Object> delete(String imagesId);
 
-	ImagesInfo select(String imagesId);
+	ImageInfo select(String imagesId);
 
-	List<ImagesInfo> selectAll();
+	List<ImageInfo> selectAll();
 
 	String execRecordExport(String path);
 
-	Map<String, Object> update(ImagesInfo imagesInfo, User loginUser);
+	Map<String, Object> update(ImageInfo imagesInfo, User loginUser);
 
 }

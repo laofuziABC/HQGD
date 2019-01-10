@@ -178,6 +178,10 @@
 		    	$.ajax({
 					url:"map/getPositions",
 					type:"post",
+					data : {
+						"userName" : userName,
+						"roleId" : roleId
+					},
 					async:false,
 					dataType: "json",
 					success: function(result){
@@ -285,7 +289,6 @@
 					dataType : "json",
 					success : function(result) {
 						var data = result.data;
-						debugger;
 						if(data==undefined){
 							channel+="<h5 style='color: red;'>未查找到通道监测信息！</h5>"; 
 						}else{

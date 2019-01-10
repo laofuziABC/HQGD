@@ -6,6 +6,6 @@ import com.hqgd.pms.domain.EquipmentInfo;
 
 public interface IMapService {
 
-	List<EquipmentInfo> getLonLats();
+	List<EquipmentInfo> getLonLats(String roleId, String userName);
 
 }
