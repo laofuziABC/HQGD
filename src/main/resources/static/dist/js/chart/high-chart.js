@@ -42,9 +42,10 @@ var currentOption={
 //配置当空白统计图
 var blankOption={
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
-	title: {text: '', style: {color: '#ffffff'}},
+	title: {text: '温度曲线图', style: {color: '#ffffff'}},
 	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
 	xAxis:{type: 'category'},
+	yAxis:{title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
 	series:[{name: '无数据', data: [], type:"spline", pointInterval: 6e4}]
 }
 
@@ -85,9 +86,12 @@ function drawingHistoryChart(url, param){
 				historyOption.xAxis.categories=data.receiveTime;
 				historyOption.xAxis.tickInterval=Math.floor(totalCount/11);
 				historyOption.series = series;
+				$("#chart_history").empty();
+				$("#chart_history").highcharts(historyOption);
+			}else{
+				$("#chart_history").empty();
+				$("#chart_history").highcharts(blankOption);
 			}
-			$("#chart_history").empty();
-			$("#chart_history").highcharts(historyOption);
 		}
 	});
 }
@@ -140,7 +144,7 @@ function initCurrentChart(){
 		}
 	}
 	//只有通道数和系列数相等，才可以绘制图表
-	if(channelList.length==dataList.length){
+	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
 		//组装系列值
 		var totalArray=[];
 		for(let i=0; i<dataList.length; i++){
@@ -160,9 +164,12 @@ function initCurrentChart(){
 			series.push(serie);
 		}
 		currentOption.series = series;
+		$("#chart_current").empty();
+		$("#chart_current").highcharts(currentOption);
+	}else{
+		$("#chart_current").empty();
+		$("#chart_current").highcharts(blankOption);
 	}
-	$("#chart_current").empty();
-	$("#chart_current").highcharts(currentOption);
 }
 //计算点的坐标，落在图表中
 function addPoints(){
