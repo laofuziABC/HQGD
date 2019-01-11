@@ -12,8 +12,13 @@
     <result column="ISDEL" jdbcType="INTEGER" property="isdel" />
   </resultMap>
   <sql id="Base_Column_List">
-    NAME, ID, PATH, GROUPS, SIZE, AUTHOR, UPDATE_TIME, ISDEL
+    NAME, ID, PATH, GROUPS, SIZE, AUTHOR, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME, ISDEL
   </sql>
+  <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from s_image_update
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

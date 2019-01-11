@@ -27,20 +27,19 @@
 				<p class="fuqutitle">
 					图例信息 <span class="fuclose">×</span>
 				</p>
-				<div class="equiform" id="equipForm">
-					<form action="#" id="outerForm">
-						<table id="equiInfoTable">
+				<div class="equiform" id="imageForm">
+					<form action="#">
+						<table id="imageTable">
 							<tr class="normal">
 								<td class="info_text">分组：</td>
-								<td><select class="biaoti_select">
-										<option value="1">自定义</option>
-										<option value="2">基本</option>
-										<option value="3">高级</option>
+								<td><select id=groups class="biaoti_select">
+								        <option value="1">高级</option>
+										<option value="2">自定义</option>
+										<option value="3">基本</option>
 								</select></td>
 								<td class="info_text"></td>
 							</tr>
 						</table>
-
 					</form>
 				</div>
 				<section role="main" class="l-main"
@@ -85,9 +84,10 @@
 											type="text" id="searchByName"></span> <span
 											style="margin-top: 20px;"> 分组： <select
 											class="biaoti_select">
-												<option value="1">自定义</option>
-												<option value="2">基本</option>
-												<option value="3">高级</option>
+											    <option value="1">高级</option>
+												<option value="2">自定义</option>
+												<option value="3">基本</option>
+												
 										</select>
 										</span><span class="float_right" style="margin-right: 70%;"> <input
 											type="button" onclick="searchResult();" value="查询"
@@ -140,45 +140,48 @@
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
-			//getImageList();
+			getImageList();
 		});
 		var globalResult;
 		//获取用户列表
 		function getImageList() {
 			$
 					.ajax({
-						url : "image/selectAll",
+						url : "images/selectAll",
 						type : "post",
 						dataType : "json",
 						success : function(result) {
-							globalResult = result;
+							globalResult = result.data;
+							var data = result.data;
 							var imagelist = "";
 							//设置分页信息——当前为假分页
-							var totalSize = result.length;
+							var totalSize = data.length;
 							var pageSize = 10;
 							var totalNum = Math.ceil(totalSize / pageSize);
 							var startIndex = (pageNum - 1) * pageSize;
 							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
 									: pageNum * pageSize;
 							for (let i = startIndex; i < endIndex; i++) {
-								userlist += "<tr class=\"\">";
-								userlist += "<td>" + (i + 1) + "</td>";
-								userlist += "<td><img src=\""+ result[i].path +"\" width=\"50\"></td>";
-								userlist += "<td>" + result[i].name + "</td>";
-								userlist += "<td>" + result[i].path + "</td>";
-								userlist += "<td>" + result[i].group + "</td>";
-								userlist += "<td>" + result[i].size + "</td>";
-								userlist += "<td>" + result[i].author + "</td>";
-								userlist += "<td>" + result[i].updateTime + "</td>";
-								userlist += "<td class=\"center\" >";
-								userlist += "<a class=\" edit\" onclick=\"getImageEdit('"
-										+ result[i].id + "');\">编辑</a>&nbsp;";
-								userlist += "<a class=\"delete\" href=\"#\" onclick=\"getImageDelete('"
-										+ result[i].id + "');\">删除</a>&nbsp;";
-								userlist += "</td>";
-								userlist += "</tr>";
+								imagelist += "<tr class=\"\">";
+								imagelist += "<td>" + (i + 1) + "</td>";
+								imagelist += "<td><img src=\""+ data[i].path +"\" width=\"50\"></td>";
+								imagelist += "<td>" + data[i].name + "</td>";
+								imagelist += "<td>" + data[i].path + "</td>";
+								imagelist += "<td>" + data[i].group + "</td>";
+								imagelist += "<td>" + data[i].size + "</td>";
+								imagelist += "<td>" + data[i].author
+										+ "</td>";
+								imagelist += "<td>" + data[i].updateTime
+										+ "</td>";
+								imagelist += "<td class=\"center\" >";
+								imagelist += "<a class=\" edit\" onclick=\"getImageEdit('"
+										+ data[i].name + "');\">编辑</a>&nbsp;";
+								imagelist += "<a class=\"delete\" href=\"#\" onclick=\"getImageDelete('"
+										+ data[i].name + "');\">删除</a>&nbsp;";
+								imagelist += "</td>";
+								imagelist += "</tr>";
 							}
-							$("#imageList").html(userlist);
+							$("#imageList").html(imagelist);
 							//加载页码
 							$("#image-show-pager").html(
 									loadPages(pageSize, totalSize, pageNum));

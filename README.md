@@ -1,1 +1,0 @@
-# hqgd_pms_server

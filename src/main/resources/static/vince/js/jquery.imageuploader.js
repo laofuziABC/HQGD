@@ -105,7 +105,8 @@
             }
 
             function addItem (file) {
-                var fileName = cleanName(file.name);
+                //var fileName = cleanName(file.name);
+                var fileName = file.name;
                 var fileSize = file.size;
                 var id = state.listIndex;
                 var sizeWrapper;
@@ -117,11 +118,10 @@
                 var thumbnailContainer = $('<span class="uploader__file-list__thumbnail"></span>');
                 var thumbnail = $('<img class="thumbnail"><i class="fa fa-spinner fa-spin uploader__icon--spinner"></i>');
                 var removeLink = $('<span class="uploader__file-list__button"><button class="uploader__icon-button js-upload-remove-button fa fa-times" data-index="' + id + '"></button></span>');
-
                 // validate the file
                 if (options.fileTypeWhiteList.indexOf(getExtension(file.name).toLowerCase()) !== -1) {
                     // file is ok, add it to the batch
-                    state.fileBatch.push({file: file, id: id, fileName: fileName, fileSize: fileSize});
+                    state.fileBatch.push({file: file, id: id, fileName: fileName, fileSize: fileSize, groups:groups});
                     sizeWrapper = $('<span class="uploader__file-list__size">' + formatBytes(fileSize) + '</span>');
                 } else {
                     // file is not ok, only add it to the dom
@@ -179,19 +179,39 @@
             }
 
             function uploadSubmitHandler () {
-            	debugger;
                 if (state.fileBatch.length !== 0) {
+                	var groups = $("#groups option:selected").val();
+                	/*var imageList = [];
+                	for (var i = 0; i < state.fileBatch.length; i++) {
+                		var imageInfo = new Object();
+                		imageInfo.name = state.fileBatch[i].fileName;
+                		imageInfo.size = state.fileBatch[i].fileSize;
+                		imageInfo.file = state.fileBatch[i].file;
+                		imageList.push(imageInfo);
+                    }*/
                     var data = new FormData();
                     for (var i = 0; i < state.fileBatch.length; i++) {
-                        data.append('files[]', state.fileBatch[i].file, state.fileBatch[i].fileName);
+                        data.append('files[]', state.fileBatch[i].file, groups+state.fileBatch[i].fileName);
                     }
+                    
                     $.ajax({
                         type: 'POST',
                         url: options.ajaxUrl,
-                        data: data,
+                        data:data,
                         cache: false,
                         contentType: false,
                         processData: false
+                        /*data: {
+    						"imageList": JSON.stringify(imageList),
+                            "group":groups
+    					},*/
+                        
+    					/*dataType : "json",
+    					success : function(result) {
+    						if (result.success) {
+    							alert("设备");
+    						}
+    					}*/
                     });
                 }
             }

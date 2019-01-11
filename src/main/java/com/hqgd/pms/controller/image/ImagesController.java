@@ -1,7 +1,6 @@
 package com.hqgd.pms.controller.image;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.gson.Gson;
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.domain.ImageInfo;
@@ -39,14 +37,13 @@ public class ImagesController {
 	IUserService userService;
 
 	@RequestMapping(value = "/add")
-	public void add(Model model, ImageInfo imagesInfo, HttpServletRequest request, HttpServletResponse response)
+	public void add(Model model,HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		log.info("添加设备开始");
-		User loginUser = (User) request.getSession(true).getAttribute("user");
-		Map<String, Object> resultMap = imagesService.add(imagesInfo, loginUser);
+		log.info("添加图例开始");
+		Map<String, Object> resultMap = imagesService.add(request);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("添加设备结束");
+		log.info("添加图例结束");
 	}
 
 	@RequestMapping(value = "/delete")
