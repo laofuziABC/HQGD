@@ -35,6 +35,7 @@ var historyOption = {
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints } },
     title: { text: '设备通道温度实时监测', style: {color: '#ffffff'} }, time: { useUTC: false },
+    lang: {loading: "数据加载中……"},
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S %m-%d}' } },
 };
@@ -221,13 +222,14 @@ function drawCurrentChannels(param){
 			//通道结果每三个循环一回，缘于界面展示效果较规整
 			for(let j=startIndex; j<endIndex; j++){
 				let state=parseFloat(param[j].state);
+				let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
 				if(state==5){
 					var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
-					channel+="<td class='green' style='width:"+tdW+"; padding: 10px;'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+resultMsg+"</span></td>"; 
+					channel+="<td class='green' style='width:"+tdW+"; padding-left: 30px;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>"+resultMsg+"</span></td>"; 
 				}
-				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding: 10px;'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>- - - - -</span></td>"; }
-				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding: 10px;'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>- - -</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"; padding: 10px;'><span class='span_left'>"+param[j].opticalFiberPosition+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 30px;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>- - - - -</span></td>"; }
+				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 30px;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>- - -</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 30px;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 			}
 			channel+="</tr>";
 		}
