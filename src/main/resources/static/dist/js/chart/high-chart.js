@@ -25,7 +25,7 @@ var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#
 //配置历史数据监测曲线图配置项
 var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
-	title: {text: '设备历史温度曲线', style: {color: '#ffffff'}},
+	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
 	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
 	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'},
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
@@ -34,7 +34,7 @@ var historyOption = {
 //配置当前数据监测统计图
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints } },
-    title: { text: '设备通道温度实时监测', style: {color: '#ffffff'} }, time: { useUTC: false },
+    title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: { useUTC: false },
     lang: {loading: "数据加载中……"},
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S %m-%d}' } },
