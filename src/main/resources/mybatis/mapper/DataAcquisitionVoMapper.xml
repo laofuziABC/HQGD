@@ -373,10 +373,10 @@ ORDER BY
  		TEMPERATURE
     from hq_equipment_monitor_data
     where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+		AND CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
 		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
 		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
-		AND CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
 		ORDER BY
 			RECEIVE_TIME ASC
   </select>
