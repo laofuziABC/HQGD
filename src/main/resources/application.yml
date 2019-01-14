@@ -24,14 +24,14 @@ logging:
 #    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 spring:
   datasource:
-    url: jdbc:sqlserver://47.106.225.170:1433;DatabaseName=HQTemp_Cloud
+    url: jdbc:sqlserver://47.106.225.170:1433;DatabaseName=HQTemp_Cloud1
     username: sa
     password: dailihui0..
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 #spring:
 #  datasource:
-#    url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=HQTemp_Cloud
+#    url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=HQTemp_Cloud1
 #    username: sa
 #    password: root
 #    type: com.alibaba.druid.pool.DruidDataSource
