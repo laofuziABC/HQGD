@@ -8,11 +8,9 @@ import com.hqgd.pms.domain.User;
 
 public interface IEquipmentService {
 
-	Map<String, Object> add(EquipmentInfo equipmentInfo, User userLog, String city);
-
 	Map<String, Object> delete(String equipmentId);
 
-	Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city);
+	Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city, String add);
 
 	EquipmentInfo select(String equipmentId);
 
