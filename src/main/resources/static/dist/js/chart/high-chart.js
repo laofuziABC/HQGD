@@ -20,14 +20,13 @@ var tooltip={shared: true, useHTML: true,
 var yAxis={title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 };
 var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
-
 //设置图表公用配置项【结束】
 //配置历史数据监测曲线图配置项
 var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
-	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
-	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'},
+	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, 
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
 	}}
 };
@@ -35,18 +34,17 @@ var historyOption = {
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints } },
     title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: { useUTC: false },
-    lang: {loading: "数据加载中……"},
-    yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors,
-    xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S %m-%d}' } },
+    yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+    xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
 };
 //配置当空白统计图
 var blankOption={
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
 	title: {text: '温度曲线图', style: {color: '#ffffff'}},
 	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
-	xAxis:{type: 'category'},
+	xAxis:{type: 'category'}, credits:{enabled: false},
 	yAxis:{title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
-	series:[{name: '无数据', data: [], type:"spline", pointInterval: 6e4}]
+	series:[{name: '数据加载中', data: [], type:"spline", pointInterval: 6e4}]
 }
 
 /**
@@ -128,20 +126,14 @@ function initCurrentChart(){
 	var channelList=result.channelList;
 	var timeList=result.timeList;
 	var dataList=result.dataList;
+	var series=[];
 	//根据实际需求设定纵轴温度值域
 	if(dataList.length>0){
-		var tempArray = dataList[0];
+		var tempArray = [];
 		for(var i=0; i<dataList.length; i++){
 			tempArray=tempArray.concat(dataList[i]);
 		}
-		if($.inArray(2999, tempArray)>-1 || $.inArray(3000, tempArray)>-1){
-			currentOption.yAxis.max=100;
-		}else if($.inArray(-437, tempArray)>-1){
-			currentOption.yAxis.min=0;
-		}else{
-			currentOption.yAxis.max=null;
-			currentOption.yAxis.min=null;
-		}
+		setValueRangeForCChart(tempArray);
 	}
 	//只有通道数和系列数相等，才可以绘制图表
 	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
@@ -158,18 +150,19 @@ function initCurrentChart(){
 			totalArray.push(singleArray);
 		}
 		//为系列赋值
-		var series=[];
 		for(let i=0; i<channelList.length; i++){
 			var serie = {name: channelList[i], data: totalArray[i], type:"spline", pointInterval: 6e4};
 			series.push(serie);
 		}
-		currentOption.series = series;
-		$("#chart_current").empty();
-		$("#chart_current").highcharts(currentOption);
 	}else{
-		$("#chart_current").empty();
-		$("#chart_current").highcharts(blankOption);
+		for(let i=0; i<channelList.length; i++){
+			var serie = {name: channelList[i], data: [], type:"spline", pointInterval: 6e4};
+			series.push(serie);
+		}
 	}
+	currentOption.series = series;
+	$("#chart_current").empty();
+	$("#chart_current").highcharts(currentOption);
 }
 //计算点的坐标，落在图表中
 function addPoints(){
@@ -183,13 +176,20 @@ function addPoints(){
 		if(pointsData!=null && JSON.stringify(pointsData)!="{}" && (pointsData.length==pointsData[0].numOfCh)){
 			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 			var nowtime = (new Date()).getTime();
+			//获取所有通道的最新温度值
+			var tempValues=[];
+			for(let i=0; i<pointsData.length; i++){
+				var yValue=parseFloat(pointsData[i].temperature);
+				tempValues.push(yValue);
+			}
+			//设定纵轴上下限
+			setValueRangeForCChart(tempValues);
 			//判断此点是否在图表中，再绘制此点
 			if(thisPointTime>ST_VALUE && nowtime-thisPointTime<1000*60*5){
-				for(let i=0; i<pointsData.length; i++){
-					var yValue=parseFloat(pointsData[i].temperature);
+				for(let i=0; i<tempValues.length; i++){
 					//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
-					if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, yValue], true, true); }
-					else{series[i].addPoint([thisPointTime, yValue], true, false); }
+					if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, tempValues[i]], true, true); }
+					else{series[i].addPoint([thisPointTime, tempValues[i]], true, false); }
 				}
 				drawCurrentChannels(pointsData);
 			}
@@ -244,4 +244,26 @@ function drawCurrentChannels(param){
 		channel+="<h3 style='color: red;'>未查找到通道监测信息！</h3>"; 
 	}
 	$("#channelsInfo").html(channel);
+}
+//根据实际需求设定纵轴温度值域
+function setValueRangeForCChart(param){
+	if(param.length>0){
+		if($.inArray(2999, param)>-1 || $.inArray(3000, param)>-1){
+			currentOption.yAxis.max=100;
+		}else if($.inArray(-437, param)>-1){
+			currentOption.yAxis.min=0;
+		}else{
+			var chart = $("#chart_current").highcharts();
+			if (chart.yAxis[0].getExtremes().dataMax < 20) {
+			   chart.yAxis[0].setExtremes(0, 20);
+			}else if(chart.yAxis[0].getExtremes().dataMax < 50){
+				chart.yAxis[0].setExtremes(0, 50);
+			}else{
+				chart.yAxis[0].setExtremes(0, 100);
+			}
+		}
+	}else{
+		currentOption.yAxis.max=100;
+		currentOption.yAxis.min=0;
+	}
 }

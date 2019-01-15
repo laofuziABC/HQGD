@@ -366,9 +366,21 @@ ORDER BY
 		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
 		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
 		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+		ORDER BY RECEIVE_TIME ASC
   </select>
   <!-- 获取单一通道在具体时间段内的数据集合 -->
   <select id="selectChanDataByParam" parameterType="java.util.Map" resultMap="TempertureList">
+  	<!-- select t.TEMPERATURE 
+  	from 
+  		(select TEMPERATURE,CHANNEL_NUM,RECEIVE_TIME 
+  		from hq_equipment_monitor_data 
+  		where 
+  			RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+  			AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+  			AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} )t 
+  	where 
+  		t.CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
+  		ORDER BY t.RECEIVE_TIME ASC -->
  	select
  		TEMPERATURE
     from hq_equipment_monitor_data
