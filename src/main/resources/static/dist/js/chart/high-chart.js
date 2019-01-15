@@ -49,8 +49,8 @@ var blankOption={
 
 /**
  * 以下的方法用于同步或者异步获取图表的数据资源
- * 其中实时监控图的相关内容，多需同步获取
- * 其它无需依靠当前时间加载的图表数据，多为异步获取
+ * 其中实时监控图的相关内容，需同步获取
+ * 其它无需依靠当前时间加载的图表数据，为异步获取
  */
 /* 方法1：同步获取指定地址下的数据资源
  * url：获取资源的途径，不能传空值；param：获取资源的传参。
@@ -127,14 +127,6 @@ function initCurrentChart(){
 	var timeList=result.timeList;
 	var dataList=result.dataList;
 	var series=[];
-	//根据实际需求设定纵轴温度值域
-//	if(dataList.length>0){
-//		var tempArray = [];
-//		for(var i=0; i<dataList.length; i++){
-//			tempArray=tempArray.concat(dataList[i]);
-//		}
-//		setValueRangeForCChart(tempArray);
-//	}
 	//只有通道数和系列数相等，才可以绘制图表
 	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
 		//组装系列值
@@ -185,17 +177,16 @@ function addPoints(){
 			//设定纵轴上下限
 			setValueRangeForCChart(tempValues);
 			//判断此点是否在图表中，再绘制此点
-			if(thisPointTime>ST_VALUE && nowtime-thisPointTime<1000*60*5){
+			if(thisPointTime>ST_VALUE && nowtime-thisPointTime<1000*60*2){
 				for(let i=0; i<tempValues.length; i++){
 					//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
 					if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, tempValues[i]], true, true); }
 					else{series[i].addPoint([thisPointTime, tempValues[i]], true, false); }
 				}
 				drawCurrentChannels(pointsData);
+			}else{
+				$("#last-time").css({"color":"red"});
 			}
-//			else{
-//				$("#last-time").css({"color":"#21242e"});
-//			}
 		}
 	}, interval);
 	//清除页面多余的定时任务
@@ -211,11 +202,11 @@ function drawCurrentChannels(param){
 	var channel = "";
 	let num = (param==null)?0:(param.length);
 	if(num>0){
-		//超过5分钟提示
+		//超过2分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
 		cTime=(new Date()).getTime();
 		$("#last-time").text("最后监测时间："+param[0].receiveTime);
-		if((cTime-lTime)>(5*60*1000)){ $("#last-time").css({"color":"red"}); }
+		if((cTime-lTime)>(2*60*1000)){ $("#last-time").css({"color":"red"}); }
 		else{$("#last-time").css({"color":"#21242e"});}
 		//设定尺寸适应容器【开始】
 		let count = Math.ceil(num/3);
