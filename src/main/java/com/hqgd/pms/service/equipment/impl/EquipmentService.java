@@ -41,43 +41,12 @@ public class EquipmentService implements IEquipmentService {
 	private static final String baseUrl = "https://restapi.amap.com/v3/geocode/geo?";
 	private static final String key = "aae78042bf29a967036e55a46b70a34a";
 
-	@Override
-	public Map<String, Object> add(EquipmentInfo equipmentInfo, User loginUser, String city) {
-		Map<String, Object> resultMap = new HashMap<>();
-		Boolean result = false;
-		EquipmentInfo equipFind = equipmentInfoMapper.selectByPrimaryKey(equipmentInfo.getEquipmentId());
-		if (equipFind == null) {
-			equipmentInfo.setUpdater(loginUser.getUserName());
-			equipmentInfo.setCreator(loginUser.getUserName());
-			equipmentInfo.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
-			equipmentInfo.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
-			String address = equipmentInfo.getAddress();
-			GeoCode geoCode = geocode(address, city);
-			if (geoCode == null) {
-				resultMap.put("message", "未找到该地址，请输入正确的地址");
-			} else {
-				String latlon = geoCode.getLocation();
-				if(equipmentInfo.getLngLat()==null||equipmentInfo.getLngLat()=="") {
-					equipmentInfo.setLngLat(latlon);
-				}
-				int i = equipmentInfoMapper.insert(equipmentInfo);
-				result = (i == 0) ? false : true;
-				resultMap.put("message", "添加设备成功");
-			}
-
-		} else {
-			resultMap.put("message", "该设备ID已经存在");
-		}
-		resultMap.put("success", result);
-		resultMap.put("resultCode", "00000001");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		return resultMap;
-	}
-
 	private GeoCode geocode(String address, String city) {
 		city = city.substring(0, city.length() - 1);
 		String url = baseUrl + "key=" + key + "&address=" + address + "&city=" + city;
+		log.info("地址url="+url);
 		String resultJson = HttpProtocolHandler.httpsRequest(url, "GET", null);
+		log.info("resultJson"+resultJson);
 		Gson gson = new Gson();
 		GeoCodeInfo geoCodeInfo = new GeoCodeInfo();
 		geoCodeInfo = gson.fromJson(resultJson, geoCodeInfo.getClass());
@@ -101,25 +70,34 @@ public class EquipmentService implements IEquipmentService {
 	}
 
 	@Override
-	public Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city) {
+	public Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city,String add) {
+		equipmentInfo.setUpdater(loginUser.getUserName());
+		equipmentInfo.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
 		Map<String, Object> resultMap = new HashMap<>();
 		Boolean result = false;
-		equipmentInfo.setUpdater(loginUser.getUserName());
-		equipmentInfo.setCreator(loginUser.getUserName());
-		equipmentInfo.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
-		equipmentInfo.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
 		String address = equipmentInfo.getAddress();
 		GeoCode geoCode = geocode(address, city);
-		if (geoCode == null) {
+		if (geoCode == null&&(equipmentInfo.getLngLat()==null||equipmentInfo.getLngLat()=="")) {
 			resultMap.put("message", "未找到该地址，请输入正确的地址");
 		} else {
-			String latlon = geoCode.getLocation();
+			String latlon ="";
+			if (geoCode != null) {
+				latlon = geoCode.getLocation();
+			}
 			if(equipmentInfo.getLngLat()==null||equipmentInfo.getLngLat()=="") {
 				equipmentInfo.setLngLat(latlon);
 			}
-			int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
-			result = (i == 0) ? false : true;
-			resultMap.put("message", "添加设备失败");
+			if(Boolean.valueOf(add)) {
+				equipmentInfo.setCreator(loginUser.getUserName());
+				equipmentInfo.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
+				int i = equipmentInfoMapper.insert(equipmentInfo);
+				result = (i == 0) ? false : true;
+				resultMap.put("message", "添加设备成功");
+			}else {
+				int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
+				result = (i == 0) ? false : true;
+				resultMap.put("message", "更新设备失败");
+			}
 		}
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000003");

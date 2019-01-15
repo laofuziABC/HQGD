@@ -23,11 +23,11 @@
 
 	<div class="fuceng" id="equipmentfuceng">
 		<div class="fuqu">
-			<div class="fuquzone" >
+			<div class="fuquzone">
 
 				<div class="fuqulogo"></div>
 				<p class="fuqutitle">
-					设备信息 <span class="fuclose" >×</span>
+					设备信息 <span class="fuclose">×</span>
 				</p>
 				<div class="equiform" id="equipForm">
 					<form action="#" id="outerForm">
@@ -101,7 +101,8 @@
 				</div>
 				<div class="container" style="padding: 0px 0px 0px 40px;">
 					<div class="row">
-						<div class="col-md-12" style="width: 40%;max-height: 300px;overflow-y: auto;max">
+						<div class="col-md-12"
+							style="width: 40%; max-height: 300px; overflow-y: auto;">
 							<div class="table-responsive">
 								<table class="table table-bordered table-striped"
 									id="channelTem">
@@ -187,7 +188,7 @@
 									</thead>
 									<tbody>
 									<tbody id="equipmentList"></tbody>
-									<tbody id="equipmentreport" style = "display :none"></tbody>
+									<tbody id="equipmentreport" style="display: none"></tbody>
 									<tr>
 										<td colspan="13" class="text_al_rig lindianjia"><input
 											type="submit" onclick="addEquip();" value="添加设备"
@@ -240,123 +241,87 @@
 		var globalData;
 		var globalUserList = [];
 		var add = true;
-		function close2() {
-			$("#equipmentfuceng").css({
-				"display" : "none"
-			});
-		}
 		//获取所有设备信息列表
 		function getEquipmentList() {
-			$
-					.ajax({
-						url : "equipment/selectAll",
-						type : "post",
-						dataType : "json",
-						success : function(result) {
-							globalData = result.data;
-							var data = result.data;
-							var equipList = "";
-							//设置分页信息——当前为假分页
-							var totalSize = data.length;
-							var pageSize = 15;
-							var totalNum = Math.ceil(totalSize / pageSize);
-							var startIndex = (pageNum - 1) * pageSize;
-							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
-									: pageNum * pageSize;
-							for (let i = startIndex; i < endIndex; i++) {
-								equipList += "<tr>";
-								equipList += "<td>" + (i + 1) + "</td>";
-								equipList += "<td>" + data[i].equipmentId
-										+ "</td>";
-								equipList += "<td>" + data[i].equipmentName
-										+ "</td>";
-								equipList += "<td>" + data[i].type + "</td>";
-								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
-										+ i + "')\">详情</a></td>";
-								equipList += "<td>" + data[i].address + "</td>";
-								equipList += "<td>" + data[i].adcode + "</td>";
-								equipList += "<td>" + data[i].lngLat + "</td>";
-								equipList += "<td>" + data[i].frameStru
-										+ "</td>";
-								equipList += "<td>" + data[i].userName
-										+ "</td>";
-								equipList += "<td>" + data[i].updateTime
-										+ "</td>";
-								equipList += "<td>" + data[i].updater + "</td>";
-								equipList += "<td class=\"center\">";
-								equipList += "<a class=\" edit\" onclick=\"getEquiEdit('"
-										+ i + "');\">编辑</a>&nbsp;";
-								equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-										+ data[i].equipmentId
-										+ "');\">删除</a>&nbsp;";
-								equipList += "</td>";
-								equipList += "</tr>";
-							}
-							$("#equipmentList").html(equipList);
-							//加载页码
-							$("#equi-show-pager").html(
-									loadPages(pageSize, totalSize, pageNum));
-							$("#equi-show-pager").setActivePage(3);
-						}
-					});
+			$.ajax({
+				url : "equipment/selectAll",
+				type : "post",
+				dataType : "json",
+				success : function(result) {
+					globalData = result.data;
+					var data = result.data;
+					var equipList = "";
+					//设置分页信息——当前为假分页
+					var totalSize = data.length;
+					var pageSize = 15;
+					var totalNum = Math.ceil(totalSize / pageSize);
+					var startIndex = (pageNum - 1) * pageSize;
+					var endIndex = (pageNum * pageSize > totalSize) ? totalSize
+							: pageNum * pageSize;
+					equipList = getequipList(startIndex, endIndex, data,
+							equipList);
+					$("#equipmentList").html(equipList);
+					//加载页码
+					$("#equi-show-pager").html(
+							loadPages(pageSize, totalSize, pageNum));
+					$("#equi-show-pager").setActivePage(3);
+				}
+			});
 		}
-
+		function getequipList(startIndex, endIndex, data, equipList) {
+			for (let i = startIndex; i < endIndex; i++) {
+				equipList += "<tr>";
+				equipList += "<td>" + (i + 1) + "</td>";
+				equipList += "<td>" + data[i].equipmentId + "</td>";
+				equipList += "<td>" + data[i].equipmentName + "</td>";
+				equipList += "<td>" + data[i].type + "</td>";
+				equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
+						+ i + "')\">详情</a></td>";
+				equipList += "<td>" + data[i].address + "</td>";
+				equipList += "<td>" + data[i].adcode + "</td>";
+				equipList += "<td>" + data[i].lngLat + "</td>";
+				equipList += "<td>" + data[i].frameStru + "</td>";
+				equipList += "<td>" + data[i].userName + "</td>";
+				equipList += "<td>" + data[i].updateTime + "</td>";
+				equipList += "<td>" + data[i].updater + "</td>";
+				equipList += "<td class=\"center\">";
+				equipList += "<a class=\" edit\" onclick=\"getEquiEdit('" + i
+						+ "');\">编辑</a>&nbsp;";
+				equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
+						+ data[i].equipmentId + "');\">删除</a>&nbsp;";
+				equipList += "</td>";
+				equipList += "</tr>";
+			}
+			return equipList;
+		};
 		function getEquipmentListByUser(userName) {
-			$
-					.ajax({
-						url : "equipment/selectAllByUser",
-						type : "post",
-						data : {
-							"userName" : userName
-						},
-						dataType : "json",
-						success : function(result) {
-							globalData = result.data;
-							var data = result.data;
-							var equipList = "";
-							//设置分页信息——当前为假分页
-							var totalSize = data.length;
-							var pageSize = 15;
-							var totalNum = Math.ceil(totalSize / pageSize);
-							var startIndex = (pageNum - 1) * pageSize;
-							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
-									: pageNum * pageSize;
-							for (let i = startIndex; i < endIndex; i++) {
-								equipList += "<tr>";
-								equipList += "<td>" + (i + 1) + "</td>";
-								equipList += "<td>" + data[i].equipmentId
-										+ "</td>";
-								equipList += "<td>" + data[i].equipmentName
-										+ "</td>";
-								equipList += "<td>" + data[i].type + "</td>";
-								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
-										+ i + "')\">详情</a></td>";
-								equipList += "<td>" + data[i].address + "</td>";
-								equipList += "<td>" + data[i].adcode + "</td>";
-								equipList += "<td>" + data[i].lngLat + "</td>";
-								equipList += "<td>" + data[i].frameStru
-										+ "</td>";
-								equipList += "<td>" + data[i].userName
-										+ "</td>";
-								equipList += "<td>" + data[i].updateTime
-										+ "</td>";
-								equipList += "<td>" + data[i].updater + "</td>";
-								equipList += "<td class=\"center\">";
-								equipList += "<a class=\" edit\" onclick=\"getEquiEdit('"
-										+ i + "');\">编辑</a>&nbsp;";
-								equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-										+ data[i].equipmentId
-										+ "');\">删除</a>&nbsp;";
-								equipList += "</td>";
-								equipList += "</tr>";
-							}
-							$("#equipmentList").html(equipList);
-							//加载页码
-							$("#equi-show-pager").html(
-									loadPages(pageSize, totalSize, pageNum));
-							$("#equi-show-pager").setActivePage(3);
-						}
-					});
+			$.ajax({
+				url : "equipment/selectAllByUser",
+				type : "post",
+				data : {
+					"userName" : userName
+				},
+				dataType : "json",
+				success : function(result) {
+					globalData = result.data;
+					var data = result.data;
+					var equipList = "";
+					//设置分页信息——当前为假分页
+					var totalSize = data.length;
+					var pageSize = 15;
+					var totalNum = Math.ceil(totalSize / pageSize);
+					var startIndex = (pageNum - 1) * pageSize;
+					var endIndex = (pageNum * pageSize > totalSize) ? totalSize
+							: pageNum * pageSize;
+					equipList = getequipList(startIndex, endIndex, data,
+							equipList);
+					$("#equipmentList").html(equipList);
+					//加载页码
+					$("#equi-show-pager").html(
+							loadPages(pageSize, totalSize, pageNum));
+					$("#equi-show-pager").setActivePage(3);
+				}
+			});
 		}
 
 		function getUserList() {
@@ -542,106 +507,51 @@
 				"city" : $("#cadcode option:selected").text(),
 				"lngLat" : $("#lngLat").val(),
 				"frameStru" : $("#frameStru").val(),
-				"channelTem" : res
+				"channelTem" : res,
+				"add" : add,
 			};
 			if ($("#equipmentId").val() != ""
 					|| $("#equipmentId").val() != null) {
 				params.equipmentId = $("#equipmentId").val();
 			}
-
-			if (add) {
-				$.ajax({
-					url : "equipment/add",
-					type : "post",
-					data : params,
-					dataType : "json",
-					success : function(result) {
-						if (result.success) {
-							alert("操作成功！");
-							$(".fuceng").css({
-								"display" : "none"
-							})
-						} else {
-							alert(result.message);
-						}
-						getEquipmentList();
+			$.ajax({
+				url : "equipment/update",
+				type : "post",
+				data : params,
+				dataType : "json",
+				success : function(result) {
+					if (result.success) {
+						alert("操作成功！");
+						$(".fuceng").css({
+							"display" : "none"
+						})
+					} else {
+						alert(result.message);
 					}
-				});
-			} else {
-				$.ajax({
-					url : "equipment/update",
-					type : "post",
-					data : params,
-					dataType : "json",
-					success : function(result) {
-						if (result.success) {
-							alert("操作成功！");
-							$(".fuceng").css({
-								"display" : "none"
-							})
-						} else {
-							alert(result.message);
-						}
-						getEquipmentList();
-					}
-				});
-			}
-
+					getEquipmentList();
+				}
+			});
 		}
 		//通过设备名称查询设备
 		function searchResult() {
 			var name = $("#searchByName").val().trim();
 			if (name != "") {
-				$
-						.ajax({
-							url : "equipment/selectByEquipmentName",
-							type : "post",
-							data : {
-								"equipmentName" : name
-							},
-							dataType : "json",
-							success : function(result) {
-								globalData = result.data;
-								var data = result.data;
-								var equipList = "";
-								for (let i = 0; i < data.length; i++) {
-									equipList += "<tr>";
-									equipList += "<td>" + (i + 1) + "</td>";
-									equipList += "<td>" + data[i].equipmentId
-											+ "</td>";
-									equipList += "<td>" + data[i].equipmentName
-											+ "</td>";
-									equipList += "<td>" + data[i].type
-											+ "</td>";
-									equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
-											+ i + "')\">详情</a></td>";
-									equipList += "<td>" + data[i].address
-											+ "</td>";
-									equipList += "<td>" + data[i].adcode
-											+ "</td>";
-									equipList += "<td>" + data[i].lngLat
-											+ "</td>";
-									equipList += "<td>" + data[i].frameStru
-											+ "</td>";
-									equipList += "<td>" + data[i].userName
-											+ "</td>";
-									equipList += "<td>" + data[i].updateTime
-											+ "</td>";
-									equipList += "<td>" + data[i].updater
-											+ "</td>";
-									equipList += "<td class=\"center\">";
-									equipList += "<a class=\" edit\" onclick=\"getEquiEdit('"
-											+ i + "');\">编辑</a>&nbsp;";
-									equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-											+ data[i].equipmentId
-											+ "');\">删除</a>&nbsp;";
-									equipList += "</td>";
-									equipList += "</tr>";
-									globalUserList.push(data[i].userName);
-								}
-								$("#equipmentList").html(equipList);
-							}
-						});
+				$.ajax({
+					url : "equipment/selectByEquipmentName",
+					type : "post",
+					data : {
+						"equipmentName" : name
+					},
+					dataType : "json",
+					success : function(result) {
+						globalData = result.data;
+						var data = result.data;
+						var equipList = "";
+						equipList = getequipList(0, data.length, data,
+								equipList);
+						$("#equipmentList").html(equipList);
+					}
+				});
 			} else {
 				getEquipmentList();
 			}
