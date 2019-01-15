@@ -44,9 +44,9 @@ public class EquipmentService implements IEquipmentService {
 	private GeoCode geocode(String address, String city) {
 		city = city.substring(0, city.length() - 1);
 		String url = baseUrl + "key=" + key + "&address=" + address + "&city=" + city;
-		log.info("地址url="+url);
+		log.info("地址url=" + url);
 		String resultJson = HttpProtocolHandler.httpsRequest(url, "GET", null);
-		log.info("resultJson"+resultJson);
+		log.info("resultJson" + resultJson);
 		Gson gson = new Gson();
 		GeoCodeInfo geoCodeInfo = new GeoCodeInfo();
 		geoCodeInfo = gson.fromJson(resultJson, geoCodeInfo.getClass());
@@ -70,30 +70,37 @@ public class EquipmentService implements IEquipmentService {
 	}
 
 	@Override
-	public Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city,String add) {
+	public Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city, String add) {
 		equipmentInfo.setUpdater(loginUser.getUserName());
 		equipmentInfo.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
 		Map<String, Object> resultMap = new HashMap<>();
 		Boolean result = false;
 		String address = equipmentInfo.getAddress();
 		GeoCode geoCode = geocode(address, city);
-		if (geoCode == null&&(equipmentInfo.getLngLat()==null||equipmentInfo.getLngLat()=="")) {
+		if (geoCode == null && (equipmentInfo.getLngLat() == null || equipmentInfo.getLngLat() == "")) {
+			log.info("geoCode"+geoCode);
+			log.info("equipmentInfo.getLngLat()"+equipmentInfo.getLngLat());
 			resultMap.put("message", "未找到该地址，请输入正确的地址");
 		} else {
-			String latlon ="";
+			String latlon = "";
 			if (geoCode != null) {
 				latlon = geoCode.getLocation();
 			}
-			if(equipmentInfo.getLngLat()==null||equipmentInfo.getLngLat()=="") {
+			if (equipmentInfo.getLngLat() == null || equipmentInfo.getLngLat() == "") {
 				equipmentInfo.setLngLat(latlon);
 			}
-			if(Boolean.valueOf(add)) {
-				equipmentInfo.setCreator(loginUser.getUserName());
-				equipmentInfo.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
-				int i = equipmentInfoMapper.insert(equipmentInfo);
-				result = (i == 0) ? false : true;
-				resultMap.put("message", "添加设备成功");
-			}else {
+			if (Boolean.valueOf(add)) {
+				EquipmentInfo equipFind = equipmentInfoMapper.selectByPrimaryKey(equipmentInfo.getEquipmentId());
+				if (equipFind == null) {
+					equipmentInfo.setCreator(loginUser.getUserName());
+					equipmentInfo.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
+					int i = equipmentInfoMapper.insert(equipmentInfo);
+					result = (i == 0) ? false : true;
+					resultMap.put("message", "添加设备成功");
+				} else {
+					resultMap.put("message", "该设备ID已经存在");
+				}
+			} else {
 				int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
 				result = (i == 0) ? false : true;
 				resultMap.put("message", "更新设备失败");
