@@ -128,13 +128,13 @@ function initCurrentChart(){
 	var dataList=result.dataList;
 	var series=[];
 	//根据实际需求设定纵轴温度值域
-	if(dataList.length>0){
-		var tempArray = [];
-		for(var i=0; i<dataList.length; i++){
-			tempArray=tempArray.concat(dataList[i]);
-		}
-		setValueRangeForCChart(tempArray);
-	}
+//	if(dataList.length>0){
+//		var tempArray = [];
+//		for(var i=0; i<dataList.length; i++){
+//			tempArray=tempArray.concat(dataList[i]);
+//		}
+//		setValueRangeForCChart(tempArray);
+//	}
 	//只有通道数和系列数相等，才可以绘制图表
 	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
 		//组装系列值
@@ -193,6 +193,9 @@ function addPoints(){
 				}
 				drawCurrentChannels(pointsData);
 			}
+//			else{
+//				$("#last-time").css({"color":"#21242e"});
+//			}
 		}
 	}, interval);
 	//清除页面多余的定时任务
@@ -255,8 +258,8 @@ function setValueRangeForCChart(param){
 		}else{
 			var chart = $("#chart_current").highcharts();
 			if (chart.yAxis[0].getExtremes().dataMax < 20) {
-			   chart.yAxis[0].setExtremes(0, 20);
-			}else if(chart.yAxis[0].getExtremes().dataMax < 50){
+			   chart.yAxis[0].setExtremes(-10, 20);
+			}else if(chart.yAxis[0].getExtremes().dataMax>20 && chart.yAxis[0].getExtremes().dataMax<50){
 				chart.yAxis[0].setExtremes(0, 50);
 			}else{
 				chart.yAxis[0].setExtremes(0, 100);
