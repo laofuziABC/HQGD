@@ -64,7 +64,7 @@ ORDER BY
     SELECT
 	<include refid="Base_Column_List" /> 
 FROM
-	HQTemp_Cloud.dbo.hq_equipment_monitor_data w1 
+	HQTemp_Cloud1.dbo.hq_equipment_monitor_data w1 
 WHERE
 	ID IN (
 SELECT
@@ -76,7 +76,7 @@ SELECT
 	EQUIPMENT_ID,
 	EQUIPMENT_NAME 
 FROM
-	HQTemp_Cloud.dbo.hq_equipment_monitor_data 
+	HQTemp_Cloud1.dbo.hq_equipment_monitor_data 
 WHERE
 	EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
 	AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
@@ -98,7 +98,7 @@ ORDER BY
     SELECT
 	<include refid="Base_Column_List" /> 
     FROM
-	    HQTemp_Cloud.dbo.hq_equipment_monitor_data w1 
+	    HQTemp_Cloud1.dbo.hq_equipment_monitor_data w1 
     WHERE
         1=1
 	  AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
@@ -131,7 +131,7 @@ ORDER BY
     SELECT
     	',' + CAST( TEMPERATURE AS VARCHAR ) 
     FROM
-    	HQTemp_Cloud.dbo.hq_equipment_monitor_data t 
+    	HQTemp_Cloud1.dbo.hq_equipment_monitor_data t 
     WHERE
     	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
     	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
@@ -147,7 +147,7 @@ ORDER BY
     SELECT
     	',' + CAST( CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS VARCHAR ) 
     FROM
-    	HQTemp_Cloud.dbo.hq_equipment_monitor_data t 
+    	HQTemp_Cloud1.dbo.hq_equipment_monitor_data t 
     WHERE
     	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
     	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
@@ -159,7 +159,7 @@ ORDER BY
     	'' 
     	)     	
     FROM
-    	HQTemp_Cloud.dbo.hq_equipment_monitor_data 
+    	HQTemp_Cloud1.dbo.hq_equipment_monitor_data 
     WHERE
       1=1
       AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
