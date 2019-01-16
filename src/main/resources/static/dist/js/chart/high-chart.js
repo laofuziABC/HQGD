@@ -242,19 +242,17 @@ function drawCurrentChannels(param){
 //根据实际需求设定纵轴温度值域
 function setValueRangeForCChart(param){
 	if(param.length>0){
-		if($.inArray(2999, param)>-1 || $.inArray(3000, param)>-1){
-			currentOption.yAxis.max=100;
-		}else if($.inArray(-437, param)>-1){
-			currentOption.yAxis.min=0;
+		var chart = $("#chart_current").highcharts();
+		var max=Math.max.apply(null, param);
+		var min=Math.min.apply(null, param);
+		max=(max>chart.yAxis[0].getExtremes().dataMax)?max:(chart.yAxis[0].getExtremes().dataMax);
+		min=(min<chart.yAxis[0].getExtremes().dataMin)?min:(chart.yAxis[0].getExtremes().dataMin);
+		if(min > -10){
+			if (max < 100){ chart.yAxis[0].setExtremes(min-10, max+10); }
+			else{ chart.yAxis[0].setExtremes(min-10, 100); }
 		}else{
-			var chart = $("#chart_current").highcharts();
-			if (chart.yAxis[0].getExtremes().dataMax < 20) {
-			   chart.yAxis[0].setExtremes(-10, 20);
-			}else if(chart.yAxis[0].getExtremes().dataMax>20 && chart.yAxis[0].getExtremes().dataMax<50){
-				chart.yAxis[0].setExtremes(0, 50);
-			}else{
-				chart.yAxis[0].setExtremes(0, 100);
-			}
+			if (max < 100){ chart.yAxis[0].setExtremes(0, max+10); }
+			else{ chart.yAxis[0].setExtremes(0, 100); }
 		}
 	}else{
 		currentOption.yAxis.max=100;
