@@ -10,7 +10,7 @@ public interface IEquipmentService {
 
 	Map<String, Object> delete(String equipmentId);
 
-	Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city, String add);
+	Map<String, Object> update(EquipmentInfo equipmentInfo, User loginUser, String city);
 
 	EquipmentInfo select(String equipmentId);
 

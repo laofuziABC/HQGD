@@ -207,7 +207,7 @@
 		    
 		    var count = markers.length;
 		    var _renderCluserMarker = function (context) {
-		        var factor = Math.pow(context.count / count, 1 / 18);
+		    	var factor = Math.pow(context.count / count, 1 / 18);
 		        var div = document.createElement('div');
 		        var Hue = 180 - factor * 180;
 		        var bgColor = 'hsla(' + Hue + ',100%,50%,0.7)';
