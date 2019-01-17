@@ -12,7 +12,7 @@
     <result column="ISDEL" jdbcType="INTEGER" property="isdel" />
   </resultMap>
   <sql id="Base_Column_List">
-    NAME, ID, PATH, GROUPS, SIZE, AUTHOR, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME, ISDEL
+    NAME,PATH, GROUPS, SIZE, AUTHOR, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME, ISDEL
   </sql>
   <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -30,10 +30,10 @@
     where NAME = #{name,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.ImageInfo">
-    insert into s_image_update (NAME, ID, PATH, 
+    insert into s_image_update (NAME, PATH, 
       GROUPS, SIZE, AUTHOR, 
       UPDATE_TIME, ISDEL)
-    values (#{name,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, 
+    values (#{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
       #{groups,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{author,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
   </insert>
@@ -43,9 +43,7 @@
       <if test="name != null">
         NAME,
       </if>
-      <if test="id != null">
-        ID,
-      </if>
+      
       <if test="path != null">
         PATH,
       </if>
@@ -69,9 +67,7 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
+      
       <if test="path != null">
         #{path,jdbcType=VARCHAR},
       </if>
@@ -95,9 +91,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.hqgd.pms.domain.ImageInfo">
     update s_image_update
     <set>
-      <if test="id != null">
-        ID = #{id,jdbcType=INTEGER},
-      </if>
+      
       <if test="path != null">
         PATH = #{path,jdbcType=VARCHAR},
       </if>
@@ -121,7 +115,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.ImageInfo">
     update s_image_update
-    set ID = #{id,jdbcType=INTEGER},
+    set 
       PATH = #{path,jdbcType=VARCHAR},
       GROUPS = #{groups,jdbcType=VARCHAR},
       SIZE = #{size,jdbcType=DOUBLE},

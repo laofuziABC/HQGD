@@ -3,10 +3,9 @@ package com.hqgd.pms.service.images;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hqgd.pms.domain.ImageInfo;
-import com.hqgd.pms.domain.User;
 
 public interface IImagesService {
 
@@ -16,10 +15,6 @@ public interface IImagesService {
 
 	List<ImageInfo> selectAll();
 
-	String execRecordExport(String path);
-
-	Map<String, Object> update(ImageInfo imagesInfo, User loginUser);
-
-	Map<String, Object> add(HttpServletRequest request);
+	Map<String, Object> add(MultipartFile[] file, String group);
 
 }

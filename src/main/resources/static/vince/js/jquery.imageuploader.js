@@ -181,37 +181,30 @@
             function uploadSubmitHandler () {
                 if (state.fileBatch.length !== 0) {
                 	var groups = $("#groups option:selected").val();
-                	/*var imageList = [];
-                	for (var i = 0; i < state.fileBatch.length; i++) {
-                		var imageInfo = new Object();
-                		imageInfo.name = state.fileBatch[i].fileName;
-                		imageInfo.size = state.fileBatch[i].fileSize;
-                		imageInfo.file = state.fileBatch[i].file;
-                		imageList.push(imageInfo);
-                    }*/
                     var data = new FormData();
                     for (var i = 0; i < state.fileBatch.length; i++) {
-                        data.append('files[]', state.fileBatch[i].file, groups+state.fileBatch[i].fileName);
+                        //data.append('files[]', state.fileBatch[i].file, groups+state.fileBatch[i].fileName);
+                        data.append('files[]', state.fileBatch[i].file);
                     }
-                    
+                    data.append('group', groups);
                     $.ajax({
                         type: 'POST',
                         url: options.ajaxUrl,
                         data:data,
                         cache: false,
                         contentType: false,
-                        processData: false
-                        /*data: {
-    						"imageList": JSON.stringify(imageList),
-                            "group":groups
-    					},*/
-                        
-    					/*dataType : "json",
-    					success : function(result) {
+                        /*enctype: 'multipart/form-data',*/
+                        processData: false,
+                        success : function(result) {
     						if (result.success) {
-    							alert("设备");
+    							$(".fuceng").css({
+    								"display" : "none"
+    							});
+    						} else {
+    							alert(result.message);
     						}
-    					}*/
+    						getImageList();
+    					}
                     });
                 }
             }

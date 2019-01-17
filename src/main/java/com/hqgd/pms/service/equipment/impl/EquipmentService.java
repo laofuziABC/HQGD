@@ -86,14 +86,14 @@ public class EquipmentService implements IEquipmentService {
 				equipmentInfo.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
 				int i = equipmentInfoMapper.insert(equipmentInfo);
 				result = (i == 0) ? false : true;
-				resultMap.put("message", "添加设备成功");
+				resultMap.put("message", (result) ? "添加设备成功" : "添加设备失败");
 			} else {
 				resultMap.put("message", "该设备ID已经存在");
 			}
 		} else {
 			int i = equipmentInfoMapper.updateByPrimaryKeySelective(equipmentInfo);
 			result = (i == 0) ? false : true;
-			resultMap.put("message", "更新设备失败");
+			resultMap.put("message", (result) ? "更新设备成功" : "更新设备失败");
 		}
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000003");

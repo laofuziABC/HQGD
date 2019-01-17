@@ -1,7 +1,5 @@
 package com.hqgd.pms.domain;
 
-import java.util.Date;
-
 public class ImageInfo {
     private String name;
 
@@ -15,7 +13,7 @@ public class ImageInfo {
 
     private String author;
 
-    private Date updateTime;
+    private String updateTime;
 
     private Integer isdel;
 
@@ -67,11 +65,11 @@ public class ImageInfo {
         this.author = author == null ? null : author.trim();
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
