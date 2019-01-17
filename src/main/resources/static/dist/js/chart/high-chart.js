@@ -23,7 +23,7 @@ var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#
 //设置图表公用配置项【结束】
 //配置历史数据监测曲线图配置项
 var historyOption = {
-	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
+	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20},
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
 	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
 	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, 
@@ -32,7 +32,7 @@ var historyOption = {
 };
 //配置当前数据监测统计图
 var currentOption={
-	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints } },
+	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
     title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: { useUTC: false },
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
@@ -226,11 +226,11 @@ function drawCurrentChannels(param){
 				let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
 				if(state==5){
 					var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
-					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>"+resultMsg+"</span></td>"; 
+					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>"+resultMsg+"</span></td>"; 
 				}
-				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>- - - - -</span></td>"; }
-				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>- - -</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+"：</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>- - - - -</span></td>"; }
+				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>- - -</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 			}
 			channel+="</tr>";
 		}
