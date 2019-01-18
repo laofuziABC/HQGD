@@ -12,7 +12,7 @@ var tooltip={shared: true, useHTML: true,
 				case -437: s='<b style="color: red;">- - - - -</b>'; break;
 				case 2999: s='<b style="color: green;">系统调整中</b>'; break;
 				case 3000: s='<b style="color: red;">- - -</b>'; break;
-				default: s='<b style="color: green;">'+this.y+'</b>'; break;
+				default: s='<b style="color: green;">'+parseFloat(this.y)+'</b>'; break;
 			}
 			return '<br/><span style="color:'+this.color+'">\u25CF</span>'+this.series.name+'：'+s;
 		}
@@ -76,6 +76,16 @@ function drawingHistoryChart(url, param){
 				var legendData = data.channelNumArr;
 				var seriesData = data.channelTemArr;
 				var totalCount = seriesData[0].length;
+				//根据温度值，设置纵轴上下限【开始】
+				var tempArray=[];
+				for(let i=0; i<seriesData.length; i++){
+					tempArray=tempArray.concat(seriesData[i]);
+				}
+				var max=Math.max.apply(null, tempArray);
+				var min=Math.min.apply(null, tempArray);
+				historyOption.yAxis.min=(min > -10)?(min-10):0;
+				historyOption.yAxis.max=(max < 100)?(max+10):100;
+				//根据温度值，设置纵轴上下限【结束】
 				for(let i=0; i<legendData.length; i++){
 					var serie = {name: legendData[i], data: seriesData[i], type:"spline"};
 					totalCount=(totalCount>seriesData[i].length)?totalCount:(seriesData[i].length);
@@ -222,7 +232,7 @@ function drawCurrentChannels(param){
 			channel+="<tr style='height:"+trH+"'>";
 			//通道结果每三个循环一回，缘于界面展示效果较规整
 			for(let j=startIndex; j<endIndex; j++){
-				let state=parseFloat(param[j].state);
+				let state=parseInt(param[j].state);
 				let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
 				if(state==5){
 					var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
@@ -247,13 +257,7 @@ function setValueRangeForCChart(param){
 		var min=Math.min.apply(null, param);
 		max=(max>chart.yAxis[0].getExtremes().dataMax)?max:(chart.yAxis[0].getExtremes().dataMax);
 		min=(min<chart.yAxis[0].getExtremes().dataMin)?min:(chart.yAxis[0].getExtremes().dataMin);
-		if(min > -10){
-			if (max < 100){ chart.yAxis[0].setExtremes(min-10, max+10); }
-			else{ chart.yAxis[0].setExtremes(min-10, 100); }
-		}else{
-			if (max < 100){ chart.yAxis[0].setExtremes(0, max+10); }
-			else{ chart.yAxis[0].setExtremes(0, 100); }
-		}
+		chart.yAxis[0].setExtremes((min > -10)?(min-10):0, (max < 100)?(max+10):100);
 	}else{
 		currentOption.yAxis.max=100;
 		currentOption.yAxis.min=0;
