@@ -23,7 +23,7 @@ var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#
 //设置图表公用配置项【结束】
 //配置历史数据监测曲线图配置项
 var historyOption = {
-	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20},
+	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20, panning: true, panKey: 'ctrl'},
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
 	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
 	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, 
