@@ -24,4 +24,6 @@ public interface IDataAcquisitionService {
 
 	List<DataAcquisitionVo> record(QueryParametersVo data);
 
+	List<DataAcquisitionVo> allEquipRealtime(String userName, String roleId);
+
 }

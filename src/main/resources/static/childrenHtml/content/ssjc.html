@@ -31,28 +31,39 @@
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <style type="text/css">
-/* 
-#ssjc_title { margin: 10px; }
-#ssjc_title button, #userParam button, #addrParam button, #typeParam button{ height: 26px; text-align: center; line-height: 26px;
-	width: 17%; color: #fff; background: #399ad7; border: none; border-radius: 3px; overflow: hidden; }
-#ssjc_title input, #userParam input, #typeParam select { line-height: 24px; background: none; position: relative; z-index: 2; color: #fff;
-	border: 1px solid #fff; height: 24px; margin-top: 8px; width: 60%; }
-#showParams { margin: 0; padding: 0; }
-#showParams .btn_first { margin: 10px 0 10px 1%; height: 26px; text-align: center; line-height: 26px; width: 30%; color: #fff;
-	background: #399ad7; border: none; border-radius: 3px; overflow: hidden; }
-#addrParam select { width: 25%; background-color: #21242e; font-size: 12px; }
-*/
 #result_list_div { margin: 10px 0 0 0; padding: 0; }
 #equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
 #equipResultList li:hover, #equipResultList .checked{ width: 80%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
 #equipResultList li span { width: 100%; }
 #sub-list-pager { margin: 10px auto; }
+/*conent start*/
+.conent{width:90px;height:120px;position:absolute;top:20px;display:none}
+.conent .sition{width:90px;height:120px;position:relative;}
+.conent .sition .c_header{width: 140px;cursor:move;}
+.conent .sition .c_header .txt{color:red;font-weight:600;font-size:20px;line-height:30px;}
+.conent .sition .c_adver{width:90px;height:90px;background:url("vince/images/fudong/back.gif") no-repeat;cursor:pointer;}
+.conent .sition .sign{width:0px;height:10px;border:2px solid #000;display:block;position:absolute;top:27px;left:46px;}
+/*end conent*/
+/*data start*/
+.data{width:260px;height:130px;margin:255px auto;color:#036;}
+.data p{line-height:20px;}
+.data p .high{color:red;}
+.data p .dispaly{color:#00F;}
+/*end data*/
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
+			<div class="conent">
+				<div class="sition">
+					<div class="c_header">
+						<strong class="txt">浮动漂窗</strong>
+					</div>
+					<div class="c_adver"></div>
+				</div>
+			</div>
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>数据监测</h1>
@@ -69,17 +80,21 @@
 						<div class="box box-solid">
 							<div class="box-body">
 								<div class="input-group">
-									<input id="new-event" type="text" class="form-control" placeholder="请输入设备名称">
+									<input id="new-event" type="text" class="form-control"
+										placeholder="请输入设备名称">
 									<div class="input-group-btn">
-										<button type="submit" class="btn btn-primary" onclick="searchByEquiName();">查询</button>
-										<button type="submit" class="btn btn-primary" onclick="showParams();" id="yincang">分组</button>
+										<button type="submit" class="btn btn-primary"
+											onclick="searchByEquiName();">查询</button>
+										<button type="submit" class="btn btn-primary"
+											onclick="showParams();" id="yincang">分组</button>
 									</div>
 									<!-- /btn-group -->
 								</div>
 								<!-- /input-group -->
 								<div class="tree_menu">
 									<!-- 查询参数【开始】 -->
-									<div class="tree well tree_one" id="showParams" style="display: none;">
+									<div class="tree well tree_one" id="showParams"
+										style="display: none;">
 										<button class="btn btn-primary" onclick="showParamBox(1);">按用户查询</button>
 										<button class="btn btn-primary" onclick="showParamBox(2);">按地区查询</button>
 										<button class="btn btn-primary" onclick="showParamBox(3);">按类型查询</button>
@@ -89,7 +104,8 @@
 											<button class="btn btn-primary" onclick="getEquiByUser();">查询</button> -->
 
 											<div class="input-group">
-												<input id="interUser" type="text" class="form-control" placeholder="请输入用户名">
+												<input id="interUser" type="text" class="form-control"
+													placeholder="请输入用户名">
 												<div class="input-group-btn">
 													<button class="btn btn-primary" onclick="getEquiByUser();">查询</button>
 												</div>
@@ -97,9 +113,12 @@
 											</div>
 										</div>
 										<div id="addrParam" style="display: none;">
-											<select id="prov-select" onchange="getCities();" class="form-control"><option value="0">选择省</option></select>
-											<select id="city-select" onchange="getTowns();" class="form-control"><option value="0">选择市</option></select>
-											<select id="town-select" class="form-control"><option value="0">选择区</option></select>
+											<select id="prov-select" onchange="getCities();"
+												class="form-control"><option value="0">选择省</option></select>
+											<select id="city-select" onchange="getTowns();"
+												class="form-control"><option value="0">选择市</option></select>
+											<select id="town-select" class="form-control"><option
+													value="0">选择区</option></select>
 											<button class="btn btn-primary" onclick="getEquiByAddr();">查询</button>
 										</div>
 										<div class="input-group" id="typeParam" style="display: none;">
@@ -116,7 +135,9 @@
 									<!-- 查询参数【结束】 -->
 									<!-- 结果列表【开始】 -->
 									<div class="tree well tree_one" id="result_list_div">
-										<ul style="color: #151414;" class="box-body no-padding nav nav-pills nav-stacked" id="equipResultList">
+										<ul style="color: #151414;"
+											class="box-body no-padding nav nav-pills nav-stacked"
+											id="equipResultList">
 											<li><span><em>设备名称</em></span></li>
 										</ul>
 										<!-- 翻页插件 -->
@@ -134,8 +155,10 @@
 						<div class="box box-primary">
 							<div class="box-body no-padding">
 								<ul class="nav nav-tabs">
-									<li class=""><a data-toggle="tab" id="cc" href="#currenttab" onclick="changeTabContent(1);">当前监测数据</a></li>
-									<li class=""><a data-toggle="tab" id="hh" href="#historytab" onclick="changeTabContent(2);">历史监测数据</a></li>
+									<li class=""><a data-toggle="tab" id="cc"
+										href="#currenttab" onclick="changeTabContent(1);">当前监测数据</a></li>
+									<li class=""><a data-toggle="tab" id="hh"
+										href="#historytab" onclick="changeTabContent(2);">历史监测数据</a></li>
 								</ul>
 								<div class="tab-content">
 									<div id="currenttab"></div>
@@ -155,6 +178,7 @@
 	<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
 	<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
+	<script type="text/javascript" src="dist/js/float-window.js"></script>
 	<script src="dist/js/app.min.js"></script>
 	<script type="text/javascript">
 		var roleId = parent.getParam("roleId");
@@ -169,6 +193,7 @@
 				AjaxPostForEquiSubList(url,param);
 			}
 		}
+		allEquipRealtime();
 		$("#currenttab").load("childrenHtml/data/current.html");
 		$("#historytab").load("childrenHtml/data/history.html");
 		$("#historytab").css({"display" : "none"}); 

@@ -60,6 +60,26 @@ public class DataAcquisitionController {
 		log.info("接口访问时长为：" + midTime);
 	}
 
+	@RequestMapping("/allEquipRealtime")
+	public void allEquipRealtime(Model model, String userName,String roleId, HttpServletRequest request,
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+		long inTime = System.currentTimeMillis();
+		log.info("查询所有设备实时数据开始 " + inTime);
+		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.allEquipRealtime(userName,roleId);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000000");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "查询实时数据成功");
+		resultMap.put("data", realTimeDateList);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		long outTime = System.currentTimeMillis();
+		log.info("查询所有设备实时数据结束：" + outTime);
+		long midTime = outTime - inTime;
+		log.info("接口访问时长为：" + midTime);
+	}
+	
 	@RequestMapping("/historical")
 	public void getHistoricalData(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {

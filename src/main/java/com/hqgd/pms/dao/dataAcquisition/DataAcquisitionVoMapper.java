@@ -34,5 +34,7 @@ public interface DataAcquisitionVoMapper {
 	List<String> selectAllChannels(String equipmentId);
 
 	List<DataAcquisitionVo> selectChanDataByParam(Map<String, Object> param);
+
+	List<DataAcquisitionVo> selectAllEquipRealtime(String userName);
 	
 }

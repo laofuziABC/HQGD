@@ -315,4 +315,16 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		return historicalDataList;
 	}
 
+	@Override
+	public List<DataAcquisitionVo> allEquipRealtime(String userName, String roleId) {
+		List<DataAcquisitionVo> realTimeDateList = null;
+		if (roleId.equals("1")) {
+			userName="";
+			realTimeDateList = dataAcquisitionVoMapper.selectAllEquipRealtime(userName);
+		} else {
+			realTimeDateList = dataAcquisitionVoMapper.selectAllEquipRealtime(userName);
+		}
+		return realTimeDateList;
+	}
+
 }
