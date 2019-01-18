@@ -112,9 +112,11 @@ public class DataAcquisitionController {
 	public void getPeriodDate(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		long inTime = System.currentTimeMillis();
+		log.info("periodDate接口开始：" + inTime);
 		Map<String, Object> resultList = dataAcquisitionService.getPeriodDataByQuery(queryVo);
 		long outTime = System.currentTimeMillis();
-		log.info("接口访问时长为：" + (outTime-inTime));
+		log.info("periodDate接口结束：" + outTime);
+		log.info("接口访问时长：" + (outTime-inTime));
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultList));
 	}

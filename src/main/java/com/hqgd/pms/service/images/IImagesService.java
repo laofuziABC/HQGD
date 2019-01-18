@@ -3,21 +3,18 @@ package com.hqgd.pms.service.images;
 import java.util.List;
 import java.util.Map;
 
-import com.hqgd.pms.domain.ImagesInfo;
-import com.hqgd.pms.domain.User;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.hqgd.pms.domain.ImageInfo;
 
 public interface IImagesService {
 
-	Map<String, Object> add(ImagesInfo imagesInfo, User loginUser);
-
 	Map<String, Object> delete(String imagesId);
 
-	ImagesInfo select(String imagesId);
+	ImageInfo select(String imagesId);
 
-	List<ImagesInfo> selectAll();
+	List<ImageInfo> selectAll();
 
-	String execRecordExport(String path);
-
-	Map<String, Object> update(ImagesInfo imagesInfo, User loginUser);
+	Map<String, Object> add(MultipartFile[] file, String group);
 
 }

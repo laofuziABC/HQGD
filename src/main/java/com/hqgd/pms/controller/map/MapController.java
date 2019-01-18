@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.hqgd.pms.common.CommonUtil;
+import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.service.map.IMapService;
 
 
@@ -31,8 +32,9 @@ public class MapController {
 	@ResponseBody
 	@RequestMapping("/getPositions")
 	public void getJson(ServletRequest request, HttpServletRequest hrequest, HttpServletResponse response) throws IOException {
-		
-		List<String> list = mapService.getLonLats();
+		String roleId = request.getParameter("roleId");
+		String userName = request.getParameter("userName");
+		List<EquipmentInfo> list = mapService.getLonLats(roleId,userName);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");

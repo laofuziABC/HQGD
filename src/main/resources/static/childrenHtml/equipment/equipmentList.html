@@ -20,123 +20,44 @@
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-
 	<div class="fuceng" id="equipmentfuceng">
 		<div class="fuqu">
-			<div class="fuquzone" >
-
+			<div class="fuquzone">
 				<div class="fuqulogo"></div>
 				<p class="fuqutitle">
-					设备信息 <span class="fuclose" >×</span>
+					通道温度 <span class="fuclose">×</span>
 				</p>
-				<div class="equiform" id="equipForm">
-					<form action="#" id="outerForm">
-						<table id="equiInfoTable">
-							<tr class="normal" id="unique">
-								<td class="info_text">设备ID：</td>
-								<td><input type="text" class="right_input" id="equipmentId"
-									name="equipmentId" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text" style="width: 130px;">设备名称<span
-									style="color: red;">*</span>：
-								</td>
-								<td><input type="text" class="right_input"
-									placeholder="请输入设备名称" id="equipmentName" name="equipmentName" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text" style="width: 130px;">设备类型<span
-									style="color: red;">*</span>：
-								</td>
-								<td><select id=type name="type" class="right_input"
-									style="height: 24px; width: 174px;">
-										<option value="1" selected="selected">开关柜</option>
-										<option value="2">干式变压器</option>
-										<option value="3">变压器绕组</option>
-										<option value="4">环网柜</option>
-								</select></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">所属用户<span style="color: red;">*</span>：
-								</td>
-								<td><select class="right_input" id="userName"
-									name="userName" style="height: 24px; width: 174px;">
-								</select></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">安装地址<span style="color: red;">*</span>：
-								</td>
-								<td><select id="padcode" name="padcode"
-									onchange="getCities();" style="height: 24px; width: 80px;"><option
-											value="0">选择省</option></select> <select id="cadcode" name="cadcode"
-									onchange="getTowns();" style="height: 24px;"><option
-											value="0">选择市</option></select> <select id="adcode" name="adcode"
-									style="height: 24px;"><option value="0">选择区</option></select> <input
-									type="text" class="right_input" id="address" name="address" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">坐标：</td>
-								<td><input type="text" class="right_input" id="lngLat"
-									name="lngLat" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">帧结构<span style="color: red;">*</span>：
-								</td>
-								<td><input type="text" class="right_input" id="frameStru"
-									name="frameStru" /></td>
-								<td class="info_text"></td>
-							</tr>
-							<tr class="normal">
-								<td class="info_text">通道温度<span style="color: red;">*</span>：
-								</td>
-							</tr>
-						</table>
-					</form>
-				</div>
-				<div class="container" style="padding: 0px 0px 0px 40px;">
-					<div class="row">
-						<div class="col-md-12" style="width: 40%;max-height: 300px;overflow-y: auto;max">
-							<div class="table-responsive">
-								<table class="table table-bordered table-striped"
-									id="channelTem">
-									<thead>
-										<tr>
-											<td style="background: #399ad7; color: #f6f6f6;">通道号</td>
-											<td style="background: #399ad7; color: #f6f6f6;">温度上限</td>
-											<td style="background: #399ad7; color: #f6f6f6;">温度下限</td>
-										</tr>
-										<!-- <th name="buttons" style="background: #00c0ef;"></th> -->
-									</thead>
-									<tbody id="channelTemList">
-
-									</tbody>
-								</table>
+				<div class="fuqubiao">
+					<div class="container" style="padding: 0px 0px 0px 40px;">
+						<div class="row">
+							<div class="col-md-12"
+								style="width: 40%; max-height: 300px; overflow-y: auto;">
+								<div class="table-responsive">
+									<table class="table table-bordered table-striped"
+										id="channelTem">
+										<thead>
+											<tr>
+												<td style="background: #399ad7; color: #f6f6f6;">通道号</td>
+												<td style="background: #399ad7; color: #f6f6f6;">温度上限</td>
+												<td style="background: #399ad7; color: #f6f6f6;">温度下限</td>
+											</tr>
+										</thead>
+										<tbody id="channelTemList">
+										</tbody>
+									</table>
+								</div>
 							</div>
-						</div>
-						<div class="col-md-12">
-							<button class="btn btn-info" id="add"
-								style="background: #399ad7;">
-								<i class="fa fa-plus"></i> 添加通道
-							</button>
 						</div>
 					</div>
 				</div>
-				<div class="fuqusave" id="saves">
-					<input type="button" onclick="submitEquiInfo();" value="保存">
-				</div>
+
 			</div>
 		</div>
 	</div>
 
 	<div class="wrapper">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
+		<div class="content-wrapper" id="equip-content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>设备信息</h1>
@@ -165,7 +86,7 @@
 									<div class="clear"></div>
 								</div>
 							</div>
-							<div class="box-body">
+							<div class="box-body" style="overflow-x: scroll;">
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
@@ -187,11 +108,11 @@
 									</thead>
 									<tbody>
 									<tbody id="equipmentList"></tbody>
-									<tbody id="equipmentreport" style = "display :none"></tbody>
+									<tbody id="equipmentreport" style="display: none"></tbody>
 									<tr>
-										<td colspan="12" class="text_al_rig lindianjia"><input
+										<td colspan="13" class="text_al_rig "><input
 											type="submit" onclick="addEquip();" value="添加设备"
-											class="anniu lindianjia"></td>
+											class="anniu "></td>
 									</tr>
 									<tr></tr>
 									</tbody>
@@ -212,20 +133,8 @@
 	<!-- ./wrapper -->
 
 	<script src="vince/js/demo.js"></script>
-	<script type="text/javascript" src="dist/js/AllCities.js"></script>
-	<script type="text/javascript" src="vince/js/bootstable.js"></script>
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<!-- page script -->
-	<script>
-		$("#equipmentfuceng").css({
-			"display" : "none"
-		});
-	</script>
-	<script type="text/javascript">
-		$('#channelTem').SetEditable({
-			$addButton : $('#add')
-		});
-	</script>
 	<script>
 		jQuery(document).ready(function() {
 			var roleId = parent.getParam("roleId");
@@ -238,136 +147,87 @@
 
 		});
 		var globalData;
-		var globalUserList = [];
-		var add = true;
-		function close2() {
-			$("#equipmentfuceng").css({
-				"display" : "none"
-			});
-		}
+		var add;
+		var parami;
 		//获取所有设备信息列表
 		function getEquipmentList() {
-			$
-					.ajax({
-						url : "equipment/selectAll",
-						type : "post",
-						dataType : "json",
-						success : function(result) {
-							globalData = result.data;
-							var data = result.data;
-							var equipList = "";
-							//设置分页信息——当前为假分页
-							var totalSize = data.length;
-							var pageSize = 15;
-							var totalNum = Math.ceil(totalSize / pageSize);
-							var startIndex = (pageNum - 1) * pageSize;
-							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
-									: pageNum * pageSize;
-							for (let i = startIndex; i < endIndex; i++) {
-								equipList += "<tr>";
-								equipList += "<td>" + (i + 1) + "</td>";
-								equipList += "<td>" + data[i].equipmentId
-										+ "</td>";
-								equipList += "<td>" + data[i].equipmentName
-										+ "</td>";
-								equipList += "<td>" + data[i].type + "</td>";
-								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
-										+ i + "')\">详情</a></td>";
-								equipList += "<td>" + data[i].address + "</td>";
-								equipList += "<td>" + data[i].adcode + "</td>";
-								equipList += "<td>" + data[i].lngLat + "</td>";
-								equipList += "<td>" + data[i].frameStru
-										+ "</td>";
-								equipList += "<td>" + data[i].userName
-										+ "</td>";
-								equipList += "<td>" + data[i].updateTime
-										+ "</td>";
-								equipList += "<td>" + data[i].updater + "</td>";
-								equipList += "<td class=\"center\">";
-								equipList += "<a class=\" edit\" onclick=\"getEquiEdit('"
-										+ i + "');\">编辑</a>&nbsp;";
-								equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-										+ data[i].equipmentId
-										+ "');\">删除</a>&nbsp;";
-								equipList += "</td>";
-								equipList += "</tr>";
-							}
-							$("#equipmentList").html(equipList);
-							//加载页码
-							$("#equi-show-pager").html(
-									loadPages(pageSize, totalSize, pageNum));
-							$("#equi-show-pager").setActivePage(3);
-						}
-					});
-		}
-
-		function getEquipmentListByUser(userName) {
-			$
-					.ajax({
-						url : "equipment/selectAllByUser",
-						type : "post",
-						data : {
-							"userName" : userName
-						},
-						dataType : "json",
-						success : function(result) {
-							globalData = result.data;
-							var data = result.data;
-							var equipList = "";
-							//设置分页信息——当前为假分页
-							var totalSize = data.length;
-							var pageSize = 15;
-							var totalNum = Math.ceil(totalSize / pageSize);
-							var startIndex = (pageNum - 1) * pageSize;
-							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
-									: pageNum * pageSize;
-							for (let i = startIndex; i < endIndex; i++) {
-								equipList += "<tr>";
-								equipList += "<td>" + (i + 1) + "</td>";
-								equipList += "<td>" + data[i].equipmentId
-										+ "</td>";
-								equipList += "<td>" + data[i].equipmentName
-										+ "</td>";
-								equipList += "<td>" + data[i].type + "</td>";
-								equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
-										+ i + "')\">详情</a></td>";
-								equipList += "<td>" + data[i].address + "</td>";
-								equipList += "<td>" + data[i].adcode + "</td>";
-								equipList += "<td>" + data[i].lngLat + "</td>";
-								equipList += "<td>" + data[i].frameStru
-										+ "</td>";
-								equipList += "<td>" + data[i].userName
-										+ "</td>";
-								equipList += "<td>" + data[i].updateTime
-										+ "</td>";
-								equipList += "<td>" + data[i].updater + "</td>";
-								equipList += "<td class=\"center\">";
-								equipList += "<a class=\" edit\" onclick=\"getEquiEdit('"
-										+ i + "');\">编辑</a>&nbsp;";
-								equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-										+ data[i].equipmentId
-										+ "');\">删除</a>&nbsp;";
-								equipList += "</td>";
-								equipList += "</tr>";
-							}
-							$("#equipmentList").html(equipList);
-							//加载页码
-							$("#equi-show-pager").html(
-									loadPages(pageSize, totalSize, pageNum));
-							$("#equi-show-pager").setActivePage(3);
-						}
-					});
-		}
-
-		function getUserList() {
 			$.ajax({
-				url : "user/selectAll",
+				url : "equipment/selectAll",
 				type : "post",
 				dataType : "json",
-				async : false,
 				success : function(result) {
-					globalUserList = result;
-
+					globalData = result.data;
+					var data = result.data;
+					var equipList = "";
+					//设置分页信息——当前为假分页
+					var totalSize = data.length;
+					var pageSize = 15;
+					var totalNum = Math.ceil(totalSize / pageSize);
+					var startIndex = (pageNum - 1) * pageSize;
+					var endIndex = (pageNum * pageSize > totalSize) ? totalSize
+							: pageNum * pageSize;
+					equipList = getequipList(startIndex, endIndex, data,
+							equipList);
+					$("#equipmentList").html(equipList);
+					//加载页码
+					$("#equi-show-pager").html(
+							loadPages(pageSize, totalSize, pageNum));
+					$("#equi-show-pager").setActivePage(3);
+				}
+			});
+		}
+		function getequipList(startIndex, endIndex, data, equipList) {
+			for (let i = startIndex; i < endIndex; i++) {
+				equipList += "<tr>";
+				equipList += "<td>" + (i + 1) + "</td>";
+				equipList += "<td>" + data[i].equipmentId + "</td>";
+				equipList += "<td>" + data[i].equipmentName + "</td>";
+				equipList += "<td>" + data[i].type + "</td>";
+				equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
+						+ i + "')\">详情</a></td>";
+				equipList += "<td>" + data[i].address + "</td>";
+				equipList += "<td>" + data[i].adcode + "</td>";
+				equipList += "<td>" + data[i].lngLat + "</td>";
+				equipList += "<td>" + data[i].frameStru + "</td>";
+				equipList += "<td>" + data[i].userName + "</td>";
+				equipList += "<td>" + data[i].updateTime + "</td>";
+				equipList += "<td>" + data[i].updater + "</td>";
+				equipList += "<td class=\"center\">";
+				equipList += "<a class=\" edit\" onclick=\"getEquiEdit('" + i
+						+ "');\">编辑</a>&nbsp;";
+				equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
+						+ data[i].equipmentId + "');\">删除</a>&nbsp;";
+				equipList += "</td>";
+				equipList += "</tr>";
+			}
+			return equipList;
+		};
+		function getEquipmentListByUser(userName) {
+			$.ajax({
+				url : "equipment/selectAllByUser",
+				type : "post",
+				data : {
+					"userName" : userName
+				},
+				dataType : "json",
+				success : function(result) {
+					globalData = result.data;
+					var data = result.data;
+					var equipList = "";
+					//设置分页信息——当前为假分页
+					var totalSize = data.length;
+					var pageSize = 15;
+					var totalNum = Math.ceil(totalSize / pageSize);
+					var startIndex = (pageNum - 1) * pageSize;
+					var endIndex = (pageNum * pageSize > totalSize) ? totalSize
+							: pageNum * pageSize;
+					equipList = getequipList(startIndex, endIndex, data,
+							equipList);
+					$("#equipmentList").html(equipList);
+					//加载页码
+					$("#equi-show-pager").html(
+							loadPages(pageSize, totalSize, pageNum));
+					$("#equi-show-pager").setActivePage(3);
 				}
 			});
 		}
@@ -377,10 +237,6 @@
 			$("#equipmentfuceng").css({
 				"display" : "block"
 			});
-			$("#equipForm").hide();
-			$("#add").hide();
-			$("#saves").hide();
-			var bu = "<td name=\"buttons\"><div class=\"btn-group pull-right\"><button id=\"bEdit\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowEdit(this);\"><span class=\"glyphicon glyphicon-pencil\"> </span></button><button id=\"bElim\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowElim(this);\"><span class=\"glyphicon glyphicon-trash\"> </span></button><button id=\"bAcep\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowAcep(this);\"><span class=\"glyphicon glyphicon-ok\"> </span></button><button id=\"bCanc\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowCancel(this);\"><span class=\"glyphicon glyphicon-remove\"> </span></button></div></td>"
 			if (globalData[param].channelTem != undefined) {
 				var v = JSON.parse(globalData[param].channelTem);
 				var channelTemList = "";
@@ -389,7 +245,6 @@
 					channelTemList += "<td>" + v[i][0] + "</td>";
 					channelTemList += "<td>" + v[i][1] + "</td>";
 					channelTemList += "<td>" + v[i][2] + "</td>";
-					channelTemList += bu;
 					channelTemList += "</tr>"
 				}
 				$("#channelTemList").html(channelTemList);
@@ -399,101 +254,20 @@
 				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
-				channelTemList += bu;
 				channelTemList += "</tr>"
 				$("#channelTemList").html(channelTemList);
 			}
 		}
-
-		//新增
 		function addEquip() {
-			$("#equipmentfuceng").css({
-				"display" : "block"
-			});
 			add = true;
-			$("#equipForm").show();
-			$("#add").show();
-			$("#saves").show();
-			var bu = "<td name=\"buttons\"><div class=\"btn-group pull-right\"><button id=\"bEdit\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowEdit(this);\"><span class=\"glyphicon glyphicon-pencil\"> </span></button><button id=\"bElim\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowElim(this);\"><span class=\"glyphicon glyphicon-trash\"> </span></button><button id=\"bAcep\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowAcep(this);\"><span class=\"glyphicon glyphicon-ok\"> </span></button><button id=\"bCanc\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowCancel(this);\"><span class=\"glyphicon glyphicon-remove\"> </span></button></div></td>"
-			var channelTemList = "";
-			channelTemList += "<tr>";
-			channelTemList += "<td>CH1</td>";
-			channelTemList += "<td>80</td>";
-			channelTemList += "<td>20</td>";
-			channelTemList += bu;
-			channelTemList += "</tr>";
-			$("#channelTemList").html(channelTemList);
-			if (globalUserList == "") {
-				getUserList();
-			}
-			var userHtml = "<option value=\"\" checked>—请选择用户—</option>";
-			for (let i = 0; i < globalUserList.length; i++) {
-				userHtml += "<option value='"+globalUserList[i].id+"'>"
-						+ globalUserList[i].userName + "</option>";
-			}
-			$("#userName").html(userHtml);
-			getProvs();
-			getCities();
-			getTowns();
+			$("#equip-content-wrapper").load(
+					"childrenHtml/equipment/equipmentForm.html");
 		}
-		//编辑
 		function getEquiEdit(param) {
-			$("#equipmentfuceng").css({
-				"display" : "block"
-			});
 			add = false;
-			$("#equipForm").show();
-			$("#add").show();
-			$("#saves").show();
-			var bu = "<td name=\"buttons\"><div class=\"btn-group pull-right\"><button id=\"bEdit\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowEdit(this);\"><span class=\"glyphicon glyphicon-pencil\"> </span></button><button id=\"bElim\" type=\"button\" class=\"btn btn-sm btn-default\" onclick=\"rowElim(this);\"><span class=\"glyphicon glyphicon-trash\"> </span></button><button id=\"bAcep\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowAcep(this);\"><span class=\"glyphicon glyphicon-ok\"> </span></button><button id=\"bCanc\" type=\"button\" class=\"btn btn-sm btn-default\" style=\"display:none;\" onclick=\"rowCancel(this);\"><span class=\"glyphicon glyphicon-remove\"> </span></button></div></td>"
-			if (globalData[param].channelTem != undefined) {
-				var v = JSON.parse(globalData[param].channelTem);
-				var channelTemList = "";
-				for (let i = 0; i < v.length; i++) {
-					channelTemList += "<tr>";
-					channelTemList += "<td>" + v[i][0] + "</td>";
-					channelTemList += "<td>" + v[i][1] + "</td>";
-					channelTemList += "<td>" + v[i][2] + "</td>";
-					channelTemList += bu;
-					channelTemList += "</tr>"
-				}
-				$("#channelTemList").html(channelTemList);
-			} else {
-				var channelTemList = "";
-				channelTemList += "<tr>";
-				channelTemList += "<td></td>";
-				channelTemList += "<td></td>";
-				channelTemList += "<td></td>";
-				channelTemList += bu;
-				channelTemList += "</tr>"
-				$("#channelTemList").html(channelTemList);
-			}
-			if (globalUserList == "") {
-				getUserList();
-			}
-			var userHtml = "<option value='"+globalData[param].userId+"' checked>"
-					+ globalData[param].userName + "</option>";
-			for (let i = 0; i < globalUserList.length; i++) {
-				userHtml += "<option  value='"+globalUserList[i].id+"'>"
-						+ globalUserList[i].userName + "</option>";
-			}
-			var typeHtml = "<option value=\"\" checked>"
-					+ globalData[param].type + "</option>";
-			typeHtml += "<option value=\"1\">开关柜</option><option value=\"2\">干式变压器</option><option value=\"3\">变压器绕组</option><option value=\"4\">环网柜</option>"
-			$("#type").html(typeHtml);
-			$("#userName").html(userHtml);
-			$("#equipmentId").val(globalData[param].equipmentId);
-			$("#equipmentName").val(globalData[param].equipmentName);
-			$("#address").val(globalData[param].address);
-			$("#adcode").val(globalData[param].adcode);
-			$("#lngLat").val(globalData[param].lngLat);
-			$("#frameStru").val(globalData[param].frameStru);
-			getProvs();
-			$("#padcode").val((globalData[param].padcode) * 10000);
-			getCities();
-			$("#cadcode").val((globalData[param].cadcode) * 100);
-			getTowns();
-			$("#adcode").val(globalData[param].adcode);
+			parami=param;
+			$("#equip-content-wrapper").load(
+					"childrenHtml/equipment/equipmentForm.html");
 		}
 
 		//删除一条设备信息
@@ -515,133 +289,27 @@
 				});
 			}
 		}
-		//提交设备信息表单
-		function submitEquiInfo() {
-			var mytable = document.getElementById("channelTem");
-			var channelInfos = [];
-			for (var i = 1, rows = mytable.rows.length; i < rows; i++) {
-				for (var j = 0, cells = mytable.rows[i].cells.length; j < cells - 1; j++) {
-					if (!channelInfos[i]) {
-						channelInfos[i] = new Array();
-					}
-					channelInfos[i][j] = mytable.rows[i].cells[j].innerHTML;
-				}
-			}
-			channelInfos.splice(0, 1);
-			var res = JSON.stringify(channelInfos);
-			var params = {
-				"equipmentId" : $("#equipmentId").val(),
-				"equipmentName" : $("#equipmentName").val(),
-				"type" : $("#type option:selected").text(),
-				"userId" : $("#userName").val(),
-				"userName" : $("#userName option:selected").text(),
-				"padcode" : $("#padcode").val() / 10000,
-				"cadcode" : $("#cadcode").val() / 100,
-				"adcode" : $("#adcode").val(),
-				"address" : $("#address").val(),
-				"city" : $("#cadcode option:selected").text(),
-				"lngLat" : $("#lngLat").val(),
-				"frameStru" : $("#frameStru").val(),
-				"channelTem" : res
-			};
-			if ($("#equipmentId").val() != ""
-					|| $("#equipmentId").val() != null) {
-				params.equipmentId = $("#equipmentId").val();
-			}
 
-			if (add) {
-				$.ajax({
-					url : "equipment/add",
-					type : "post",
-					data : params,
-					dataType : "json",
-					success : function(result) {
-						if (result.success) {
-							alert("操作成功！");
-							$(".fuceng").css({
-								"display" : "none"
-							})
-						} else {
-							alert(result.message);
-						}
-						getEquipmentList();
-					}
-				});
-			} else {
-				$.ajax({
-					url : "equipment/update",
-					type : "post",
-					data : params,
-					dataType : "json",
-					success : function(result) {
-						if (result.success) {
-							alert("操作成功！");
-							$(".fuceng").css({
-								"display" : "none"
-							})
-						} else {
-							alert(result.message);
-						}
-						getEquipmentList();
-					}
-				});
-			}
-
-		}
 		//通过设备名称查询设备
 		function searchResult() {
 			var name = $("#searchByName").val().trim();
 			if (name != "") {
-				$
-						.ajax({
-							url : "equipment/selectByEquipmentName",
-							type : "post",
-							data : {
-								"equipmentName" : name
-							},
-							dataType : "json",
-							success : function(result) {
-								globalData = result.data;
-								var data = result.data;
-								var equipList = "";
-								for (let i = 0; i < data.length; i++) {
-									equipList += "<tr>";
-									equipList += "<td>" + (i + 1) + "</td>";
-									equipList += "<td>" + data[i].equipmentId
-											+ "</td>";
-									equipList += "<td>" + data[i].equipmentName
-											+ "</td>";
-									equipList += "<td>" + data[i].type
-											+ "</td>";
-									equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
-											+ i + "')\">详情</a></td>";
-									equipList += "<td>" + data[i].address
-											+ "</td>";
-									equipList += "<td>" + data[i].adcode
-											+ "</td>";
-									equipList += "<td>" + data[i].lngLat
-											+ "</td>";
-									equipList += "<td>" + data[i].frameStru
-											+ "</td>";
-									equipList += "<td>" + data[i].userName
-											+ "</td>";
-									equipList += "<td>" + data[i].updateTime
-											+ "</td>";
-									equipList += "<td>" + data[i].updater
-											+ "</td>";
-									equipList += "<td class=\"center\">";
-									equipList += "<a class=\" edit\" onclick=\"getEquiEdit('"
-											+ i + "');\">编辑</a>&nbsp;";
-									equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-											+ data[i].equipmentId
-											+ "');\">删除</a>&nbsp;";
-									equipList += "</td>";
-									equipList += "</tr>";
-									globalUserList.push(data[i].userName);
-								}
-								$("#equipmentList").html(equipList);
-							}
-						});
+				$.ajax({
+					url : "equipment/selectByEquipmentName",
+					type : "post",
+					data : {
+						"equipmentName" : name
+					},
+					dataType : "json",
+					success : function(result) {
+						globalData = result.data;
+						var data = result.data;
+						var equipList = "";
+						equipList = getequipList(0, data.length, data,
+								equipList);
+						$("#equipmentList").html(equipList);
+					}
+				});
 			} else {
 				getEquipmentList();
 			}
@@ -676,283 +344,8 @@
 				exclude_inputs : true
 			});
 		}
-
-		/*
-		Bootstable
-		 @description  Javascript library to make HMTL tables editable, using Bootstrap
-		 @version 1.1
-		 @autor Tito Hinostroza
-		 */
-		"use strict";
-		//Global variables
-		var params = null; //Parameters
-		var colsEdi = null;
-		var newColHtml = '<div class="btn-group pull-right">'
-				+ '<button id="bEdit" type="button" class="btn btn-sm btn-default" onclick="rowEdit(this);">'
-				+ '<span class="glyphicon glyphicon-pencil" > </span>'
-				+ '</button>'
-				+ '<button id="bElim" type="button" class="btn btn-sm btn-default" onclick="rowElim(this);">'
-				+ '<span class="glyphicon glyphicon-trash" > </span>'
-				+ '</button>'
-				+ '<button id="bAcep" type="button" class="btn btn-sm btn-default" style="display:none;" onclick="rowAcep(this);">'
-				+ '<span class="glyphicon glyphicon-ok" > </span>'
-				+ '</button>'
-				+ '<button id="bCanc" type="button" class="btn btn-sm btn-default" style="display:none;" onclick="rowCancel(this);">'
-				+ '<span class="glyphicon glyphicon-remove" > </span>'
-				+ '</button>' + '</div>';
-		var colEdicHtml = '<td name="buttons">' + newColHtml + '</td>';
-
-		$.fn.SetEditable = function(options) {
-			var defaults = {
-				columnsEd : null, //Index to editable columns. If null all td editables. Ex.: "1,2,3,4,5"
-				$addButton : null, //Jquery object of "Add" button
-				onEdit : function() {
-				}, //Called after edition
-				onBeforeDelete : function() {
-				}, //Called before deletion
-				onDelete : function() {
-				}, //Called after deletion
-				onAdd : function() {
-				} //Called when added a new row
-			};
-			params = $.extend(defaults, options);
-			this
-					.find('thead tr')
-					.append(
-							'<th name="buttons" value="操作" style="background: #399ad7;color: #f6f6f6;">操作</th>'); //encabezado vacío
-			this.find('tbody tr').append(colEdicHtml);
-			var $tabedi = this; //Read reference to the current table, to resolve "this" here.
-			//Process "addButton" parameter
-			if (params.$addButton != null) {
-				//Se proporcionó parámetro
-				params.$addButton.click(function() {
-					rowAddNew($tabedi.attr("id"));
-				});
-			}
-			//Process "columnsEd" parameter
-			if (params.columnsEd != null) {
-				//Extract felds
-				colsEdi = params.columnsEd.split(',');
-			}
-		};
-		function IterarCamposEdit($cols, tarea) {
-			//Itera por los campos editables de una fila
-			var n = 0;
-			$cols.each(function() {
-				n++;
-				if ($(this).attr('name') == 'buttons')
-					return; //excluye columna de botones
-				if (!EsEditable(n - 1))
-					return; //noe s campo editable
-				tarea($(this));
-			});
-
-			function EsEditable(idx) {
-				//Indica si la columna pasada está configurada para ser editable
-				if (colsEdi == null) { //no se definió
-					return true; //todas son editable
-				} else { //hay filtro de campos
-					//alert('verificando: ' + idx);
-					for (var i = 0; i < colsEdi.length; i++) {
-						if (idx == colsEdi[i])
-							return true;
-					}
-					return false; //no se encontró
-				}
-			}
-		}
-		function FijModoNormal(but) {
-			$(but).parent().find('#bAcep').hide();
-			$(but).parent().find('#bCanc').hide();
-			$(but).parent().find('#bEdit').show();
-			$(but).parent().find('#bElim').show();
-			var $row = $(but).parents('tr'); //accede a la fila
-			$row.attr('id', ''); //quita marca
-		}
-		function FijModoEdit(but) {
-			$(but).parent().find('#bAcep').show();
-			$(but).parent().find('#bCanc').show();
-			$(but).parent().find('#bEdit').hide();
-			$(but).parent().find('#bElim').hide();
-			var $row = $(but).parents('tr'); //accede a la fila
-			$row.attr('id', 'editing'); //indica que está en edición
-		}
-		function ModoEdicion($row) {
-			if ($row.attr('id') == 'editing') {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		function rowAcep(but) {
-			//Acepta los cambios de la edición
-			var $row = $(but).parents('tr'); //accede a la fila
-			var $cols = $row.find('td'); //lee campos
-			if (!ModoEdicion($row))
-				return; //Ya está en edición
-			//Está en edición. Hay que finalizar la edición
-			IterarCamposEdit($cols, function($td) { //itera por la columnas
-				var cont = $td.find('input').val(); //lee contenido del input
-				$td.html(cont); //fija contenido y elimina controles
-			});
-			FijModoNormal(but);
-			/* params.onEdit($row); */
-		}
-		function rowCancel(but) {
-			//Rechaza los cambios de la edición
-			var $row = $(but).parents('tr'); //accede a la fila
-			var $cols = $row.find('td'); //lee campos
-			if (!ModoEdicion($row))
-				return; //Ya está en edición
-			//Está en edición. Hay que finalizar la edición
-			IterarCamposEdit($cols, function($td) { //itera por la columnas
-				var cont = $td.find('div').html(); //lee contenido del div
-				$td.html(cont); //fija contenido y elimina controles
-			});
-			FijModoNormal(but);
-		}
-		function rowEdit(but) { //Inicia la edición de una fila
-			var $row = $(but).parents('tr'); //accede a la fila
-			var $cols = $row.find('td'); //lee campos
-			if (ModoEdicion($row))
-				return; //Ya está en edición
-			//Pone en modo de edición
-			IterarCamposEdit(
-					$cols,
-					function($td) { //itera por la columnas
-						var cont = $td.html(); //lee contenido
-						var div = '<div style="display: none;">' + cont
-								+ '</div>'; //guarda contenido
-						var input = '<input class="form-control input-sm"  value="' + cont + '">';
-						$td.html(div + input); //fija contenido
-					});
-			FijModoEdit(but);
-		}
-		function rowElim(but) { //Elimina la fila actual
-			var $row = $(but).parents('tr'); //accede a la fila
-			/*  params.onBeforeDelete($row); */
-			$row.remove();
-			/*  params.onDelete(); */
-
-		}
-		function rowAddNew(tabId) { //Agrega fila a la tabla indicada.
-			var $tab_en_edic = $("#" + tabId); //Table to edit
-			var $filas = $tab_en_edic.find('tbody tr');
-			if ($filas.length == 0) {
-				//No hay filas de datos. Hay que crearlas completas
-				var $row = $tab_en_edic.find('thead tr'); //encabezado
-				var $cols = $row.find('th'); //lee campos
-				//construye html
-				var htmlDat = '';
-				$cols.each(function() {
-					if ($(this).attr('name') == 'buttons') {
-						//Es columna de botones
-						htmlDat = htmlDat + colEdicHtml; //agrega botones
-					} else {
-						htmlDat = htmlDat + '<td></td>';
-					}
-				});
-				$tab_en_edic.find('tbody').append('<tr>' + htmlDat + '</tr>');
-			} else {
-				//Hay otras filas, podemos clonar la última fila, para copiar los botones
-				var $ultFila = $tab_en_edic.find('tr:last');
-				$ultFila.clone().appendTo($ultFila.parent());
-				$ultFila = $tab_en_edic.find('tr:last');
-				var $cols = $ultFila.find('td'); //lee campos
-				$cols.each(function() {
-					if ($(this).attr('name') == 'buttons') {
-						//Es columna de botones
-					} else {
-						$(this).html(''); //limpia contenido
-					}
-				});
-			}
-			params.onAdd();
-		}
-		function TableToCSV(tabId, separator) { //Convierte tabla a CSV
-			var datFil = '';
-			var tmp = '';
-			var $tab_en_edic = $("#" + tabId); //Table source
-			$tab_en_edic.find('tbody tr').each(
-					function() {
-						//Termina la edición si es que existe
-						if (ModoEdicion($(this))) {
-							$(this).find('#bAcep').click(); //acepta edición
-						}
-						var $cols = $(this).find('td'); //lee campos
-						datFil = '';
-						$cols.each(function() {
-							if ($(this).attr('name') == 'buttons') {
-								//Es columna de botones
-							} else {
-								datFil = datFil + $(this).html() + separator;
-							}
-						});
-						if (datFil != '') {
-							datFil = datFil.substr(0, datFil.length
-									- separator.length);
-						}
-						tmp = tmp + datFil + '\n';
-					});
-			return tmp;
-		}
 	</script>
-
-	<script type="text/javascript">
-		/* 全局变量【开始】 */
-		var provValueList = [];
-		var cityValueList = [];
-		/* 全局变量【结束】 */
-		//地区级联
-		function getProvs() {
-			var sh = "";
-			sh += "<option value=\"0\">选择省</option>";
-			provValueList = new Array();
-			for (let i = 0; i < allCities.length; i++) {
-				sh += "<option value='"+allCities[i].value+"'>"
-						+ allCities[i].label + "</option>";
-				provValueList.push(allCities[i].value);
-			}
-			$("#padcode").html(sh);
-		}
-		function getCities() {
-			var p = $("#padcode option:selected").val();
-			var s = "<option value=\"0\">选择市</option>";
-			if (p > 0) {
-				var i = $.inArray(p, provValueList);
-				var c = allCities[i].children;
-				cityValueList = new Array();
-				for (let j = 0; j < c.length; j++) {
-					s += "<option value='"+c[j].value+"'>" + c[j].label
-							+ "</option>";
-					cityValueList.push(c[j].value);
-				}
-			}
-			$("#cadcode").html(s);
-		}
-		function getTowns() {
-			var p = $("#padcode option:selected").val();
-			var c = $("#cadcode option:selected").val();
-			var t = "<option value=\"0\">选择区</option>";
-			if (p * c > 0) {
-				var m = $.inArray(p, provValueList);
-				var n = $.inArray(c, cityValueList);
-				var t1 = allCities[m].children;
-				var t2 = t1[n].children;
-				for (let j = 0; j < t2.length; j++) {
-					t += "<option value='"+t2[j].value+"'>" + t2[j].label
-							+ "</option>";
-				}
-			}
-			$("#adcode").html(t);
-		}
-	</script>
-
-
-	<!-- 框架的js -->
 	<script src="dist/js/app.min.js"></script>
-	<div id="sss" style="display: none; height: 200px; width: 200px;"></div>
-
 </body>
 </html>
 

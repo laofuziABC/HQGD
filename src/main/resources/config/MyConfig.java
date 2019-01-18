@@ -15,6 +15,8 @@ public class MyConfig extends WebMvcConfigurerAdapter {
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/static/**").addResourceLocations("file:/D:/temp/upload/");
+        super.addResourceHandlers(registry);
     }
 	
 }

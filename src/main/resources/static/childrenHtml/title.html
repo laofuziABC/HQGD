@@ -95,6 +95,14 @@
 		function updatePassword() {
 			parent.updatePass();
 		}
+		//展示/隐藏页面微信二维码
+		$(".sidebar-toggle").click(function (){
+			if($("body").hasClass("sidebar-collapse")){
+				$("#sidebar-footer").css({"display":"block"});
+			}else{
+				$("#sidebar-footer").css({"display":"none"});
+			}
+		});
 	</script>
 </body>
 </html>

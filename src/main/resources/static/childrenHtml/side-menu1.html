@@ -11,11 +11,13 @@
 		<!-- 加载用户菜单【开始】 -->
 		<ul class="sidebar-menu">
 			<li class="header"></li>
-			<li class="active"><a href="#" onclick="javascript: window.history.go(0);" style="margin-top: 10px;"><i
-					class="fa fa-home" style="font-size: 22px"></i> <span>首页</span></a></li>
+			<li class="active"><a href="#"
+				onclick="javascript: window.history.go(0);"
+				style="margin-top: 10px;"><i class="fa fa-home"
+					style="font-size: 22px"></i> <span>首页</span></a></li>
 			<li><a href="#"
 				onclick="loadMainContent('childrenHtml/content/ssjc.html');"><i
-					class="fa fa-eye"></i> <span>实时监测</span></a></li>
+					class="fa fa-eye"></i> <span>数据监测</span></a></li>
 			<!-- <li><a href="#" onclick="loadMainContent('childrenHtml/operationalMonitoring/yxjc.html');"> <i
 					class="fa fa-print"></i> <span>运行监测</span>
 			</a></li> -->
@@ -24,15 +26,9 @@
 				onclick="loadMainContent('childrenHtml/equipment/equipmentList.html');">
 					<i class="fa fa-gears"></i> <span>设备管理</span>
 			</a></li>
-
-			<!-- 二维码【开始】 -->
-			<div>
-				<img src="vince/images/QRcode.jpg"
-					style="width: 200px; height: 200px; padding: 20px; margin-top: 350px;"
-					alt="Logo">
-			</div>
-			<span class="qrcode" style="font-size: 14px; padding-left: 20px;">扫描二维码了解更多详情</span>
-			<!-- 二维码【结束】 -->
+			<li><img id="sidebar-footer" src="vince/images/QRcode.jpg"
+				style="position: fixed; bottom: 0; width: 200px; height: 200px; padding: 20px;"
+				alt="Logo"></li>
 		</ul>
 		<!-- 加载用户菜单【结束】 -->
 	</section>
