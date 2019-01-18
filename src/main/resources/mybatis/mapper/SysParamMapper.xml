@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqgd.pms.dao.system.SysParamMapper">
+  <resultMap id="BaseResultMap" type="com.hqgd.pms.domain.SysParam">
+    <id column="PARAM_CODE" jdbcType="VARCHAR" property="paramCode" />
+    <result column="EDIT_LEVEL" jdbcType="VARCHAR" property="editLevel" />
+    <result column="PARAM_NAME" jdbcType="VARCHAR" property="paramName" />
+    <result column="PARAM_VALUE" jdbcType="VARCHAR" property="paramValue" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PARAM_CODE, EDIT_LEVEL, PARAM_NAME, PARAM_VALUE, CREATE_TIME
+  </sql>
+  <select id="selectSysParam" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from conf_sys_parameter  
+  </select>
+  <update id="setSysParam" >
+    update  conf_sys_parameter set PARAM_VALUE = #{paramValue} where PARAM_CODE = #{paramCode,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from conf_sys_parameter
+    where PARAM_CODE = #{paramCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

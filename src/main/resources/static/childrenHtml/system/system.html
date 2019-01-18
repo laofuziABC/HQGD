@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<h1>系统参数设置</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li class="active">系统参数设置</li>
+				</ol>
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="box box-warning">
+							<!-- /.box-header -->
+							<div class="box-body">
+								<form role="form">
+									<div class="form-group">
+										<label>浮动飘窗</label> <select id="FLOAT_WINDOW"
+											class="form-control" onchange="setSystem('FLOAT_WINDOW')">
+											<option value="1">开启</option>
+											<option value="2">关闭</option>
+										</select>
+									</div>
+								</form>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+					</div>
+					<!--/.col (right) -->
+				</div>
+				<!-- /.row -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<div class="control-sidebar-bg"></div>
+	</div>
+	<!-- ./wrapper -->
+	<script type="text/javascript">
+		selectSysParam();
+		function selectSysParam() {
+			$.ajax({
+				url : "system/selectSysParam",
+				type : "post",
+				dataType : "json",
+				success : function(result) {
+					var data = result.data;
+					for (let i = 0; i < data.length; i++) {
+						var paramCode = data[i].paramCode;
+						document.getElementById(paramCode).value = data[i].paramValue;
+					}
+				}
+			});
+		}
+		function setSystem(param) {
+			var paramCode = param;
+			var paramValue = $("#"+paramCode).val();
+			$.ajax({
+				url : "system/setSysParam",
+				type : "post",
+				dataType : "json",
+				data : {
+					"paramCode" : paramCode,
+					"paramValue" : paramValue
+				},
+				success : function(result) {
+
+				}
+			});
+		}
+	</script>
+	<script src="dist/js/app.min.js"></script>
+</body>
+</html>
