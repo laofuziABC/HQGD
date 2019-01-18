@@ -208,9 +208,10 @@ function addPoints(){
 
 function drawCurrentChannels(param){
 	//设置DIV高度
-	$("#channelDiv").css({"height":($(window).height())*0.45});
 	var channel = "";
-	let num = (param==null)?0:(param.length);
+	var num;
+	if(param==null){ num=0; $("#channelDiv").css({"height":($(window).height())*0.45}); }
+	else{ num=param.length; }
 	if(num>0){
 		//超过2分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
