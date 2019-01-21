@@ -1,7 +1,14 @@
 //每分钟获取所有设备的实时数据，判断有没有异常
 function allEquipRealtime() {
-	debugger;
-	var timing =setInterval(function(){ myTimer() }, 5000);
+	var timing = setInterval(function() {
+		myTimer()
+	}, 30000);
+	// 清除页面多余的定时任务
+	/*var start = (timing - 5000 > 0) ? (timing - 5000) : 0;
+	for (var i = start; i < timing; i++) {
+		clearInterval(i);
+	}*/
+
 }
 function myTimer() {
 	var userName = parent.getParam("userName");
@@ -16,19 +23,20 @@ function myTimer() {
 		},
 		dataType : "json",
 		success : function(result) {
-			globalData = result.data;
-			if (result.data.length > 0) {
+			var data = result.data;
+			if (data.length > 0) {
 				floatWindow();
 			}
 		}
 	});
-	/*
-	 * //清除页面多余的定时任务 var start = (timing-10000>0) ?(timing-10000):0; for(var
-	 * i=start; i<timing; i++){      clearInterval(i); }
-	 */
+
 }
 
 function floatWindow() {
+	debugger;
+	$(".conent").css({
+		"display" : "block"
+	});
 	var timer = null;/* 定时器 */
 	var _left = 0;/* 默认left距离 */
 	var _top = 20;/* 默认top距离 */
@@ -156,4 +164,4 @@ function floatWindow() {
 			state = true;
 		});
 	});
-};
+}

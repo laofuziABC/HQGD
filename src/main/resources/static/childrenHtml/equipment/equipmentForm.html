@@ -183,14 +183,14 @@ button {
 		var firstEdit = 0;
 		AMapUI.loadUI([ 'misc/PositionPicker' ], function(PositionPicker) {
 			var map = new AMap.Map('containermap', {
-				zoom : 16
+				zoom : 16,
+				center: [108.856389,34.171147]
 			})
 			var positionPicker = new PositionPicker({
 				mode : 'dragMap',
 				map : map
 			});
 			positionPicker.on('success', function(positionResult) {
-				debugger;
 				if (add || firstEdit >= 2) {
 					$("#address").val(positionResult.address);
 					$("#lnglat").val(positionResult.position);

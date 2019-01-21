@@ -237,6 +237,7 @@
 		        if (tag == 2) {//完全自定义
 		            cluster = new AMap.MarkerClusterer(map, markers, {
 		                gridSize: 80,
+		                maxZoom:17,
 		                renderCluserMarker: _renderCluserMarker
 		            });
 		        }else if (tag == 1) {//自定义图标

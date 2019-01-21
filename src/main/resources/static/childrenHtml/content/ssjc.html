@@ -37,7 +37,7 @@
 #equipResultList li span { width: 100%; }
 #sub-list-pager { margin: 10px auto; }
 /*conent start*/
-.conent{width:90px;height:120px;position:absolute;top:20px;display:none}
+.conent{width:90px;height:120px;position:absolute;top:20px;display:none;z-index:9999}
 .conent .sition{width:90px;height:120px;position:relative;}
 .conent .sition .c_header{width: 140px;cursor:move;}
 .conent .sition .c_header .txt{color:red;font-weight:600;font-size:20px;line-height:30px;}
@@ -53,6 +53,7 @@
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+	
 	<div class="wrapper">
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
@@ -178,7 +179,7 @@
 	<script type="text/javascript" src="dist/js/pager/data_table_pager.js"></script>
 	<script type="text/javascript" src="dist/js/AsynAjax.js"></script>
 	<script type="text/javascript" src="dist/js/AllCities.js"></script>
-	<script type="text/javascript" src="dist/js/float-window.js"></script>
+	<!-- <script type="text/javascript" src="dist/js/float-window.js"></script> -->
 	<script src="dist/js/app.min.js"></script>
 	<script type="text/javascript">
 		var roleId = parent.getParam("roleId");
@@ -193,7 +194,6 @@
 				AjaxPostForEquiSubList(url,param);
 			}
 		}
-		allEquipRealtime();
 		$("#currenttab").load("childrenHtml/data/current.html");
 		$("#historytab").load("childrenHtml/data/history.html");
 		$("#historytab").css({"display" : "none"}); 
