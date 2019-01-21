@@ -15744,6 +15744,7 @@ function getCities(){
 		}
 	}
 	$("#city-select").html(s);
+	$("#town-select").val(0);
 }
 function getTowns(){
 	var p = $("#prov-select option:selected").val();

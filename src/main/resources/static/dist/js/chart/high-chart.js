@@ -1,7 +1,8 @@
 /**
- * 绘制highChart图表 此文档用于设置图表的相关配置
+ * 绘制highChart图表
+ * 此文档用于设置图表的相关配置
  */
-// 设置图表公用配置项【开始】
+//设置图表公用配置项【开始】
 var legend={enabled: true, backgroundColor: '#ffffff'};
 var tooltip={shared: true, useHTML: true,
 		xDateFormat: '%Y-%m-%d %H:%M:%S',
@@ -19,8 +20,8 @@ var tooltip={shared: true, useHTML: true,
 var yAxis={title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 };
 var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
-// 设置图表公用配置项【结束】
-// 配置历史数据监测曲线图配置项
+//设置图表公用配置项【结束】
+//配置历史数据监测曲线图配置项
 var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20, panning: true, panKey: 'ctrl'},
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
@@ -29,14 +30,14 @@ var historyOption = {
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
 	}}
 };
-// 配置当前数据监测统计图
+//配置当前数据监测统计图
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
     title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: { useUTC: false },
     yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
 };
-// 配置当空白统计图
+//配置当空白统计图
 var blankOption={
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
 	title: {text: '温度曲线图', style: {color: '#ffffff'}},
@@ -47,12 +48,14 @@ var blankOption={
 }
 
 /**
- * 以下的方法用于同步或者异步获取图表的数据资源 其中实时监控图的相关内容，需同步获取 其它无需依靠当前时间加载的图表数据，为异步获取
+ * 以下的方法用于同步或者异步获取图表的数据资源
+ * 其中实时监控图的相关内容，需同步获取
+ * 其它无需依靠当前时间加载的图表数据，为异步获取
  */
-/*
- * 方法1：同步获取指定地址下的数据资源 url：获取资源的途径，不能传空值；param：获取资源的传参。
+/* 方法1：同步获取指定地址下的数据资源
+ * url：获取资源的途径，不能传空值；param：获取资源的传参。
  * data：返回值，可能为null，也可能为空值，其本身为一个对象。
- */
+*/
 function getChartData(url, param){
 	var resultMap={};
 	$.ajax({ url: url, type: "post", data: param, dataType: "json", async:false,
@@ -61,9 +64,9 @@ function getChartData(url, param){
 	});
 	return resultMap;
 }
-/*
- * 方法2：异步获取指定时间段内的图表数据 url：获取资源的途径，不能传空值；param：获取资源的传参。
- */
+/*方法2：异步获取指定时间段内的图表数据
+ * url：获取资源的途径，不能传空值；param：获取资源的传参。
+*/
 function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
@@ -73,7 +76,7 @@ function drawingHistoryChart(url, param){
 				var legendData = data.channelNumArr;
 				var seriesData = data.channelTemArr;
 				var totalCount = seriesData[0].length;
-				// 根据温度值，设置纵轴上下限【开始】
+				//根据温度值，设置纵轴上下限【开始】
 				var tempArray=[];
 				for(let i=0; i<seriesData.length; i++){
 					tempArray=tempArray.concat(seriesData[i]);
@@ -82,7 +85,7 @@ function drawingHistoryChart(url, param){
 				var min=Math.min.apply(null, tempArray);
 				historyOption.yAxis.min=(min > -10)?(min-10):0;
 				historyOption.yAxis.max=(max < 100)?(max+10):100;
-				// 根据温度值，设置纵轴上下限【结束】
+				//根据温度值，设置纵轴上下限【结束】
 				for(let i=0; i<legendData.length; i++){
 					var serie = {name: legendData[i], data: seriesData[i], type:"spline"};
 					totalCount=(totalCount>seriesData[i].length)?totalCount:(seriesData[i].length);
@@ -101,9 +104,11 @@ function drawingHistoryChart(url, param){
 	});
 }
 /*
- * 方法3：绘制当前监测数据图 首先获取登录时间到当前时间里的监测数据 然后通过定时器，同步获取最新的数据点，添加在图表中
- */
-// 获取并计算常量【开始】
+ * 方法3：绘制当前监测数据图
+ * 首先获取登录时间到当前时间里的监测数据
+ * 然后通过定时器，同步获取最新的数据点，添加在图表中
+*/
+//获取并计算常量【开始】
 function getUrlParam(string) {
     var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
     var l = decodeURI(window.location.search);
@@ -119,22 +124,22 @@ var START_TIME=new Date(parseInt(LOGIN_TIME));
 var ST_VALUE=START_TIME.getTime();
 var NOW_TIME=new Date();
 var NT_VALUE=NOW_TIME.getTime();
-START_TIME=(NT_VALUE-ST_VALUE>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
-// 获取并计算常量【结束】
+//获取并计算常量【结束】
 function initCurrentChart(){
+	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/periodDate";
 	var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime };
 	var result=getChartData(url, param);
-	// 分别获取系列、横坐标、纵坐标集
+	//分别获取系列、横坐标、纵坐标集
 	var channelList=result.channelList;
 	var timeList=result.timeList;
 	var dataList=result.dataList;
 	var series=[];
-	// 只有通道数和系列数相等，才可以绘制图表
+	//只有通道数和系列数相等，才可以绘制图表
 	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
-		// 组装系列值
+		//组装系列值
 		var totalArray=[];
 		for(let i=0; i<dataList.length; i++){
 			var temp = dataList[i];
@@ -146,7 +151,7 @@ function initCurrentChart(){
 			}
 			totalArray.push(singleArray);
 		}
-		// 为系列赋值
+		//为系列赋值
 		for(let i=0; i<channelList.length; i++){
 			var serie = {name: channelList[i], data: totalArray[i], type:"spline", pointInterval: 6e4};
 			series.push(serie);
@@ -161,7 +166,7 @@ function initCurrentChart(){
 	$("#chart_current").empty();
 	$("#chart_current").highcharts(currentOption);
 }
-// 计算点的坐标，落在图表中
+//计算点的坐标，落在图表中
 function addPoints(){
 	var interval = 60000;
 	var series = this.series;
@@ -173,18 +178,18 @@ function addPoints(){
 		if(pointsData!=null && JSON.stringify(pointsData)!="{}" && (pointsData.length==pointsData[0].numOfCh)){
 			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 			var nowtime = (new Date()).getTime();
-			// 获取所有通道的最新温度值
+			//获取所有通道的最新温度值
 			var tempValues=[];
 			for(let i=0; i<pointsData.length; i++){
 				var yValue=parseFloat(pointsData[i].temperature);
 				tempValues.push(yValue);
 			}
-			// 设定纵轴上下限
+			//设定纵轴上下限
 			setValueRangeForCChart(tempValues);
-			// 判断此点是否在图表中，再绘制此点
+			//判断此点是否在图表中，再绘制此点
 			if(thisPointTime>ST_VALUE && nowtime-thisPointTime<1000*60*2){
 				for(let i=0; i<tempValues.length; i++){
-					// 确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
+					//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
 					if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, tempValues[i]], true, true); }
 					else{series[i].addPoint([thisPointTime, tempValues[i]], true, false); }
 				}
@@ -194,7 +199,7 @@ function addPoints(){
 			}
 		}
 	}, interval);
-	// 清除页面多余的定时任务
+	//清除页面多余的定时任务
 	var start = (timing-60000>0) ?(timing-60000):0;
 	for(var i=start; i<timing; i++){
 	     clearInterval(i);
@@ -202,31 +207,31 @@ function addPoints(){
 }
 
 function drawCurrentChannels(param){
-	// 设置DIV高度
+	//设置DIV高度
 	var channel = "";
 	var num;
 	if(param==null){ num=0; $("#channelDiv").css({"height":($(window).height())*0.45}); }
 	else{ num=param.length; }
 	if(num>0){
-		// 超过2分钟提示
+		//超过2分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
 		cTime=(new Date()).getTime();
 		$("#last-time").text("最后监测时间："+param[0].receiveTime);
 		if((cTime-lTime)>(2*60*1000)){ $("#last-time").css({"color":"red"}); }
 		else{$("#last-time").css({"color":"#21242e"});}
-		// 设定尺寸适应容器【开始】
+		//设定尺寸适应容器【开始】
 		let count = Math.ceil(num/3);
-		// 如果只有一排，让容器填充下方位置
+		//如果只有一排，让容器填充下方位置
 		var divH=$(window).height()/3;
 		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
 		var divW=$(window).width()*0.9;
 		var tdW=divW/3+"px;";
-		// 设定尺寸适应容器【结束】
+		//设定尺寸适应容器【结束】
 		for(let i=0; i<count; i++){
 			let startIndex = 3*i;
 			let endIndex = (3*i+3>num)?num:(3*i+3);
 			channel+="<tr style='height:"+trH+"'>";
-			// 通道结果每三个循环一回，缘于界面展示效果较规整
+			//通道结果每三个循环一回，缘于界面展示效果较规整
 			for(let j=startIndex; j<endIndex; j++){
 				let state=parseInt(param[j].state);
 				let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
@@ -245,7 +250,7 @@ function drawCurrentChannels(param){
 	}
 	$("#channelsInfo").html(channel);
 }
-// 根据实际需求设定纵轴温度值域
+//根据实际需求设定纵轴温度值域
 function setValueRangeForCChart(param){
 	if(param.length>0){
 		var chart = $("#chart_current").highcharts();
@@ -258,129 +263,4 @@ function setValueRangeForCChart(param){
 		currentOption.yAxis.max=100;
 		currentOption.yAxis.min=0;
 	}
-}
-
-function allEquipRealtime(){
-	var interval = 60000;
-	var timing=setInterval(function (){
-		var userName = parent.getParam("userName");
-		var roleId = parent.getParam("roleId");
-		$.ajax({
-			url : "dataAcquisition/allEquipRealtime",
-			type : "post",
-			data : {
-				"userName" : userName,
-				"roleId" : roleId
-			},
-			dataType : "json",
-			success : function(result) {
-				var data = result.data;
-				if (data.length > 0) {
-					floatWindow();
-				}
-			}
-		});
-	}, interval);
-	// 清除页面多余的定时任务
-	var start = (timing-60000>0) ?(timing-60000):0;
-	for(var i=start; i<timing; i++){
-	     clearInterval(i);
-	}
-}
-
-function floatWindow(){
-	$(".conent").css({
-		"display" : "block"
-	});
-	var timer=null;/* 定时器 */
-	var _left=0;/* 默认left距离 */
-	var _top=20;/* 默认top距离 */
-	var top_folg=false;/* 控制高度-锁 */
-	var left_folg=true;/* 控制宽度-锁 */
-	var win_width=$(window).width()-$(".conent").width();/* 获取并计算浏览器初始宽度 */
-	var win_height=$(window).height()-$(".conent").height();/* 获取并计算浏览器初始高度 */
-	$("#liulan").html(win_height+"px");
-	$("#sumwid").html(win_width+"px");;
-	action();/* 执行走动 */
-	$(".conent").mouseover(function(){
-		clearInterval(timer);
-		$(this).find(".c_adver").css({"background":"url('images/no.gif')","bakcground-repeat":"no-repeat"});
-		$(this).find(".txt").text("放开我!!!");
-
-	}).mouseout(function(){
-		action();
-		$(this).find(".txt").text("杜绝广告");
-		$(this).find(".c_adver").css({"background":"url('images/back.gif')","bakcground-repeat":"no-repeat"});
-	});
-
-	$(window).resize(function(){
-		conobj=$(".conent");
-		win_width=$(window).width()-conobj.width();
-		win_height=$(window).height()-conobj.height();
-		$("#liulan").html(win_height+"px");
-		$("#sumwid").html(win_width+"px");;
-	});
-
-	function action(){
-		timer=setInterval(function(){
-			if(!top_folg){
-				_top++;
-				if(_top>=win_height){top_folg=true;};
-			}else{
-				_top--;
-				if(_top<=0){top_folg=false;};
-			};
-			if(left_folg){
-				 _left++;
-				if(_left>=win_width){left_folg=false;};
-			}else{
-				_left--;
-				if(_left<=0){left_folg=true;};
-			};
-            $("#textone").html(_top+"px");
-			$("#timewid").html(_left+"px");
-			$(".conent").animate({
-				left:_left,
-				top:_top
-			},3);
-		},15);
-	};
-
-	$(".conent .c_adver").dblclick(function(){
-		$(this).parents(".conent").slideUp(500,function(){
-			$(this).remove();
-			clearInterval(timer);
-		});
-	});
-
-	var state;/* 拖动锁 */
-	$(".c_header").mousedown(function(event){
-	state=false;
-	var x=event.clientX;
-	var y=event.clientY;
-	var obj=$(this).parents(".conent");
-	var c_left=obj.offset().left;
-	var c_top=obj.offset().top;
-			$(document).mousemove(function(e){
-				if(!state){
-					  var x1=e.clientX;
-					  var y1=e.clientY;
-					  var action_left=x1-x+c_left;
-					  var action_top=y1-y+c_top;
-					  if(action_left<=0){action_left=0;};
-					  if(action_top<=0){action_top=0;}
-					  if(action_left>=win_width){action_left=win_width;};
-					  if(action_top>=win_height){action_top=win_height;};
-					  obj.css({top:action_top,left:action_left});
-					  _left=action_left;
-					  _top=action_top;
-					  $("#text").html(_top+"px");
-					  $("#dywid").html(_left+"px");
-					};
-			}).mouseup(function(){
-				state=true;
-			});
-	});
-	
-	$(".conent").empty();
 }
