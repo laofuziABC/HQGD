@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -232,43 +233,14 @@ public class EquipmentService implements IEquipmentService {
 		return equipmentInfoList;
 	}
 
-	// @Override
-	// public List<EquipmentParam> selectEquipmentParam(String equipmentId) {
-	// List<EquipmentParam> equipmentParamList =
-	// equipmentParamMapper.selectEquipmentParam(equipmentId);
-	// return equipmentParamList;
-	// }
-
-	// @Override
-	// public Boolean setEquipmentParam(EquipmentParam equipmentParam, User
-	// loginUser) {
-	// equipmentParam.setCreator(loginUser.getUserName());
-	// equipmentParam.setCreateTime(new Date());
-	// equipmentParam.setUpdater(loginUser.getUserName());
-	// equipmentParam.setUpdateTime(new Date());
-	// int i = equipmentParamMapper.setEquipmentParam(equipmentParam);
-	// Boolean result = (i == 0) ? false : true;
-	// // Map<String, Object> resultMap = new HashMap<String, Object>();
-	// // resultMap.put("success", result);
-	// // resultMap.put("resultCode", "00000007");
-	// // resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-	// // resultMap.put("message", "");
-	// return result;
-	// }
-
-	// @Override
-	// public Map<String, Object> updateParam(EquipmentParam equipmentParam, User
-	// loginUser) {
-	// equipmentParam.setUpdater(loginUser.getUserName());
-	// equipmentParam.setUpdateTime(new Date());
-	// int i = equipmentParamMapper.updateParam(equipmentParam);
-	// Boolean result = (i == 0) ? false : true;
-	// Map<String, Object> resultMap = new HashMap<String, Object>();
-	// resultMap.put("success", result);
-	// resultMap.put("resultCode", "00000008");
-	// resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-	// resultMap.put("message", "");
-	// return resultMap;
-	// }
+	@Override
+	public List<EquipmentInfo> selectAllByParam(HttpServletRequest request) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userName", request.getParameter("userName"));
+		param.put("adcode", request.getParameter("adcode"));
+		param.put("type", request.getParameter("type"));
+		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllByParam(param);
+		return equipmentInfoList;
+	}
 
 }

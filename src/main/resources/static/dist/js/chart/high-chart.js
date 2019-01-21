@@ -193,7 +193,6 @@ function addPoints(){
 				$("#last-time").css({"color":"red"});
 			}
 		}
-			allEquipRealtime();
 	}, interval);
 	// 清除页面多余的定时任务
 	var start = (timing-60000>0) ?(timing-60000):0;

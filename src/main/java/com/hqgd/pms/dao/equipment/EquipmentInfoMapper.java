@@ -1,6 +1,7 @@
 package com.hqgd.pms.dao.equipment;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hqgd.pms.domain.EquipmentInfo;
 
@@ -34,5 +35,7 @@ public interface EquipmentInfoMapper {
 	List<EquipmentInfo> selectAllByType(String type);
 
 	List<EquipmentInfo> selectLngLatByUser(String userName);
+
+	List<EquipmentInfo> selectAllByParam(Map<String, Object> param);
 
 }

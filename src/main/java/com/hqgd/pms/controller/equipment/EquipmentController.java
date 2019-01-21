@@ -98,6 +98,23 @@ public class EquipmentController {
 		log.info("查询设备结束");
 	}
 
+	@RequestMapping(value = "/selectAllByParam")
+	@ResponseBody
+	public void selectAllByParam(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		log.info("查询符合表单参数的所有设备开始");
+		List<EquipmentInfo> equipmentList = equipmentService.selectAllByParam(request);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000005");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "");
+		resultMap.put("data", equipmentList);
+		resultMap.put("total", equipmentList.size());
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("查询符合表单参数的所有设备开始");
+	}
 	@RequestMapping(value = "/selectAllByUser")
 	@ResponseBody
 	public void selectAllByUser(Model model, HttpServletRequest request, HttpServletResponse response)

@@ -266,10 +266,11 @@ button {
 				userHtml += "<option  value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
 			}
-			var typeHtml = "<option value=\"\" checked>"
+			/* var typeHtml = "<option value=\"\" checked>"
 					+ globalData[param].type + "</option>";
 			typeHtml += "<option value=\"1\">开关柜</option><option value=\"2\">干式变压器</option><option value=\"3\">变压器绕组</option><option value=\"4\">环网柜</option>"
-			$("#type").html(typeHtml);
+			$("#type").html(typeHtml); */
+			document.getElementById('type').value = globalData[param].type;
 			$("#userName").html(userHtml);
 			$("#equipmentId").val(globalData[param].equipmentId);
 			$("#equipmentName").val(globalData[param].equipmentName);
@@ -321,7 +322,7 @@ button {
 			var params = {
 				"equipmentId" : $("#equipmentId").val(),
 				"equipmentName" : $("#equipmentName").val(),
-				"type" : $("#type option:selected").text(),
+				"type" : $("#type option:selected").val(),
 				"userId" : $("#userName").val(),
 				"userName" : $("#userName option:selected").text(),
 				"address" : $("#address").val(),
