@@ -98,9 +98,9 @@ public class EquipmentController {
 		log.info("查询设备结束");
 	}
 
-	@RequestMapping(value = "/selectAllByParam")
+	@RequestMapping(value = "/searchEquiByParam")
 	@ResponseBody
-	public void selectAllByParam(Model model, HttpServletRequest request, HttpServletResponse response)
+	public void searchEquiByParam(Model model, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("查询符合表单参数的所有设备开始");
 		List<EquipmentInfo> equipmentList = equipmentService.selectAllByParam(request);
