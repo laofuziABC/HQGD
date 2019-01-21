@@ -87,7 +87,7 @@
 						<div class="box box-solid">
 							<div class="box-body">
 								<div class="input-group">
-									<input id="new-event" type="text" class="form-control" placeholder="请输入设备名称">
+									<input id="interEqui" type="text" class="form-control" placeholder="请输入设备名称">
 									<div class="input-group-btn">
 										<button type="submit" class="btn btn-primary" onclick="searchByEquiName();">查询</button>
 										<button type="submit" class="btn btn-primary" onclick="showParams();">分组</button>
@@ -249,9 +249,8 @@
 				"type":equiType,				//类型
 				"adcode":areaCode			//地区(代码)
 			};
-			alert(JSON.stringify(param));
 			var url="equipment/searchEquiByParam";
-			//AjaxPostForEquiSubList(url, param);
+			AjaxPostForEquiSubList(url, param);
 		}
 		//根据设备主键，获取数据展示信息
 		function getEquiData(param){
@@ -267,14 +266,10 @@
 					showHistoryContent();
 				}else{
 					showCurrentContent();
-				} 
+				}
 			}
+			changeCheckEqui();
 		}
-		//监听活动设备
-		$("#equipResultList>li").click(function(){
-			$(this).parent().find("li").removeClass("checked");
-			$(this).addClass("checked");
-		});
 	</script>
 </body>
 </html>
