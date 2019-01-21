@@ -182,7 +182,15 @@
 				equipList += "<td>" + (i + 1) + "</td>";
 				equipList += "<td>" + data[i].equipmentId + "</td>";
 				equipList += "<td>" + data[i].equipmentName + "</td>";
-				equipList += "<td>" + data[i].type + "</td>";
+				if(data[i].type=='1'){
+					equipList += "<td>开关柜</td>";
+				}else if(data[i].type=='2'){
+					equipList += "<td>干式变压器</td>";
+				}else if(data[i].type=='3'){
+					equipList += "<td>变压器绕组</td>";
+				}else if(data[i].type=='3'){
+					equipList += "<td>环网柜</td>";
+				}
 				equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 						+ i + "')\">详情</a></td>";
 				equipList += "<td>" + data[i].address + "</td>";
