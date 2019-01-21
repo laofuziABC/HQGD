@@ -163,6 +163,11 @@
 	<script type="text/javascript" src="dist/js/float-window.js"></script>
 	<script src="dist/js/app.min.js"></script>
 	<script type="text/javascript">
+		//加载子页面
+		$("#currenttab").load("childrenHtml/data/current.html");
+		$("#historytab").load("childrenHtml/data/history.html");
+		$("#historytab").css({"display" : "none"}); 
+		//加载设备列表
 		var roleId = parent.getParam("roleId");
 		if(roleId==1){
 			getEquiResultList();
@@ -175,9 +180,7 @@
 			}
 		}
 		allEquipRealtime();
-		$("#currenttab").load("childrenHtml/data/current.html");
-		$("#historytab").load("childrenHtml/data/history.html");
-		$("#historytab").css({"display" : "none"}); 
+		//设置页面局部样式
 		$(".nav-tabs >li:contains('当前')").addClass("active");
 		$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
