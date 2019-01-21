@@ -11,29 +11,34 @@
 		<!-- sidebar menu: : style can be found in sidebar.less -->
 		<ul class="sidebar-menu" data-widget="tree">
 			<li class="header">菜单栏</li>
-			<li><a href="#" onclick="javascript: window.history.go(0);"
-				style="margin-top: 10px;"><i class="fa fa-home"
-					style="font-size: 22px"></i> <span>首页</span></a></li>
-			<li><a href="#"
-				onclick="loadMainContent('childrenHtml/content/ssjc.html');"><i
-					class="fa fa-eye"></i> <span>数据监测</span></a></li>
+			<li>
+				<a href="#" onclick="javascript: window.history.go(0);" style="margin-top: 10px;">
+					<i class="fa fa-home" style="font-size: 22px"></i> <span>首页</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="loadMainContent('childrenHtml/content/ssjc.html');">
+					<i class="fa fa-eye"></i> <span>数据监测</span>
+				</a>
+			</li>
 			<!-- <li><a href="#"
 				onclick="loadMainContent('childrenHtml/operationalMonitoring/yxjc.html');">
 					<i class="fa fa-print"></i> <span>运行监测</span>
 			</a></li> -->
-			<li><a href="#"
-				onclick="loadMainContent('childrenHtml/equipment/equipmentList.html');">
+			<li>
+				<a href="#" onclick="loadMainContent('childrenHtml/equipment/equipmentList.html');">
 					<i class="fa fa-gears"></i> <span>设备管理</span>
-			</a></li>
-			<li><a href="#"
-				onclick="loadMainContent('childrenHtml/user/userList.html');"> <i
-					class="fa fa-map"></i> <span>用户管理</span>
-			</a></li>
-			<li class="treeview"><a href="#"> <i class="fa fa-sliders"></i>
-					<span>系统集成</span> <span class="pull-right-container"> <i
-						class="fa fa-angle-left pull-right"></i>
-				</span>
-			</a>
+				</a>
+			</li>
+			<li class="manager">
+				<a href="#" onclick="loadMainContent('childrenHtml/user/userList.html');"> 
+					<i class="fa fa-map"></i> <span>用户管理</span>
+				</a>
+			</li>
+			<li class="treeview manager">
+				<a href="#"> <i class="fa fa-sliders"></i>
+					<span>系统集成</span> <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+				</a>
 				<ul class="treeview-menu">
 					<!-- <li><a href="#" onclick="network();"> <i
 							class="fa fa-bookmark"></i> <span>图形设计</span>

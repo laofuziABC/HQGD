@@ -119,9 +119,7 @@
 									<!-- 查询参数【结束】 -->
 									<!-- 结果列表【开始】 -->
 									<div class="tree well tree_one" id="result_list_div">
-										<ul style="color: #151414;"
-											class="box-body no-padding nav nav-pills nav-stacked"
-											id="equipResultList">
+										<ul style="color: #151414;" class="box-body no-padding nav nav-pills nav-stacked" id="equipResultList">
 											<li><span><em>设备名称</em></span></li>
 										</ul>
 										<!-- 翻页插件 -->
@@ -216,11 +214,6 @@
 			if(target.style.display=="none"){
 				target.style.display="block";
 				document.getElementById("userParam").style.display=(roleId==1)?"block":"none";
-				/* if(roleId==1){
-					$("#userParam").css({"display":"block"});
-				}else{
-					$("#userParam").css({"display":"none"});
-				} */
 				getProvs();
 			}
 			else{
@@ -256,8 +249,9 @@
 				"type":equiType,				//类型
 				"adcode":areaCode			//地区(代码)
 			};
+			alert(JSON.stringify(param));
 			var url="equipment/searchEquiByParam";
-			AjaxPostForEquiSubList(url, param);
+			//AjaxPostForEquiSubList(url, param);
 		}
 		//根据设备主键，获取数据展示信息
 		function getEquiData(param){
