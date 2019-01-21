@@ -36,6 +36,6 @@ public interface EquipmentInfoMapper {
 
 	List<EquipmentInfo> selectLngLatByUser(String userName);
 
-	List<EquipmentInfo> selectAllByParam(Map<String, Object> param);
+	List<EquipmentInfo> selectAllByParam(Map<String, String> param);
 
 }

@@ -31,25 +31,25 @@
     LNG_LAT,EQUIPMENT_ID, EQUIPMENT_NAME
     from hq_equipment_info
   </select>
-  <select id="selectAllByParam" resultMap="BaseResultMap">
+  <select id="selectAllByParam" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     select 
     EQUIPMENT_ID, EQUIPMENT_NAME
     from hq_equipment_info
     where 1=1 
-    <if test="_parameter!= null and _parameter!=0">
-     AND TYPE = #{type,jdbcType=VARCHAR}
+    <if test="type!= null">
+     AND TYPE = #{type}
     </if>
-    <if test="_parameter!= null and _parameter!=''">
+    <if test="userName!= null and userName!=''">
      AND USER_NAME = #{userName}
     </if> 
-    <if test="_parameter.length() == 2">
-     and  PADCODE = #{_parameter}
+    <if test="adcode.length() == 2">
+     and  PADCODE = #{adcode}
     </if> 
-    <if test="_parameter.length() == 4">
-     and  CADCODE = #{_parameter}
+    <if test="adcode.length() == 4">
+     and  CADCODE = #{adcode}
     </if>
-    <if test="_parameter.length() == 6">
-     and  ADCODE = #{_parameter}
+    <if test="adcode.length() == 6">
+     and  ADCODE = #{adcode}
     </if> 
   </select>
   <select id="selectAllEquipmentByUser" parameterType="java.lang.String" resultMap="BaseResultMap">

@@ -235,10 +235,14 @@ public class EquipmentService implements IEquipmentService {
 
 	@Override
 	public List<EquipmentInfo> selectAllByParam(HttpServletRequest request) {
-		Map<String, Object> param = new HashMap<>();
+		Map<String, String> param = new HashMap<>();
 		param.put("userName", request.getParameter("userName"));
 		param.put("adcode", request.getParameter("adcode"));
-		param.put("type", request.getParameter("type"));
+		if(request.getParameter("type").equals("0")) {
+			param.put("type", null);
+		}else {
+			param.put("type", request.getParameter("type"));
+		}
 		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllByParam(param);
 		return equipmentInfoList;
 	}
