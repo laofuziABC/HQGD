@@ -59,5 +59,4 @@ function AjaxPostForEquiSubList(url,param){
 			}
 		});
 	}
-	userParam.style.display="none";
 }

@@ -215,11 +215,12 @@
 			var target = document.getElementById("showParams");
 			if(target.style.display=="none"){
 				target.style.display="block";
-				if(roleId==1){
+				document.getElementById("userParam").style.display=(roleId==1)?"block":"none";
+				/* if(roleId==1){
 					$("#userParam").css({"display":"block"});
 				}else{
 					$("#userParam").css({"display":"none"});
-				}
+				} */
 				getProvs();
 			}
 			else{
