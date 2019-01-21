@@ -52,11 +52,20 @@ function AjaxPostForEquiSubList(url,param){
 					equiId=data[0].equipmentId;
 					resultList+="<li class=\"checked\" onclick=\"getEquiData('"+data[0].equipmentId+"');\"><span><em>"+data[0].equipmentName+"</em></span></li>";
 					for(let i=1; i<totalSize; i++){
-						resultList+="<li onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>";
+						resultList+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>";
 					}
 				}
 				$("#equipResultList").html(resultList);
+				changeCheckEqui();
+				getEquiData(equiId);
 			}
 		});
 	}
+}
+//监听活动设备
+function changeCheckEqui(){
+	$("#equipResultList>li").click(function(){
+		$(this).parent().find("li").removeClass("checked");
+		$(this).addClass("checked");
+	});
 }
