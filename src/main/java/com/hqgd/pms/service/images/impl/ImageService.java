@@ -1,7 +1,6 @@
 package com.hqgd.pms.service.images.impl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hqgd.pms.common.CommonUtil;
@@ -18,37 +16,18 @@ import com.hqgd.pms.domain.ImageInfo;
 import com.hqgd.pms.service.images.IImagesService;
 
 import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Service
 public class ImageService implements IImagesService {
 	@Resource
 	private ImageInfoMapper imageInfoMapper;
 	File tempPathFile;
-	private static final String updatepath = "static/vince/images/graphicDesign";
+	private static final String updatepath = "D:/工具软件/static/vince/images/graphicDesign";
 
 	@Override
 	public Map<String, Object> add(MultipartFile[] MultipartFile, String group) {
 		Map<String, Object> resultMap = new HashMap<>();
-		// 获取跟目录
-		File classpath = null;
-		try {
-			classpath = new File(ResourceUtils.getURL("classpath:").getPath());
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		if (!classpath.exists())
-			classpath = new File("");
-		log.info("path:" + classpath.getAbsolutePath());
-
-		// 如果上传目录为/static/images/upload/，则可以如下获取：
-		File upload = new File(classpath.getAbsolutePath(), updatepath);
-		if (!upload.exists())
-			upload.mkdirs();
-		log.info("upload url:" + upload.getAbsolutePath());
-		// 在开发测试模式时，得到的地址为：{项目跟目录}/target/static/vince/images/graphicDesign/
-		// 在打包成jar正式发布时，得到的地址为：{发布jar包目录}/static/vince/images/graphicDesign/
+		String path = "";
 		try {
 			for (int i = 0; i < MultipartFile.length; i++) {
 				MultipartFile file = MultipartFile[i];
@@ -60,21 +39,25 @@ public class ImageService implements IImagesService {
 					resultMap.put("success", false);
 					return resultMap;
 				}
-				String path = upload.getAbsolutePath();
 				ImageInfo imageInfo = new ImageInfo();
 				if (group.equals("1")) {
 					imageInfo.setGroups("高级");
-					path = path + "/advanced/" + fileName;
+					path = updatepath + "/advanced/" + fileName;
 				} else if (group.equals("3")) {
 					imageInfo.setGroups("基本");
-					path = path + "/base/" + fileName;
+					path = updatepath + "/base/" + fileName;
 				} else {
 					imageInfo.setGroups("自定义");
-					path = path + "/customize/" + fileName;
+					path = updatepath + "/customize/" + fileName;
 				}
-				file.transferTo(new File(path));
+				log.info("path:"+path);
+				File f = new File(path);
+				if (!f.getParentFile().exists())
+					f.getParentFile().mkdirs();
+				file.transferTo(f);
 				imageInfo.setAuthor("");
 				imageInfo.setName(fileName);
+				/* imageInfo.setPath(path); */
 				imageInfo.setPath(path.substring(path.indexOf("static") + 7, path.length()));
 				imageInfo.setSize(Double.valueOf(fileSize));
 				imageInfo.setIsdel(0);
