@@ -22,7 +22,7 @@ public class ImageService implements IImagesService {
 	@Resource
 	private ImageInfoMapper imageInfoMapper;
 	File tempPathFile;
-	private static final String updatepath = "D:/工具软件/static/vince/images/graphicDesign";
+	private static final String updatepath = "D:/image/static/vince/images/graphicDesign";
 
 	@Override
 	public Map<String, Object> add(MultipartFile[] MultipartFile, String group) {
@@ -57,8 +57,8 @@ public class ImageService implements IImagesService {
 				file.transferTo(f);
 				imageInfo.setAuthor("");
 				imageInfo.setName(fileName);
-				/* imageInfo.setPath(path); */
-				imageInfo.setPath(path.substring(path.indexOf("static") + 7, path.length()));
+				imageInfo.setPath(path);
+				/*imageInfo.setPath(path.substring(path.indexOf("image") + 6, path.length()));*/
 				imageInfo.setSize(Double.valueOf(fileSize));
 				imageInfo.setIsdel(0);
 				imageInfo.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());

@@ -33,7 +33,7 @@ spring:
   mvc:
     static-path-pattern: /**
   resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/static,classpath:/resources/,file:D:/工具软件/
+    static-locations: classpath:/META-INF/resources/,classpath:/static,classpath:/resources/,file:D:/image/
 
 #spring:
 #  datasource:
