@@ -158,13 +158,17 @@
 			var userName =getParam("userName");
 			$("#main-sidebar").load("childrenHtml/side-menu.html");
 			$("#main-header").load("childrenHtml/title.html");
-			$(function(){
+			var managerMenu=document.getElementsByClassName("manager");
+			for(let i=0; i<managerMenu.length; i++){
+				managerMenu[i].style.display=(roleId==1)?"block":"none";
+			}
+			/* $(function(){
 				if(roleId=="0"){
 					$("#main-sidebar").load("childrenHtml/side-menu1.html");
 				}else{$("#main-sidebar").load("childrenHtml/side-menu.html");}
 				
 				$("#main-header").load("childrenHtml/title.html");
-			});
+			}); */
 			 AMapUI.loadUI(['overlay/SimpleInfoWindow'], function(SimpleInfoWindow) {
 			var cluster, markers = [];
 		    var points= [];
