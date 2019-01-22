@@ -237,11 +237,11 @@ function drawCurrentChannels(param){
 				let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
 				if(state==5){
 					var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
-					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>"+resultMsg+"</span></td>"; 
+					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+resultMsg+"</span></td>"; 
 				}
-				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>- - - - -</span></td>"; }
-				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>- - -</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - - - -</span></td>"; }
+				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - -</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 			}
 			channel+="</tr>";
 		}
