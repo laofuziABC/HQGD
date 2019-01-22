@@ -13,7 +13,7 @@ function allEquipRealtime() {
 function myTimer() {
 	var userName = parent.getParam("userName");
 	var roleId = parent.getParam("roleId");
-	debugger;
+	//debugger;
 	$.ajax({
 		url : "dataAcquisition/allEquipRealtime",
 		type : "post",
@@ -33,7 +33,7 @@ function myTimer() {
 }
 
 function floatWindow() {
-	debugger;
+	//debugger;
 	$(".conent").css({
 		"display" : "block"
 	});
