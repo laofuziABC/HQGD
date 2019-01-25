@@ -147,9 +147,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			channelNumArr.add(historicalDataList.get(i).getChannelNum());
 			tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
 			// 避免空指针的情况下，将List<String>更改为List<Float>
-			if (tem != null) {
-				List<Float> temInteger = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
-				channelTemArr.add(temInteger);
+			if (tem.size()>0) {
+				List<Float> temFloat = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
+				channelTemArr.add(temFloat);
 			}
 			// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
 			// stateArr.add(state);
@@ -283,20 +283,25 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			param.put("endTime", queryVo.getEndTime());
 			// 使用Map集合封装所有结果
 			Map<String, Object> result = new HashMap<String, Object>();
-			long inTime = System.currentTimeMillis();
-			// 获取所有通道集合
+			long t1 = System.currentTimeMillis();
+			// 使用List集合承接查询结果
 			List<String> channelList = dataAcquisitionVoMapper.selectAllChannels(equipmentId);
 			List<Date> timeList = dataAcquisitionVoMapper.selectAllTimestamp(param);
-			// 循环封装各个通道的数据集合
-			List<List<DataAcquisitionVo>> dataList = new ArrayList<List<DataAcquisitionVo>>();
-			for (int i = 0; i < channelList.size(); i++) {
-				String channelNum = channelList.get(i).trim();
-				param.put("channelNum", channelNum);
-				List<DataAcquisitionVo> chanDataList = dataAcquisitionVoMapper.selectChanDataByParam(param);
-				dataList.add(chanDataList);
+			List<List<Float>> dataList = new ArrayList<List<Float>>();
+			//查询并组装通道温度集合【开始】
+			List<DataAcquisitionVo> allDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
+			List<String> channelDatas = new ArrayList<String>();
+			for (int i = 0; i < allDataList.size(); i++) {
+				channelDatas = Arrays.asList(allDataList.get(i).getTemperature().split(","));
+				// 避免空指针的情况下，将List<String>更改为List<Float>
+				if (channelDatas.size()>0) {
+					List<Float> channelData = channelDatas.stream().map(Float::parseFloat).collect(Collectors.toList());
+					dataList.add(channelData);
+				}
 			}
-			long outTime = System.currentTimeMillis();
-			log.info("查询数据SQL时长为：" + (outTime - inTime));
+			long t2 = System.currentTimeMillis();
+			log.info("一次查询所有数据SQL时长为：" + (t2 - t1));
+			//查询并组装通道温度集合【结束】
 			result.put("channelList", channelList);
 			result.put("timeList", timeList);
 			result.put("dataList", dataList);
