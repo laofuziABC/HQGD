@@ -303,7 +303,7 @@
 			var name = $("#searchByName").val().trim();
 			if (name != "") {
 				$.ajax({
-					url : "equipment/selectByEquipmentName",
+					url : "equipment/searchEquiByParam",
 					type : "post",
 					data : {
 						"equipmentName" : name

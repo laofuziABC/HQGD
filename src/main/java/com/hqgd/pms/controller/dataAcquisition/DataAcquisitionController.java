@@ -1,12 +1,14 @@
 package com.hqgd.pms.controller.dataAcquisition;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.gson.Gson;
 import com.hqgd.pms.common.CommonUtil;
+import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
@@ -39,13 +42,15 @@ public class DataAcquisitionController {
 	@Autowired
 	@Qualifier("dataAcquisitionService")
 	private IDataAcquisitionService dataAcquisitionService;
+	@Resource
+	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 
 	@RequestMapping("/realtime")
-	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
+	public void getRealTimeMonitoringData(Model model, String equipmentId, String type, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询实时数据开始 " + inTime);
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId);
+		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId, type);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
@@ -60,12 +65,13 @@ public class DataAcquisitionController {
 		log.info("接口访问时长为：" + midTime);
 	}
 
+	// 飘窗报警需要知道所有设备的实时数据
 	@RequestMapping("/allEquipRealtime")
-	public void allEquipRealtime(Model model, String userName,String roleId, HttpServletRequest request,
+	public void allEquipRealtime(Model model, String userName, String roleId, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询所有设备实时数据开始 " + inTime);
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.allEquipRealtime(userName,roleId);
+		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.allEquipRealtime(userName, roleId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
@@ -79,7 +85,7 @@ public class DataAcquisitionController {
 		long midTime = outTime - inTime;
 		log.info("接口访问时长为：" + midTime);
 	}
-	
+
 	@RequestMapping("/historical")
 	public void getHistoricalData(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
@@ -101,7 +107,7 @@ public class DataAcquisitionController {
 		long midTime = outTime - inTime;
 		log.info("接口访问时长为：" + midTime);
 	}
-	
+
 	@RequestMapping("/historicalCurve")
 	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -120,13 +126,11 @@ public class DataAcquisitionController {
 		resultMap.put("data", historicalDataList);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		
+
 	}
-	
+
 	/**
-	 * 获取指定时间段（自开机到当前时间）内的数据点的集合
-	 * 用于初始化当前监控图表
-	 * 2018.12.25
+	 * 获取指定时间段（自开机到当前时间）内的数据点的集合 用于初始化当前监控图表 2018.12.25
 	 */
 	@RequestMapping("/periodDate")
 	public void getPeriodDate(Model model, QueryParametersVo queryVo, HttpServletRequest request,
@@ -136,58 +140,31 @@ public class DataAcquisitionController {
 		Map<String, Object> resultList = dataAcquisitionService.getPeriodDataByQuery(queryVo);
 		long outTime = System.currentTimeMillis();
 		log.info("periodDate接口结束：" + outTime);
-		log.info("接口访问时长：" + (outTime-inTime));
+		log.info("接口访问时长：" + (outTime - inTime));
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultList));
 	}
 
-	/**
-	 * 描述： 作者：姚绒 日期：2018年11月20日 下午1:53:51 @param data @return @throws Exception
-	 * Model @throws
-	 */
-	@RequestMapping("/recordExport")
-	public void recordExport(QueryParametersVo data ,HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String path = request.getParameter("path");
-		String classPath = dataAcquisitionService.execRecordExport(data, path);
-		try {
-			try {
-				path = new String(classPath.getBytes(), "ISO8859-1");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	// 创建临时表
+	@RequestMapping(value = "/temporaryTable")
+	public void temporaryTable() {
+		// 获取服务启动时间
+		long startTime = System.currentTimeMillis();
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				// 获取当前时间
+				long currentTime = System.currentTimeMillis();
+				// 判断当前时间和登录时间的差额,如果小于一天就把临时表1里的数据放进临时表2,如果大于一天就把临时表2里的最旧一条删除，再插入最新的一条
+				if ((currentTime - startTime) > (24 * 3600000 + 1000 * 60 * 10)) {// 保留十分钟的冗余度，避免系统时间和数据库时间有误差
+					dataAcquisitionVoMapper.deleteFirst();
+
+					dataAcquisitionVoMapper.insertLast();
+				} else {
+					dataAcquisitionVoMapper.insertLast();
+				}
+
 			}
-			response.setContentType("application/vnd.ms-excel;charset=gb2312"); 
-//			response.setContentType("application/octet-stream;charset=ISO8859-1");
-			response.setHeader("Content-Disposition", "attachment;filename=" + path);
-			response.addHeader("Pargam", "no-cache");
-			response.addHeader("Cache-Control", "no-cache");
-			Map<String, Object> resultMap = new HashMap<String, Object>();
-			resultMap.put("success", Boolean.TRUE.toString());
-			resultMap.put("resultCode", "00000000");
-			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-			resultMap.put("message", "查询历史数据成功");
-			resultMap.put("data", path);
-			response.getWriter().write(new Gson().toJson(resultMap));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		}, 0, 60000);
 	}
-	
-	@RequestMapping("/record")
-	public void record(QueryParametersVo data ,HttpServletRequest request,HttpServletResponse response) throws Exception {
-		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.record(data);
-		try {
-			Map<String, Object> resultMap = new HashMap<String, Object>();
-			resultMap.put("success", Boolean.TRUE.toString());
-			resultMap.put("resultCode", "00000000");
-			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-			resultMap.put("message", "");
-			resultMap.put("data", historicalDataList);
-			response.setContentType("application/json; charset=UTF-8");
-			response.getWriter().write(new Gson().toJson(resultMap));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-	
 }

@@ -35,6 +35,47 @@
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
     PD, UV, STATE, MESSAGE, CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS RECEIVE_TIME, DUTY_PERSON, TEL,NUM_OF_CH
   </sql>
+  <delete id="deleteFirst">
+    DELETE 
+FROM
+	hq_equipment_monitor_data_r 
+WHERE
+	RECEIVE_TIME = ( SELECT min( RECEIVE_TIME ) FROM hq_equipment_monitor_data_r )
+  </delete>
+  <insert id="insertLast" >
+  INSERT INTO hq_equipment_monitor_data_r (
+EQUIPMENT_ID,
+EQUIPMENT_NAME,
+ADDRESS,
+CHANNEL_NUM,
+OPTICAL_FIBER_POSITION,
+TEMPERATURE,
+PD,
+UV,
+STATE,
+MESSAGE,
+RECEIVE_TIME,
+DUTY_PERSON,
+TEL,
+NUM_OF_CH 
+) SELECT
+EQUIPMENT_ID,
+EQUIPMENT_NAME,
+ADDRESS,
+CHANNEL_NUM,
+OPTICAL_FIBER_POSITION,
+TEMPERATURE,
+PD,
+UV,
+STATE,
+MESSAGE,
+RECEIVE_TIME,
+DUTY_PERSON,
+TEL,
+NUM_OF_CH 
+FROM
+	hq_equipment_monitor_data_f
+	</insert>
   <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
    SELECT
 	t.EQUIPMENT_ID,
@@ -48,8 +89,8 @@
 	t.NUM_OF_CH,
 	CONVERT ( VARCHAR ( 100 ), t.RECEIVE_TIME, 20 ) AS RECEIVE_TIME 
 FROM
-	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM hq_equipment_monitor_data GROUP BY EQUIPMENT_ID ) AS temp
-	LEFT JOIN hq_equipment_monitor_data AS t ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM hq_equipment_monitor_data_r GROUP BY EQUIPMENT_ID ) AS temp
+	LEFT JOIN hq_equipment_monitor_data_r AS t ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
 	AND temp.RECEIVE_TIME = t.RECEIVE_TIME
 WHERE
 	t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}

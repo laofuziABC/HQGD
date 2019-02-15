@@ -18,16 +18,6 @@ public interface IEquipmentService {
 
 	List<EquipmentInfo> selectAll();
 
-	List<EquipmentInfo> selectAllByUser(String userName);
-
-	List<EquipmentInfo> selectAllByAddress(String code);
-
-	EquipmentInfo selectByEquipmentName(String equipmentName);
-
-	String execRecordExport(String path);
-
-	List<EquipmentInfo> selectAllByType(String type);
-
 	List<EquipmentInfo> selectAllByParam(HttpServletRequest request);
 
 }

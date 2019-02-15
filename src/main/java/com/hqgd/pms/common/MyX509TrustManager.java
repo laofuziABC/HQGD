@@ -4,8 +4,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
-
-import com.sun.net.ssl.TrustManager;
  
 public class MyX509TrustManager implements X509TrustManager {
  

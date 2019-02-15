@@ -89,7 +89,7 @@
 								<div class="input-group">
 									<input id="interEqui" type="text" class="form-control" placeholder="请输入设备名称">
 									<div class="input-group-btn">
-										<button type="submit" class="btn btn-primary" onclick="searchByEquiName();">查询</button>
+										<button type="submit" class="btn btn-primary" onclick="searchEquipList();">查询</button>
 										<button type="submit" class="btn btn-primary" onclick="showParams();">分组</button>
 									</div>
 								</div>
@@ -228,19 +228,9 @@
 			var url="equipment/selectAll";
 			AjaxPostForEquiSubList(url,null);
 		}
-		//根据设备名称查询设备列表
-		function searchByEquiName(){
-			var url="equipment/selectByEquipmentName";
-			var equiName=$("#interEqui").val().trim();
-			var param={"equipmentName":equiName};
-			if(equiName != ""){
-				AjaxPostForEquiSubList(url,param);
-			}else{
-				getEquiResultList();
-			}
-		}
 		//通过筛选条件的所有内容，查询设备列表
 		function searchEquipList(){
+			var equiName=$("#interEqui").val().trim();
 			var username = (roleId==1)?($("#interUser").val().trim()):(parent.getParam("userName"));
 			var equiType=$("#equi-type").val().trim();
 			var p = $("#prov-select").val();
@@ -248,6 +238,7 @@
 			var t = $("#town-select").val();
 			var areaCode = ((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
 			var param={
+				"equipmentName":equiName,
 				"userName":username,		//用户
 				"type":equiType,				//类型
 				"adcode":areaCode			//地区(代码)

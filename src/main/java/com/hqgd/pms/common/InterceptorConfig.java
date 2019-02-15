@@ -34,14 +34,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	 * 		“/**”	——表示的是当前目录下的所有层级url地址(甚至静态资源)
 	 */
 	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(interceptor()).addPathPatterns("/*")
-            .excludePathPatterns("/hqgd")							//登录页
-            .excludePathPatterns("/hqgd/login")					//登录
-            .excludePathPatterns("/hqgd/loginout")			//退出
-//            .excludePathPatterns("/user/*")
-//            .excludePathPatterns("/equipment/*")
-			.excludePathPatterns("classpath:/static/**");	//静态资源
-    }
+	public void addInterceptors(InterceptorRegistry registry) {}
 
 }

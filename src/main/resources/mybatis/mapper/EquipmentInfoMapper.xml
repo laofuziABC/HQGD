@@ -39,6 +39,9 @@
     <if test="type!= null">
      AND TYPE = #{type}
     </if>
+    <if test="equipmentName null and equipmentName''">
+     AND EQUIPMENT_NAME = #{equipmentName}
+    </if>
     <if test="userName!= null and userName!=''">
      AND USER_NAME = #{userName}
     </if> 
@@ -52,51 +55,16 @@
      and  ADCODE = #{adcode}
     </if> 
   </select>
-  <select id="selectAllEquipmentByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from hq_equipment_info
-    where 1=1 
-     AND USER_NAME = #{userName,jdbcType=VARCHAR}
-  </select>
-  <select id="selectAllByType" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from hq_equipment_info
-    where 1=1 
-     AND TYPE = #{type,jdbcType=VARCHAR}
-  </select>
-  <select id="selectAllEquipmentByAddress"  resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from hq_equipment_info
-    where 1=1
-    <if test="_parameter.length() == 2">
-     and  PADCODE = #{_parameter,jdbcType=VARCHAR}
-    </if> 
-    <if test="_parameter.length() == 4">
-     and  CADCODE = #{_parameter,jdbcType=VARCHAR}
-    </if>
-    <if test="_parameter.length() == 6">
-     and  ADCODE = #{_parameter,jdbcType=VARCHAR}
-    </if> 
-  </select>
+  
   <select id="selectAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from hq_equipment_info
   </select>
-  <select id="selectEquipmentByGroup" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+  
+  <select id="selectFrame">
+    select FRAME_STRU
     from hq_equipment_info
-    where GROUP = #{group,jdbcType=VARCHAR}
-  </select>
-  <select id="selectByEquipmentName" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from hq_equipment_info
-    where EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 

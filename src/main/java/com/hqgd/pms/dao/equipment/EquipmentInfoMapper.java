@@ -18,24 +18,14 @@ public interface EquipmentInfoMapper {
 
 	int updateByPrimaryKey(EquipmentInfo record);
 
-	List<EquipmentInfo> selectAllEquipmentByUser(String userName);
-
 	List<EquipmentInfo> selectAll();
 
-	int selectTotalChNum();
-
-	int selectEquipCh(String equipmentId);
-
 	List<EquipmentInfo> selectLngLat();
-
-	List<EquipmentInfo> selectAllEquipmentByAddress(String adcode);
-
-	EquipmentInfo selectByEquipmentName(String equipmentName);
-
-	List<EquipmentInfo> selectAllByType(String type);
 
 	List<EquipmentInfo> selectLngLatByUser(String userName);
 
 	List<EquipmentInfo> selectAllByParam(Map<String, String> param);
+	
+	List<String> selectFrame();
 
 }

@@ -19,7 +19,7 @@ public interface DataAcquisitionVoMapper {
 
     int updateByPrimaryKey(DataAcquisitionVo record);
     
-    List<DataAcquisitionVo> selectRealTimeDataById(String equipmentId);
+    List<DataAcquisitionVo> selectRealTimeDataById(String equipmentId, String type);
 
 	List<DataAcquisitionVo> selectHistoricalDataById(Map<String, Object> param);
 
@@ -36,5 +36,9 @@ public interface DataAcquisitionVoMapper {
 	List<DataAcquisitionVo> selectChanDataByParam(Map<String, Object> param);
 
 	List<DataAcquisitionVo> selectAllEquipRealtime(String userName);
+
+	void deleteFirst();
+
+	void insertLast();
 	
 }

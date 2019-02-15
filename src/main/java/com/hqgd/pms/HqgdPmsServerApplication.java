@@ -11,14 +11,16 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-//@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @EnableScheduling
 @SpringBootApplication
 @MapperScan("com.hqgd.pms.dao")
 public class HqgdPmsServerApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		SpringApplication.run(HqgdPmsServerApplication.class, args);
+//		//启动socket
+//		SystemStartServlet server = new SystemStartServlet();
+//		server.init();
 	}
 
 	@Bean
