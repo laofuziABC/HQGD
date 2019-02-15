@@ -8,7 +8,7 @@ import com.hqgd.pms.domain.QueryParametersVo;
 
 public interface IDataAcquisitionService {
 
-	List<DataAcquisitionVo> execGetRealTimeData(String equipmentId, String type);
+	List<DataAcquisitionVo> execGetRealTimeData(String equipmentId);
 
 	List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo);
 

@@ -19,7 +19,7 @@ public interface DataAcquisitionVoMapper {
 
     int updateByPrimaryKey(DataAcquisitionVo record);
     
-    List<DataAcquisitionVo> selectRealTimeDataById(String equipmentId, String type);
+    List<DataAcquisitionVo> selectRealTimeDataById(String equipmentId);
 
 	List<DataAcquisitionVo> selectHistoricalDataById(Map<String, Object> param);
 

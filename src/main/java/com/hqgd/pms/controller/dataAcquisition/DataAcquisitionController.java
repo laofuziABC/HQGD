@@ -46,11 +46,11 @@ public class DataAcquisitionController {
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 
 	@RequestMapping("/realtime")
-	public void getRealTimeMonitoringData(Model model, String equipmentId, String type, HttpServletRequest request,
+	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询实时数据开始 " + inTime);
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId, type);
+		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");

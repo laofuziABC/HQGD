@@ -30,8 +30,8 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	private EquipmentInfoMapper equipmentInfoMapper;
 
 	@Override
-	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId, String type) {
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId, type);
+	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
+		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(equipmentId);
 		if (realTimeDateList.size() > 0) {
 			int numOfCh = realTimeDateList.get(0).getNumOfCh();
 			if (realTimeDateList.size() == numOfCh) {
