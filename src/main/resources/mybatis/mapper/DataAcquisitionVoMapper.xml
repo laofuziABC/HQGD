@@ -409,7 +409,7 @@ ORDER BY
   <!-- 获取所有的通道名称集合 -->
   <select id="selectAllChannels" parameterType="String" resultMap="ChannelResultMap">
   	select CHANNEL_NUM 
-  	from hq_equipment_monitor_data 
+  	from hq_equipment_monitor_data_r 
   	where
 		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
 		GROUP BY
@@ -419,7 +419,7 @@ ORDER BY
   </select>
   <select id="selectAllTimestamp" parameterType="java.util.Map" resultMap="TimeResultMap">
 	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
-	from hq_equipment_monitor_data 
+	from hq_equipment_monitor_data_r 
 	where
 		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
 		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
@@ -430,7 +430,7 @@ ORDER BY
   <select id="selectChanDataByParam" parameterType="java.util.Map" resultMap="TempertureList">
  	select
  		TEMPERATURE
-    from hq_equipment_monitor_data
+    from hq_equipment_monitor_data_r
     where
 		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
 		AND CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
