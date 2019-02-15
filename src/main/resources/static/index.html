@@ -200,10 +200,19 @@
 			//根据用户角色，加载用户菜单【结束】
 			//关联菜单和页面
 			function loadMainContent(param) {
+				if($("body").hasClass("sidebar-open")){
+					$(".sidebar-toggle").click();
+				}
 				if (param != null) {
 					$("#content-wrapper").load(param);
 				}
 			}
+			//小屏幕指定菜单选择后隐藏
+			$(".selection>li").on("click",function(){
+				if($("body").hasClass("sidebar-open")){
+					$(".sidebar-toggle").click();
+				}
+			});
 		</script>
 		<!-- 页面地图【开始】 -->
 		<script type="text/javascript"
