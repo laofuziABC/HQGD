@@ -29,14 +29,16 @@
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <style type="text/css">
-	#result_list_div { margin: 10px 0 0 0; padding: 0; }
+	#result_list_div { margin: 10px 0 0 0; padding: 0; min-height: 150px; overflow-y: scroll; max-height: 400px;}
 	/* #equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
 	#equipResultList li:hover, #equipResultList .checked{ width: 80%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
 	#equipResultList li span { width: 100%; } */
-	#equipResultList .hide{display: none;}
 	.equipResultList{padding: 0 0 0 10%;}
-	.equipResultList li { width: 95%; margin: 5px auto; text-align: left; list-style: none; padding: 0;}
-	.equipResultList li:hover, .equipResultList .checked{ width: 95%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
+	#equipResultList .hide{display: none;}
+	#equipResultList p{font-size: 16px; cursor: pointer;}
+	
+	.equipResultList li { width: 75%; margin: 5px auto; text-align: left; list-style: none; padding: 0;}
+	.equipResultList li:hover, .equipResultList .checked{ width: 75%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; position: relative; left: -5%;}
 	.equipResultList li span { width: 100%; }
 	#sub-list-pager { margin: 10px auto; }
 /*conent start*/
@@ -54,12 +56,12 @@
 .data p .dispaly{color:#00F;}
 /*end data*/
 	/* 查询条件样式【开始】 */
-	#showParams{padding: 0; color: #000;}
+	#showParams{padding: 5px 0; color: #000;}
 	#showParams div{margin: 5px 0;}
 	#showParams div span{font-size: 16px;}
-	#showParams .input{height: 35px; width: 165px;}
-	#showParams .select1{height: 35px; width: 165px;}
-	#showParams .select2{height: 35px; width: 66px;}
+	#showParams .input{height: 35px; border: 1px solid #ccc; width: 77%;}
+	#showParams .select1{height: 35px; width: 165px; border: 1px solid #ccc;}
+	#showParams .select2{height: 35px; width: 66px; border: 1px solid #ccc; width: 31%;}
 	#showParams button{margin: 5px 35%;}
 	/* 查询条件样式【结束】 */
 </style>
@@ -90,51 +92,41 @@
 						<div class="box box-solid">
 							<div class="box-body">
 								<div class="input-group">
-									<input id="interEqui" type="text" class="form-control" placeholder="请输入设备名称">
-									<input type="button" class="btn btn-primary" onclick="searchByEquiName();" value="查询" />
-									<input type="button" class="btn btn-primary" onclick="showParams();" value="分组" />
-								</div>
-								<div class="tree_menu">
-									<!-- 查询参数【开始】 -->
-									<div class="tree well tree_one" id="showParams" style="display: none;">
-										<div id="userParam"><span>用户:</span>
+									<div style="height: 35px; width: 96%;"><input id="interEqui" type="text" class="form-control" placeholder="请输入设备名称"></div>
+									<!-- 分组参数【开始】 -->
+									<div id="showParams" style="display: none;">
+										<div id="userParam"><span>&nbsp;用户:&nbsp;</span>
 											<input id="interUser" type="text" class="input" placeholder="请输入用户名" value="">
 										</div>
-										<!-- <div id="addrParam"><span>类型:</span>
-											<select id="equi-type" class="select1">
-												<option value="0" selected="selected">所有类型</option>
-												<option value="1">开关柜</option>
-												<option value="2">干式变压器</option>
-												<option value="3">变压器绕组</option>
-												<option value="4">环网柜</option>
-											</select>
-										</div> -->
-										<div id="typeParam"><span>地区:</span><br/>
+										<div id="typeParam"><span>&nbsp;地区:</span><br/>
 											<select id="prov-select" class="select2" onchange="getCities();"><option value="0">选择省</option></select>
 											<select id="city-select" class="select2" onchange="getTowns();"><option value="0">选择市</option></select>
 											<select id="town-select" class="select2"><option value="0">选择区</option></select>
 										</div>
-										<button class="btn btn-primary" onclick="searchEquipList();">查询</button>
-										
 									</div>
-									<!-- 查询参数【结束】 -->
+									<!-- 分组参数【结束】 -->
+									<!-- <input type="button" class="btn btn-primary" onclick="searchByEquiName();" value="查询" /> -->
+									<input type="button" class="btn btn-primary" onclick="searchEquipList();" value="查询" />
+									<input type="button" class="btn btn-primary" onclick="showParams();" value="分组" />
+								</div>
+								<div class="tree_menu">
 									<!-- 结果列表【开始】 -->
 									<div class="tree well tree_one" id="result_list_div">
 										<ul style="color: #151414;" class="box-body no-padding nav nav-pills nav-stacked" id="equipResultList">
 											<li>
-												<p class="">开关柜</p>
+												<p class="">>&nbsp;开关柜</p>
 												<ul id="kgglist" class="equipResultList hide"></ul>
 											</li>
 											<li>
-												<p class="">干式变压器</p>
+												<p class="">>&nbsp;干式变压器</p>
 												<ul id="gsbyqlist" class="equipResultList hide"></ul>
 											</li>
 											<li>
-												<p class="">变压器绕阻</p>
+												<p class="">>&nbsp;变压器绕阻</p>
 												<ul id="byqrzlist" class="equipResultList hide"></ul>
 											</li>
 											<li>
-												<p class="">环网柜</p>
+												<p class="">>&nbsp;环网柜</p>
 												<ul id="hwglist" class="equipResultList hide"></ul>
 											</li>
 										</ul>
@@ -244,7 +236,7 @@
 			var url="equipment/selectAll";
 			AjaxPostForEquiSubList(url,null);
 		}
-		//根据设备名称查询设备列表
+		/* //根据设备名称查询设备列表
 		function searchByEquiName(){
 			var url="equipment/selectByEquipmentName";
 			var equiName=$("#interEqui").val().trim();
@@ -254,21 +246,19 @@
 			}else{
 				getEquiResultList();
 			}
-		}
+		} */
 		//通过筛选条件的所有内容，查询设备列表
 		function searchEquipList(){
 			var equiName=$("#interEqui").val().trim();
 			var username = (roleId==1)?($("#interUser").val().trim()):(parent.getParam("userName"));
-			var equiType=$("#equi-type").val().trim();
 			var p = $("#prov-select").val();
 			var c = $("#city-select").val();
 			var t = $("#town-select").val();
 			var areaCode = ((p>c)?(p/10000):(c/100))>t?((p>c)?(p/10000):(c/100)):t;
 			var param={
-				"equipmentName":equiName,
-				"userName":username,		//用户
-				"type":equiType,				//类型
-				"adcode":areaCode			//地区(代码)
+				"equipmentName":equiName,		//设备名称
+				"userName":username,					//所属用户
+				"adcode":areaCode						//地区(代码)
 			};
 			var url="equipment/searchEquiByParam";
 			AjaxPostForEquiSubList(url, param);

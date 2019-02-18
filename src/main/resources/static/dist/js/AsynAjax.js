@@ -33,10 +33,10 @@ function POSTAjaxForAllResultList(url,param){
 	return allResultList;
 }
 //封装数据监测页面的Ajax异步请求
-var equiId;		//设备主键
+var equiId;			//设备主键
+var equiType;	//设备类型
 var userParam=document.getElementById("userParam");
 function AjaxPostForEquiSubList(url,param){
-	var resultList = "";
 	var kgg_list = "";			//开关柜
 	var gsbyq_list = "";		//干式变压器
 	var byqrz_list = "";		//变压器绕阻
@@ -54,7 +54,7 @@ function AjaxPostForEquiSubList(url,param){
 				//根据设备列表，初始化第一台设备的展示信息
 				if(totalSize>0){
 					equiId=data[0].equipmentId;
-					var activeStr="<li class=\"checked\" onclick=\"getEquiData('"+data[0].equipmentId+"');\"><span><em>"+data[0].equipmentName+"</em></span></li>";
+					var activeStr="<li class=\"checked\" onclick=\"getEquiData('"+equiId+"');\"><span><em>"+data[0].equipmentName+"</em></span></li>";
 					switch(data[0].type){
 						case "1": kgg_list+=activeStr; $("#kgglist").removeClass("hide"); break;
 						case "2": gsbyq_list+=activeStr; $("#gsbyqlist").removeClass("hide"); break;
@@ -87,13 +87,15 @@ function AjaxPostForEquiSubList(url,param){
 //监听活动设备
 function changeCheckEqui(){
 	$(".equipResultList>li").click(function(){
-		$(this).parent().parent().parent().find("li").removeClass("checked");
 		if(!$(this).hasClass("disabled")){
+			$(this).parent().parent().parent().find("li").removeClass("checked");
 			$(this).addClass("checked");
 		}
 	});
 }
-
-$("#equipResultList li>p").click(function(){
-	$(this).next().toggleClass("hide");
+//切换设备分组菜单
+$(function(){
+	$("#equipResultList li>p").click(function(){
+		$(this).next().toggleClass("hide");
+	});
 });

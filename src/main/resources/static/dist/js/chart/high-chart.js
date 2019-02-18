@@ -166,6 +166,7 @@ function initCurrentChart(){
 	currentOption.series = series;
 	$("#chart_current").empty();
 	$("#chart_current").highcharts(currentOption);
+//	currentOption.reflow();
 }
 //计算点的坐标，落在图表中
 function addPoints(){
@@ -206,7 +207,14 @@ function addPoints(){
 	     clearInterval(i);
 	}
 }
-
+//展示实时监控通道最新监测的温度
+function showBlocks(){
+	var url="dataAcquisition/realtime";
+	var param={"equipmentId": equiId};
+	var result = getChartData(url, param);
+	var data = (result==null)?null:(result.data);
+	drawCurrentChannels(data);
+}
 function drawCurrentChannels(param){
 	//设置DIV高度
 	var channel = "";
@@ -217,7 +225,11 @@ function drawCurrentChannels(param){
 		//超过2分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
 		cTime=(new Date()).getTime();
-		$("#last-time").text("最后监测时间："+param[0].receiveTime);
+//		$("#last-time").text("最后监测时间："+param[0].receiveTime);
+		
+		var timetext = "最新通道温度(单位:℃，最后监测时间："+param[0].receiveTime+")";
+		$("#last-time").text(timetext);
+		
 		if((cTime-lTime)>(2*60*1000)){ $("#last-time").css({"color":"red"}); }
 		else{$("#last-time").css({"color":"#21242e"});}
 		//设定尺寸适应容器【开始】

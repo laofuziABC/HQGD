@@ -75,11 +75,6 @@
 		<!-- </div> -->
 		<!-- 下方的统计表【结束】 -->
 	
-		<!-- <script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-		<!-- bootstrap datepicker -->
-		<!-- <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
-		<!-- bootstrap time picker -->
-		<!-- <script src="../../plugins/timepicker/bootstrap-timepicker.min.js"></script> -->
 		<script src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
 		<script type="text/javascript">
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【开始】
@@ -125,9 +120,8 @@
 					"startTime" : $("#startTime").val(),
 					"endTime" : $("#endTime").val(),
 					"state" : $("#data-type").val(),
-					"page" : pageNo, //当前页码，相当于pageNum
-					"limit" : $("#page-size").val()
-				//当前页面大小，相当于pageSize
+					"page" : pageNo, 							//当前页码，相当于pageNum
+					"limit" : $("#page-size").val()		//当前页面大小，相当于pageSize
 				};
 				$.ajax({
 					url : "dataAcquisition/historical",
@@ -187,21 +181,14 @@
 							//加载表格内容
 							for (let i = 0; i < data.length; i++) {
 								historyTable += "<tr>";
-								historyTable += "<td>" + data[i].equipmentName
-										+ "</td>";
-								historyTable += "<td>" + data[i].channelNum
-										+ "</td>";
-								historyTable += "<td>"
-										+ data[i].opticalFiberPosition
-										+ "</td>";
-								historyTable += "<td>" + data[i].temperature
-										+ "</td>";
+								historyTable += "<td>" + data[i].equipmentName + "</td>";
+								historyTable += "<td>" + data[i].channelNum + "</td>";
+								historyTable += "<td>" + data[i].opticalFiberPosition + "</td>";
+								historyTable += "<td>" + data[i].temperature + "</td>";
 								historyTable += "<td>" + data[i].pd + "</td>";
 								historyTable += "<td>" + data[i].uv + "</td>";
-								historyTable += "<td>" + data[i].message
-										+ "</td>";
-								historyTable += "<td>" + data[i].receiveTime
-										+ "</td>";
+								historyTable += "<td>" + data[i].message + "</td>";
+								historyTable += "<td>" + data[i].receiveTime + "</td>";
 								historyTable += "</tr>";
 							}
 						}
