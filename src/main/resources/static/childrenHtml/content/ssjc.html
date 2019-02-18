@@ -142,18 +142,20 @@
 					</div>
 					<!-- /.col -->
 					<div class="col-md-9">
-						<div class="box box-primary">
-							<div class="box-body no-padding">
-								<ul class="nav nav-tabs">
-									<li class=""><a data-toggle="tab" id="cc"
-										href="#currenttab" onclick="changeTabContent(1);">当前监测数据</a></li>
-									<li class=""><a data-toggle="tab" id="hh"
-										href="#historytab" onclick="changeTabContent(2);">历史监测数据</a></li>
-								</ul>
-								<div class="tab-content">
-									<div id="currenttab"></div>
-									<div id="historytab"></div>
-								</div>
+						<div class="nav-tabs-custom">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#currenttab" data-toggle="tab"
+									id="hh" onclick="changeTabContent(1);">实时监测数据</a></li>
+								<li><a href="#historytab" data-toggle="tab" id="dd"
+									onclick="changeTabContent(2);">历史监测数据</a></li>
+								<!-- <li class=""><a data-toggle="tab" id="cc"
+									href="#currenttab" onclick="changeTabContent(1);">当前监测数据</a></li>
+								<li class=""><a data-toggle="tab" id="hh"
+									href="#historytab" onclick="changeTabContent(2);">历史监测数据</a></li> -->
+							</ul>
+							<div class="tab-content">
+								<div id="currenttab"></div>
+								<div id="historytab"></div>
 							</div>
 						</div>
 					</div>
@@ -189,30 +191,30 @@
 		}
 		//allEquipRealtime();
 		//设置页面局部样式
-		$(".nav-tabs >li:contains('当前')").addClass("active");
-		$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
+		//$(".nav-tabs >li:contains('当前')").addClass("active");
+		//$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
 		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
 		var oldequiId=equiId;
 		var newequiId=equiId;
 		//切换标签页
 		function changeTabContent(param){
-			$(".nav-tabs >li").removeClass("active");
+			//$(".nav-tabs >li").removeClass("active");
 			if(param==2){
-				$(".nav-tabs >li:contains('历史')").addClass("active");
+				//$(".nav-tabs >li:contains('历史')").addClass("active");
 				if(oldequiId!=newequiId){
 					$("#historytab").load("childrenHtml/data/history.html");
 				}
 				$("#currenttab").css({"display" : "none" });
 				$("#historytab").css({ "display" : "block" });
-				$("#hh").css({"background-color": "#3c8dbc", "color": "#ffffff", "border": "0"});
-				$("#cc").css({"background-color": "#ffffff", "color": "#3c8dbc", "border": "0"});
+				//$("#hh").css({"background-color": "#3c8dbc", "color": "#ffffff", "border": "0"});
+				//$("#cc").css({"background-color": "#ffffff", "color": "#3c8dbc", "border": "0"});
 			}else if(param==1){
-				$(".nav-tabs >li:contains('当前')").addClass("active");
+				//$(".nav-tabs >li:contains('当前')").addClass("active");
 				$("#historytab").css({ "display" : "none" });
 				$("#currenttab").css({ "display" : "block" });
-				$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
-				$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
+				//$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
+				//$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
 				if(oldequiId!=newequiId){
 					showCurrentContent();
 				}
