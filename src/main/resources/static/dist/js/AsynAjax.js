@@ -73,6 +73,11 @@ function AjaxPostForEquiSubList(url,param){
 					gsbyq_list=(gsbyq_list.length==0)?("<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>"):(gsbyq_list);
 					byqrz_list=(byqrz_list.length==0)?("<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>"):(byqrz_list);
 					hwg_list=(hwg_list.length==0)?("<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>"):(hwg_list);
+				}else{
+					kgg_list+="<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>";
+					gsbyq_list+="<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>";
+					byqrz_list+="<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>";
+					hwg_list+="<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>";
 				}
 				$("#kgglist").html(kgg_list);
 				$("#gsbyqlist").html(gsbyq_list);
