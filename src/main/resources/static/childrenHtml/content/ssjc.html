@@ -5,8 +5,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=10">
 <title>实时监测</title>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="stylesheet" type="text/css" href="dist/js/pager/pager.css" />
-<link rel="stylesheet" type="text/css" href="dist/js/datetime/datetimepicker.css" />
 <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
@@ -31,11 +29,16 @@
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <style type="text/css">
-#result_list_div { margin: 10px 0 0 0; padding: 0; }
-#equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
-#equipResultList li:hover, #equipResultList .checked{ width: 80%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
-#equipResultList li span { width: 100%; }
-#sub-list-pager { margin: 10px auto; }
+	#result_list_div { margin: 10px 0 0 0; padding: 0; }
+	/* #equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
+	#equipResultList li:hover, #equipResultList .checked{ width: 80%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
+	#equipResultList li span { width: 100%; } */
+	#equipResultList .hide{display: none;}
+	.equipResultList{padding: 0 0 0 10%;}
+	.equipResultList li { width: 95%; margin: 5px auto; text-align: left; list-style: none; padding: 0;}
+	.equipResultList li:hover, .equipResultList .checked{ width: 95%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
+	.equipResultList li span { width: 100%; }
+	#sub-list-pager { margin: 10px auto; }
 /*conent start*/
 .conent{width:90px;height:120px;position:absolute;top:20px;display:none;/* z-index:810; */}
 .conent .sition{width:90px;height:120px;position:relative;}
@@ -88,10 +91,8 @@
 							<div class="box-body">
 								<div class="input-group">
 									<input id="interEqui" type="text" class="form-control" placeholder="请输入设备名称">
-									<div class="input-group-btn">
-										<button type="submit" class="btn btn-primary" onclick="searchEquipList();">查询</button>
-										<button type="submit" class="btn btn-primary" onclick="showParams();">分组</button>
-									</div>
+									<input type="button" class="btn btn-primary" onclick="searchByEquiName();" value="查询" />
+									<input type="button" class="btn btn-primary" onclick="showParams();" value="分组" />
 								</div>
 								<div class="tree_menu">
 									<!-- 查询参数【开始】 -->
@@ -99,7 +100,7 @@
 										<div id="userParam"><span>用户:</span>
 											<input id="interUser" type="text" class="input" placeholder="请输入用户名" value="">
 										</div>
-										<div id="addrParam"><span>类型:</span>
+										<!-- <div id="addrParam"><span>类型:</span>
 											<select id="equi-type" class="select1">
 												<option value="0" selected="selected">所有类型</option>
 												<option value="1">开关柜</option>
@@ -107,7 +108,7 @@
 												<option value="3">变压器绕组</option>
 												<option value="4">环网柜</option>
 											</select>
-										</div>
+										</div> -->
 										<div id="typeParam"><span>地区:</span><br/>
 											<select id="prov-select" class="select2" onchange="getCities();"><option value="0">选择省</option></select>
 											<select id="city-select" class="select2" onchange="getTowns();"><option value="0">选择市</option></select>
@@ -120,7 +121,22 @@
 									<!-- 结果列表【开始】 -->
 									<div class="tree well tree_one" id="result_list_div">
 										<ul style="color: #151414;" class="box-body no-padding nav nav-pills nav-stacked" id="equipResultList">
-											<li><span><em>设备名称</em></span></li>
+											<li>
+												<p class="">开关柜</p>
+												<ul id="kgglist" class="equipResultList hide"></ul>
+											</li>
+											<li>
+												<p class="">干式变压器</p>
+												<ul id="gsbyqlist" class="equipResultList hide"></ul>
+											</li>
+											<li>
+												<p class="">变压器绕阻</p>
+												<ul id="byqrzlist" class="equipResultList hide"></ul>
+											</li>
+											<li>
+												<p class="">环网柜</p>
+												<ul id="hwglist" class="equipResultList hide"></ul>
+											</li>
 										</ul>
 										<!-- 翻页插件 -->
 										<div>
@@ -227,6 +243,17 @@
 		function getEquiResultList(){
 			var url="equipment/selectAll";
 			AjaxPostForEquiSubList(url,null);
+		}
+		//根据设备名称查询设备列表
+		function searchByEquiName(){
+			var url="equipment/selectByEquipmentName";
+			var equiName=$("#interEqui").val().trim();
+			var param={"equipmentName":equiName};
+			if(equiName != ""){
+				AjaxPostForEquiSubList(url,param);
+			}else{
+				getEquiResultList();
+			}
 		}
 		//通过筛选条件的所有内容，查询设备列表
 		function searchEquipList(){
