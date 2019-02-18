@@ -178,4 +178,21 @@ public class DataAcquisitionController {
 		}, 0, 60000);
 	}
 
+	@RequestMapping("/record")
+	public void record(QueryParametersVo data, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.record(data);
+		try {
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			resultMap.put("success", Boolean.TRUE.toString());
+			resultMap.put("resultCode", "00000000");
+			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+			resultMap.put("message", "");
+			resultMap.put("data", historicalDataList);
+			response.setContentType("application/json; charset=UTF-8");
+			response.getWriter().write(new Gson().toJson(resultMap));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 }

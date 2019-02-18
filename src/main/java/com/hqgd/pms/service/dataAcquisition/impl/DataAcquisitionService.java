@@ -303,4 +303,34 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		return realTimeDateList;
 	}
 
+	@Override
+	public List<DataAcquisitionVo> record(QueryParametersVo queryVo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		param.put("state", queryVo.getState());
+		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
+		List<DataAcquisitionVo> historicalDataList = null;
+		switch (type) {
+		case "1":
+			param.put("table", "hq_equipment_monitor_data_1");
+			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
+			break;
+		case "2":
+			param.put("table", "hq_equipment_monitor_data_2");
+			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
+			break;
+		case "3":
+			param.put("table", "hq_equipment_monitor_data_3");
+			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
+			break;
+		case "4":
+			param.put("table", "hq_equipment_monitor_data_4");
+			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
+			;
+			break;
+		}
+		return historicalDataList;
+	}
 }

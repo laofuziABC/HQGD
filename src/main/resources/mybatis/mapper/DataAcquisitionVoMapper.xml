@@ -159,7 +159,7 @@ ORDER BY
     SELECT
 	<include refid="Base_Column_List" /> 
     FROM
-	    HQTemp_Cloud1.dbo.hq_equipment_monitor_data w1 
+	    ${table} w1 
     WHERE
         1=1
 	  AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
