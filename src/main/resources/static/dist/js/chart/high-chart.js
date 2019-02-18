@@ -127,7 +127,7 @@ var NOW_TIME=new Date();
 var NT_VALUE=NOW_TIME.getTime();
 //获取并计算常量【结束】
 function initCurrentChart(){
-	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
+	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/periodDate";
