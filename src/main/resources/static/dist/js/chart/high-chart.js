@@ -25,7 +25,7 @@ var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#ffffff', marginRight: 20, panning: true, panKey: 'ctrl'},
 	title: {text: '历史温度曲线图', style: {color: '#666'}},
 	legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
-	yAxis: { title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#666'}}, min: 0, max: 100 },
+	yAxis: { title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', gridLineColor: '#666', labels: {style: {color: '#666'}}, min: 0, max: 100 },
 	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#666'}, 
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
 	}}
@@ -35,7 +35,7 @@ var currentOption={
 	chart: { type: 'spline', backgroundColor: "#ffffff", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
     title: { text: '实时温度监测图', style: {color: '#666'} }, time: { useUTC: false },
     tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
-    yAxis: { title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#666'}}, min: 0, max: 100 },
+    yAxis: { title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', gridLineColor: '#666', labels: {style: {color: '#666'}}, min: 0, max: 100 },
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#666'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
 };
 //配置当空白统计图
@@ -44,7 +44,7 @@ var blankOption={
 	title: {text: '温度曲线图', style: {color: '#666'}},
 	legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors,
 	xAxis:{type: 'category'}, credits:{enabled: false},
-	yAxis:{title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#666'}}, min: 0, max: 100 },
+	yAxis:{title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', gridLineColor: '#666', labels: {style: {color: '#666'}}, min: 0, max: 100 },
 	series:[{name: '数据加载中', data: [], type:"spline", pointInterval: 6e4}]
 }
 
@@ -71,6 +71,7 @@ function getChartData(url, param){
 function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
+			debugger;
 			var series=[];
 			var data = result.data;
 			if(JSON.stringify(data) != '{}'){
@@ -79,11 +80,18 @@ function drawingHistoryChart(url, param){
 				var totalCount = seriesData[0].length;
 				//根据温度值，设置纵轴上下限【开始】
 				var tempArray=[];
+				//逻辑一：通过逐步比较，取出所有系列最值
+				var max, min;
 				for(let i=0; i<seriesData.length; i++){
-					tempArray=tempArray.concat(seriesData[i]);
+					max=(max>Math.max.apply(null, seriesData[i]))?max:(Math.max.apply(null, seriesData[i]));
+					min=(min<Math.min.apply(null, seriesData[i]))?min:(Math.min.apply(null, seriesData[i]));
 				}
-				var max=Math.max.apply(null, tempArray);
-				var min=Math.min.apply(null, tempArray);
+//				//逻辑二：先将所有的温度值合并为一个数组，取出最值(数据量大时浏览器可能会出现数据栈溢出)
+//				for(let i=0; i<seriesData.length; i++){
+//					tempArray=tempArray.concat(seriesData[i]);
+//				}
+//				var max=Math.max.apply(null, tempArray);
+//				var min=Math.min.apply(null, tempArray);
 				historyOption.yAxis.min=(min > -10)?(min-10):0;
 				historyOption.yAxis.max=(max < 100)?(max+10):100;
 				//根据温度值，设置纵轴上下限【结束】
@@ -165,12 +173,7 @@ function initCurrentChart(){
 	}
 	currentOption.series = series;
 	$("#chart_current").empty();
-	if(dataList.length==0){
-		$("#chart_current").highcharts(blankOption);
-	}else{
-		$("#chart_current").highcharts(currentOption);
-	}
-//	currentOption.reflow();
+	$("#chart_current").highcharts(currentOption);
 }
 //计算点的坐标，落在图表中
 function addPoints(){
@@ -204,6 +207,8 @@ function addPoints(){
 				$("#last-time").css({"color":"red"});
 			}
 		}
+		var chart=$("#chart_current").highcharts();
+		chart.reflow();
 	}, interval);
 	//清除页面多余的定时任务
 	var start = (timing-60000>0) ?(timing-60000):0;
@@ -281,3 +286,9 @@ function setValueRangeForCChart(param){
 		currentOption.yAxis.min=0;
 	}
 }
+
+$(".navbar > .sidebar-toggle").on("click",function(){
+	alert("abc");
+	var chart=$("#chart_current").highcharts();
+	chart.reflow();
+});
