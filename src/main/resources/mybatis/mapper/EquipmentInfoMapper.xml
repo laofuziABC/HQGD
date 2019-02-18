@@ -45,19 +45,19 @@
     <if test="type!= null">
      AND TYPE = #{type}
     </if>
-    <if test="equipmentName null and equipmentName''">
+    <if test="equipmentName!= null">
      AND EQUIPMENT_NAME = #{equipmentName}
     </if>
     <if test="userName!= null and userName!=''">
      AND USER_NAME = #{userName}
     </if> 
-    <if test="adcode.length() == 2">
+    <if test="adcode!= null and adcode.length() == 2">
      and  PADCODE = #{adcode}
     </if> 
-    <if test="adcode.length() == 4">
+    <if test="adcode!= null and adcode.length() == 4">
      and  CADCODE = #{adcode}
     </if>
-    <if test="adcode.length() == 6">
+    <if test="adcode!= null and adcode.length() == 6">
      and  ADCODE = #{adcode}
     </if> 
   </select>

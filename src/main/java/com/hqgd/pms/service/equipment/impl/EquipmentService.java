@@ -84,7 +84,7 @@ public class EquipmentService implements IEquipmentService {
 		Map<String, String> param = new HashMap<>();
 		param.put("userName", request.getParameter("userName"));
 		param.put("adcode", request.getParameter("adcode"));
-		if(request.getParameter("type").equals("0")) {
+		if(request.getParameter("type")==null||request.getParameter("type").equals("0")) {
 			param.put("type", null);
 		}else {
 			param.put("type", request.getParameter("type"));
