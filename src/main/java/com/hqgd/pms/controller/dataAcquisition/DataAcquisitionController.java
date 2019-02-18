@@ -94,7 +94,7 @@ public class DataAcquisitionController {
 		long inTime = System.currentTimeMillis();
 		log.info("查询历史数据开始 " + inTime);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
-		Integer total = historicalDataList.size();
+		Integer total = dataAcquisitionService.selectTotal(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");

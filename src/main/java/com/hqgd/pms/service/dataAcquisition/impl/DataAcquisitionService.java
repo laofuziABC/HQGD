@@ -37,21 +37,18 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_r1");
-			realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
 			break;
 		case "2":
 			param.put("table", "hq_equipment_monitor_data_r2");
-			realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
 			break;
 		case "3":
 			param.put("table", "hq_equipment_monitor_data_r3");
-			realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
 			break;
 		case "4":
 			param.put("table", "hq_equipment_monitor_data_r4");
-			realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
 			break;
 		}
+		realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
 		if (realTimeDateList.size() > 0) {
 			int numOfCh = realTimeDateList.get(0).getNumOfCh();
 			if (realTimeDateList.size() == numOfCh) {
@@ -99,22 +96,18 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_1");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 			break;
 		case "2":
 			param.put("table", "hq_equipment_monitor_data_2");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 			break;
 		case "3":
 			param.put("table", "hq_equipment_monitor_data_3");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 			break;
 		case "4":
 			param.put("table", "hq_equipment_monitor_data_4");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
-			;
 			break;
 		}
+		historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
 		for (DataAcquisitionVo d : historicalDataList) {
 			switch (d.getTemperature()) {
 			case "-437":
@@ -138,7 +131,23 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("startTime", queryVo.getStartTime());
 		param.put("endTime", queryVo.getEndTime());
 		param.put("state", queryVo.getState());
-		Integer total = dataAcquisitionVoMapper.selectTotal(param);
+		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
+		Integer total = null;
+		switch (type) {
+		case "1":
+			param.put("table", "hq_equipment_monitor_data_1");
+			break;
+		case "2":
+			param.put("table", "hq_equipment_monitor_data_2");
+			break;
+		case "3":
+			param.put("table", "hq_equipment_monitor_data_3");
+			break;
+		case "4":
+			param.put("table", "hq_equipment_monitor_data_4");
+			break;
+		}
+		total = dataAcquisitionVoMapper.selectTotal(param);
 		return total;
 	}
 
@@ -157,22 +166,18 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_1");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 			break;
 		case "2":
 			param.put("table", "hq_equipment_monitor_data_2");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 			break;
 		case "3":
 			param.put("table", "hq_equipment_monitor_data_3");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 			break;
 		case "4":
 			param.put("table", "hq_equipment_monitor_data_4");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
-			;
 			break;
 		}
+		historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 		long outTime = System.currentTimeMillis();
 		log.info("SQL结束：" + outTime);
 		long midTime = outTime - inTime;
@@ -233,22 +238,18 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_r1");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 			break;
 		case "2":
 			param.put("table", "hq_equipment_monitor_data_r2");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 			break;
 		case "3":
 			param.put("table", "hq_equipment_monitor_data_r3");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 			break;
 		case "4":
 			param.put("table", "hq_equipment_monitor_data_r4");
-			historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
-			;
 			break;
 		}
+		historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
 		long outTime = System.currentTimeMillis();
 		log.info("SQL结束：" + outTime);
 		long midTime = outTime - inTime;
@@ -315,22 +316,18 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_1");
-			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
 			break;
 		case "2":
 			param.put("table", "hq_equipment_monitor_data_2");
-			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
 			break;
 		case "3":
 			param.put("table", "hq_equipment_monitor_data_3");
-			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
 			break;
 		case "4":
 			param.put("table", "hq_equipment_monitor_data_4");
-			historicalDataList = dataAcquisitionVoMapper.recordExport(param);
-			;
 			break;
 		}
+		historicalDataList = dataAcquisitionVoMapper.recordExport(param);
 		return historicalDataList;
 	}
 }
