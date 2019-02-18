@@ -28,4 +28,6 @@ public interface EquipmentInfoMapper {
 	
 	List<String> selectFrame();
 
+	String selectTypeById(String equipmentId);
+
 }

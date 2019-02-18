@@ -1,6 +1,8 @@
 package com.hqgd.pms.controller.dataAcquisition;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +94,7 @@ public class DataAcquisitionController {
 		long inTime = System.currentTimeMillis();
 		log.info("查询历史数据开始 " + inTime);
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
-		Integer total = dataAcquisitionService.selectTotal(queryVo);
+		Integer total = historicalDataList.size();
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
@@ -155,16 +157,25 @@ public class DataAcquisitionController {
 			public void run() {
 				// 获取当前时间
 				long currentTime = System.currentTimeMillis();
+				Calendar calendar = Calendar.getInstance();
+				calendar.add(Calendar.MINUTE, -1460);
+				String lastTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
+				Map<String, Object> param = new HashMap<>();
 				// 判断当前时间和登录时间的差额,如果小于一天就把临时表1里的数据放进临时表2,如果大于一天就把临时表2里的最旧一条删除，再插入最新的一条
-				if ((currentTime - startTime) > (24 * 3600000 + 1000 * 60 * 10)) {// 保留十分钟的冗余度，避免系统时间和数据库时间有误差
-					dataAcquisitionVoMapper.deleteFirst();
-
-					dataAcquisitionVoMapper.insertLast();
-				} else {
-					dataAcquisitionVoMapper.insertLast();
+				if ((currentTime - startTime) < (24 * 3600000 + 1000 * 60 * 20)) {// 保留十分钟的冗余度，避免系统时间和数据库时间有误差
+					for (int i = 1; i <= 4; i++) {
+						param.put("lastTime", lastTime);
+						param.put("table", "hq_equipment_monitor_data_r" + i);
+						dataAcquisitionVoMapper.deleter(param);
+					}
 				}
-
+				for (int i = 1; i <= 4; i++) {
+					param.put("tabler", "hq_equipment_monitor_data_r" + i);
+					param.put("tablef", "hq_equipment_monitor_data_f" + i);
+					dataAcquisitionVoMapper.insertt(param);
+				}
 			}
 		}, 0, 60000);
 	}
+
 }

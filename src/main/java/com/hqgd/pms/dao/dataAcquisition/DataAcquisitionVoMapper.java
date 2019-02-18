@@ -37,8 +37,15 @@ public interface DataAcquisitionVoMapper {
 
 	List<DataAcquisitionVo> selectAllEquipRealtime(String userName);
 
-	void deleteFirst();
+	void deleteFirst(String lastTime);
 
 	void insertLast();
+
+
+	List<DataAcquisitionVo> selectRealTimeDataById(Map<String, Object> param);
+
+	void deleter(Map<String, Object> param);
+
+	void insertt(Map<String, Object> param);
 	
 }

@@ -35,15 +35,17 @@
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
     PD, UV, STATE, MESSAGE, CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS RECEIVE_TIME, DUTY_PERSON, TEL,NUM_OF_CH
   </sql>
-  <delete id="deleteFirst">
+  <delete id="deleter" parameterType="java.util.HashMap">
     DELETE 
 FROM
-	hq_equipment_monitor_data_r 
+	${table} 
 WHERE
-	RECEIVE_TIME = ( SELECT min( RECEIVE_TIME ) FROM hq_equipment_monitor_data_r )
+	RECEIVE_TIME <![CDATA[ < ]]> #{lastTime,jdbcType=VARCHAR};
+	
   </delete>
-  <insert id="insertLast" >
-  INSERT INTO hq_equipment_monitor_data_r (
+  
+	<insert id="insertt" parameterType="java.util.HashMap">
+	INSERT INTO ${tabler} (
 EQUIPMENT_ID,
 EQUIPMENT_NAME,
 ADDRESS,
@@ -74,9 +76,9 @@ DUTY_PERSON,
 TEL,
 NUM_OF_CH 
 FROM
-	hq_equipment_monitor_data_f
+	${tablef}
 	</insert>
-  <select id="selectRealTimeDataById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectRealTimeDataById"  resultMap="BaseResultMap">
    SELECT
 	t.EQUIPMENT_ID,
 	t.EQUIPMENT_NAME,
@@ -89,14 +91,15 @@ FROM
 	t.NUM_OF_CH,
 	CONVERT ( VARCHAR ( 100 ), t.RECEIVE_TIME, 20 ) AS RECEIVE_TIME 
 FROM
-	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM hq_equipment_monitor_data_r GROUP BY EQUIPMENT_ID ) AS temp
-	LEFT JOIN hq_equipment_monitor_data_r AS t ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM ${table}  GROUP BY EQUIPMENT_ID ) AS temp
+	LEFT JOIN ${table} AS t ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
 	AND temp.RECEIVE_TIME = t.RECEIVE_TIME
 WHERE
-	t.EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+	t.EQUIPMENT_ID = #{equipmentId}
 ORDER BY
 	CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
   </select>
+  
   <select id="selectAllEquipRealtime" parameterType="java.lang.String" resultMap="BaseResultMap">
    SELECT
 	t.EQUIPMENT_ID,
@@ -122,7 +125,7 @@ WHERE 1=1
     SELECT
 	<include refid="Base_Column_List" /> 
 FROM
-	HQTemp_Cloud1.dbo.hq_equipment_monitor_data w1 
+	${table} w1 
 WHERE
 	ID IN (
 SELECT
@@ -134,7 +137,7 @@ SELECT
 	EQUIPMENT_ID,
 	EQUIPMENT_NAME 
 FROM
-	HQTemp_Cloud1.dbo.hq_equipment_monitor_data 
+	${table} 
 WHERE
 	EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
 	AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
@@ -189,9 +192,9 @@ ORDER BY
     SELECT
     	',' + CAST( TEMPERATURE AS VARCHAR ) 
     FROM
-    	HQTemp_Cloud1.dbo.hq_equipment_monitor_data t 
+    	${table} t 
     WHERE
-    	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
+    	t.CHANNEL_NUM = m.CHANNEL_NUM 
     	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
         AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
         AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} ORDER BY RECEIVE_TIME FOR XML path ( '' ) 
@@ -205,9 +208,9 @@ ORDER BY
     SELECT
     	',' + CAST( CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS VARCHAR ) 
     FROM
-    	HQTemp_Cloud1.dbo.hq_equipment_monitor_data t 
+    	${table} t 
     WHERE
-    	t.CHANNEL_NUM = hq_equipment_monitor_data.CHANNEL_NUM 
+    	t.CHANNEL_NUM = m.CHANNEL_NUM 
     	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
         AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
         AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} ORDER BY RECEIVE_TIME FOR XML path ( '' ) 
@@ -217,7 +220,7 @@ ORDER BY
     	'' 
     	)     	
     FROM
-    	HQTemp_Cloud1.dbo.hq_equipment_monitor_data 
+    	${table} m
     WHERE
       1=1
       AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
@@ -407,7 +410,7 @@ ORDER BY
   </update>
   
   <!-- 获取所有的通道名称集合 -->
-  <select id="selectAllChannels" parameterType="String" resultMap="ChannelResultMap">
+  <select id="selectAllChannels1" parameterType="String" resultMap="ChannelResultMap">
   	select CHANNEL_NUM 
   	from hq_equipment_monitor_data_r 
   	where
@@ -417,7 +420,64 @@ ORDER BY
 		ORDER BY
 			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
   </select>
-  <select id="selectAllTimestamp" parameterType="java.util.Map" resultMap="TimeResultMap">
+  <select id="selectAllChannels2" parameterType="String" resultMap="ChannelResultMap">
+  	select CHANNEL_NUM 
+  	from hq_equipment_monitor_data_r 
+  	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		GROUP BY
+			CHANNEL_NUM 
+		ORDER BY
+			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
+  </select>
+  <select id="selectAllChannels3" parameterType="String" resultMap="ChannelResultMap">
+  	select CHANNEL_NUM 
+  	from hq_equipment_monitor_data_r 
+  	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		GROUP BY
+			CHANNEL_NUM 
+		ORDER BY
+			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
+  </select>
+  <select id="selectAllChannels4" parameterType="String" resultMap="ChannelResultMap">
+  	select CHANNEL_NUM 
+  	from hq_equipment_monitor_data_r 
+  	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		GROUP BY
+			CHANNEL_NUM 
+		ORDER BY
+			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
+  </select>
+  <select id="selectAllTimestamp1" parameterType="java.util.Map" resultMap="TimeResultMap">
+	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
+	from hq_equipment_monitor_data_r 
+	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+		ORDER BY RECEIVE_TIME ASC
+  </select>
+  <select id="selectAllTimestamp2" parameterType="java.util.Map" resultMap="TimeResultMap">
+	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
+	from hq_equipment_monitor_data_r 
+	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+		ORDER BY RECEIVE_TIME ASC
+  </select>
+  <select id="selectAllTimestamp3" parameterType="java.util.Map" resultMap="TimeResultMap">
+	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
+	from hq_equipment_monitor_data_r 
+	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+		ORDER BY RECEIVE_TIME ASC
+  </select>
+  <select id="selectAllTimestamp4" parameterType="java.util.Map" resultMap="TimeResultMap">
 	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
 	from hq_equipment_monitor_data_r 
 	where
