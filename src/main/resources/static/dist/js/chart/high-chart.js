@@ -19,12 +19,16 @@ var tooltip={shared: true, useHTML: true,
 };
 var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
+var lang={loading: "数据载入中……"};
+var loading={labelStyle: {color: "red", fontWeight: "bold"}, 
+		style: {backgroundColor: "rgba(255,255,255,0.7)", backgroundImage: "url('login/img/jiazaizhong.gif')", backgroundSize: '100% 100%'}
+};
 //设置图表公用配置项【结束】
 //配置历史数据监测曲线图配置项
 var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20, panning: true, panKey: 'ctrl'},
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
-	legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+	lang: lang, loading: loading, legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
 	yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
 	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, 
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
@@ -35,7 +39,7 @@ var historyOption = {
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
     title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: { useUTC: false },
-    tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+    lang: lang, loading: loading, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
     yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
     series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
@@ -62,6 +66,8 @@ function getChartData(url, param){
  * url：获取资源的途径，不能传空值；param：获取资源的传参。
 */
 function drawingHistoryChart(url, param){
+	var chart = $("#chart_history").highcharts();
+	chart.showLoading();
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
 			var series=[];
@@ -71,7 +77,6 @@ function drawingHistoryChart(url, param){
 				var seriesData = data.channelTemArr;
 				var totalCount = seriesData[0].length;
 				//根据温度值，设置纵轴上下限【开始】
-				var tempArray=[];
 				//逻辑一：通过逐步比较，取出所有系列最值
 				var max, min;
 				for(let i=0; i<seriesData.length; i++){
@@ -79,6 +84,7 @@ function drawingHistoryChart(url, param){
 					min=(min<Math.min.apply(null, seriesData[i]))?min:(Math.min.apply(null, seriesData[i]));
 				}
 //				//逻辑二：先将所有的温度值合并为一个数组，取出最值(数据量大时浏览器可能会出现数据栈溢出)
+//				var tempArray=[];
 //				for(let i=0; i<seriesData.length; i++){
 //					tempArray=tempArray.concat(seriesData[i]);
 //				}
@@ -124,6 +130,8 @@ var NOW_TIME=new Date();
 var NT_VALUE=NOW_TIME.getTime();
 //获取并计算常量【结束】
 function initCurrentChart(){
+	var chart = $("#chart_current").highcharts();
+	chart.showLoading();
 	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
