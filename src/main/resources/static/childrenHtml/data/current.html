@@ -5,12 +5,12 @@
 		<title>当前监测数据</title>
 		<style type="text/css">
 			#channelDiv .tiaoshijian{font-size: 20px;}
-			#channelsInfo td{text-align: left; border: 10px solid #ffffff;border-radius: 15%;}
-			#channelsInfo td .span_left{font-size: 25px; color: #666;}
+			#channelsInfo td{text-align: left; border: 1px solid #ffffff; /* border-radius: 15%; */}
+			#channelsInfo td .span_left{font-size: 25px; color: #ffffff;}
 			#channelsInfo td .span_right{font-size: 32px;}
-			#channelsInfo .green{background-color: #18fe482e; color: #00ff00;}
-			#channelsInfo .yellow{background-color: #ffff0036;color: #ffff00;}
-			#channelsInfo .red{background-color: #ff000017; color: #ff0000;}
+			#channelsInfo .green{/* background-color: #18fe482e; */ background-color: #21242e; color: #00ff00;}
+			#channelsInfo .yellow{/* background-color: #ffff0036; */ background-color: #21242e; color: #ffff00;}
+			#channelsInfo .red{/* background-color: #ff000017; */ background-color: #21242e; color: #ff0000;}
 			#jk_state{margin-top: 1%; text-align: center;}
 		</style>
 	</head>
@@ -44,21 +44,11 @@
 		
 		<script type="text/javascript">
 			//初始化页面信息
-			$("#chart_current").highcharts(blankOption);
-			/* if(equiId!=null){
+			if(equiId!=null){
 				showCurrentContent(); 
 			}else{
 				$("#chart_current").highcharts(blankOption);
-			} */
-			//异步加载通道温度【开始】
-			/* function showBlocks(){
-				var url="dataAcquisition/realtime";
-				var param={"equipmentId": equiId};
-				var result = getChartData(url, param);
-				var data = (result==null)?null:(result.data);
-				drawCurrentChannels(data);
-			} */
-			//异步加载通道温度【结束】
+			}
 			//绘制温度实时监控表【开始】
 			function showCurrentContent(){
 				showBlocks();

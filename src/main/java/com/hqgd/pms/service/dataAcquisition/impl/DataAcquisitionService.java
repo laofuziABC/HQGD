@@ -203,8 +203,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				List<Float> temFloat = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
 				channelTemArr.add(temFloat);
 			}
-			// state = Arrays.asList(historicalDataList.get(i).getState().split(","));
-			// stateArr.add(state);
 		}
 		long outTime1 = System.currentTimeMillis();
 		log.info("处理数据结束：" + outTime1);
@@ -261,6 +259,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		List<String> receiveTime = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		if (historicalDataList.isEmpty()) {
+			channelNumArr=dataAcquisitionVoMapper.selectAllChannels(param);
 			map.put("timeList", receiveTime);
 			map.put("channelList", channelNumArr);
 			map.put("dataList", channelTemArr);
@@ -278,7 +277,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			if (tem.size() > 0) {
 				List<Float> temFloat = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
 				channelTemArr.add(temFloat);
-				;
 			}
 		}
 		long outTime1 = System.currentTimeMillis();

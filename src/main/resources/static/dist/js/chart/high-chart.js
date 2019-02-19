@@ -22,29 +22,29 @@ var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#
 //设置图表公用配置项【结束】
 //配置历史数据监测曲线图配置项
 var historyOption = {
-	chart: {zoomType: ['x','y'], backgroundColor: '#ffffff', marginRight: 20, panning: true, panKey: 'ctrl'},
-	title: {text: '历史温度曲线图', style: {color: '#666'}},
+	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20, panning: true, panKey: 'ctrl'},
+	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
 	legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
-	yAxis: { title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', gridLineColor: '#666', labels: {style: {color: '#666'}}, min: 0, max: 100 },
-	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#666'}, 
+	yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
+	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, 
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
 	}}
 };
 //配置当前数据监测统计图
 var currentOption={
-	chart: { type: 'spline', backgroundColor: "#ffffff", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
-    title: { text: '实时温度监测图', style: {color: '#666'} }, time: { useUTC: false },
+	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
+    title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: { useUTC: false },
     tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
-    yAxis: { title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', gridLineColor: '#666', labels: {style: {color: '#666'}}, min: 0, max: 100 },
-    xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#666'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
+    yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
+    xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
 };
 //配置当空白统计图
 var blankOption={
-	chart: {zoomType: ['x','y'], backgroundColor: '#ffffff' },
-	title: {text: '温度曲线图', style: {color: '#666'}},
+	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
+	title: {text: '温度曲线图', style: {color: '#ffffff'}},
 	legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors,
 	xAxis:{type: 'category'}, credits:{enabled: false},
-	yAxis:{title: {text: '温度值（℃）', style:{color: '#666'} }, gridLineDashStyle: 'dot', gridLineColor: '#666', labels: {style: {color: '#666'}}, min: 0, max: 100 },
+	yAxis:{title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
 	series:[{name: '数据加载中', data: [], type:"spline", pointInterval: 6e4}]
 }
 
@@ -71,7 +71,6 @@ function getChartData(url, param){
 function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
-			debugger;
 			var series=[];
 			var data = result.data;
 			if(JSON.stringify(data) != '{}'){
@@ -287,7 +286,7 @@ function setValueRangeForCChart(param){
 	}
 }
 
-$(".navbar > .sidebar-toggle").on("click",function(){
+$(".sidebar-toggle").on("click",function(){
 	alert("abc");
 	var chart=$("#chart_current").highcharts();
 	chart.reflow();

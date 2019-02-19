@@ -31,7 +31,7 @@ public interface DataAcquisitionVoMapper {
 
 	List<Date> selectAllTimestamp(Map<String, Object> param);
 	
-	List<String> selectAllChannels(String equipmentId);
+	List<String> selectAllChannels(Map<String, Object> param);
 
 	List<DataAcquisitionVo> selectChanDataByParam(Map<String, Object> param);
 

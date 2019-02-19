@@ -410,6 +410,17 @@ ORDER BY
   </update>
   
   <!-- 获取所有的通道名称集合 -->
+  <select id="selectAllChannels" parameterType="String" resultMap="ChannelResultMap">
+  	select CHANNEL_NUM 
+  	from
+  		${table}
+  	where
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+		GROUP BY
+			CHANNEL_NUM 
+		ORDER BY
+			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
+  </select>
   <select id="selectAllChannels1" parameterType="String" resultMap="ChannelResultMap">
   	select CHANNEL_NUM 
   	from hq_equipment_monitor_data_r 
