@@ -206,8 +206,10 @@ function addPoints(){
 				$("#last-time").css({"color":"red"});
 			}
 		}
-		var chart=$("#chart_current").highcharts();
-		chart.reflow();
+		var chartH = $("#chart_history").highcharts();
+		var chartC=$("#chart_current").highcharts();
+		chartH.reflow();
+		chartC.reflow();
 	}, interval);
 	//清除页面多余的定时任务
 	var start = (timing-60000>0) ?(timing-60000):0;
