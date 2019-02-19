@@ -64,6 +64,7 @@ $.fn.extend({
 			if(fParam==1){searchTableResult(pageNum);}
 			else if(fParam==2){getUserList();}
 			else if(fParam==3){getEquipmentList();}
+			else if(fParam==4){getImageList();}
 			loadPages(null, null, pageNum);
 		});
 	}
