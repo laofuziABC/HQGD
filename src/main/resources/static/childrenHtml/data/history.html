@@ -9,8 +9,8 @@
 		<style type="text/css">
 			.ssjc_ru_title span {margin: 5px; }
 			.ssjc_ru_title {padding: 5px; }
-			.box-body2{padding: 0; background-color: #21242e;}
-			#example1{color: #ffffff; width: 100%;}
+			.box-body2{padding: 2px 0; background-color: #21242e;}
+			#example1{color: #ffffff; width: 98%; margin: 2px auto;}
 		</style>
 	</head>
 	<body>
@@ -88,7 +88,7 @@
 			var endTimeInput = document.getElementById("endTime");
 			startTimeInput.value = parent.formatInitDateToString(new Date());
 			endTimeInput.value = parent.formatDateToString(new Date());
-			$("#chart_history").highcharts(blankOption);
+			$("#chart_history").highcharts(historyOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
 				var startTime = $("#startTime").val();
