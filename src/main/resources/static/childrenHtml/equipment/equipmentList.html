@@ -77,9 +77,17 @@
 								<div class="sbaz_table">
 									<p>
 										<span class="float_left"><span>设备名称：</span><input
-											type="text" id="searchByName"></span> <span
-											class="float_right" style="margin-right: 70%;"> <input
-											type="button" onclick="searchResult();" value="查询"
+											type="text" id="searchByName"></span> <span>设备类型: <select
+											id="searchtype"
+											style="height: 26px;">
+												<option value="0" selected="selected">所有设备</option>
+												<option value="1">开关柜</option>
+												<option value="2">干式变压器</option>
+												<option value="3">变压器绕阻</option>
+												<option value="4">环网柜</option>
+										</select>
+										</span> <span class="float_right" style="margin-right: 70%;">
+											<input type="button" onclick="searchResult();" value="查询"
 											class="in_sub"> <input type="button"
 											onclick="report();" value="导出" class="in_sub">
 										</span>
@@ -182,13 +190,13 @@
 				equipList += "<td>" + (i + 1) + "</td>";
 				equipList += "<td>" + data[i].equipmentId + "</td>";
 				equipList += "<td>" + data[i].equipmentName + "</td>";
-				if(data[i].type=='1'){
+				if (data[i].type == '1') {
 					equipList += "<td>开关柜</td>";
-				}else if(data[i].type=='2'){
+				} else if (data[i].type == '2') {
 					equipList += "<td>干式变压器</td>";
-				}else if(data[i].type=='3'){
+				} else if (data[i].type == '3') {
 					equipList += "<td>变压器绕组</td>";
-				}else if(data[i].type=='3'){
+				} else if (data[i].type == '3') {
 					equipList += "<td>环网柜</td>";
 				}
 				equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
@@ -273,7 +281,7 @@
 		}
 		function getEquiEdit(param) {
 			add = false;
-			parami=param;
+			parami = param;
 			$("#equip-content-wrapper").load(
 					"childrenHtml/equipment/equipmentForm.html");
 		}
@@ -301,12 +309,14 @@
 		//通过设备名称查询设备
 		function searchResult() {
 			var name = $("#searchByName").val().trim();
-			if (name != "") {
+			var type = $("#searchtype option:selected").val();
+			
 				$.ajax({
 					url : "equipment/searchEquiByParam",
 					type : "post",
 					data : {
-						"equipmentName" : name
+						"equipmentName" : name,
+						"type" : type
 					},
 					dataType : "json",
 					success : function(result) {
@@ -318,9 +328,7 @@
 						$("#equipmentList").html(equipList);
 					}
 				});
-			} else {
-				getEquipmentList();
-			}
+			
 		}
 		//导出
 		function report() {
