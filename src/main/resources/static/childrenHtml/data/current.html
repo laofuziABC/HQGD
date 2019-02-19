@@ -46,9 +46,8 @@
 			//初始化页面信息
 			if(equiId!=null){
 				showCurrentContent(); 
-			}else{
-				$("#chart_current").highcharts(blankOption);
 			}
+			$("#chart_current").highcharts(currentOption);
 			//绘制温度实时监控表【开始】
 			function showCurrentContent(){
 				showBlocks();

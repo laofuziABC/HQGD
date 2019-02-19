@@ -28,7 +28,8 @@ var historyOption = {
 	yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
 	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, 
 		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
-	}}
+	}},
+	series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
 //配置当前数据监测统计图
 var currentOption={
@@ -37,16 +38,8 @@ var currentOption={
     tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
     yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
+    series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
-//配置当空白统计图
-var blankOption={
-	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
-	title: {text: '温度曲线图', style: {color: '#ffffff'}},
-	legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors,
-	xAxis:{type: 'category'}, credits:{enabled: false},
-	yAxis:{title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
-	series:[{name: '数据加载中', data: [], type:"spline", pointInterval: 6e4}]
-}
 
 /**
  * 以下的方法用于同步或者异步获取图表的数据资源
@@ -104,9 +97,6 @@ function drawingHistoryChart(url, param){
 				historyOption.series = series;
 				$("#chart_history").empty();
 				$("#chart_history").highcharts(historyOption);
-			}else{
-				$("#chart_history").empty();
-				$("#chart_history").highcharts(blankOption);
 			}
 		}
 	});
