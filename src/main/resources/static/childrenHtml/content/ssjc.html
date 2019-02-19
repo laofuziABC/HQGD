@@ -30,13 +30,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <style type="text/css">
 	#result_list_div { margin: 10px 0 0 0; padding: 0; min-height: 150px; overflow-y: scroll; max-height: 400px;}
-	/* #equipResultList li { width: 95%; margin: 5px auto; text-align: center; }
-	#equipResultList li:hover, #equipResultList .checked{ width: 80%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; }
-	#equipResultList li span { width: 100%; } */
 	.equipResultList{padding: 0 0 0 10%;}
 	#equipResultList .hide{display: none;}
 	#equipResultList p{font-size: 16px; cursor: pointer;}
-	
 	.equipResultList li { width: 75%; margin: 5px auto; text-align: left; list-style: none; padding: 0;}
 	.equipResultList li:hover, .equipResultList .checked{ width: 75%; border-radius: 3px;font-size: 18px; background-color: #3c8dbc; color: #ffffff; cursor: pointer; position: relative; left: -5%;}
 	.equipResultList li span { width: 100%; }
@@ -105,7 +101,6 @@
 										</div>
 									</div>
 									<!-- 分组参数【结束】 -->
-									<!-- <input type="button" class="btn btn-primary" onclick="searchByEquiName();" value="查询" /> -->
 									<input type="button" class="btn btn-primary" onclick="searchEquipList();" value="查询" />
 									<input type="button" class="btn btn-primary" onclick="showParams();" value="分组" />
 								</div>
@@ -144,14 +139,8 @@
 					<div class="col-md-9">
 						<div class="nav-tabs-custom">
 							<ul class="nav nav-tabs">
-								<li class="active"><a href="#currenttab" data-toggle="tab"
-									id="hh" onclick="changeTabContent(1);">实时监测数据</a></li>
-								<li><a href="#historytab" data-toggle="tab" id="dd"
-									onclick="changeTabContent(2);">历史监测数据</a></li>
-								<!-- <li class=""><a data-toggle="tab" id="cc"
-									href="#currenttab" onclick="changeTabContent(1);">当前监测数据</a></li>
-								<li class=""><a data-toggle="tab" id="hh"
-									href="#historytab" onclick="changeTabContent(2);">历史监测数据</a></li> -->
+								<li class="active"><a href="#currenttab" data-toggle="tab" id="hh" onclick="changeTabContent(1);">实时监测数据</a></li>
+								<li><a href="#historytab" data-toggle="tab" id="dd" onclick="changeTabContent(2);">历史监测数据</a></li>
 							</ul>
 							<div class="tab-content">
 								<div id="currenttab"></div>
@@ -189,32 +178,22 @@
 				AjaxPostForEquiSubList(url,param);
 			}
 		}
-		//allEquipRealtime();
 		//设置页面局部样式
-		//$(".nav-tabs >li:contains('当前')").addClass("active");
-		//$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
 		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
 		var oldequiId=equiId;
 		var newequiId=equiId;
 		//切换标签页
 		function changeTabContent(param){
-			//$(".nav-tabs >li").removeClass("active");
 			if(param==2){
-				//$(".nav-tabs >li:contains('历史')").addClass("active");
 				if(oldequiId!=newequiId){
 					$("#historytab").load("childrenHtml/data/history.html");
 				}
 				$("#currenttab").css({"display" : "none" });
 				$("#historytab").css({ "display" : "block" });
-				//$("#hh").css({"background-color": "#3c8dbc", "color": "#ffffff", "border": "0"});
-				//$("#cc").css({"background-color": "#ffffff", "color": "#3c8dbc", "border": "0"});
 			}else if(param==1){
-				//$(".nav-tabs >li:contains('当前')").addClass("active");
 				$("#historytab").css({ "display" : "none" });
 				$("#currenttab").css({ "display" : "block" });
-				//$("#cc").css({"background-color":"#3c8dbc" ,"color": "#ffffff" ,"border": "0"});
-				//$("#hh").css({"background-color": "#ffffff" ,"color": "#3c8dbc", "border": "0"});
 				if(oldequiId!=newequiId){
 					showCurrentContent();
 				}
@@ -238,17 +217,6 @@
 			var url="equipment/selectAll";
 			AjaxPostForEquiSubList(url,null);
 		}
-		/* //根据设备名称查询设备列表
-		function searchByEquiName(){
-			var url="equipment/selectByEquipmentName";
-			var equiName=$("#interEqui").val().trim();
-			var param={"equipmentName":equiName};
-			if(equiName != ""){
-				AjaxPostForEquiSubList(url,param);
-			}else{
-				getEquiResultList();
-			}
-		} */
 		//通过筛选条件的所有内容，查询设备列表
 		function searchEquipList(){
 			var equiName=$("#interEqui").val().trim();
