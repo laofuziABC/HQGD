@@ -66,8 +66,8 @@ function getChartData(url, param){
  * url：获取资源的途径，不能传空值；param：获取资源的传参。
 */
 function drawingHistoryChart(url, param){
-	var chart = $("#chart_history").highcharts();
-	chart.showLoading();
+//	var chart = $("#chart_history").highcharts();
+//	chart.showLoading();
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
 			var series=[];
@@ -130,8 +130,8 @@ var NOW_TIME=new Date();
 var NT_VALUE=NOW_TIME.getTime();
 //获取并计算常量【结束】
 function initCurrentChart(){
-	var chart = $("#chart_current").highcharts();
-	chart.showLoading();
+//	var chart = $("#chart_current").highcharts();
+//	chart.showLoading();
 	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
