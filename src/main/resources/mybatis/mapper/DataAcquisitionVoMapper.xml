@@ -176,7 +176,7 @@ ORDER BY
     SELECT 
   		COUNT(ID) AS TOTAL
 	FROM
-  		hq_equipment_monitor_data 
+  		${table} 
 	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 

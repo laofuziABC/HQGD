@@ -182,7 +182,7 @@
 		if(roleId==1){
 			getEquiResultList();
 		}else{
-			var url="equipment/selectAllByUser";
+			var url="equipment/searchEquiByParam";
 			var username=parent.getParam("userName");
 			var param={"userName":username};
 			if(username != ""){

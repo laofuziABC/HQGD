@@ -162,7 +162,7 @@ public class DataAcquisitionController {
 				String lastTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
 				Map<String, Object> param = new HashMap<>();
 				// 判断当前时间和登录时间的差额,如果小于一天就把临时表1里的数据放进临时表2,如果大于一天就把临时表2里的最旧一条删除，再插入最新的一条
-				if ((currentTime - startTime) < (24 * 3600000 + 1000 * 60 * 20)) {// 保留十分钟的冗余度，避免系统时间和数据库时间有误差
+				if ((currentTime - startTime) > (24 * 3600000 + 1000 * 60 * 20)) {// 保留十分钟的冗余度，避免系统时间和数据库时间有误差
 					for (int i = 1; i <= 4; i++) {
 						param.put("lastTime", lastTime);
 						param.put("table", "hq_equipment_monitor_data_r" + i);
