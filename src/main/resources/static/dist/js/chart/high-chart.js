@@ -17,7 +17,7 @@ var tooltip={shared: true, useHTML: true,
 			return '<br/><span style="color:'+this.color+'">\u25CF</span>'+this.series.name+'：'+s;
 		}
 };
-var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
+var plotOptions={spline: {marker: {radius: 0, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
 var lang={loading: "数据载入中……"};
 var loading={labelStyle: {color: "red", fontWeight: "bold"}, 
