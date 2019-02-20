@@ -103,6 +103,7 @@
 											<td>设备名称</td>
 											<td>设备类型</td>
 											<td>通道温度</td>
+											<td>通道数</td>
 											<td>安装地址</td>
 											<td>地区编码</td>
 											<td>经纬度</td>
@@ -201,6 +202,7 @@
 				}
 				equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
 						+ i + "')\">详情</a></td>";
+				equipList += "<td>" + data[i].numOfCh + "</td>";
 				equipList += "<td>" + data[i].address + "</td>";
 				equipList += "<td>" + data[i].adcode + "</td>";
 				equipList += "<td>" + data[i].lngLat + "</td>";
@@ -332,7 +334,7 @@
 		}
 		//导出
 		function report() {
-			var equipList = "<tr><td>设备ID</td><td>设备名称</td><td>设备类型</td><td>通道温度</td><td>安装地址</td><td>地区编码</td><td>经纬度</td><td>帧结构</td>"
+			var equipList = "<tr><td>设备ID</td><td>设备名称</td><td>设备类型</td><td>通道温度</td><td>通道数</td><td>安装地址</td><td>地区编码</td><td>经纬度</td><td>帧结构</td>"
 					+ "<td>所属用户</td><td>更新时间</td><td>更新者</td></tr>";
 			var data = globalData;
 			for (let i = 0; i < data.length; i++) {
@@ -341,6 +343,7 @@
 				equipList += "<td>" + data[i].equipmentName + "</td>";
 				equipList += "<td>" + data[i].type + "</td>";
 				equipList += "<td>" + data[i].channelTem + "</td>";
+				equipList += "<td>" + data[i].numOfCh + "</td>";
 				equipList += "<td>" + data[i].address + "</td>";
 				equipList += "<td>" + data[i].adcode + "</td>";
 				equipList += "<td>" + data[i].lngLat + "</td>";

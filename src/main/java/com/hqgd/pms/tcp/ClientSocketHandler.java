@@ -46,11 +46,11 @@ public class ClientSocketHandler implements Runnable {
 				String inputString = new String(byteArray, 0, len);
 				System.out.println(Thread.currentThread().getName() + " say :" + inputString);
 				// 返回结果
-				String resultString = "";
-				if (inputString.lastIndexOf("I'm coming") > -1) {
-					resultString = "Hello , welcome to join";
-					sendMessage(socketOut, resultString);
-				}
+//				String resultString = "";
+//				if (inputString.lastIndexOf("I'm coming") > -1) {
+//					resultString = "Hello , welcome to join";
+//					sendMessage(socketOut, resultString);
+//				}
 				//sendMessage(socketOut, resultString);
 			}
 		} catch (Exception e) {

@@ -13,7 +13,7 @@ public class EquipmentInfo {
     private String userId;
 
     private String channelTem;
-
+    private String numOfCh;
     private String address;
 
     private String adcode;
@@ -36,7 +36,15 @@ public class EquipmentInfo {
 
     private String updateTime;
 
-    public String getType() {
+    public String getNumOfCh() {
+		return numOfCh;
+	}
+
+	public void setNumOfCh(String numOfCh) {
+		this.numOfCh = numOfCh;
+	}
+
+	public String getType() {
 		return type;
 	}
 

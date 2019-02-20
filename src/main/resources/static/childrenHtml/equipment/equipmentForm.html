@@ -114,7 +114,12 @@ button {
 										<input type="text" class="form-control" id="frameStru">
 									</div>
 								</div>
-
+								<div class="form-group">
+									<label class="col-sm-2 control-label">通道数</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="numOfCh">
+									</div>
+								</div>
 							</div>
 						</form>
 						<div class="col-md-12"
@@ -162,15 +167,13 @@ button {
 										<input type="text" class="form-control" id="address">
 									</div>
 								</div>
-								<div id="containermap" style="height: 500px;"
-									class="map" tabindex="0"></div>
+								<div id="containermap" style="height: 550px;" class="map"
+									tabindex="0"></div>
 							</div>
 						</form>
 						<div class="fuqusave" id="saves">
 							<button class="btn btn-info" onclick="submitEquiInfo();"
-								style="background: #399ad7;">
-								 保         存
-							</button>
+								style="background: #399ad7;">保 存</button>
 							<!-- <input type="button" onclick="submitEquiInfo();" value="保存"> -->
 						</div>
 					</div>
@@ -184,7 +187,7 @@ button {
 		AMapUI.loadUI([ 'misc/PositionPicker' ], function(PositionPicker) {
 			var map = new AMap.Map('containermap', {
 				zoom : 16,
-				center: [108.856389,34.171147]
+				center : [ 108.856389, 34.171147 ]
 			})
 			var positionPicker = new PositionPicker({
 				mode : 'dragMap',
@@ -278,6 +281,7 @@ button {
 			$("#adcode").val(globalData[param].adcode);
 			$("#lnglat").val(globalData[param].lngLat);
 			$("#frameStru").val(globalData[param].frameStru);
+			$("#numOfCh").val(globalData[param].numOfCh);
 			$("#equipmentId").attr("disabled", "disabled");
 		}
 		function addEquip1() {
@@ -328,6 +332,7 @@ button {
 				"address" : $("#address").val(),
 				"lngLat" : $("#lnglat").val(),
 				"frameStru" : $("#frameStru").val(),
+				"numOfCh" : $("#numOfCh").val(),
 				"channelTem" : res,
 				"adcode" : $("#adcode").val(),
 				"add" : add
