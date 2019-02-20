@@ -17,7 +17,7 @@ var tooltip={shared: true, useHTML: true,
 			return '<br/><span style="color:'+this.color+'">\u25CF</span>'+this.series.name+'：'+s;
 		}
 };
-var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
+var plotOptions={spline: {marker: {radius: 0, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
 var lang={loading: "数据载入中……"};
 var loading={labelStyle: {color: "red", fontWeight: "bold"}, 
@@ -130,8 +130,6 @@ var NOW_TIME=new Date();
 var NT_VALUE=NOW_TIME.getTime();
 //获取并计算常量【结束】
 function initCurrentChart(){
-//	var chart = $("#chart_current").highcharts();
-//	chart.showLoading();
 	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
@@ -177,6 +175,12 @@ function addPoints(){
 	var interval = 60000;
 	var series = this.series;
 	var timing=setInterval(function (){
+		//图表适应容器
+		var chartH = $("#chart_history").highcharts();
+		var chartC=$("#chart_current").highcharts();
+		chartH.reflow();
+		chartC.reflow();
+		//在实时监测图表上加点
 		var url="dataAcquisition/realtime";
 		var param={"equipmentId": equiId};
 		var pointResult = getChartData(url, param);
@@ -204,10 +208,6 @@ function addPoints(){
 				$("#last-time").css({"color":"red"});
 			}
 		}
-		var chartH = $("#chart_history").highcharts();
-		var chartC=$("#chart_current").highcharts();
-		chartH.reflow();
-		chartC.reflow();
 	}, interval);
 	//清除页面多余的定时任务
 	var start = (timing-60000>0) ?(timing-60000):0;
@@ -233,11 +233,8 @@ function drawCurrentChannels(param){
 		//超过2分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
 		cTime=(new Date()).getTime();
-//		$("#last-time").text("最后监测时间："+param[0].receiveTime);
-		
 		var timetext = "最新通道温度(单位:℃，最后监测时间："+param[0].receiveTime+")";
 		$("#last-time").text(timetext);
-		
 		if((cTime-lTime)>(2*60*1000)){ $("#last-time").css({"color":"red"}); }
 		else{$("#last-time").css({"color":"#21242e"});}
 		//设定尺寸适应容器【开始】

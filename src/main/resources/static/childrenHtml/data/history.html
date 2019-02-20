@@ -99,8 +99,13 @@
 				} else if (startTime == "" || endTime == "") {
 					alert("开始时间和结束时间不能为空");
 				} else {
-					searchChartResult();
+					//加载数据列表
 					searchTableResult(1);
+					//加载历史数据图表
+					$("#chart_history").highcharts(historyOption);
+					var chart = $("#chart_history").highcharts();
+					chart.showLoading();
+					searchChartResult();
 				}
 			}
 			//加载历史数据统计图【开始】
