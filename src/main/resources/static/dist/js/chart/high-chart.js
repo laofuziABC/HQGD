@@ -66,8 +66,6 @@ function getChartData(url, param){
  * url：获取资源的途径，不能传空值；param：获取资源的传参。
 */
 function drawingHistoryChart(url, param){
-//	var chart = $("#chart_history").highcharts();
-//	chart.showLoading();
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
 			var series=[];
@@ -76,6 +74,7 @@ function drawingHistoryChart(url, param){
 				var legendData = data.channelNumArr;
 				var seriesData = data.channelTemArr;
 				var totalCount = seriesData[0].length;
+				var equiName = data.equipment.equipmentName;
 				//根据温度值，设置纵轴上下限【开始】
 				//逻辑一：通过逐步比较，取出所有系列最值
 				var max, min;
@@ -90,6 +89,7 @@ function drawingHistoryChart(url, param){
 //				}
 //				var max=Math.max.apply(null, tempArray);
 //				var min=Math.min.apply(null, tempArray);
+				historyOption.title.text="历史温度曲线图("+equiName+")";
 				historyOption.yAxis.min=(min > -10)?(min-10):0;
 				historyOption.yAxis.max=(max < 100)?(max+10):100;
 				//根据温度值，设置纵轴上下限【结束】

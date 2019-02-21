@@ -84,7 +84,7 @@ function AjaxPostForEquiSubList(url,param){
 				$("#byqrzlist").html(byqrz_list);
 				$("#hwglist").html(hwg_list);
 				changeCheckEqui();
-				getEquiData(equiId);
+				showCurrentContent();
 			}
 		});
 	}

@@ -159,7 +159,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", startTime);
 		param.put("endTime", endTime);
-		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
+		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
+		String type = equipment.getType();
+//		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
 		List<DataAcquisitionVo> historicalDataList = null;
 		long inTime = System.currentTimeMillis();
 		log.info("查询数据SQL开始：" + inTime);
@@ -191,7 +193,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			return map;
 		}
 		DataAcquisitionVo vo = historicalDataList.get(0);
-		String equipmentId = queryVo.getEquipmentId();
+//		String equipmentId = queryVo.getEquipmentId();
 		long inTime1 = System.currentTimeMillis();
 		log.info("处理数据开始：" + inTime);
 		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
@@ -208,7 +210,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("处理数据结束：" + outTime1);
 		long midTime1 = outTime1 - inTime1;
 		log.info("时长为：" + midTime1);
-		map.put("equipmentId", equipmentId);
+		map.put("equipment", equipment);
 		map.put("receiveTime", receiveTime);
 		map.put("channelNumArr", channelNumArr);
 		map.put("channelTemArr", channelTemArr);
@@ -229,7 +231,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", startTime);
 		param.put("endTime", endTime);
-		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
+		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
+		String type = equipment.getType();
+//		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
 		List<DataAcquisitionVo> historicalDataList = null;
 		long inTime = System.currentTimeMillis();
 		log.info("查询数据SQL开始：" + inTime);
@@ -266,7 +270,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			return map;
 		}
 		DataAcquisitionVo vo = historicalDataList.get(0);
-		String equipmentId = queryVo.getEquipmentId();
+//		String equipmentId = queryVo.getEquipmentId();
 		long inTime1 = System.currentTimeMillis();
 		log.info("处理数据开始：" + inTime);
 		receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
@@ -283,7 +287,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("处理数据结束：" + outTime1);
 		long midTime1 = outTime1 - inTime1;
 		log.info("时长为：" + midTime1);
-		map.put("equipmentId", equipmentId);
+		map.put("equipment", equipment);
 		map.put("timeList", receiveTime);
 		map.put("channelList", channelNumArr);
 		map.put("dataList", channelTemArr);

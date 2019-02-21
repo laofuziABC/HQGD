@@ -187,7 +187,8 @@
 		function changeTabContent(param){
 			if(param==2){
 				if(oldequiId!=newequiId){
-					$("#historytab").load("childrenHtml/data/history.html");
+					//$("#historytab").load("childrenHtml/data/history.html");
+					showHistoryContent();
 				}
 				$("#currenttab").css({"display" : "none" });
 				$("#historytab").css({ "display" : "block" });
@@ -197,8 +198,8 @@
 				if(oldequiId!=newequiId){
 					showCurrentContent();
 				}
-				oldequiId=equiId;
 			}
+			oldequiId=equiId;
 		}
 		//打开筛选区域
 		function showParams(){
@@ -241,11 +242,7 @@
 			}else{
 				equiId=param.trim();
 				newequiId=param.trim();
-				if($(".nav-tabs >li:contains('当前')").hasClass("active")){
-					showCurrentContent();
-				}else if($(".nav-tabs >li:contains('历史')").hasClass("active")){
-					showHistoryContent();
-				}else{
+				if($("#hh").parent().hasClass("active")){
 					showCurrentContent();
 				}
 			}
