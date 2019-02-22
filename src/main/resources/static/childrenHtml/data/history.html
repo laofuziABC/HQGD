@@ -12,6 +12,7 @@
 			.box-body2{padding: 2px 0; background-color: #21242e;}
 			#example1{color: #ffffff; width: 98%; margin: 2px auto;}
 			#data-show-pager a, #data-show-pager span{color: #ffffff; }
+			#enterNum{color: #666666;}
 		</style>
 	</head>
 	<body>
@@ -92,20 +93,22 @@
 			$("#chart_history").highcharts(historyOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
-				var startTime = $("#startTime").val();
-				var endTime = $("#endTime").val();
-				if (startTime > endTime) {
-					alert("开始时间不能大于结束时间");
-				} else if (startTime == "" || endTime == "") {
-					alert("开始时间和结束时间不能为空");
-				} else {
-					//加载数据列表
-					searchTableResult(1);
-					//加载历史数据图表
-					$("#chart_history").highcharts(historyOption);
-					var chart = $("#chart_history").highcharts();
-					chart.showLoading();
-					searchChartResult();
+				if(equiId!=null){
+					var startTime = $("#startTime").val();
+					var endTime = $("#endTime").val();
+					if (startTime > endTime) {
+						alert("开始时间不能大于结束时间");
+					} else if (startTime == "" || endTime == "") {
+						alert("开始时间和结束时间不能为空");
+					} else {
+						//加载数据列表
+						searchTableResult(1);
+						//加载历史数据图表
+						$("#chart_history").highcharts(historyOption);
+						var chart = $("#chart_history").highcharts();
+						chart.showLoading();
+						searchChartResult();
+					}
 				}
 			}
 			//加载历史数据统计图【开始】
@@ -156,7 +159,6 @@
 							}
 						} else {
 							historyTable += "<h3 style='color: red;'>未查找到相关信息！</h3>";
-							$("#chart_history").highcharts(blankOption);
 						}
 						$("#history-table-body").html(historyTable);
 						//加载页码

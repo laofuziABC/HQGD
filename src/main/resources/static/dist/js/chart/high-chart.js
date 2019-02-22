@@ -140,6 +140,7 @@ function initCurrentChart(){
 	var channelList=result.channelList;
 	var timeList=result.timeList;
 	var dataList=result.dataList;
+	var equiName = result.equipment.equipmentName;
 	var series=[];
 	//只有通道数和系列数相等，才可以绘制图表
 	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
@@ -166,6 +167,7 @@ function initCurrentChart(){
 			series.push(serie);
 		}
 	}
+	currentOption.title.text="实时温度监测图("+equiName+")";
 	currentOption.series = series;
 	$("#chart_current").empty();
 	$("#chart_current").highcharts(currentOption);
