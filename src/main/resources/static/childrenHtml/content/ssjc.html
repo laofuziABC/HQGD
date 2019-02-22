@@ -167,17 +167,21 @@
 		$("#historytab").load("childrenHtml/data/history.html");
 		$("#historytab").css({"display" : "none"}); 
 		//加载设备列表
-		var roleId = parent.getParam("roleId");
-		if(roleId==1){
-			getEquiResultList();
-		}else{
-			var url="equipment/searchEquiByParam";
-			var username=parent.getParam("userName");
-			var param={"userName":username};
-			if(username != ""){
-				AjaxPostForEquiSubList(url,param);
+		$(function(){
+			var roleId = parent.getParam("roleId");
+			if(roleId==1){
+				getEquiResultList();
+			}else{
+				var url="equipment/searchEquiByParam";
+				var username=parent.getParam("userName");
+				var param={"userName":username};
+				if(username != ""){
+					AjaxPostForEquiSubList(url,param);
+				}
 			}
-		}
+			changeCheckEqui();
+			showCurrentContent();
+		});
 		//设置页面局部样式
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
 		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
