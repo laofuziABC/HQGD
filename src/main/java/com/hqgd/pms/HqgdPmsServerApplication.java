@@ -11,6 +11,8 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.hqgd.pms.tcp.SystemStartServlet;
+
 @EnableScheduling
 @SpringBootApplication
 @MapperScan("com.hqgd.pms.dao")
@@ -19,8 +21,8 @@ public class HqgdPmsServerApplication {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(HqgdPmsServerApplication.class, args);
 //		//启动socket
-//		SystemStartServlet server = new SystemStartServlet();
-//		server.init();
+		SystemStartServlet server = new SystemStartServlet();
+		server.init();
 	}
 
 	@Bean

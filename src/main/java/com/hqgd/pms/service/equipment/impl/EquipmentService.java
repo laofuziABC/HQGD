@@ -97,5 +97,10 @@ public class EquipmentService implements IEquipmentService {
 		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllByParam(param);
 		return equipmentInfoList;
 	}
+	@Override
+	public EquipmentInfo selectByHbid(Map<String, String> param) {
+		EquipmentInfo equipmentInfo = equipmentInfoMapper.selectByHbid(param);
+		return equipmentInfo;
+	}
 
 }

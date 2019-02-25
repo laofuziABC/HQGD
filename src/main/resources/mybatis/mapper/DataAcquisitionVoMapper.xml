@@ -244,12 +244,12 @@ ORDER BY
     where ID = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data (ID, EQUIPMENT_ID, EQUIPMENT_NAME, 
+    insert into hq_equipment_monitor_data (EQUIPMENT_ID, EQUIPMENT_NAME, 
       ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
       TEMPERATURE, PD, UV, 
       STATE, MESSAGE, RECEIVE_TIME, 
       DUTY_PERSON, TEL)
-    values (#{id,jdbcType=INTEGER}, #{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
       #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
       #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 

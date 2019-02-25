@@ -5,11 +5,12 @@ public class User {
 	public User() {
 	}
 
-	public User(Integer id, String userName, String password, String comments, String isdel, String creator,
+	public User(Integer id, String userName,String tel, String password, String comments, String isdel, String creator,
 			String createTime, String updater, String updateTime) {
 		super();
 		this.id = id;
 		this.userName = userName;
+		this.tel = tel;
 		this.password = password;
 		this.comments = comments;
 		this.isdel = isdel;
@@ -22,6 +23,8 @@ public class User {
 	private Integer id;
 
 	private String userName;
+	
+	private String tel;
 
 	private String password;
 
@@ -36,6 +39,15 @@ public class User {
 	private String updater;
 
 	private String updateTime;
+
+	
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 
 	public Integer getId() {
 		return id;

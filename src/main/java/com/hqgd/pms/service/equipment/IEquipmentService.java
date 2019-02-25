@@ -20,4 +20,6 @@ public interface IEquipmentService {
 
 	List<EquipmentInfo> selectAllByParam(HttpServletRequest request);
 
+	EquipmentInfo selectByHbid(Map<String, String> param);
+
 }

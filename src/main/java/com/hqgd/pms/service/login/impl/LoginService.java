@@ -33,7 +33,7 @@ public class LoginService implements ILoginService {
 		log.info("登录开始，参数为userName=" + userName + "password=" + password + "isRemember=" + isRemember);
 		User userFind = userService.selectByUserName(userName);
 		Map<String, Object> map = authUser(userFind,
-				new User(null, userName, password, null, null, null, null, null, null));
+				new User(null, userName,null, password, null, null, null, null, null, null));
 		Boolean authUser = (Boolean) map.get("success");
 		if (authUser) {
 			log.info("用户名密码正确");

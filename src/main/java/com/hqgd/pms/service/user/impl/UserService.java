@@ -54,7 +54,6 @@ public class UserService implements IUserService {
 			user.setCreator(loginUser.getUserName());
 			user.setUpdateTime(CommonUtil.getSimpleFormatTimestamp());
 			user.setCreateTime(CommonUtil.getSimpleFormatTimestamp());
-			user.setIsdel("N");
 			int i = userMapper.insert(user);
 			result = (i == 0) ? false : true;
 			message = (result == true) ? "添加用户成功！" : "添加用户失败！";
@@ -124,7 +123,7 @@ public class UserService implements IUserService {
 	public Map<String, Object> updatePassword(String id, String password, String newPassword) {
 		User userFind = userMapper.selectByPrimaryKey(Integer.valueOf(id));
 		Map<String, Object> result = authUser(userFind,
-				new User(null, id, password, null, null, null, null, null, null));
+				new User(null, id,null, password, null, null, null, null, null, null));
 		Boolean authUser = (Boolean) result.get("success");
 		if (!authUser) {
 			// 返回用户名或密码错误，修改密码失败
