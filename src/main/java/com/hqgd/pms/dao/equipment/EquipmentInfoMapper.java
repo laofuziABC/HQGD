@@ -30,4 +30,6 @@ public interface EquipmentInfoMapper {
 
 	String selectTypeById(String equipmentId);
 
+	EquipmentInfo selectByHbid(Map<String, String> param);
+
 }

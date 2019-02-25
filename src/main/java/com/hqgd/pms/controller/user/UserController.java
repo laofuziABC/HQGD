@@ -40,11 +40,11 @@ public class UserController {
 
 	@RequestMapping(value = "update") // 新增和编辑用户信息都是此接口
 	@ResponseBody
-	public String update(Model model, User user, HttpServletRequest request, HttpServletResponse response)
+	public String update(Model model, User user, boolean add ,HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		User userLog = (User) request.getSession(true).getAttribute("user");
 		Map<String, Object> result = new HashMap<String, Object>();
-		if (user.getId() == null) {
+		if (add) {
 			result = userService.add(user, userLog);
 		} else {
 			result = userService.update(user, userLog);

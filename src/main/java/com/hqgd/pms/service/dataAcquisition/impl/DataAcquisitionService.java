@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
-import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
 
@@ -49,33 +48,33 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			break;
 		}
 		realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
-		if (realTimeDateList.size() > 0) {
-			int numOfCh = realTimeDateList.get(0).getNumOfCh();
-			if (realTimeDateList.size() == numOfCh) {
-				EquipmentInfo e = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
-				String s = e.getChannelTem();
-				s = s.substring(2, s.length() - 2);
-				String[] arr = s.split("\\],\\[");
-				if (arr.length == realTimeDateList.size()) {
-					for (int i = 0; i < realTimeDateList.size(); i++) {
-						String[] ta = arr[i].split(",");
-						String cn = ta[0].substring(1, ta[0].length() - 1);
-						String max = ta[1].substring(1, ta[1].length() - 1);
-						String min = ta[2].substring(1, ta[2].length() - 1);
-						String t = realTimeDateList.get(i).getTemperature();
-						String channelNum = realTimeDateList.get(i).getChannelNum();
-						if (!t.equals("3000") && !t.equals("-437") && !t.equals("2999") && channelNum.equals(cn)
-								&& (Float.valueOf(t) < Float.valueOf(min) || Float.valueOf(t) > Float.valueOf(max))) {
-							realTimeDateList.get(i).setState("9");
-						}
-					}
-				}
+//		if (realTimeDateList.size() > 0) {
+//			int numOfCh = realTimeDateList.get(0).getNumOfCh();
+//			if (realTimeDateList.size() == numOfCh) {
+//				EquipmentInfo e = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
+//				String s = e.getChannelTem();
+//				s = s.substring(2, s.length() - 2);
+//				String[] arr = s.split("\\],\\[");
+//				if (arr.length == realTimeDateList.size()) {
+//					for (int i = 0; i < realTimeDateList.size(); i++) {
+//						String[] ta = arr[i].split(",");
+//						String cn = ta[0].substring(1, ta[0].length() - 1);
+//						String max = ta[1].substring(1, ta[1].length() - 1);
+//						String min = ta[2].substring(1, ta[2].length() - 1);
+//						String t = realTimeDateList.get(i).getTemperature();
+//						String channelNum = realTimeDateList.get(i).getChannelNum();
+//						if (!t.equals("3000") && !t.equals("-437") && !t.equals("2999") && channelNum.equals(cn)
+//								&& (Float.valueOf(t) < Float.valueOf(min) || Float.valueOf(t) > Float.valueOf(max))) {
+//							realTimeDateList.get(i).setState("9");
+//						}
+//					}
+//				}
 
-			}
+//			}
 			return realTimeDateList;
-		} else {
-			return null;
-		}
+//		} else {
+//			return null;
+//		}
 
 	}
 

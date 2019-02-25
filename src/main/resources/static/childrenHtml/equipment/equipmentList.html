@@ -38,6 +38,7 @@
 										<thead>
 											<tr>
 												<td style="background: #399ad7; color: #f6f6f6;">通道号</td>
+												<td style="background: #399ad7; color: #f6f6f6;">光纤位置</td>
 												<td style="background: #399ad7; color: #f6f6f6;">温度上限</td>
 												<td style="background: #399ad7; color: #f6f6f6;">温度下限</td>
 											</tr>
@@ -109,7 +110,8 @@
 											<td>经纬度</td>
 											<td>帧结构</td>
 											<td>所属用户</td>
-											<!-- <td>创建时间</td> -->
+											<td>心跳包ID</td>
+											<td>心跳包名称</td>
 											<td>更新时间</td>
 											<td>更新者</td>
 											<td>操作</td>
@@ -208,6 +210,8 @@
 				equipList += "<td>" + data[i].lngLat + "</td>";
 				equipList += "<td>" + data[i].frameStru + "</td>";
 				equipList += "<td>" + data[i].userName + "</td>";
+				equipList += "<td>" + data[i].heartbeatId + "</td>";
+				equipList += "<td>" + data[i].heartbeatName + "</td>";
 				equipList += "<td>" + data[i].updateTime + "</td>";
 				equipList += "<td>" + data[i].updater + "</td>";
 				equipList += "<td class=\"center\">";
@@ -263,12 +267,14 @@
 					channelTemList += "<td>" + v[i][0] + "</td>";
 					channelTemList += "<td>" + v[i][1] + "</td>";
 					channelTemList += "<td>" + v[i][2] + "</td>";
+					channelTemList += "<td>" + v[i][3] + "</td>";
 					channelTemList += "</tr>"
 				}
 				$("#channelTemList").html(channelTemList);
 			} else {
 				var channelTemList = "";
 				channelTemList += "<tr>";
+				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
@@ -335,7 +341,7 @@
 		//导出
 		function report() {
 			var equipList = "<tr><td>设备ID</td><td>设备名称</td><td>设备类型</td><td>通道温度</td><td>通道数</td><td>安装地址</td><td>地区编码</td><td>经纬度</td><td>帧结构</td>"
-					+ "<td>所属用户</td><td>更新时间</td><td>更新者</td></tr>";
+					+ "<td>所属用户</td><td>心跳包ID</td><td>心跳包名称</td><td>更新时间</td><td>更新者</td></tr>";
 			var data = globalData;
 			for (let i = 0; i < data.length; i++) {
 				equipList += "<tr>";
@@ -349,6 +355,10 @@
 				equipList += "<td>" + data[i].lngLat + "</td>";
 				equipList += "<td>" + data[i].frameStru + "</td>";
 				equipList += "<td>" + data[i].userName + "</td>";
+				equipList += "<td>" + data[i].heartbeatId + "</td>";
+				equipList += "<td>" + data[i].heartbeatName + "</td>";
+				equipList += "<td>" + data[i].heartbeatId + "</td>";
+				equipList += "<td>" + data[i].heartbeatName + "</td>";
 				equipList += "<td>" + data[i].updateTime + "</td>";
 				equipList += "<td>" + data[i].updater + "</td>";
 				equipList += "</tr>";

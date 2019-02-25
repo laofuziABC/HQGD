@@ -101,13 +101,7 @@ button {
 										</select>
 									</div>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">所属用户</label>
-									<div class="col-sm-10">
-										<select id="userName" class="form-control select2">
-										</select>
-									</div>
-								</div>
+
 								<div class="form-group">
 									<label class="col-sm-2 control-label">帧结构</label>
 									<div class="col-sm-10">
@@ -120,6 +114,18 @@ button {
 										<input type="text" class="form-control" id="numOfCh">
 									</div>
 								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">心跳包ID</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="heartbeatId">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">心跳包名称</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="heartbeatName">
+									</div>
+								</div>
 							</div>
 						</form>
 						<div class="col-md-12"
@@ -129,9 +135,9 @@ button {
 								<thead>
 									<tr>
 										<td style="background: #399ad7; color: #f6f6f6;">通道号</td>
+										<td style="background: #399ad7; color: #f6f6f6;">光纤位置</td>
 										<td style="background: #399ad7; color: #f6f6f6;">温度上限</td>
 										<td style="background: #399ad7; color: #f6f6f6;">温度下限</td>
-										<!-- <td style="background: #399ad7; color: #f6f6f6;">操作</td> -->
 									</tr>
 								</thead>
 								<tbody id="channelTemList1">
@@ -149,6 +155,13 @@ button {
 					<div class="col-md-6">
 						<form class="form-horizontal">
 							<div class="box-body">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">所属用户</label>
+									<div class="col-sm-10">
+										<select id="userName" class="form-control select2">
+										</select>
+									</div>
+								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">经纬度</label>
 									<div class="col-sm-10">
@@ -174,7 +187,6 @@ button {
 						<div class="fuqusave" id="saves">
 							<button class="btn btn-info" onclick="submitEquiInfo();"
 								style="background: #399ad7;">保 存</button>
-							<!-- <input type="button" onclick="submitEquiInfo();" value="保存"> -->
 						</div>
 					</div>
 
@@ -246,6 +258,7 @@ button {
 					channelTemList += "<td>" + v[i][0] + "</td>";
 					channelTemList += "<td>" + v[i][1] + "</td>";
 					channelTemList += "<td>" + v[i][2] + "</td>";
+					channelTemList += "<td>" + v[i][3] + "</td>";
 					channelTemList += bu;
 					channelTemList += "</tr>"
 				}
@@ -253,6 +266,7 @@ button {
 			} else {
 				var channelTemList = "";
 				channelTemList += "<tr>";
+				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
 				channelTemList += "<td></td>";
@@ -269,10 +283,6 @@ button {
 				userHtml += "<option  value='"+globalUserList[i].id+"'>"
 						+ globalUserList[i].userName + "</option>";
 			}
-			/* var typeHtml = "<option value=\"\" checked>"
-					+ globalData[param].type + "</option>";
-			typeHtml += "<option value=\"1\">开关柜</option><option value=\"2\">干式变压器</option><option value=\"3\">变压器绕组</option><option value=\"4\">环网柜</option>"
-			$("#type").html(typeHtml); */
 			document.getElementById('type').value = globalData[param].type;
 			$("#userName").html(userHtml);
 			$("#equipmentId").val(globalData[param].equipmentId);
@@ -282,6 +292,8 @@ button {
 			$("#lnglat").val(globalData[param].lngLat);
 			$("#frameStru").val(globalData[param].frameStru);
 			$("#numOfCh").val(globalData[param].numOfCh);
+			$("#heartbeatId").val(globalData[param].heartbeatId);
+			$("#heartbeatName").val(globalData[param].heartbeatName);
 			$("#equipmentId").attr("disabled", "disabled");
 		}
 		function addEquip1() {
@@ -289,6 +301,7 @@ button {
 			var channelTemList = "";
 			channelTemList += "<tr>";
 			channelTemList += "<td>CH1</td>";
+			channelTemList += "<td></td>";
 			channelTemList += "<td>80</td>";
 			channelTemList += "<td>20</td>";
 			channelTemList += bu;
@@ -333,6 +346,8 @@ button {
 				"lngLat" : $("#lnglat").val(),
 				"frameStru" : $("#frameStru").val(),
 				"numOfCh" : $("#numOfCh").val(),
+				"heartbeatName" : $("#heartbeatName").val(),
+				"heartbeatId" : $("#heartbeatId").val(),
 				"channelTem" : res,
 				"adcode" : $("#adcode").val(),
 				"add" : add
