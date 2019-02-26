@@ -65,6 +65,7 @@ $.fn.extend({
 			else if(fParam==2){getUserList();}
 			else if(fParam==3){getEquipmentList();}
 			else if(fParam==4){getImageList();}
+			else if(fParam==5){getRouterList();}
 			loadPages(null, null, pageNum);
 		});
 	}
