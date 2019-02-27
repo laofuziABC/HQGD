@@ -110,6 +110,7 @@
 			if (stompClient != null) {
 				stompClient.disconnect();
 				stompClient = null;
+				setMessageInnerHTML("断开成功！" + "\n")
 			}
 		}
 		function aide(param) {
