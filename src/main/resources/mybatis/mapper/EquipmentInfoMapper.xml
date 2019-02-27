@@ -35,6 +35,13 @@
     LNG_LAT,EQUIPMENT_ID, EQUIPMENT_NAME
     from hq_equipment_info
   </select>
+  <select id="selectAllByHb" parameterType="java.lang.String" resultType="java.lang.String">
+    select 
+    EQUIPMENT_NAME
+    from hq_equipment_info
+    WHERE
+    HEARTBEAT_ID = #{heartbeatId,jdbcType=VARCHAR}
+  </select>
   <select id="selectByHbid" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     SELECT
 	EQUIPMENT_ID,

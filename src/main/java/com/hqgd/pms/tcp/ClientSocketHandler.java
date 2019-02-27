@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
@@ -32,12 +34,14 @@ public class ClientSocketHandler implements Runnable {
 	private Socket socket;
 	private EquipmentService equipmentService;
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
+	private SimpMessagingTemplate simpMessage;
 
 	public ClientSocketHandler(Socket socket, EquipmentService equipmentService,
-			DataAcquisitionVoMapper dataAcquisitionVoMapper) {
+			DataAcquisitionVoMapper dataAcquisitionVoMapper, SimpMessagingTemplate simpMessage) {
 		this.socket = socket;
 		this.equipmentService = equipmentService;
 		this.dataAcquisitionVoMapper = dataAcquisitionVoMapper;
+		this.simpMessage = simpMessage;
 	}
 
 	BufferedReader socketIn = null;
@@ -46,22 +50,27 @@ public class ClientSocketHandler implements Runnable {
 	@Override
 	public void run() {
 		try {
-
 			socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			socketOut = new PrintStream(socket.getOutputStream());
 			while (true) {
 				// 获取设备发送的数据
 				String inputString = socketIn.readLine();
 				System.out.println(Thread.currentThread().getName() + " say :" + inputString);
-				inputString = "01 03 18 01 21 A9 41 75 30 00 2E EE EE EE EE 00 CC B8 7F FF CB B4 2A 00 CD C0 70 CD B6";
 				inputString = inputString.replace(" ", "");
 				int len = inputString.length();
-				// String heartbeatId = "";
-				String heartbeatId = "0x000001";
+				String heartbeat = "";
 				String frameStru = "";
+				int count = 1;
 				// 获取心跳包id,判断数据长度，当最少只有一个通道的时候，数据为“0103040121CDB6",长度为14，而14已经亿亿，不会有那么多id编号
-				if (len < 14) {
-					heartbeatId = inputString;
+				if (len < 14 && count < 2) {
+					heartbeat = inputString;
+					List<String> el = equipmentService.selectAllByHb(heartbeat);
+					Map<String, Object> resultMap = new HashMap<String, Object>();
+					resultMap.put("ip", socket.getInetAddress());
+					resultMap.put("heartbeat", heartbeat);
+					resultMap.put("equipList", el);
+					simpMessage.convertAndSend("/topic/ip", resultMap);
+					count++;
 				} else {
 					// 解析客户端发送过来的数据
 					// 获取设备地址编码
@@ -70,10 +79,10 @@ public class ClientSocketHandler implements Runnable {
 					int num = Integer.valueOf(inputString.substring(4, 6), 16) / 4;
 					inputString = inputString.substring(6);
 					param.put("frameStru", frameStru);
-					param.put("heartbeatId", heartbeatId);
+					param.put("heartbeatId", heartbeat);
 					EquipmentInfo e = equipmentService.selectByHbid(param);
 					String equipmentId = e.getEquipmentId();
-					String name = e.getEquipmentName();
+					String equipmentName = e.getEquipmentName();
 					String channelTem = e.getChannelTem();
 					channelTem = channelTem.substring(2, channelTem.length() - 2);
 					String[] arr = channelTem.split("\\],\\[");
@@ -96,7 +105,7 @@ public class ClientSocketHandler implements Runnable {
 					}
 					DataAcquisitionVo d = new DataAcquisitionVo();
 					d.setEquipmentId(equipmentId);
-					d.setEquipmentName(name);
+					d.setEquipmentName(equipmentName);
 					d.setAddress(frameStru);
 					d.setReceiveTime(CommonUtil.getSimpleFormatTimestamp());
 					d.setDutyPerson(e.getUserName());
@@ -133,7 +142,7 @@ public class ClientSocketHandler implements Runnable {
 							d.setMessage("正常");
 							break;
 						}
-						if (value != 3000.0 && value != 6116.6 && value != 2999.9&& value != 4332.9
+						if (value != 3000.0 && value != 6116.6 && value != 2999.9 && value != 4332.9
 								&& (value < Float.valueOf(minl.get(i)) || value > Float.valueOf(maxl.get(i)))) {
 							d.setState("9");
 						}

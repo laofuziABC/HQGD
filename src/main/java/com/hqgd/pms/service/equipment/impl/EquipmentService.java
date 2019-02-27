@@ -103,4 +103,9 @@ public class EquipmentService implements IEquipmentService {
 		return equipmentInfo;
 	}
 
+	public List<String> selectAllByHb(String heartbeat) {
+		List<String> equipmentInfoList = equipmentInfoMapper.selectAllByHb(heartbeat);
+		return equipmentInfoList;
+	}
+
 }

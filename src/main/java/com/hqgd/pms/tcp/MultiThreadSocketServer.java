@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import com.hqgd.pms.common.SpringContextUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.service.equipment.impl.EquipmentService;
@@ -23,11 +25,13 @@ public class MultiThreadSocketServer implements Runnable {
 	private static final int SERVER_PORT = 12345;
 	private EquipmentService equipmentService;
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
+	private SimpMessagingTemplate simpMessage;// 消息发送模板
 	public static List<Socket> CLIENT_SOCKET_LIST = new ArrayList<Socket>();
 
 	public MultiThreadSocketServer() {
 		this.equipmentService = SpringContextUtil.getBean(EquipmentService.class);
 		this.dataAcquisitionVoMapper = SpringContextUtil.getBean(DataAcquisitionVoMapper.class);
+		this.simpMessage = SpringContextUtil.getBean(SimpMessagingTemplate.class);
 	}
 
 	@Override
@@ -45,7 +49,8 @@ public class MultiThreadSocketServer implements Runnable {
 				System.out.println("client join in, ip:" + socket.getInetAddress());
 				CLIENT_SOCKET_LIST.add(socket);
 				// 将接收到的客户端socket交给处理线程进行处理，实现多线程
-				new Thread(new ClientSocketHandler(socket,equipmentService,dataAcquisitionVoMapper)).start();
+				new Thread(new ClientSocketHandler(socket, equipmentService, dataAcquisitionVoMapper, simpMessage))
+						.start();
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

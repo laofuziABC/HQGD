@@ -40,7 +40,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
             .excludePathPatterns("/hqgd/login")					//登录
             .excludePathPatterns("/hqgd/loginout")			//退出
 //            .excludePathPatterns("/user/*")
-//            .excludePathPatterns("/equipment/*")
+            .excludePathPatterns("/myWebSocket/*")
 			.excludePathPatterns("classpath:/static/**");	//静态资源
     }
 

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>通信监测</title>
+<script src="https://cdn.bootcss.com/sockjs-client/1.1.0/sockjs.min.js"></script>
+<script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<h1>通信监测</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li class="active">通信监测</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="box box-primary">
+							<h3 class="profile-username text-center">已连接设备</h3>
+							<div class="box-header with-border">
+								<div class="box-body">
+									<ul id="routerip" class="sidebar-menu" data-widget="tree">
+
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-9">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title">通信日志</h3>
+
+								<button class="btn btn-primary pull-right" id="disconnect">
+									<i class="fa fa-unlink"></i> 断开
+								</button>
+								<button class="btn btn-primary pull-right" id="connect">
+									<i class="fa fa-link"></i> 连接
+								</button>
+							</div>
+							<div class="box-body">
+								<div class="form-group">
+									<textarea id="compose-textarea" class="form-control"
+										readonly="readonly" style="height: 600px"></textarea>
+								</div>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer">
+								<div class="pull-right">
+									<button type="reset" class="btn btn-primary" id="clear">
+										<i class="fa fa-trash"></i> 清屏
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<script src="dist/js/app.min.js"></script>
+	<script type="text/javascript">
+		$("#clear").click(function() {
+			document.getElementById('compose-textarea').innerHTML = "";
+		})
+		$(function() {
+			$("#connect").click(function(e) {
+				setMessageInnerHTML("连接中……" + "\n")
+				connect();
+				e.preventDefault();
+			});
+		});
+		$(function() {
+			$("#disconnect").click(function(e) {
+				closeSocket();
+				e.preventDefault();
+			});
+		});
+	</script>
+
+	<script>
+		var websocket = null;
+		var stompClient = null;
+		function connect() {
+			var socket = new SockJS("http://localhost:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
+			stompClient = Stomp.over(socket);
+			stompClient.connect({}, function(frame) {
+				setMessageInnerHTML("连接成功！" + "\n")
+				console.log(frame);
+				stompClient.subscribe('/topic/ip', function(body) {
+					if (body.body.indexOf("equipList") > -1) {
+						aide(body.body);
+					}
+					setMessageInnerHTML(getNowFormatDate() + "-------"
+							+ body.body + "\n");
+				});
+			});
+		}
+
+		function setMessageInnerHTML(innerHTML) {
+			document.getElementById('compose-textarea').innerHTML += innerHTML;
+		}
+		//关闭连接
+		function closeSocket() {
+			if (stompClient != null) {
+				stompClient.disconnect();
+				stompClient = null;
+			}
+		}
+		function aide(param) {
+			var euiplist = "";
+			var object = JSON.parse(param);
+			var ip = object.ip;
+			var el = object.equipList;
+			var hb = object.heartbeat;
+			for (i = 0; i < el.length; i++) {
+				euiplist += "<li>" + el[i] + "</li>";
+			}
+			debugger;
+			document.getElementById('routerip').innerHTML += "<li>" + ip
+					+ " 建立连接" + "</li>";
+
+			// $("#routerip").html("<span>" + ip + "</span>");
+			// $("#euiplist").html(euiplist);
+		}
+
+		function getNowFormatDate() {
+			var date = new Date();
+			var seperator1 = "-";
+			var seperator2 = ":";
+			var month = date.getMonth() + 1;
+			var strDate = date.getDate();
+			if (month >= 1 && month <= 9) {
+				month = "0" + month;
+			}
+			if (strDate >= 0 && strDate <= 9) {
+				strDate = "0" + strDate;
+			}
+			var currentdate = date.getFullYear() + seperator1 + month
+					+ seperator1 + strDate + " " + date.getHours() + seperator2
+					+ date.getMinutes() + seperator2 + date.getSeconds();
+			return currentdate;
+		}
+	</script>
+</body>
+</html>
