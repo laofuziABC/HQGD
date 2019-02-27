@@ -42,20 +42,9 @@
 		
 		<script type="text/javascript">
 			//初始化页面信息
-			showCurrentContent();
-			//绘制温度实时监控表【开始】
-			function showCurrentContent(){
-				if(equiId!=null){
-					//加载通道温度
-					showBlocks();
-					//加载图表
-					$("#chart_current").highcharts(currentOption);
-					var chart = $("#chart_current").highcharts();
-					chart.showLoading();
-					initCurrentChart();
-				}
-			}
-			//绘制温度实时监控表【结束】
+			$(function(){
+				showCurrentContent();
+			});
 		</script>
 	</body>
 </html>

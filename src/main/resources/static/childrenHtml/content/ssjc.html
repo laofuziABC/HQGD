@@ -170,7 +170,8 @@
 		$(function(){
 			var roleId = parent.getParam("roleId");
 			if(roleId==1){
-				getEquiResultList();
+				var url="equipment/selectAll";
+				AjaxPostForEquiSubList(url,null);
 			}else{
 				var url="equipment/searchEquiByParam";
 				var username=parent.getParam("userName");
@@ -180,7 +181,6 @@
 				}
 			}
 			changeCheckEqui();
-			showCurrentContent();
 		});
 		//设置页面局部样式
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
@@ -191,7 +191,6 @@
 		function changeTabContent(param){
 			if(param==2){
 				if(oldequiId!=newequiId){
-					//$("#historytab").load("childrenHtml/data/history.html");
 					showHistoryContent();
 				}
 				$("#currenttab").css({"display" : "none" });
@@ -216,11 +215,6 @@
 			else{
 				target.style.display="none";
 			}
-		}
-		//加载设备列表
-		function getEquiResultList(){
-			var url="equipment/selectAll";
-			AjaxPostForEquiSubList(url,null);
 		}
 		//通过筛选条件的所有内容，查询设备列表
 		function searchEquipList(){

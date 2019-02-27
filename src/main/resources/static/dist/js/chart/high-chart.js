@@ -217,6 +217,18 @@ function addPoints(){
 	     clearInterval(i);
 	}
 }
+//初始化实时监控表
+function showCurrentContent(){
+	if(equiId!=null){
+		//加载通道温度
+		showBlocks();
+		//加载图表
+		$("#chart_current").highcharts(currentOption);
+		var chart = $("#chart_current").highcharts();
+		chart.showLoading();
+		initCurrentChart();
+	}
+}
 //展示实时监控通道最新监测的温度
 function showBlocks(){
 	var url="dataAcquisition/realtime";
