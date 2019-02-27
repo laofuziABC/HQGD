@@ -60,8 +60,10 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 					for (int i = 0; i < realTimeDateList.size(); i++) {
 						String[] ta = arr[i].split(",");
 						String cn = ta[0].substring(1, ta[0].length() - 1);
-						String max = ta[1].substring(1, ta[1].length() - 1);
-						String min = ta[2].substring(1, ta[2].length() - 1);
+//						String max = ta[1].substring(1, ta[1].length() - 1);
+//						String min = ta[2].substring(1, ta[2].length() - 1);
+						String max = ta[2].substring(1, ta[2].length() - 1);
+						String min = ta[3].substring(1, ta[3].length() - 1);
 						String t = realTimeDateList.get(i).getTemperature();
 						String channelNum = realTimeDateList.get(i).getChannelNum();
 						if (!t.equals("3000") && !t.equals("-437") && !t.equals("2999") && channelNum.equals(cn)

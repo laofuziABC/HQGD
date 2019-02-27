@@ -12,7 +12,8 @@
 			.box-body2{padding: 2px 0; background-color: #21242e;}
 			#example1{color: #ffffff; width: 98%; margin: 2px auto;}
 			#data-show-pager a, #data-show-pager span{color: #ffffff; }
-			#enterNum{color: #666666;}
+			#data-show-pager a.goto-btn{margin: 3px; min-width: 20px;}
+			#enterNum{color: #000000;}
 		</style>
 	</head>
 	<body>
@@ -87,6 +88,9 @@
 			var endTimeInput = document.getElementById("endTime");
 			startTimeInput.value = parent.formatInitDateToString(new Date());
 			endTimeInput.value = parent.formatDateToString(new Date());
+			//初始化图表配置项，添加空的图表
+			historyOption.title.text="历史温度曲线图";
+			historyOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
 			$("#chart_history").highcharts(historyOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
