@@ -1,60 +1,69 @@
 package com.hqgd.pms.domain;
 
 public class RouterInfo {
-    private String routerId;
+	private String routerId;
 
-    private String routerName;
+	private String routerName;
 
-    private String connect;
+	private String ip;
 
-    private String creator;
+	private String connect;
 
-    private String createTime;
+	private String creator;
 
-    private String updater;
+	private String createTime;
 
-    private String updateTime;
+	private String updater;
 
-    public String getRouterId() {
-        return routerId;
-    }
+	private String updateTime;
 
-    public void setRouterId(String routerId) {
-        this.routerId = routerId == null ? null : routerId.trim();
-    }
+	public String getIp() {
+		return ip;
+	}
 
-    public String getRouterName() {
-        return routerName;
-    }
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-    public void setRouterName(String routerName) {
-        this.routerName = routerName == null ? null : routerName.trim();
-    }
+	public String getRouterId() {
+		return routerId;
+	}
 
-    public String getConnect() {
-        return connect;
-    }
+	public void setRouterId(String routerId) {
+		this.routerId = routerId == null ? null : routerId.trim();
+	}
 
-    public void setConnect(String connect) {
-        this.connect = connect == null ? null : connect.trim();
-    }
+	public String getRouterName() {
+		return routerName;
+	}
 
-    public String getCreator() {
-        return creator;
-    }
+	public void setRouterName(String routerName) {
+		this.routerName = routerName == null ? null : routerName.trim();
+	}
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
+	public String getConnect() {
+		return connect;
+	}
 
+	public void setConnect(String connect) {
+		this.connect = connect == null ? null : connect.trim();
+	}
 
-    public String getUpdater() {
-        return updater;
-    }
+	public String getCreator() {
+		return creator;
+	}
 
-    public void setUpdater(String updater) {
-        this.updater = updater == null ? null : updater.trim();
-    }
+	public void setCreator(String creator) {
+		this.creator = creator == null ? null : creator.trim();
+	}
+
+	public String getUpdater() {
+		return updater;
+	}
+
+	public void setUpdater(String updater) {
+		this.updater = updater == null ? null : updater.trim();
+	}
 
 	public String getCreateTime() {
 		return createTime;

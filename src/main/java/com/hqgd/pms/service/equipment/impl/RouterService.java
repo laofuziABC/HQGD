@@ -81,4 +81,10 @@ public class RouterService implements IRouterService {
 		return map;
 	}
 
+	@Override
+	public List<Map<String, String>> selectConEqui() {
+		List<Map<String, String>> routerInfo = routerInfoMapper.selectConEqui();
+		return routerInfo;
+	}
+
 }

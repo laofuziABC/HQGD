@@ -1,6 +1,7 @@
 package com.hqgd.pms.dao.equipment;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hqgd.pms.domain.RouterInfo;
 
@@ -20,4 +21,10 @@ public interface RouterInfoMapper {
 	List<RouterInfo> selectAll();
 
 	List<RouterInfo> selectByRouterName(String routerName);
+
+	List<Map<String,String>> selectConEqui();
+
+	void updateIp(String routerId, String ip);
+
+	void updateConnect(String routerId);
 }

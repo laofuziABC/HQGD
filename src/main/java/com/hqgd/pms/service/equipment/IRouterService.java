@@ -16,4 +16,6 @@ public interface IRouterService {
 
 	Map<String, Object> update(RouterInfo routerInfo, User userLog);
 
-	Map<String, Object> delete(String routerId);}
+	Map<String, Object> delete(String routerId);
+
+	List<Map<String, String>> selectConEqui();}

@@ -53,20 +53,29 @@ public class RouterController {
 
 	@RequestMapping(value = "selectByRouterName")
 	@ResponseBody
-	public String selectByUserName(Model model, String routerName, HttpServletRequest request,
+	public void selectByUserName(Model model, String routerName, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		List<RouterInfo> router = routerService.selectByRouterName(routerName);
-		String json = new Gson().toJson(router).toString();
-		return json;
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(router));
 	}
 
 	@RequestMapping(value = "selectAll")
 	@ResponseBody
-	public String selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<RouterInfo> router = routerService.selectAll();
-		String json = new Gson().toJson(router).toString();
-		return json;
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(router));
+
+	}
+
+	@RequestMapping(value = "selectConEqui")
+	@ResponseBody
+	public void selectConEqui(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		List<Map<String, String>> router = routerService.selectConEqui();
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(router));
 
 	}
 

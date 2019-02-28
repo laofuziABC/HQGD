@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
+import com.hqgd.pms.dao.equipment.RouterInfoMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.service.equipment.impl.EquipmentService;
@@ -35,17 +36,21 @@ public class ClientSocketHandler implements Runnable {
 	private EquipmentService equipmentService;
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 	private SimpMessagingTemplate simpMessage;
+	private RouterInfoMapper routerInfoMapper;
 
 	public ClientSocketHandler(Socket socket, EquipmentService equipmentService,
-			DataAcquisitionVoMapper dataAcquisitionVoMapper, SimpMessagingTemplate simpMessage) {
+			DataAcquisitionVoMapper dataAcquisitionVoMapper, SimpMessagingTemplate simpMessage,
+			RouterInfoMapper routerInfoMapper) {
 		this.socket = socket;
 		this.equipmentService = equipmentService;
 		this.dataAcquisitionVoMapper = dataAcquisitionVoMapper;
 		this.simpMessage = simpMessage;
+		this.routerInfoMapper = routerInfoMapper;
 	}
 
 	BufferedReader socketIn = null;
 	PrintStream socketOut = null;
+	String heartbeat = "";
 
 	@Override
 	public void run() {
@@ -58,7 +63,6 @@ public class ClientSocketHandler implements Runnable {
 				System.out.println(Thread.currentThread().getName() + " say :" + inputString);
 				inputString = inputString.replace(" ", "");
 				int len = inputString.length();
-				String heartbeat = "";
 				String frameStru = "";
 				int count = 1;
 				// 获取心跳包id,判断数据长度，当最少只有一个通道的时候，数据为“0103040121CDB6",长度为14，而14已经亿亿，不会有那么多id编号
@@ -66,10 +70,12 @@ public class ClientSocketHandler implements Runnable {
 					heartbeat = inputString;
 					List<String> el = equipmentService.selectAllByHb(heartbeat);
 					Map<String, Object> resultMap = new HashMap<String, Object>();
-					resultMap.put("ip", socket.getInetAddress());
+					String ip = String.valueOf(socket.getInetAddress()).substring(1);
+					resultMap.put("ip", ip);
 					resultMap.put("heartbeat", heartbeat);
 					resultMap.put("equipList", el);
 					simpMessage.convertAndSend("/topic/ip", resultMap);
+					routerInfoMapper.updateIp(heartbeat, ip);
 					count++;
 				} else {
 					// 解析客户端发送过来的数据
@@ -162,6 +168,8 @@ public class ClientSocketHandler implements Runnable {
 					socketOut.close();
 				}
 				if (socket != null) {
+					simpMessage.convertAndSend("/topic/ip", "closeSocket:" + socket.getInetAddress());
+					routerInfoMapper.updateConnect(heartbeat);
 					socket.shutdownOutput();
 					socket.close();
 				}

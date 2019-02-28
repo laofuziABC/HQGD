@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>通信监测</title>
-<script src="https://cdn.bootcss.com/sockjs-client/1.1.0/sockjs.min.js"></script>
-<script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -64,6 +62,8 @@
 		</div>
 	</div>
 	<script src="dist/js/app.min.js"></script>
+	<script src="dist/js/sockjs.min.js"></script>
+	<script src="dist/js/stomp.min.js"></script>
 	<script type="text/javascript">
 		$("#clear").click(function() {
 			document.getElementById('compose-textarea').innerHTML = "";
@@ -82,10 +82,29 @@
 			});
 		});
 	</script>
-
 	<script>
 		var websocket = null;
 		var stompClient = null;
+		selectConEqui();
+		//已连接设备
+		function selectConEqui() {
+			$.ajax({
+				url : "router/selectConEqui",
+				type : "post",
+				dataType : "json",
+				success : function(result) {
+					var arr = [];
+					for(i=0;i<result.length;i++){
+						arr[i]=result[i].IP;
+					}
+					var set = Array.from(new Set(arr));
+					for(i=0;i<set.length;i++){
+						document.getElementById('routerip').innerHTML += "<li>" + set[i]
+						+ " 建立连接" + "</li>";
+					}
+				}
+			});
+		}
 		function connect() {
 			var socket = new SockJS("http://localhost:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
 			stompClient = Stomp.over(socket);
@@ -94,7 +113,10 @@
 				console.log(frame);
 				stompClient.subscribe('/topic/ip', function(body) {
 					if (body.body.indexOf("equipList") > -1) {
-						aide(body.body);
+						display(body.body);
+					}
+					if (body.body.indexOf("closeSocket") > -1) {
+						clearSocket(body.body);
 					}
 					setMessageInnerHTML(getNowFormatDate() + "-------"
 							+ body.body + "\n");
@@ -113,7 +135,21 @@
 				setMessageInnerHTML("断开成功！" + "\n")
 			}
 		}
-		function aide(param) {
+		function clearSocket(param) {
+			debugger;
+			var ip = param.substring(13);
+			var oUl = document.querySelector("#routerip");
+			var oList = oUl.querySelectorAll("li");
+
+			for (var i = 0; i < oList.length; i++) {
+				(function(i) {
+					if (oList[i].innerText.indexOf("127.0.0.1") > -1) {
+						oList[i].remove();
+					}
+				})(i);
+			}
+		}
+		function display(param) {
 			var euiplist = "";
 			var object = JSON.parse(param);
 			var ip = object.ip;
@@ -122,7 +158,6 @@
 			for (i = 0; i < el.length; i++) {
 				euiplist += "<li>" + el[i] + "</li>";
 			}
-			debugger;
 			document.getElementById('routerip').innerHTML += "<li>" + ip
 					+ " 建立连接" + "</li>";
 
@@ -147,6 +182,7 @@
 					+ date.getMinutes() + seperator2 + date.getSeconds();
 			return currentdate;
 		}
+		connect();
 	</script>
 </body>
 </html>

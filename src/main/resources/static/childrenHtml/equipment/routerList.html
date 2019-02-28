@@ -39,6 +39,10 @@
 							id="routerName" />
 					</p>
 					<p>
+						<span>路由器IP</span><input type="text" class="right_input" value=""
+							id="routerIp" />
+					</p>
+					<p>
 						<span>状态：</span> <select id="connect">
 							<option value="Y" selected="selected">连接</option>
 							<option value="N">断开</option>
@@ -88,6 +92,7 @@
 											<td>序号</td>
 											<td>路由器ID</td>
 											<td>路由器名称</td>
+											<td>路由器IP</td>
 											<td>状态</td>
 											<td>创建时间</td>
 											<td>更新时间</td>
@@ -156,6 +161,7 @@
 										+ "</td>";
 								routerlist += "<td>" + result[i].routerName
 										+ "</td>";
+								routerlist += "<td>" + result[i].ip + "</td>";
 								if (result[i].connect == "Y") {
 									routerlist += "<td>连接</td>";
 								} else {
@@ -172,7 +178,8 @@
 								routerlist += "<a class=\" edit\" onclick=\"getRouterEdit('"
 										+ i + "');\">编辑</a>&nbsp;";
 								routerlist += "<a class=\"delete\" href=\"#\" onclick=\"getRouterDelete('"
-										+ result[i].routerId + "');\">删除</a>&nbsp;";
+										+ result[i].routerId
+										+ "');\">删除</a>&nbsp;";
 								routerlist += "</td>";
 								routerlist += "</tr>";
 							}
@@ -204,6 +211,7 @@
 			});
 			$("#routerId").val(globalResult[param].routerId);
 			$("#routerName").val(globalResult[param].routerName);
+			$("#routerIp").val(globalResult[param].ip);
 			document.getElementById('connect').value = globalResult[param].connect;
 		}
 		//删除用户
@@ -246,6 +254,8 @@
 											+ "</td>";
 									routerlist += "<td>" + result[i].routerName
 											+ "</td>";
+									routerlist += "<td>" + result[i].ip
+											+ "</td>";
 									if (result[i].connect == "Y") {
 										routerlist += "<td>连接</td>";
 									} else {
@@ -277,6 +287,7 @@
 		function submitRouterInfo() {
 			var routerId = $("#routerId").val();
 			var routerName = $("#routerName").val();
+			var ip = $("#routerIp").val();
 			var connect = $("#connect option:selected").val();
 			$.ajax({
 				url : "router/update",
@@ -284,6 +295,7 @@
 				data : {
 					"routerId" : routerId,
 					"routerName" : routerName,
+					"ip" : ip,
 					"connect" : connect,
 					"add" : add
 				},
