@@ -127,12 +127,12 @@
 				setMessageInnerHTML("连接成功！" + "\n")
 				console.log(frame);
 				stompClient.subscribe('/topic/ip', function(body) {
-					if (body.body.indexOf("parent") > -1) {
+					/* if (body.body.indexOf("parent") > -1) {
 						display(body.body);
 					}
 					if (body.body.indexOf("closeSocket") > -1) {
 						clearSocket(body.body);
-					}
+					} */
 					setMessageInnerHTML(getNowFormatDate() + "-------"
 							+ body.body + "\n");
 				});
