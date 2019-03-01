@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>通信监测</title>
+<link rel="stylesheet" href="dist/js/themes/default/style.min.css" />
+<script type="application/javascript" src="dist/js/jstree.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -21,11 +23,7 @@
 						<div class="box box-primary">
 							<h3 class="profile-username text-center">已连接设备</h3>
 							<div class="box-header with-border">
-								<div class="box-body">
-									<ul id="routerip" class="sidebar-menu" data-widget="tree">
-
-									</ul>
-								</div>
+								<div id="routerip"></div>
 							</div>
 						</div>
 					</div>
@@ -85,26 +83,43 @@
 	<script>
 		var websocket = null;
 		var stompClient = null;
-		selectConEqui();
-		//已连接设备
-		function selectConEqui() {
-			$.ajax({
-				url : "router/selectConEqui",
-				type : "post",
-				dataType : "json",
-				success : function(result) {
-					var arr = [];
-					for(i=0;i<result.length;i++){
-						arr[i]=result[i].IP;
+		$(function() {
+			$('#routerip').jstree({
+				"core" : {
+					'data' : {
+						'url' : "router/selectConEqui",
+						'data' : function(node) {
+							console.log(node);
+							return node;
+
+						}
+					},
+					"themes" : {
+						"ellipsis" : true
+					//文字多时省略
+					},
+					"check_callback" : true
+				},
+				"types" : {
+					"default" : {
+						"icon" : "false"
+					},
+					"text" : {
+						"icon" : "false"
 					}
-					var set = Array.from(new Set(arr));
-					for(i=0;i<set.length;i++){
-						document.getElementById('routerip').innerHTML += "<li>" + set[i]
-						+ " 建立连接" + "</li>";
-					}
-				}
+				},
+
+				"plugins" : [ "wholerow", "types", "themes" ]
+			}).on('select_node.jstree', function(event, data) {
+				//console.log(data.node);
+			}).on('changed.jstree', function(event, data) {
+				//console.log("-----------changed.jstree");
+				//console.log("action:" + data.action);
+				//console.log(data.node);
 			});
-		}
+
+		});
+		
 		function connect() {
 			var socket = new SockJS("http://localhost:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
 			stompClient = Stomp.over(socket);
@@ -112,7 +127,7 @@
 				setMessageInnerHTML("连接成功！" + "\n")
 				console.log(frame);
 				stompClient.subscribe('/topic/ip', function(body) {
-					if (body.body.indexOf("equipList") > -1) {
+					if (body.body.indexOf("parent") > -1) {
 						display(body.body);
 					}
 					if (body.body.indexOf("closeSocket") > -1) {
@@ -152,6 +167,8 @@
 		function display(param) {
 			var euiplist = "";
 			var object = JSON.parse(param);
+			debugger;
+			var json = $("#routerip").jstree(true).get_json();
 			var ip = object.ip;
 			var el = object.equipList;
 			var hb = object.heartbeat;
@@ -184,5 +201,7 @@
 		}
 		connect();
 	</script>
+
+
 </body>
 </html>

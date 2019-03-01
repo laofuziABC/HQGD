@@ -3,6 +3,7 @@ package com.hqgd.pms.dao.equipment;
 import java.util.List;
 import java.util.Map;
 
+import com.hqgd.pms.domain.Menu;
 import com.hqgd.pms.domain.RouterInfo;
 
 public interface RouterInfoMapper {

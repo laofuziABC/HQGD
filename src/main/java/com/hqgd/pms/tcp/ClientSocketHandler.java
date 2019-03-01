@@ -68,13 +68,14 @@ public class ClientSocketHandler implements Runnable {
 				// 获取心跳包id,判断数据长度，当最少只有一个通道的时候，数据为“0103040121CDB6",长度为14，而14已经亿亿，不会有那么多id编号
 				if (len < 14 && count < 2) {
 					heartbeat = inputString;
-					List<String> el = equipmentService.selectAllByHb(heartbeat);
-					Map<String, Object> resultMap = new HashMap<String, Object>();
+					List<Map<String, String>> el = equipmentService.selectAllByHb(heartbeat);
+					Map<String, String> resultMap = new HashMap<String, String>();
 					String ip = String.valueOf(socket.getInetAddress()).substring(1);
-					resultMap.put("ip", ip);
-					resultMap.put("heartbeat", heartbeat);
-					resultMap.put("equipList", el);
-					simpMessage.convertAndSend("/topic/ip", resultMap);
+					resultMap.put("id", heartbeat);
+					resultMap.put("text", ip);
+					resultMap.put("parent", "#");
+					el.add(resultMap);
+					simpMessage.convertAndSend("/topic/ip", el);
 					routerInfoMapper.updateIp(heartbeat, ip);
 					count++;
 				} else {

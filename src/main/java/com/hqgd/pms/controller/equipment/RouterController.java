@@ -79,4 +79,13 @@ public class RouterController {
 
 	}
 
+	@RequestMapping(value = "test")
+	@ResponseBody
+	public void test(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		List<Map<String,String>> menu = routerService.selectMenu();
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(menu));
+
+	}
+
 }

@@ -32,6 +32,8 @@ public interface EquipmentInfoMapper {
 
 	EquipmentInfo selectByHbid(Map<String, String> param);
 
-	List<String> selectAllByHb(String heartbeat);
+	List<Map<String, String>> selectAllByHb(String heartbeat);
+
+	List<Map<String, String>> selectConEqui1();
 
 }

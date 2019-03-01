@@ -35,9 +35,23 @@
     LNG_LAT,EQUIPMENT_ID, EQUIPMENT_NAME
     from hq_equipment_info
   </select>
-  <select id="selectAllByHb" parameterType="java.lang.String" resultType="java.lang.String">
-    select 
-    EQUIPMENT_NAME
+  <select id="selectConEqui1" resultType="java.util.HashMap">
+    SELECT
+	EQUIPMENT_ID AS id,
+	EQUIPMENT_NAME AS text,
+	HEARTBEAT_ID AS parent 
+FROM
+	hq_equipment_info e,
+	hq_router_info r 
+WHERE
+	r.CONNECT = 'Y' 
+	AND r.ROUTER_ID = e.HEARTBEAT_ID
+  </select>
+  <select id="selectAllByHb" parameterType="java.lang.String" resultType="java.util.HashMap">
+    SELECT
+	EQUIPMENT_ID AS id,
+	EQUIPMENT_NAME AS text,
+	HEARTBEAT_ID AS parent
     from hq_equipment_info
     WHERE
     HEARTBEAT_ID = #{heartbeatId,jdbcType=VARCHAR}

@@ -27,16 +27,14 @@
     update hq_router_info set IP = #{param2},CONNECT = 'Y' where ROUTER_ID = #{param1}
   </update>
   <select id="selectConEqui"  resultType="java.util.HashMap">
-    SELECT
-	ROUTER_ID,
-	IP,
-	EQUIPMENT_NAME 
-    FROM
-	hq_router_info r,
-	hq_equipment_info e 
-    WHERE
-	r.ROUTER_ID = e.HEARTBEAT_ID 
-	AND CONNECT = 'Y'
+  SELECT
+	ROUTER_ID AS id,
+	IP AS text,
+	'#' AS parent 
+FROM
+	hq_router_info 
+WHERE
+	CONNECT = 'Y'
   </select>
   <select id="selectByRouterName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
