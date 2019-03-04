@@ -75,7 +75,8 @@ public class ClientSocketHandler implements Runnable {
 					resultMap.put("text", ip);
 					resultMap.put("parent", "#");
 					el.add(resultMap);
-					simpMessage.convertAndSend("/topic/ip", el);
+					simpMessage.convertAndSend("/topic/ip", ip+"建立连接");
+					simpMessage.convertAndSend("/topic/ip", "该路由下的设备有"+el);
 					routerInfoMapper.updateIp(heartbeat, ip);
 					count++;
 				} else {
