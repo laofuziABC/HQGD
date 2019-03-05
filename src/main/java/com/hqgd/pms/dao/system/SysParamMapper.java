@@ -12,4 +12,6 @@ public interface SysParamMapper {
 	List<SysParam> selectSysParam();
 
 	int setSysParam(Map<String, Object> param);
+
+	String selectServerPort();
 }

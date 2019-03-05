@@ -16,6 +16,12 @@
     <include refid="Base_Column_List" />
     from conf_sys_parameter  
   </select>
+  <select id="selectServerPort" resultType="java.lang.String">
+    select 
+    PARAM_VALUE
+    from conf_sys_parameter  
+    where PARAM_CODE='SERVER_PORT'
+  </select>
   <update id="setSysParam" >
     update  conf_sys_parameter set PARAM_VALUE = #{paramValue} where PARAM_CODE = #{paramCode,jdbcType=VARCHAR}
   </update>

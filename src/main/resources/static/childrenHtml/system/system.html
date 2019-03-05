@@ -19,7 +19,7 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-md-6">
-						<div class="box box-warning">
+						<div class="box box-primary">
 							<!-- /.box-header -->
 							<div class="box-body">
 								<form role="form">
@@ -29,6 +29,18 @@
 											<option value="1">开启</option>
 											<option value="2">关闭</option>
 										</select>
+									</div>
+									<div class="form-group">
+										<label>服务器绑定端口</label>
+										<div class="input-group">
+											<input id="SERVER_PORT" type="text" class="form-control">
+
+											<div class="input-group-btn">
+												<button id="add-new-event" type="button" onclick="setSystem('SERVER_PORT')"
+													class="btn btn-primary btn-flat">保存</button>
+											</div>
+											<!-- /btn-group -->
+										</div>
 									</div>
 								</form>
 							</div>
@@ -50,22 +62,24 @@
 	<script type="text/javascript">
 		selectSysParam();
 		function selectSysParam() {
-			$.ajax({
-				url : "system/selectSysParam",
-				type : "post",
-				dataType : "json",
-				success : function(result) {
-					var data = result.data;
-					for (let i = 0; i < data.length; i++) {
-						var paramCode = data[i].paramCode;
-						document.getElementById(paramCode).value = data[i].paramValue;
-					}
-				}
-			});
+			$
+					.ajax({
+						url : "system/selectSysParam",
+						type : "post",
+						dataType : "json",
+						success : function(result) {
+							var data = result.data;
+							for (let i = 0; i < data.length; i++) {
+								var paramCode = data[i].paramCode;
+								document.getElementById(paramCode).value = data[i].paramValue;
+							}
+						}
+					});
 		}
 		function setSystem(param) {
+			debugger;
 			var paramCode = param;
-			var paramValue = $("#"+paramCode).val();
+			var paramValue = $("#" + paramCode).val();
 			$.ajax({
 				url : "system/setSysParam",
 				type : "post",
