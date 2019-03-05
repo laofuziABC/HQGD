@@ -63,6 +63,7 @@ public class MultiThreadSocketServer implements Runnable {
 				// 等待接收客户端连接
 				socket = serverSocket.accept();
 				System.out.println("client join in, ip:" + socket.getInetAddress());
+				simpMessage.convertAndSend("/topic/ip", socket.getInetAddress() + "建立连接！！！！");
 				CLIENT_SOCKET_LIST.add(socket);
 				// 将接收到的客户端socket交给处理线程进行处理，实现多线程
 				new Thread(new ClientSocketHandler(socket, equipmentService, dataAcquisitionVoMapper, simpMessage,
