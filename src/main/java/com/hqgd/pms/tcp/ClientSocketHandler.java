@@ -75,8 +75,8 @@ public class ClientSocketHandler implements Runnable {
 					resultMap.put("text", ip);
 					resultMap.put("parent", "#");
 					el.add(resultMap);
-					simpMessage.convertAndSend("/topic/ip", ip+"建立连接");
-					simpMessage.convertAndSend("/topic/ip", "该路由下的设备有"+el);
+					simpMessage.convertAndSend("/topic/ip", ip + "建立连接");
+					simpMessage.convertAndSend("/topic/ip", "该路由下的设备有" + el);
 					routerInfoMapper.updateIp(heartbeat, ip);
 					count++;
 				} else {
@@ -119,6 +119,21 @@ public class ClientSocketHandler implements Runnable {
 					d.setDutyPerson(e.getUserName());
 					d.setTel(e.getTel());
 					d.setNumOfCh(e.getNumOfCh());
+					String type = e.getType();
+					switch (type) {
+					case "1":
+						dataAcquisitionVoMapper.truncatef1();
+						break;
+					case "2":
+						dataAcquisitionVoMapper.truncatef2();
+						break;
+					case "3":
+						dataAcquisitionVoMapper.truncatef3();
+						break;
+					case "4":
+						dataAcquisitionVoMapper.truncatef4();
+						break;
+					}
 					for (int i = 0; i < num; i++) {
 						Float value = Integer.valueOf(inputString.substring(i * 4, i * 4 + 4), 16) / 10F;
 						Float pd = Integer.valueOf(inputString.substring(i * 4 + 4, i * 4 + 6), 16) / 10F;
@@ -131,31 +146,45 @@ public class ClientSocketHandler implements Runnable {
 						switch (value.toString()) {
 						case "3000.0":
 							d.setState("2");
-							d.setMessage("传感器故障");
+							d.setMessage("光纤故障");
 							break;
 						case "6116.6":
 							d.setState("1");
-							d.setMessage("光纤故障");
+							d.setTemperature("-437");
+							d.setMessage("传感器模块故障");
 							break;
 						case "2999.9":
 							d.setState("3");
-							d.setMessage("设备安装中");
-							break;
-						case "4332.9":
-							d.setState("4");
-							d.setMessage("设备安装中");
+							d.setMessage("系统调整中");
 							break;
 						default:
 							d.setState("5");
 							d.setMessage("正常");
 							break;
 						}
-						if (value != 3000.0 && value != 6116.6 && value != 2999.9 && value != 4332.9
+						if (value != 3000.0 && value != 6116.6 && value != 2999.9
 								&& (value < Float.valueOf(minl.get(i)) || value > Float.valueOf(maxl.get(i)))) {
 							d.setState("9");
 						}
-						// 将数据存储在数据库中
-						dataAcquisitionVoMapper.insert(d);
+
+						switch (type) {
+						case "1":
+							dataAcquisitionVoMapper.insert1(d);
+							dataAcquisitionVoMapper.insertf1(d);
+							break;
+						case "2":
+							dataAcquisitionVoMapper.insert2(d);
+							dataAcquisitionVoMapper.insertf2(d);
+							break;
+						case "3":
+							dataAcquisitionVoMapper.insert3(d);
+							dataAcquisitionVoMapper.insertf3(d);
+							break;
+						case "4":
+							dataAcquisitionVoMapper.insert4(d);
+							dataAcquisitionVoMapper.insertf4(d);
+							break;
+						}
 					}
 				}
 			}
@@ -172,6 +201,7 @@ public class ClientSocketHandler implements Runnable {
 				if (socket != null) {
 					simpMessage.convertAndSend("/topic/ip", "closeSocket:" + socket.getInetAddress());
 					routerInfoMapper.updateConnect(heartbeat);
+					MultiThreadSocketServer.CLIENT_SOCKET_LIST.remove(socket);
 					socket.shutdownOutput();
 					socket.close();
 				}

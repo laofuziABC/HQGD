@@ -248,13 +248,124 @@ ORDER BY
       ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
       TEMPERATURE, PD, UV, 
       STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL)
+      DUTY_PERSON, TEL,NUM_OF_CH)
     values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
       #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
       #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR})
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
   </insert>
+  <insert id="insert1" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into HQTemp_Cloud.dbo.hq_equipment_monitor_data_1 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  <insert id="insert2" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into HQTemp_Cloud.dbo.hq_equipment_monitor_data_2 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  <insert id="insert3" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into HQTemp_Cloud.dbo.hq_equipment_monitor_data_3 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  <insert id="insert4" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into HQTemp_Cloud.dbo.hq_equipment_monitor_data_4 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertf1" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into hq_equipment_monitor_data_f1 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertf2" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into hq_equipment_monitor_data_f2 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertf3" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into hq_equipment_monitor_data_f3 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertf4" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+    insert into hq_equipment_monitor_data_f4 (EQUIPMENT_ID, EQUIPMENT_NAME, 
+      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
+      TEMPERATURE, PD, UV, 
+      STATE, MESSAGE, RECEIVE_TIME, 
+      DUTY_PERSON, TEL,NUM_OF_CH)
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="truncatef1">
+  truncate table hq_equipment_monitor_data_f1
+  </update>
+  <update id="truncatef2">
+  truncate table hq_equipment_monitor_data_f2
+  </update>
+  <update id="truncatef3">
+  truncate table hq_equipment_monitor_data_f3
+  </update>
+  <update id="truncatef4">
+  truncate table hq_equipment_monitor_data_f4
+  </update>
+  
   <insert id="insertSelective" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
     insert into hq_equipment_monitor_data
     <trim prefix="(" suffix=")" suffixOverrides=",">

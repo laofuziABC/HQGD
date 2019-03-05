@@ -55,7 +55,7 @@ public class HttpTestServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
-		}, 0, 20000);
+		}, 0, 60000);
 
 	}
 
@@ -88,58 +88,6 @@ public class HttpTestServlet extends HttpServlet {
 		resp.getWriter().println("test OK");
 	}
 
-//	public static void main(String[] args) {
-//		String inputString = "01 03 18 01 21 A9 41 75 30 00 2E EE EE EE EE 00 CC B8 7F FF CB B4 2A 00 CD C0 70 CD B6";
-//		inputString = inputString.replace(" ", "");
-//		int len = inputString.length();
-//		String heartbeatId = "0x000001";
-//		String frameStru = "";
-//		
-//		// 获取心跳包id,判断数据长度，当最少只有一个通道的时候，数据为“0103040121CDB6",长度为14，而14已经是整形的亿亿，不会有那么多id编号
-//		// if (len < 14) {
-//		// heartbeatId = inputString;
-//		// } else {
-//		// 解析客户端发送过来的数据
-//		// 获取设备地址编码
-//		Map<String, String> param = new HashMap<>();
-//		frameStru = Integer.valueOf(inputString.substring(0, 2), 16).toString();
-//		int num = Integer.valueOf(inputString.substring(4, 6), 16) / 4;
-//		inputString = inputString.substring(6);
-//		param.put("frameStru", frameStru);
-//		param.put("heartbeatId", heartbeatId);
-//		EquipmentInfo e = equipmentInfoMapper.selectByHbid(param);
-//		String equipmentId = e.getEquipmentId();
-//		String name = e.getEquipmentName();
-//		DataAcquisitionVo d = new DataAcquisitionVo();
-//		d.setEquipmentId(equipmentId);
-//		d.setEquipmentName(name);
-//		d.setAddress("0x0"+frameStru);
-//		d.setChannelNum(String.valueOf(num));
-//		for (int i = 0; i < num; i++) {
-//			Float value = Integer.valueOf(inputString.substring(i * 4, i * 4 + 4), 16) / 10F;
-//			Float pd = Integer.valueOf(inputString.substring(i * 4 + 4, i * 4 + 6), 16) / 10F;
-//			Float uv = Integer.valueOf(inputString.substring(i * 4 + 6, i * 4 + 8), 16) / 10F;
-//			d.setTemperature(value.toString());
-//			d.setPd(pd.toString());
-//			d.setUv(uv.toString());
-//			switch (value.toString()) {
-//			case "7530":
-//				d.setState("2");
-//				d.setMessage("故障2");
-//				break;
-//			case "61166":
-//				d.setState("1");
-//				d.setMessage("故障1");
-//				break;
-//			default:
-//				d.setState("5");
-//				d.setMessage("正常");
-//				break;
-//			}
-//			dataAcquisitionVoMapper.insert(d);
-//		}
-//		// }
-//	}
 
 	public static String getCRC(String data) {
 		data = data.replace(" ", "");
