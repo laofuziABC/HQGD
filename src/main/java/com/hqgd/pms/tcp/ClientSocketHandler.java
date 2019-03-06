@@ -1,8 +1,7 @@
 package com.hqgd.pms.tcp;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -51,45 +50,46 @@ public class ClientSocketHandler implements Runnable {
 		this.routerInfoMapper = routerInfoMapper;
 	}
 
-	DataInputStream socketIn = null;
+	InputStream socketIn = null;
 	PrintStream socketOut = null;
 	String heartbeat = "";
 
 	@Override
 	public void run() {
 		try {
-			socketIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-			int count = 1;
-			// 获取设备发送的数据
-			byte[] bytes = new byte[1]; // 一次读取一个byte
-			String ret = "";
-			String inputString = "";
-			log.info(bytes.toString());
 
-			while (socketIn.read(bytes) != -1) {
-				ret += bytesToHexString(bytes);
-				if (socketIn.available() == 0) { // 一个请求
-					System.out.println(Thread.currentThread().getName() + " say :" + ret);
-					inputString = ret;
-					ret = "";
-					inputString = inputString.trim();
-					String frameStru = "";
-					// 获取心跳包id,判断数据长度，当最少只有一个通道的时候，数据为“0103040121CDB6",长度为14，而14已经亿亿，不会有那么多id编号
-					if (count < 2) {
-						heartbeat = hexStr2Str(inputString).substring(0, 15);
-						log.info(heartbeat);
-						List<Map<String, String>> el = equipmentService.selectAllByHb(heartbeat);
-						Map<String, String> resultMap = new HashMap<String, String>();
-						String ip = String.valueOf(socket.getInetAddress()).substring(1);
-						resultMap.put("id", heartbeat);
-						resultMap.put("text", ip);
-						resultMap.put("parent", "#");
-						el.add(resultMap);
-						simpMessage.convertAndSend("/topic/ip", "该路由下的设备有" + el);
-						routerInfoMapper.updateIp(heartbeat, ip);
-						count++;
-					} else {
-						// 解析客户端发送过来的数据
+			socketIn = socket.getInputStream();
+			int count = 1;
+
+			// socketIn = new BufferedReader(new
+			// InputStreamReader(socket.getInputStream()));
+			// socketOut = new PrintStream(socket.getOutputStream());
+			while (true) {
+				// 获取设备发送的数据
+				String inputString = "";
+				String frameStru = "";
+				byte[] bytes = new byte[1024];
+				int len = socketIn.read(bytes);
+				// 接受的第一次心跳包做处理，后面的心跳包都不做处理
+				if (count < 2) {
+					heartbeat = new String(bytes, 0, len);
+					log.info(Thread.currentThread().getName() + " say :" + heartbeat);
+					List<Map<String, String>> el = equipmentService.selectAllByHb(heartbeat);
+					Map<String, String> resultMap = new HashMap<String, String>();
+					String ip = String.valueOf(socket.getInetAddress()).substring(1);
+					resultMap.put("id", heartbeat);
+					resultMap.put("text", ip);
+					resultMap.put("parent", "#");
+					el.add(resultMap);
+					simpMessage.convertAndSend("/topic/ip", "该路由下的设备有" + el);
+					routerInfoMapper.updateIp(heartbeat, ip);
+					count++;
+				} else {
+					// 解析客户端发送过来的数据
+					inputString = bytesToHexString(bytes).substring(0, len*2);
+					if (socketIn.available() == 0) { // 一个请求
+						log.info(Thread.currentThread().getName() + " say :" + inputString);
+						inputString = inputString.trim();
 						// 获取设备地址编码
 						Map<String, String> param = new HashMap<>();
 						frameStru = Integer.valueOf(inputString.substring(0, 2), 16).toString();
@@ -97,7 +97,6 @@ public class ClientSocketHandler implements Runnable {
 						inputString = inputString.substring(6);
 						param.put("frameStru", frameStru);
 						param.put("heartbeatId", heartbeat);
-						log.info("frameStru=" + frameStru + "____heartbeat=" + heartbeat);
 						EquipmentInfo e = equipmentService.selectByHbid(param);
 						if (e != null) {
 							String equipmentId = e.getEquipmentId();
@@ -204,7 +203,6 @@ public class ClientSocketHandler implements Runnable {
 					}
 				}
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
