@@ -1,7 +1,7 @@
 package com.hqgd.pms.tcp;
 
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,10 @@ import com.hqgd.pms.domain.EquipmentInfo;
 @RequestMapping("socket_server")
 public class HttpTestServlet extends HttpServlet {
 	@Resource
-	private  DataAcquisitionVoMapper dataAcquisitionVoMapper;
+	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 	private static final long serialVersionUID = -6915004878346440376L;
 	@Resource
-	private  EquipmentInfoMapper equipmentInfoMapper;
+	private EquipmentInfoMapper equipmentInfoMapper;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -77,17 +77,20 @@ public class HttpTestServlet extends HttpServlet {
 			}
 			String frame = fHex + " 03 01 48 00 " + nHex;
 			String rameStru = getCRC(frame);
+
 			frameList.add(frame + " " + rameStru);
 		}
-		for (String s : frameList) {
+		//for (String s : frameList) {
 			for (Socket socket : socketlist) {
 				// 循环获取信息
-				new PrintStream(socket.getOutputStream()).println(s);
+				byte[] bytes = hexStringToByteArray("01 03 01 48 00 0C C4 25");
+				OutputStream os = socket.getOutputStream();
+				os.write(bytes);
+				// new PrintStream(socket.getOutputStream()).println(s);
 			}
-		}
+		//}
 		resp.getWriter().println("test OK");
 	}
-
 
 	public static String getCRC(String data) {
 		data = data.replace(" ", "");
@@ -139,6 +142,18 @@ public class HttpTestServlet extends HttpServlet {
 		// return result.substring(2, 4) + " " + result.substring(0, 2);
 		// 交换高低位，低位在前高位在后
 		return result.substring(2, 4) + " " + result.substring(0, 2);
+	}
+
+	public static byte[] hexStringToByteArray(String hexString) {
+		hexString = hexString.replaceAll(" ", "");
+		int len = hexString.length();
+		byte[] bytes = new byte[len / 2];
+		for (int i = 0; i < len; i += 2) {
+			// 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个字节
+			bytes[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4)
+					+ Character.digit(hexString.charAt(i + 1), 16));
+		}
+		return bytes;
 	}
 
 }
