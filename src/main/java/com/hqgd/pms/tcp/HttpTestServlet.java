@@ -21,6 +21,8 @@ import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.domain.EquipmentInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * <pre>
  *  描述：辅助测试类，收集温度
@@ -29,6 +31,7 @@ import com.hqgd.pms.domain.EquipmentInfo;
  * &#64;ClassName: HttpTestServlet
  * </pre>
  */
+@Slf4j
 @Controller
 @RequestMapping("socket_server")
 public class HttpTestServlet extends HttpServlet {
@@ -60,9 +63,12 @@ public class HttpTestServlet extends HttpServlet {
 	}
 
 	private void doExcute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("服务器向客户端发送定时器运行");
 		// 拿到所有客户端信息
 		List<Socket> socketlist = MultiThreadSocketServer.CLIENT_SOCKET_LIST;
+		log.info("socketlist的size=" + socketlist.size());
 		List<EquipmentInfo> equipmentList = equipmentInfoMapper.selectAll();
+		log.info("测温仪的size=" + socketlist.size());
 		List<String> frameList = new ArrayList<String>();
 		for (EquipmentInfo e : equipmentList) {
 			int f = Integer.valueOf(e.getFrameStru());
@@ -80,15 +86,16 @@ public class HttpTestServlet extends HttpServlet {
 
 			frameList.add(frame + " " + rameStru);
 		}
-		//for (String s : frameList) {
-			for (Socket socket : socketlist) {
-				// 循环获取信息
-				byte[] bytes = hexStringToByteArray("01 03 01 48 00 0C C4 25");
-				OutputStream os = socket.getOutputStream();
-				os.write(bytes);
-				// new PrintStream(socket.getOutputStream()).println(s);
-			}
-		//}
+		// for (String s : frameList) {
+		for (Socket socket : socketlist) {
+			// 循环获取信息
+			byte[] bytes = hexStringToByteArray("01030148000CC425");
+			OutputStream os = socket.getOutputStream();
+			log.info("bytes=" + bytes);
+			os.write(bytes);
+			// new PrintStream(socket.getOutputStream()).println(s);
+		}
+		// }
 		resp.getWriter().println("test OK");
 	}
 

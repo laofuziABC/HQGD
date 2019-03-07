@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.cache.annotation.CacheConfig;
@@ -34,6 +35,7 @@ public class MultiThreadSocketServer implements Runnable {
 	private SimpMessagingTemplate simpMessage;// 消息发送模板
 	private SysParamMapper sysParamMapper;// 消息发送模板
 	public static List<Socket> CLIENT_SOCKET_LIST = new ArrayList<Socket>();
+	public static HashSet<String> IP_SET = new HashSet<String>();
 
 	public MultiThreadSocketServer() {
 		this.equipmentService = SpringContextUtil.getBean(EquipmentService.class);
@@ -64,10 +66,14 @@ public class MultiThreadSocketServer implements Runnable {
 				socket = serverSocket.accept();
 				System.out.println("client join in, ip:" + socket.getInetAddress());
 				simpMessage.convertAndSend("/topic/ip", socket.getInetAddress() + "建立连接！！！！");
-				CLIENT_SOCKET_LIST.add(socket);
-				// 将接收到的客户端socket交给处理线程进行处理，实现多线程
-				new Thread(new ClientSocketHandler(socket, equipmentService, dataAcquisitionVoMapper, simpMessage,
-						routerInfoMapper)).start();
+				String ip = socket.getInetAddress().toString().replaceAll("/", "");
+				if (!IP_SET.contains(ip)) {
+					CLIENT_SOCKET_LIST.add(socket);
+					// 将接收到的客户端socket交给处理线程进行处理，实现多线程
+					new Thread(new ClientSocketHandler(socket, equipmentService, dataAcquisitionVoMapper, simpMessage,
+							routerInfoMapper)).start();
+				}
+
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
