@@ -9,7 +9,7 @@
 		<style type="text/css">
 			ul li{font-size: 30px;color:#2ec0f6;}
 			.tyg-div{z-index:-1000;float:left;position:absolute;left:5%;top:20%;}
-			.tyg-p{ font-size: 14px; font-family: 'microsoft yahei'; position: absolute; top: 135px; left: 60px; }
+			.tyg-p{ font-size: 14px; font-family: 'microsoft yahei'; /* position: absolute; top: 135px; left: 60px; */ color: red;}
 			.tyg-div-denglv{ z-index:1000;float:right;position:absolute;top:20%;right:3%;}
 			.tyg-div-form{ background-color: #23305a; color:#2ec0f6; }
 			.tyg-div-form form {padding:20px;}
@@ -23,6 +23,8 @@
 			    font-family: 'PT Sans', Helvetica, Arial, sans-serif;  font-size: 14px; font-weight: 700; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.1);
 			    -o-transition: all .2s; -moz-transition: all .2s; -webkit-transition: all .2s; -ms-transition: all .2s; }
 			form button span{margin: auto 10px;}
+			form .valid-error{border: 1px solid red;}
+			form .message-error{font-weight: bold; color: red;}
 		</style>
 	</head>
 	<body>
@@ -52,13 +54,13 @@
 		</div>
 		<div class="tyg-div-denglv">
 			<div class="tyg-div-form">
-				<form action="#">
+				<form action="#" id="login-form">
 					<h2>登录</h2><p class="tyg-p"></p>
 					<div style="margin:5px 0px;">
-						<input type="text" placeholder="请输入账号..." id="username" name="username"/>
+						<input type="text" placeholder="请输入账号..." id="username" name="username" required="required" />
 					</div>
 					<div style="margin:5px 0px;">
-						<input type="password" placeholder="请输入密码..." id="password" name="password" />
+						<input type="password" placeholder="请输入密码..." id="password" name="password" required="required" />
 					</div>
 					<div class="form-actions">
 						<span style="width: 40%; float: left; font-size: 14px;"><input type="checkbox"/> 记住我</span>
@@ -89,7 +91,7 @@
 							LOGIN_TIME=(new Date()).getTime();
 							window.location.href = encodeURI(encodeURI("index.html?roleId="+data.roleId+"&userId="+data.userId+"&userName="+data.userName+"&LOGINTIME="+LOGIN_TIME));
 						}else{
-							alert(data.message);
+							$("form>.tyg-p").html(data.message);
 						}
 					}
 				});
