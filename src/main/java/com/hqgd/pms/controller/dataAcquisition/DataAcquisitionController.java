@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.google.gson.Gson;
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
+import com.hqgd.pms.dao.system.SysParamMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
@@ -46,6 +47,8 @@ public class DataAcquisitionController {
 	private IDataAcquisitionService dataAcquisitionService;
 	@Resource
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
+	@Resource
+	private SysParamMapper sysParamMapper;
 
 	@RequestMapping("/realtime")
 	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
@@ -145,37 +148,6 @@ public class DataAcquisitionController {
 		log.info("接口访问时长：" + (outTime - inTime));
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultList));
-	}
-
-	// 创建临时表
-	@RequestMapping(value = "/temporaryTable")
-	public void temporaryTable() {
-		// 获取服务启动时间
-		long startTime = System.currentTimeMillis();
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			public void run() {
-				// 获取当前时间
-				long currentTime = System.currentTimeMillis();
-				Calendar calendar = Calendar.getInstance();
-				calendar.add(Calendar.MINUTE, -1460);
-				String lastTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
-				Map<String, Object> param = new HashMap<>();
-				// 判断当前时间和登录时间的差额,如果小于一天就把临时表1里的数据放进临时表2,如果大于一天就把临时表2里的最旧一条删除，再插入最新的一条
-				if ((currentTime - startTime) > (24 * 3600000 + 1000 * 60 * 20)) {// 保留十分钟的冗余度，避免系统时间和数据库时间有误差
-					for (int i = 1; i <= 4; i++) {
-						param.put("lastTime", lastTime);
-						param.put("table", "hq_equipment_monitor_data_r" + i);
-						dataAcquisitionVoMapper.deleter(param);
-					}
-				}
-				for (int i = 1; i <= 4; i++) {
-					param.put("tabler", "hq_equipment_monitor_data_r" + i);
-					param.put("tablef", "hq_equipment_monitor_data_f" + i);
-					dataAcquisitionVoMapper.insertt(param);
-				}
-			}
-		}, 0, 60000);
 	}
 
 	@RequestMapping("/record")

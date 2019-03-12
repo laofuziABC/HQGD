@@ -67,25 +67,25 @@ public class HttpTestServlet extends HttpServlet {
 		// 拿到所有客户端信息
 		List<Socket> socketlist = MultiThreadSocketServer.CLIENT_SOCKET_LIST;
 		log.info("socketlist的size=" + socketlist.size());
-		List<EquipmentInfo> equipmentList = equipmentInfoMapper.selectAll();
-		log.info("测温仪的size=" + socketlist.size());
-		List<String> frameList = new ArrayList<String>();
-		for (EquipmentInfo e : equipmentList) {
-			int f = Integer.valueOf(e.getFrameStru());
-			int n = e.getNumOfCh();
-			String fHex = Integer.toHexString(f);
-			String nHex = Integer.toHexString(n * 2);
-			if (fHex.length() < 2) {
-				fHex = "0" + fHex;
-			}
-			if (nHex.length() < 2) {
-				nHex = "0" + nHex;
-			}
-			String frame = fHex + " 03 01 48 00 " + nHex;
-			String rameStru = getCRC(frame);
-
-			frameList.add(frame + " " + rameStru);
-		}
+//		List<EquipmentInfo> equipmentList = equipmentInfoMapper.selectAll();
+//		log.info("测温仪的size=" + socketlist.size());
+//		List<String> frameList = new ArrayList<String>();
+//		for (EquipmentInfo e : equipmentList) {
+//			int f = Integer.valueOf(e.getFrameStru());
+//			int n = e.getNumOfCh();
+//			String fHex = Integer.toHexString(f);
+//			String nHex = Integer.toHexString(n * 2);
+//			if (fHex.length() < 2) {
+//				fHex = "0" + fHex;
+//			}
+//			if (nHex.length() < 2) {
+//				nHex = "0" + nHex;
+//			}
+//			String frame = fHex + " 03 01 48 00 " + nHex;
+//			String rameStru = getCRC(frame);
+//
+//			frameList.add(frame + " " + rameStru);
+//		}
 		// for (String s : frameList) {
 		for (Socket socket : socketlist) {
 			// 循环获取信息
@@ -96,7 +96,6 @@ public class HttpTestServlet extends HttpServlet {
 			// new PrintStream(socket.getOutputStream()).println(s);
 		}
 		// }
-		resp.getWriter().println("test OK");
 	}
 
 	public static String getCRC(String data) {

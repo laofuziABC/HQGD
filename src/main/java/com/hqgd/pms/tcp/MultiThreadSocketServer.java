@@ -47,7 +47,7 @@ public class MultiThreadSocketServer implements Runnable {
 
 	@Cacheable
 	public void selectPort() {
-		int port = Integer.valueOf(sysParamMapper.selectServerPort());
+		int port = Integer.valueOf(sysParamMapper.selectByPrimaryKey("SERVER_PORT").getParamValue());
 		SERVER_PORT = port;
 	}
 
