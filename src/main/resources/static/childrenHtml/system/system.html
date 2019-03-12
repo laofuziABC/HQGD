@@ -23,13 +23,13 @@
 							<!-- /.box-header -->
 							<div class="box-body">
 								<form role="form">
-									<div class="form-group">
+									<!--<div class="form-group">
 										<label>浮动飘窗</label> <select id="FLOAT_WINDOW"
 											class="form-control" onchange="setSystem('FLOAT_WINDOW')">
 											<option value="1">开启</option>
 											<option value="2">关闭</option>
 										</select>
-									</div>
+									</div>  -->
 									<div class="form-group">
 										<label>服务器绑定端口</label>
 										<div class="input-group">
@@ -59,12 +59,21 @@
 									<div class="form-group">
 										<label>更新临时表定时器</label>
 										<div class="box-footer">
-											<button type="button" class="btn btn-info " onclick="timerMan('start')">开启</button>
-											<button type="button" class="btn btn-default" onclick="timerMan('stop')">停止</button>
+											<button type="button" class="btn btn-info "
+												onclick="timerMan('start')">开启</button>
+											<button type="button" class="btn btn-default"
+												onclick="timerMan('stop')">停止</button>
 										</div>
-
 									</div>
-
+									<div class="form-group">
+										<label>服务器向客户端发送请求数据命令定时器</label>
+										<div class="box-footer">
+											<button type="button" class="btn btn-info "
+												onclick="socketMan('start')">开启</button>
+											<button type="button" class="btn btn-default"
+												onclick="socketMan('stop')">停止</button>
+										</div>
+									</div>
 								</form>
 							</div>
 							<!-- /.box-body -->
@@ -116,8 +125,19 @@
 			});
 		}
 		function timerMan(param) {
+			var url = "timer/table/" + param;
+			$.ajax({
+				url : url,
+				type : "post",
+				dataType : "json",
+				success : function(result) {
+					alert(result);
+				}
+			});
+		}
+		function socketMan(param) {
 			debugger;
-			var url = "timer/" + param;
+			var url = "timer/socket/" + param;
 			$.ajax({
 				url : url,
 				type : "post",

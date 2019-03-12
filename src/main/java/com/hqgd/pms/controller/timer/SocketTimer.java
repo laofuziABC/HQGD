@@ -1,97 +1,56 @@
-package com.hqgd.pms.tcp;
+package com.hqgd.pms.controller.timer;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
-import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
-import com.hqgd.pms.domain.EquipmentInfo;
+import com.hqgd.pms.tcp.MultiThreadSocketServer;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * <pre>
- *  描述：辅助测试类，收集温度
- * &#64;date: 2019年2月1日 下午5:26:15
- * &#64;author: yaorong 
- * &#64;ClassName: HttpTestServlet
- * </pre>
- */
 @Slf4j
-@Controller
-@RequestMapping("socket_server")
-public class HttpTestServlet extends HttpServlet {
-	@Resource
-	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
-	private static final long serialVersionUID = -6915004878346440376L;
-	@Resource
-	private EquipmentInfoMapper equipmentInfoMapper;
+public class SocketTimer extends TimerTask {
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doExcute(req, resp);
+	public void run() {
+		try {
+			doExcute();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	@RequestMapping(value = "/test")
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			public void run() {
-				try {
-					doExcute(req, resp);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}, 0, 60000);
-
-	}
-
-	private void doExcute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		log.info("服务器向客户端发送定时器运行");
+	private void doExcute() throws IOException {
 		// 拿到所有客户端信息
 		List<Socket> socketlist = MultiThreadSocketServer.CLIENT_SOCKET_LIST;
 		log.info("socketlist的size=" + socketlist.size());
-//		List<EquipmentInfo> equipmentList = equipmentInfoMapper.selectAll();
-//		log.info("测温仪的size=" + socketlist.size());
-//		List<String> frameList = new ArrayList<String>();
-//		for (EquipmentInfo e : equipmentList) {
-//			int f = Integer.valueOf(e.getFrameStru());
-//			int n = e.getNumOfCh();
-//			String fHex = Integer.toHexString(f);
-//			String nHex = Integer.toHexString(n * 2);
-//			if (fHex.length() < 2) {
-//				fHex = "0" + fHex;
-//			}
-//			if (nHex.length() < 2) {
-//				nHex = "0" + nHex;
-//			}
-//			String frame = fHex + " 03 01 48 00 " + nHex;
-//			String rameStru = getCRC(frame);
-//
-//			frameList.add(frame + " " + rameStru);
-//		}
+		// List<EquipmentInfo> equipmentList = equipmentInfoMapper.selectAll();
+		// log.info("测温仪的size=" + socketlist.size());
+		// List<String> frameList = new ArrayList<String>();
+		// for (EquipmentInfo e : equipmentList) {
+		// int f = Integer.valueOf(e.getFrameStru());
+		// int n = e.getNumOfCh();
+		// String fHex = Integer.toHexString(f);
+		// String nHex = Integer.toHexString(n * 2);
+		// if (fHex.length() < 2) {
+		// fHex = "0" + fHex;
+		// }
+		// if (nHex.length() < 2) {
+		// nHex = "0" + nHex;
+		// }
+		// String frame = fHex + " 03 01 48 00 " + nHex;
+		// String rameStru = getCRC(frame);
+		//
+		// frameList.add(frame + " " + rameStru);
+		// }
 		// for (String s : frameList) {
 		for (Socket socket : socketlist) {
 			// 循环获取信息
 			byte[] bytes = hexStringToByteArray("01030148000CC425");
 			OutputStream os = socket.getOutputStream();
-			log.info("bytes=" + bytes);
 			os.write(bytes);
 			// new PrintStream(socket.getOutputStream()).println(s);
 		}

@@ -1,4 +1,4 @@
-package com.hqgd.pms.controller.Timer;
+package com.hqgd.pms.controller.timer;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
