@@ -147,8 +147,8 @@ public class ClientSocketHandler implements Runnable {
 							}
 							for (int i = 0; i < num; i++) {
 								Float value = Integer.valueOf(inputString.substring(i * 8, i * 8 + 4), 16) / 10F;
-								Float pd = Integer.valueOf(inputString.substring(i * 8 + 4, i * 4 + 6), 16) / 10F;
-								Float uv = Integer.valueOf(inputString.substring(i * 8 + 6, i * 8 + 8), 16) / 10F;
+								Integer pd = Integer.valueOf(inputString.substring(i * 8 + 4, i * 8 + 6), 16);
+								Integer uv = Integer.valueOf(inputString.substring(i * 8 + 6, i * 8 + 8), 16);
 								d.setChannelNum(cnl.get(i));
 								d.setOpticalFiberPosition(opticall.get(i));
 								d.setTemperature(value.toString());
@@ -175,7 +175,7 @@ public class ClientSocketHandler implements Runnable {
 									d.setMessage("正常");
 									break;
 								}
-								if (value != 3000 && value != -437 && value != 2999
+								if (value != 3000.0 && value != -6116.6 && value != 2999.9&& value != 6548.3
 										&& (value < Float.valueOf(minl.get(i)) || value > Float.valueOf(maxl.get(i)))) {
 									d.setState("9");
 								}
