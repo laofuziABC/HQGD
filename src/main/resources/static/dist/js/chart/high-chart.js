@@ -108,7 +108,6 @@ function drawingHistoryChart(url, param){
 				var seriesData = data.channelTemArr;
 				var totalCount = seriesData[0].length;
 				var equiName = data.equipment.equipmentName;
-				newequiId = data.equipment.equipmentId;
 				//根据温度值，设置纵轴上下限【开始】
 				//逻辑一：通过逐步比较，取出所有系列最值
 				var max, min;
