@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>数据统计分析</title>
+		<style type="text/css">
+			#statisticalDiv .ssjc_ru_table{height: 350px; background: #21242e;}
+			#chart_extremum{height: 100%;}
+			#statisticalDiv .flex_box{display: flex;}
+			#chart_error_type, #chart_error_channel{height: 100%; width: 50%;}
+		</style>
+	</head>
+	<body>
+		<div class="ssjc_right_up" id="statisticalDiv">
+			<!-- 时间选择【开始】 -->
+			<div class="nei">
+				<div class="ssjc_ru_title">
+					<span class="tiaoshijian">开始时间:<input type="date" class="shi" id="startDate" /></span>
+					<span class="tiaoshijian">结束时间:<input type="date" class="shi" id="endDate" /></span> 
+					<span class="float_right">
+						<input type="button" class="youcecha" onclick="showStatisticalContent();" value="查询" />
+					</span>
+				</div>
+			</div>
+			<!-- 时间选择【结束】 -->
+			<!-- 展示图表【开始】 -->
+			<div class="ssjc_ru_table">
+				<div class="echarts_ssjc_one" id="chart_extremum"></div>
+			</div>
+			<p>&nbsp;</p>
+			<div class="ssjc_ru_table flex_box">
+				<div class="echarts_ssjc_two" id="chart_error_type"></div>
+				<div class="echarts_ssjc_two" id="chart_error_channel"></div>
+			</div>
+			<!-- 展示图表【结束】 -->
+		</div>
+		
+		
+		<script type="text/javascript">
+			//初始化页面信息，历史数据页面的开始时间和结束时间默认为当天0点到当前时间
+			$("#chart_extremum").highcharts(extremumOption);
+			$("#chart_error_type").highcharts(errorTypeOption);
+			$("#chart_error_channel").highcharts(errorChannelOption);
+			function showStatisticalContent(){
+				if(equiId!=null){
+					var startDate = $("#startDate").val();
+					var endDate = $("#endDate").val();
+					var chart = $("#chart_extremum").highcharts();
+					chart.showLoading();
+					var param = {"equipmentId" : equiId, "startTime" : startDate, "endTime" : endDate };
+					var statistical_url = "dataAcquisition/historicalCurve";
+					var errors_url = "dataAcquisition/errorStateCurve";
+					fetchExtremumChartData(statistical_url, param);
+					fetchErrorChartData(errors_url, param);
+				}
+			}
+		</script>
+	</body>
+</html>

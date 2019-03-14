@@ -60,6 +60,7 @@
 	#showParams .select2{height: 35px; width: 66px; border: 1px solid #ccc; width: 31%;}
 	#showParams button{margin: 5px 35%;}
 	/* 查询条件样式【结束】 */
+	/* .tab-content>#statistical{background: #21242e; color: #fff;} */
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -141,10 +142,12 @@
 							<ul class="nav nav-tabs">
 								<li class="active"><a href="#currenttab" data-toggle="tab" id="hh" onclick="changeTabContent(1);">实时监测数据</a></li>
 								<li><a href="#historytab" data-toggle="tab" id="dd" onclick="changeTabContent(2);">历史监测数据</a></li>
+								<li><a href="#statistical" data-toggle="tab" id="stat" onclick="changeTabContent(3);">数据统计分析</a></li>
 							</ul>
 							<div class="tab-content">
 								<div id="currenttab"></div>
 								<div id="historytab"></div>
+								<div id="statistical"></div>
 							</div>
 						</div>
 					</div>
@@ -165,7 +168,9 @@
 		//加载子页面
 		$("#currenttab").load("childrenHtml/data/current.html");
 		$("#historytab").load("childrenHtml/data/history.html");
-		$("#historytab").css({"display" : "none"}); 
+		$("#statistical").load("childrenHtml/data/statistical.html");
+		$("#historytab").css({"display" : "none"});
+		$("#statistical").css({"display" : "none"});
 		//加载设备列表
 		$(function(){
 			var roleId = parent.getParam("roleId");
@@ -185,24 +190,38 @@
 		//设置页面局部样式
 		$(".ssjc_left").css({"height":$("#content-wrapper").height()-10});
 		$(".ssjc_right_bottom").css({"height": ($(window).height())*0.4});
-		var oldequiId=equiId;
-		var newequiId=equiId;
+		var equiId0=equiId;
+		var equiId1=equiId;
+		var equiId2=equiId;
+		var equiId3=equiId;
 		//切换标签页
 		function changeTabContent(param){
-			if(param==2){
-				if(oldequiId!=newequiId){
-					showHistoryContent();
-				}
-				$("#currenttab").css({"display" : "none" });
-				$("#historytab").css({ "display" : "block" });
-			}else if(param==1){
-				$("#historytab").css({ "display" : "none" });
-				$("#currenttab").css({ "display" : "block" });
-				if(oldequiId!=newequiId){
+			if(param==1){
+				$("#currenttab").css({ "display": "block" });
+				$("#historytab").css({ "display": "none" });
+				$("#statistical").css({"display": "none"});
+				if(equiId1!=equiId0){
+					equiId1=equiId0;
 					showCurrentContent();
 				}
+			}else if(param==2){
+				$("#currenttab").css({"display": "none" });
+				$("#historytab").css({ "display": "block" });
+				$("#statistical").css({"display": "none"});
+				if(equiId2!=equiId0){
+					equiId2=equiId0;
+					showHistoryContent();
+				}
+			}else if(param==3){
+				$("#currenttab").css({"display": "none" });
+				$("#historytab").css({ "display": "none" });
+				$("#statistical").css({"display": "block"});
+				if(equiId3!=equiId0){
+					equiId3=equiId0;
+					showStatisticalContent();
+				}
 			}
-			oldequiId=equiId;
+			equiId0=equiId;
 		}
 		//打开筛选区域
 		function showParams(){
@@ -239,8 +258,9 @@
 				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
 			}else{
 				equiId=param.trim();
-				newequiId=param.trim();
+				equiId0=param.trim();
 				if($("#hh").parent().hasClass("active")){
+					equiId1=equiId0;
 					showCurrentContent();
 				}
 			}
