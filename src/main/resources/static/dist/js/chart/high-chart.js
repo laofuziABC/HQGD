@@ -195,10 +195,6 @@ function initCurrentChart(){
 			series.push(serie);
 		}
 	}else{
-//		for(let i=0; i<channelList.length; i++){
-//			var serie = {name: channelList[i], data: [], type:"spline", pointInterval: 6e4};
-//			series.push(serie);
-//		}
 		for(let i=1; i<=result.equipment.numOfCh; i++){
 			var serie = {name: "CH"+i, data: [], type:"spline", pointInterval: 6e4};
 			series.push(serie);
