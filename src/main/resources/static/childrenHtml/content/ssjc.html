@@ -59,6 +59,7 @@
 	#showParams .select1{height: 35px; width: 165px; border: 1px solid #ccc;}
 	#showParams .select2{height: 35px; width: 66px; border: 1px solid #ccc; width: 31%;}
 	#showParams button{margin: 5px 35%;}
+	.tiaoshijian>.error{border: 2px solid red;}
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -261,6 +262,22 @@
 			}
 			changeCheckEqui();
 		}
+		//验证时间文本框内容有效性
+		$(function(){
+			var doms=document.querySelectorAll("input.shi");
+			if(doms){
+				document.addEventListener("blur", function(event){
+					if(!event.target.classList.contains("shi")) return;
+					var e=event.target;
+					datetimeValidate(e);
+				}, true);
+				document.addEventListener("change", function(event){
+					if(!event.target.classList.contains("shi")) return;
+					var e=event.target;
+					datetimeValidate(e);
+				}, true);
+			}
+		})
 	</script>
 </body>
 </html>

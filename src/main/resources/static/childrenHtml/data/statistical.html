@@ -15,8 +15,8 @@
 			<!-- 时间选择【开始】 -->
 			<div class="nei">
 				<div class="ssjc_ru_title">
-					<span class="tiaoshijian">开始时间:<input type="date" class="shi" id="startDate" /></span>
-					<span class="tiaoshijian">结束时间:<input type="date" class="shi" id="endDate" /></span> 
+					<span class="tiaoshijian">开始日期:<input type="date" class="shi" id="startDate" /></span>
+					<span class="tiaoshijian">结束日期:<input type="date" class="shi" id="endDate" /></span> 
 					<span class="float_right">
 						<input type="button" class="youcecha" onclick="showStatisticalContent();" value="查询" />
 					</span>
@@ -45,6 +45,11 @@
 				if(equiId!=null){
 					var startDate = $("#startDate").val();
 					var endDate = $("#endDate").val();
+					if(startDate==""){$("#startDate").addClass("error"); return; }
+					if(endDate==""){$("#endDate").addClass("error"); return; }
+					if(startDate>endDate){$("#endDate").addClass("error"); return; }
+					$("#startDate").removeClass("error");
+					$("#endDate").removeClass("error");
 					var chart = $("#chart_extremum").highcharts();
 					chart.showLoading();
 					var param = {"equipmentId" : equiId, "startTime" : startDate, "endTime" : endDate };

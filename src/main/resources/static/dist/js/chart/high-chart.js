@@ -450,3 +450,5 @@ function changeChannelChart(e){
 	$("#chart_error_channel").empty();
 	$("#chart_error_channel").highcharts(errorChannelOption);
 }
+//验证时间日期文本框内容有效性
+function datetimeValidate(e){if(e.value==""||e.value==null){e.classList.add("error");return}else if(e.id=="startDate"||e.id=="startTime"){e.classList.remove("error");return}else{if(e.id=="endDate"){($("#endDate").val())>($("#startDate").val())?(e.classList.remove("error")):(e.classList.add("error"))}else if(e.id=="endTime"){($("#endTime").val())>($("#startTime").val())?(e.classList.remove("error")):(e.classList.add("error"))}}}

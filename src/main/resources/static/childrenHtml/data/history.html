@@ -97,19 +97,17 @@
 				if(equiId!=null){
 					var startTime = $("#startTime").val();
 					var endTime = $("#endTime").val();
-					if (startTime > endTime) {
-						alert("开始时间不能大于结束时间");
-					} else if (startTime == "" || endTime == "") {
-						alert("开始时间和结束时间不能为空");
-					} else {
-						//加载数据列表
-						searchTableResult(1);
-						//加载历史数据图表
-						$("#chart_history").highcharts(historyOption);
-						var chart = $("#chart_history").highcharts();
-						chart.showLoading();
-						searchChartResult();
-					}
+					if(startTime==""){$("#startTime").addClass("error"); return; }
+					if(endTime==""){$("#endTime").addClass("error"); return; }
+					if(startTime>endTime){$("#endTime").addClass("error"); return; }
+					$("#startTime").removeClass("error");
+					$("#endTime").removeClass("error");
+					searchTableResult(1);
+					//加载历史数据图表
+					$("#chart_history").highcharts(historyOption);
+					var chart = $("#chart_history").highcharts();
+					chart.showLoading();
+					searchChartResult();
 				}
 			}
 			//加载历史数据统计图【开始】
