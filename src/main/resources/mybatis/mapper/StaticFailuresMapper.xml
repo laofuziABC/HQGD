@@ -20,14 +20,18 @@
   </sql>
   <select id="errorStateStatic" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     SELECT
-	CHANNEL_NUM, COMMUNICATE, 
-    FIBER, THERMOMETER, OVER_TEMPERATURE 
+	CHANNEL_NUM,
+	SUM( COMMUNICATE ) AS COMMUNICATE,
+	SUM( FIBER ) AS FIBER,
+	SUM( THERMOMETER ) AS THERMOMETER,
+	SUM( OVER_TEMPERATURE ) AS OVER_TEMPERATURE 
     FROM
 	hq_static_failures 
-    WHERE
 	EQUIPMENT_ID = #{equipmentId,jdbcType=INTEGER} 
 	AND DATE <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR}
 	AND DATE <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
+	GROUP BY
+	CHANNEL_NUM
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 

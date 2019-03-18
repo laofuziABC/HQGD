@@ -87,10 +87,14 @@
 									</div>
 									<div class="form-group">
 										<label>统计指定日期内的故障次数</label>
-										<div class="input-group">
-											<input type="text" class="form-control pull-right"
-												id="reservation">
-											<div class="input-group-btn">
+										<div class="box-footer">
+											<div class="input-group">
+												<div class="input-group date">
+													<label> 开始日期：</label><input type="text" id="startDate">
+												</div>
+												<div class="input-group date">
+													<label> 结束日期：</label><input type="text" id="endDate">
+												</div>
 												<button type="button" class="btn btn-primary "
 													onclick="staticFailures('run')">统计</button>
 											</div>
@@ -115,16 +119,14 @@
 	<!-- ./wrapper -->
 	<script src="../../bower_components/moment/min/moment.min.js"></script>
 	<script
-		src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-	<script
 		src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 	<script type="text/javascript">
-		$('#reservation').daterangepicker(
-				{
-					startDate : moment().subtract(1, 'days'),
-					endDate : moment().subtract(1, 'days'),
-				},
-				)
+		$('#startDate').datepicker({
+			autoclose : true
+		})
+		$('#endDate').datepicker({
+			autoclose : true
+		})
 		selectSysParam();
 		function selectSysParam() {
 			$
@@ -181,13 +183,11 @@
 		}
 		function staticFailures(param) {
 			debugger;
-			var date = $("#reservation").val();
-			var today = getNowFormatDate();
-			var startTime = date.substring(0,10);
-			var endTime = date.substring(13,23);
-			if(endTime>=today){
+			var startTime = $("#startDate").val();
+			var endTime = $("#endDate").val();
+			if (endTime >= today) {
 				alert("终止日期不能大于当天日期！");
-			}else{
+			} else {
 				var url = "timer/failures/" + param;
 				$.ajax({
 					url : url,
@@ -202,24 +202,24 @@
 					}
 				});
 			}
-			
+
 		}
 		//获取当前时间，格式YYYY-MM-DD
-	    function getNowFormatDate() {
-	        var date = new Date();
-	        var seperator1 = "-";
-	        var year = date.getFullYear();
-	        var month = date.getMonth() + 1;
-	        var strDate = date.getDate();
-	        if (month >= 1 && month <= 9) {
-	            month = "0" + month;
-	        }
-	        if (strDate >= 0 && strDate <= 9) {
-	            strDate = "0" + strDate;
-	        }
-	        var currentdate = year + seperator1 + month + seperator1 + strDate;
-	        return currentdate;
-	    }
+		function getNowFormatDate() {
+			var date = new Date();
+			var seperator1 = "-";
+			var year = date.getFullYear();
+			var month = date.getMonth() + 1;
+			var strDate = date.getDate();
+			if (month >= 1 && month <= 9) {
+				month = "0" + month;
+			}
+			if (strDate >= 0 && strDate <= 9) {
+				strDate = "0" + strDate;
+			}
+			var currentdate = year + seperator1 + month + seperator1 + strDate;
+			return currentdate;
+		}
 	</script>
 	<script src="dist/js/app.min.js"></script>
 

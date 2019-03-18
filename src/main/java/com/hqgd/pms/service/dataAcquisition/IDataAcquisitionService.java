@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
+import com.hqgd.pms.domain.StaticFailures;
 
 public interface IDataAcquisitionService {
 
@@ -23,7 +24,7 @@ public interface IDataAcquisitionService {
 
 	List<DataAcquisitionVo> record(QueryParametersVo data);
 
-	Map<String, Object> errorStateStatic(QueryParametersVo queryVo);
+	List<StaticFailures> errorStateStatic(QueryParametersVo queryVo);
 
 	void run(String startTime);
 

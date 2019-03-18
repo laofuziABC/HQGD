@@ -23,6 +23,7 @@ import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.system.SysParamMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.QueryParametersVo;
+import com.hqgd.pms.domain.StaticFailures;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -168,7 +169,7 @@ public class DataAcquisitionController {
 	public void errorStateStatic(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		log.info("故障次数统计开始 ");
-		Map<String, Object> errorStateStatic = dataAcquisitionService.errorStateStatic(queryVo);
+		List<StaticFailures> errorStateStatic = dataAcquisitionService.errorStateStatic(queryVo);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");

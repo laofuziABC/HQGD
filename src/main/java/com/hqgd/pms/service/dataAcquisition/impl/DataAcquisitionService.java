@@ -330,15 +330,19 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	}
 
 	@Override
-	public Map<String, Object> errorStateStatic(QueryParametersVo queryVo) {
+	public List<StaticFailures> errorStateStatic(QueryParametersVo queryVo) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", queryVo.getStartTime());
-		param.put("endTime", queryVo.getEndTime());
-		// List<StaticFailures> errorStateStatic =
-		// staticFailuresMapper.errorStateStatic(param);
-
-		return null;
+		String endTime = queryVo.getEndTime();
+		try {
+			endTime = getAfterDay(endTime);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		param.put("endTime", endTime);
+		List<StaticFailures> errorStateStatic = staticFailuresMapper.errorStateStatic(param);
+		return errorStateStatic;
 	}
 
 	int comm = 0;// 458通信故障
@@ -386,6 +390,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			if (i == 0 && !L.get(i).getState().equals("5")) {
 				StaticFailCounts(yesterday, L.get(i), table);
 			}
+
 			String equipmentId = L.get(i).getEquipmentId();
 			String channelNum = L.get(i).getChannelNum();
 			String state = L.get(i).getState();
@@ -437,10 +442,34 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				overT = 0;
 				if (!statea.equals("5")) {
 					// 如果某个设备的某个通道的第一条数据不是正常状态，就需要判断昨天最后一条是否正常，若不正常则算做一次，若正常，今天的故障就要加1
-					StaticFailCounts(yesterday, L.get(i), table);
+					StaticFailCounts(yesterday, L.get(i + 1), table);
 				}
 			}
+			if (i == L.size() - 2) {
+				StaticFailures sf = new StaticFailures();
+				sf.setEquipmentId(equipmentIda);
+				sf.setEquipmentName(L.get(i + 1).getEquipmentName());
+				sf.setAddress(L.get(i + 1).getAddress());
+				sf.setChannelNum(channelNuma);
+				sf.setOpticalFiberPosition(L.get(i + 1).getOpticalFiberPosition());
+				sf.setCommunicate(comm);
+				sf.setFiber(fiber);
+				sf.setThermometer(therm);
+				sf.setOverTemperature(overT);
+				try {
+					sf.setDate(format.parse(L.get(i + 1).getReceiveTime()));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				staticFailuresMapper.insert(sf);
+				comm = 0;
+				fiber = 0;
+				therm = 0;
+				overT = 0;
+			}
 		}
+
 	}
 
 	public void StaticFailCounts(String yesterday, DataAcquisitionVo d, String table) {
