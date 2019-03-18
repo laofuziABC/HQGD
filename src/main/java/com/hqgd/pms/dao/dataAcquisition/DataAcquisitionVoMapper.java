@@ -71,5 +71,13 @@ public interface DataAcquisitionVoMapper {
 
 	void truncatef4();
 
+	List<DataAcquisitionVo> selectAllFailures(Map<String, Object> param);
+
+	DataAcquisitionVo selectYesDayFailures(Map<String, String> param1);
+
+	List<DataAcquisitionVo> selectTodayFirFailures(Map<String, Object> param);
+
+	List<DataAcquisitionVo> selectEqu(Map<String, Object> param);
+
 
 }

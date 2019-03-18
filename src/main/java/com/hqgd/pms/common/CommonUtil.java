@@ -18,9 +18,9 @@ import java.util.TreeMap;
  */
 
 public class CommonUtil {
-	
-//	private ICommParamService commParamService = ApplicationContextUtil
-//			.getBean("commParamService", ICommParamService.class);
+
+	// private ICommParamService commParamService = ApplicationContextUtil
+	// .getBean("commParamService", ICommParamService.class);
 
 	/**
 	 * 描述：将字符型的枚举值转换为对应的枚举类值 作者：姚绒 日期：2018年11月19日 下午3:21:46 @param enumType @param
@@ -230,18 +230,17 @@ public class CommonUtil {
 		return result;
 	}
 
-	
 	public String getDocumentSavePath() {
-//		String addr = commParamService.getSysParam("SYS_DOCUMENT_SAVE_PATH");
-//		if (addr.isEmpty()) {
-//			System.out.println("未配置下载文档保存地址，使用默认配置");
-//			String os = System.getProperty("os.name");
-//			if (os.toLowerCase().startsWith("win")) {
-//				addr = "D:\\tmp\\iips_payment\\document";
-//			} else {
-//				addr = "/tmp/iips_payment/document";
-//			}
-//		}
+		// String addr = commParamService.getSysParam("SYS_DOCUMENT_SAVE_PATH");
+		// if (addr.isEmpty()) {
+		// System.out.println("未配置下载文档保存地址，使用默认配置");
+		// String os = System.getProperty("os.name");
+		// if (os.toLowerCase().startsWith("win")) {
+		// addr = "D:\\tmp\\iips_payment\\document";
+		// } else {
+		// addr = "/tmp/iips_payment/document";
+		// }
+		// }
 		String addr = "C:\\Users\\yr\\Desktop\\PMS";
 		File file = new File(addr);
 		if (!file.exists()) {
@@ -250,58 +249,61 @@ public class CommonUtil {
 		System.out.println("getDocumentSavePath addr：" + addr);
 		return addr;
 	}
-	
-	/**
-     * 实体对象转成Map
-     * @param obj 实体对象
-     * @return
-     */
-	public static Map<String, Object> object2Map(Object obj) {
-        Map<String, Object> map = new HashMap<>();
-        if (obj == null) {
-            return map;
-        }
-        Class<? extends Object> clazz = obj.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-        try {
-            for (Field field : fields) {
-                field.setAccessible(true);
-                map.put(field.getName(), field.get(obj));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return map;
-    }
 
 	/**
-     * 截取字符串str中指定字符 strStart、strEnd之间的字符串
-     * 
-     * @param string
-     * @param str1
-     * @param str2
-     * @return
-     */
-    public static String subString(String str, String strStart, String strEnd) {
- 
-        /* 找出指定的2个字符在 该字符串里面的 位置 */
-        int strStartIndex = str.indexOf(strStart);
-        int strEndIndex = str.indexOf(strEnd);
- 
-        /* index 为负数 即表示该字符串中 没有该字符 */
-        if (strStartIndex < 0) {
-            return str;
-        }
-        if (strEndIndex < 0) {
-            return str;
-        }
-        /* 开始截取 */
-        String result = str.substring(strStartIndex, strEndIndex).substring(strStart.length());
-        return result;
-    }
-    
-    /**
+	 * 实体对象转成Map
+	 * 
+	 * @param obj
+	 *            实体对象
+	 * @return
+	 */
+	public static Map<String, Object> object2Map(Object obj) {
+		Map<String, Object> map = new HashMap<>();
+		if (obj == null) {
+			return map;
+		}
+		Class<? extends Object> clazz = obj.getClass();
+		Field[] fields = clazz.getDeclaredFields();
+		try {
+			for (Field field : fields) {
+				field.setAccessible(true);
+				map.put(field.getName(), field.get(obj));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 截取字符串str中指定字符 strStart、strEnd之间的字符串
+	 * 
+	 * @param string
+	 * @param str1
+	 * @param str2
+	 * @return
+	 */
+	public static String subString(String str, String strStart, String strEnd) {
+
+		/* 找出指定的2个字符在 该字符串里面的 位置 */
+		int strStartIndex = str.indexOf(strStart);
+		int strEndIndex = str.indexOf(strEnd);
+
+		/* index 为负数 即表示该字符串中 没有该字符 */
+		if (strStartIndex < 0) {
+			return str;
+		}
+		if (strEndIndex < 0) {
+			return str;
+		}
+		/* 开始截取 */
+		String result = str.substring(strStartIndex, strEndIndex).substring(strStart.length());
+		return result;
+	}
+
+	/**
 	 * get postfix of the path
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -313,5 +315,29 @@ public class CommonUtil {
 			return path.substring(path.lastIndexOf(Common.POINT) + 1, path.length());
 		}
 		return Common.EMPTY;
+	}
+
+	/**
+	 * 描述： 作者：姚绒 日期：2019年3月14日 上午8:59:53
+	 *
+	 */
+	public static String getAfterDay(String today) throws ParseException {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new SimpleDateFormat("yy-MM-dd").parse(today));
+		int date = c.get(Calendar.DATE);
+		c.set(Calendar.DATE, date + 1);
+		String afterDay = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+		System.out.println(afterDay);
+		return afterDay;
+	}
+
+	public static String getBeforeDay(String today) throws ParseException {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new SimpleDateFormat("yy-MM-dd").parse(today));
+		int date = c.get(Calendar.DATE);
+		c.set(Calendar.DATE, date - 1);
+		String afterDay = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+		System.out.println(afterDay);
+		return afterDay;
 	}
 }

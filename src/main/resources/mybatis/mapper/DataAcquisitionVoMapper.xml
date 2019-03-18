@@ -618,8 +618,102 @@ ORDER BY
 		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
 		AND CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
 		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+		AND RECEIVE_TIME <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
 		ORDER BY
 			RECEIVE_TIME ASC
+  </select>
+  <select id="selectAllFailures" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	SELECT
+	<include refid="Base_Column_List" /> 
+    FROM
+	    ${table}  
+    WHERE
+        1=1
+	  AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ <  ]]> #{endTime,jdbcType=VARCHAR} 
+    ORDER BY
+	   EQUIPMENT_NAME,
+	   CHANNEL_NUM
+  </select>
+  <select id="selectYesDayFailures" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	SELECT
+	t.EQUIPMENT_ID,
+	t.EQUIPMENT_NAME,
+	t.CHANNEL_NUM,
+	t.ADDRESS,
+	t.OPTICAL_FIBER_POSITION,
+	t.TEMPERATURE,
+	t.STATE,
+	t.MESSAGE,
+	t.RECEIVE_TIME 
+FROM
+	(
+SELECT
+	EQUIPMENT_ID,
+	MAX( RECEIVE_TIME ) AS RECEIVE_TIME 
+FROM
+	${table}
+WHERE
+    EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+	AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+	AND RECEIVE_TIME <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
+GROUP BY
+	EQUIPMENT_ID 
+	) AS temp
+	LEFT JOIN ${table} AS t 
+	ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+	AND temp.RECEIVE_TIME = t.RECEIVE_TIME
+	AND CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
+ORDER BY
+	EQUIPMENT_ID,
+	CHANNEL_NUM
+  </select>
+  
+  <select id="selectTodayFirFailures" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	SELECT
+	t.EQUIPMENT_ID,
+	t.EQUIPMENT_NAME,
+	t.CHANNEL_NUM,
+	t.ADDRESS,
+	t.OPTICAL_FIBER_POSITION,
+	t.TEMPERATURE,
+	t.STATE,
+	t.MESSAGE,
+	t.RECEIVE_TIME 
+FROM
+	(
+SELECT
+	EQUIPMENT_ID,
+	MIN( RECEIVE_TIME ) AS RECEIVE_TIME 
+FROM
+	${table}
+WHERE
+	RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+	AND RECEIVE_TIME <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
+GROUP BY
+	EQUIPMENT_ID 
+	) AS temp
+	LEFT JOIN ${table} AS t 
+	ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+	AND temp.RECEIVE_TIME = t.RECEIVE_TIME
+ORDER BY
+	EQUIPMENT_ID,
+	CHANNEL_NUM
+  </select>
+  <select id="selectEqu" parameterType="java.util.Map" resultMap="BaseResultMap">
+SELECT DISTINCT
+	EQUIPMENT_ID,
+	EQUIPMENT_NAME,
+	ADDRESS,
+	OPTICAL_FIBER_POSITION,
+	CHANNEL_NUM  
+FROM
+	${table} 
+WHERE
+	RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+	AND RECEIVE_TIME <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
+	ORDER BY
+	EQUIPMENT_ID,
+	CHANNEL_NUM
   </select>
 </mapper>

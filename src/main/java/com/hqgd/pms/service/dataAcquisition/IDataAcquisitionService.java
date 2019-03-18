@@ -23,4 +23,8 @@ public interface IDataAcquisitionService {
 
 	List<DataAcquisitionVo> record(QueryParametersVo data);
 
+	Map<String, Object> errorStateStatic(QueryParametersVo queryVo);
+
+	void run(String startTime);
+
 }

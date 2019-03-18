@@ -1,13 +1,9 @@
 package com.hqgd.pms.controller.dataAcquisition;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Resource;
@@ -166,5 +162,21 @@ public class DataAcquisitionController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	@RequestMapping("/errorStateStatic")
+	public void errorStateStatic(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		log.info("故障次数统计开始 ");
+		Map<String, Object> errorStateStatic = dataAcquisitionService.errorStateStatic(queryVo);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", Boolean.TRUE.toString());
+		resultMap.put("resultCode", "00000000");
+		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
+		resultMap.put("message", "故障次数统计成功");
+		resultMap.put("data", errorStateStatic);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("故障次数统计开始 ");
 	}
 }

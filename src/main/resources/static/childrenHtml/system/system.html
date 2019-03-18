@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet"
+	href="../../bower_components/bootstrap-daterangepicker/daterangepicker.css">
+<link rel="stylesheet"
+	href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -34,7 +38,6 @@
 										<label>服务器绑定端口</label>
 										<div class="input-group">
 											<input id="SERVER_PORT" type="text" class="form-control">
-
 											<div class="input-group-btn">
 												<button id="add-new-event" type="button"
 													onclick="setSystem('SERVER_PORT')"
@@ -47,7 +50,6 @@
 										<label>服务器采集数据间隔时间(单位：秒)</label>
 										<div class="input-group">
 											<input id="TIME_INTERVAL" type="text" class="form-control">
-
 											<div class="input-group-btn">
 												<button id="add-new-event" type="button"
 													onclick="setSystem('TIME_INTERVAL')"
@@ -59,7 +61,7 @@
 									<div class="form-group">
 										<label>更新临时表定时器</label>
 										<div class="box-footer">
-											<button type="button" class="btn btn-info "
+											<button type="button" class="btn btn-primary "
 												onclick="timerMan('start')">开启</button>
 											<button type="button" class="btn btn-default"
 												onclick="timerMan('stop')">停止</button>
@@ -68,10 +70,30 @@
 									<div class="form-group">
 										<label>服务器向客户端发送请求数据命令定时器</label>
 										<div class="box-footer">
-											<button type="button" class="btn btn-info "
+											<button type="button" class="btn btn-primary "
 												onclick="socketMan('start')">开启</button>
 											<button type="button" class="btn btn-default"
 												onclick="socketMan('stop')">停止</button>
+										</div>
+									</div>
+									<div class="form-group">
+										<label>统计故障次数定时器</label>
+										<div class="box-footer">
+											<button type="button" class="btn btn-primary "
+												onclick="staticFailures('start')">开启</button>
+											<button type="button" class="btn btn-default"
+												onclick="staticFailures('stop')">停止</button>
+										</div>
+									</div>
+									<div class="form-group">
+										<label>统计指定日期内的故障次数</label>
+										<div class="input-group">
+											<input type="text" class="form-control pull-right"
+												id="reservation">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-primary "
+													onclick="staticFailures('run')">统计</button>
+											</div>
 										</div>
 									</div>
 								</form>
@@ -91,7 +113,18 @@
 		<div class="control-sidebar-bg"></div>
 	</div>
 	<!-- ./wrapper -->
+	<script src="../../bower_components/moment/min/moment.min.js"></script>
+	<script
+		src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script
+		src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 	<script type="text/javascript">
+		$('#reservation').daterangepicker(
+				{
+					startDate : moment().subtract(1, 'days'),
+					endDate : moment().subtract(1, 'days'),
+				},
+				)
 		selectSysParam();
 		function selectSysParam() {
 			$
@@ -136,7 +169,6 @@
 			});
 		}
 		function socketMan(param) {
-			debugger;
 			var url = "timer/socket/" + param;
 			$.ajax({
 				url : url,
@@ -147,7 +179,49 @@
 				}
 			});
 		}
+		function staticFailures(param) {
+			debugger;
+			var date = $("#reservation").val();
+			var today = getNowFormatDate();
+			var startTime = date.substring(0,10);
+			var endTime = date.substring(13,23);
+			if(endTime>=today){
+				alert("终止日期不能大于当天日期！");
+			}else{
+				var url = "timer/failures/" + param;
+				$.ajax({
+					url : url,
+					type : "post",
+					dataType : "json",
+					data : {
+						"startTime" : startTime,
+						"endTime" : endTime
+					},
+					success : function(result) {
+						alert(result);
+					}
+				});
+			}
+			
+		}
+		//获取当前时间，格式YYYY-MM-DD
+	    function getNowFormatDate() {
+	        var date = new Date();
+	        var seperator1 = "-";
+	        var year = date.getFullYear();
+	        var month = date.getMonth() + 1;
+	        var strDate = date.getDate();
+	        if (month >= 1 && month <= 9) {
+	            month = "0" + month;
+	        }
+	        if (strDate >= 0 && strDate <= 9) {
+	            strDate = "0" + strDate;
+	        }
+	        var currentdate = year + seperator1 + month + seperator1 + strDate;
+	        return currentdate;
+	    }
 	</script>
 	<script src="dist/js/app.min.js"></script>
+
 </body>
 </html>

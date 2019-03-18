@@ -8,7 +8,8 @@ mybatis:
 logging:
   level:
      com.hqgd.pms.dao : debug  
-
+youxing:
+  corn1: 0 0 1 ? * *
 
 #spring:
 #  datasource:
