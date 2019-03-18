@@ -22,23 +22,18 @@
 	width: 50%;
 }
 </style>
-<link rel="stylesheet"
-	href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 </head>
 <body>
 	<div class="ssjc_right_up" id="statisticalDiv">
 		<!-- 时间选择【开始】 -->
 		<div class="nei">
 			<div class="ssjc_ru_title">
-				<!-- <span class="tiaoshijian">开始日期:<input type="date" class="shi" id="startDate" /></span>
-					<span class="tiaoshijian">结束日期:<input type="date" class="shi" id="endDate" /></span> 
-					<span class="float_right">
-						<input type="button" class="youcecha" onclick="showStatisticalContent();" value="查询" />
-					</span> -->
-				<div class="input-group date">
-					<label> 开始日期：</label><input type="text" id="startDate"> <label> 结束日期：</label><input
-						type="text" id="endDate">
-				</div>
+				<span class="tiaoshijian">开始日期:<input type="date" class="shi"
+					id="startDate" /></span> <span class="tiaoshijian">结束日期:<input
+					type="date" class="shi" id="endDate" /></span> <span class="float_right">
+					<input type="button" class="youcecha"
+					onclick="showStatisticalContent();" value="查询" />
+				</span>
 			</div>
 		</div>
 		<!-- 时间选择【结束】 -->
@@ -54,15 +49,8 @@
 		<!-- 展示图表【结束】 -->
 	</div>
 
-	<script
-		src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+
 	<script type="text/javascript">
-		$('#startDate').datepicker({
-			autoclose : true
-		})
-		$('#endDate').datepicker({
-			autoclose : true
-		})
 		//初始化页面信息，历史数据页面的开始时间和结束时间默认为当天0点到当前时间
 		$("#chart_extremum").highcharts(extremumOption);
 		$("#chart_error_type").highcharts(errorTypeOption);
@@ -93,7 +81,7 @@
 					"endTime" : endDate
 				};
 				var statistical_url = "dataAcquisition/historicalCurve";
-				var errors_url = "dataAcquisition/errorStateCurve";
+				var errors_url = "dataAcquisition/errorStateStatic";
 				fetchExtremumChartData(statistical_url, param);
 				fetchErrorChartData(errors_url, param);
 			}

@@ -368,10 +368,10 @@ function fetchErrorChartData(url,param){
 	console.log(url);
 	console.log(param);
 	var resultMap={};
-//	$.ajax({url: url, type: "post", data: param, dataType: "json",
-//		success: function(result){resultMap=result;},
-//		error: function(){resultMap=null; }
-//	});
+	$.ajax({url: url, type: "post", data: param, dataType: "json", async:false,
+		success: function(result){resultMap=result;},
+		error: function(){resultMap=null; }
+	});
 	drawingErrorTypesChart(resultMap);
 	drawingErrorChannelsChart(resultMap);
 }
