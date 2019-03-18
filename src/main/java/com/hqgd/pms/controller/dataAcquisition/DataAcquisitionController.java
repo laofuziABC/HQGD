@@ -22,9 +22,11 @@ import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.system.SysParamMapper;
 import com.hqgd.pms.domain.DataAcquisitionVo;
+import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.domain.StaticFailures;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
+import com.hqgd.pms.service.equipment.IEquipmentService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +48,8 @@ public class DataAcquisitionController {
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 	@Resource
 	private SysParamMapper sysParamMapper;
+	@Autowired
+	IEquipmentService equipmentService;
 
 	@RequestMapping("/realtime")
 	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
@@ -170,12 +174,14 @@ public class DataAcquisitionController {
 			HttpServletResponse response) throws Exception {
 		log.info("故障次数统计开始 ");
 		List<StaticFailures> errorStateStatic = dataAcquisitionService.errorStateStatic(queryVo);
+		EquipmentInfo equipmentInfo = equipmentService.select(queryVo.getEquipmentId());
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "故障次数统计成功");
 		resultMap.put("data", errorStateStatic);
+		resultMap.put("equipment", equipmentInfo);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("故障次数统计开始 ");

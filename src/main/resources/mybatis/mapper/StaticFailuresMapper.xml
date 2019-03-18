@@ -27,6 +27,7 @@
 	SUM( OVER_TEMPERATURE ) AS OVER_TEMPERATURE 
     FROM
 	hq_static_failures 
+	WHERE
 	EQUIPMENT_ID = #{equipmentId,jdbcType=INTEGER} 
 	AND DATE <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR}
 	AND DATE <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
