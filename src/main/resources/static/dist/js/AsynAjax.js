@@ -34,7 +34,6 @@ function POSTAjaxForAllResultList(url,param){
 }
 //封装数据监测页面的Ajax异步请求
 var equiId;			//设备主键
-var equiType;	//设备类型
 var userParam=document.getElementById("userParam");
 function AjaxPostForEquiSubList(url,param){
 	var kgg_list = "";			//开关柜

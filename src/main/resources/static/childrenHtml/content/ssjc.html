@@ -253,10 +253,10 @@
 				$("#equipResultList").html("<li><span><em>未查找到设备</em></span></li>");
 				$("#ssjc_right").html("<h1 style='color:#fff;'>无设备监测信息！</h1>");
 			}else{
-				equiId=param.trim();
 				equiId0=param.trim();
 				if($("#hh").parent().hasClass("active")){
 					equiId1=equiId0;
+					equiId=param.trim();
 					showCurrentContent();
 				}
 			}
@@ -267,11 +267,13 @@
 			var doms=document.querySelectorAll("input.shi");
 			if(doms){
 				document.addEventListener("blur", function(event){
+					if(!event.target.classList) return;
 					if(!event.target.classList.contains("shi")) return;
 					var e=event.target;
 					datetimeValidate(e);
 				}, true);
 				document.addEventListener("change", function(event){
+					if(!event.target.classList) return;
 					if(!event.target.classList.contains("shi")) return;
 					var e=event.target;
 					datetimeValidate(e);

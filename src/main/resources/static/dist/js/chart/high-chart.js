@@ -58,7 +58,7 @@ var extremumOption={
 var errorTypeOption={
 	chart: {backgroundColor: "#21242e" },
 	title: { text: "设备故障类型统计图", style: {color: "#ffffff"} },
-	lang: { noData: "暂无数据" }, loading: loading, colors: colors, credits:{enabled: false},
+	lang: { noData: "无异常数据" }, loading: loading, colors: colors, credits:{enabled: false},
 	legend:{enabled: true, itemStyle:{"color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
 			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
@@ -69,7 +69,8 @@ var errorTypeOption={
 var errorChannelOption={
 	chart: { backgroundColor: "#21242e" },
 	title: { text: "通道发生故障次数统计图", style: {color: "#ffffff"} },
-	lang: { noData: "暂无数据" }, loading: loading, colors: colors, credits:{enabled: false},
+	lang: { noData: "无异常数据" }, noData:{itemStyle:{"fontSize": "14px", "color":"#fff"}},
+	loading: loading, colors: colors, credits:{enabled: false},
 	legend:{enabled: true, itemStyle:{ "color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
 			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
@@ -212,7 +213,7 @@ function addPoints(){
 	var timing=setInterval(function (){
 		//在实时监测图表上加点
 		var url="dataAcquisition/realtime";
-		var param={"equipmentId": equiId};
+		var param={"equipmentId": equiId1};
 		var pointResult = getChartData(url, param);
 		var pointsData = (pointResult==null)?null:pointResult.data;
 		if(pointsData!=null && JSON.stringify(pointsData)!="{}" && (pointsData.length==pointsData[0].numOfCh)){
@@ -364,50 +365,46 @@ function loadingExtremumChart(maxs, mins, names, equiName){
 	$("#chart_extremum").highcharts(extremumOption);
 }
 //加载通道报错信息统计图
+var errors_forchart;
 function fetchErrorChartData(url,param){
-	console.log(url);
-	console.log(param);
 	var resultMap={};
 	$.ajax({url: url, type: "post", data: param, dataType: "json", async:false,
 		success: function(result){resultMap=result;},
 		error: function(){resultMap=null; }
 	});
-	drawingErrorTypesChart(resultMap);
-	drawingErrorChannelsChart(resultMap);
+	var result_data=resultMap.data;
+	if(result_data==null || result_data.length==0) return;
+	var channels=[], code2=[], code3=[], code4=[], code9=[];
+	for(var i=0; i<result_data.length; i++){
+		channels.push(result_data[i].channelNum);
+		code2.push(result_data[i].communicate);
+		code3.push(result_data[i].fiber);
+		code4.push(result_data[i].thermometer);
+		code9.push(result_data[i].overTemperature);
+	}
+	var errors={"channels":channels, "code2":code2, "code3":code3, "code4":code4, "code9":code9, "equipment":resultMap.equipment };
+	errors_forchart=errors;
+	drawingErrorTypesChart(errors);
+	drawingErrorChannelsChart(errors);
 }
 //绘制设备异常类型统计图
-var data_analog={
-		"equipment":{"equipmentId":"0x000001", "equipmentName":"1号测温仪","numOfCh":"6"},
-		"type":["485通信故障","光纤故障","测温仪故障"],
-		"channels":["CH1","CH2","CH3","CH4","CH5","CH6"],
-		"code2":10,
-		"code3":[0,4,0,2,1,0],
-		"code4":[3,1,5,1,1,2]
-};
 function drawingErrorTypesChart(param){
-	param=data_analog;
-	var channels=param.channels;
-	var code2=param.code2;
-	var code3=param.code3;
-	var code4=param.code4;
 	var equiName=param.equipment.equipmentName;
 	errorTypeOption.title.text="设备故障类型统计图("+equiName+")";
+	
 	errorTypeOption.series=[{type: "pie", name: "故障类型",
-		data: [{name: '485通信故障', y: code2}, {name: '光纤故障', y: code3.addition()}, {name: '测温仪故障', y: code4.addition()} ]
+		data: [{name: '485通信故障', y: param.code2.addition()}, {name: '光纤故障', y: param.code3.addition()}, 
+			{name: '测温仪故障', y: param.code4.addition()}, {name: '超温故障', y: param.code9.addition()}]
 	}];
-	$("#chart_error_type").empty();
+	$("#chart_error_type").highcharts().destroy();
 	$("#chart_error_type").highcharts(errorTypeOption);
 }
 
 //绘制通道异常次数统计图
 function drawingErrorChannelsChart(param){
-	param=data_analog;
 	var channels=param.channels;
-	var code2=param.code2;
-	var code3=param.code3;
-	var code4=param.code4;
 	var equiName=param.equipment.equipmentName;
-	var resultData=additionCount(code3,code4);
+	var resultData=param.code2.countall(param.code3).countall(param.code4).countall(param.code9);
 	if(resultData.length!=channels.length) return;
 	var result=[];
 	for(var i=0;i<channels.length;i++){
@@ -415,36 +412,29 @@ function drawingErrorChannelsChart(param){
 	}
 	errorChannelOption.series[0].data=result;
 	errorChannelOption.title.text="通道故障次数统计图("+equiName+")";
-	$("#chart_error_channel").empty();
+	$("#chart_error_channel").highcharts().destroy();
 	$("#chart_error_channel").highcharts(errorChannelOption);
 }
-Array.prototype.addition=function(){
-	var count=0;
-	for(var i=0; i<this.length; i++){count+=this.valueOf()[i];}
-	return count;
-}
-function additionCount(param1,param2){
-	if(param1.length!=param2.length) return;
-	var result=[];
-	for(var i=0;i<param1.length;i++){
-		result.push(param1[i]+param2[i]);
-	}
-	return result;
-}
+
 function changeChannelChart(e){
 	var data=e.point.options;
-	console.log(data);
-	var channels=data_analog.channels;
+	var channels=errors_forchart.channels;
 	var mydata=[], result=[];
-	if(data.name=="485通信故障") return;
-	if(data.name=="光纤故障"){mydata=data_analog.code3;}
-	if(data.name=="测温仪故障"){mydata=data_analog.code4;}
+	if(data.name=="485通信故障"){mydata=errors_forchart.code2;}
+	if(data.name=="光纤故障"){mydata=errors_forchart.code3;}
+	if(data.name=="测温仪故障"){mydata=errors_forchart.code4;}
+	if(data.name=="超温故障"){mydata=errors_forchart.code9;}
+	if(mydata.addition()==0) return;
 	for(var i=0;i<mydata.length;i++){
 		result.push({name:channels[i], y: mydata[i]});
 	}
+	var title=errorChannelOption.title.text;
+	title=(title.indexOf(":")>-1)?title.substring(0,title.indexOf(":")):title;
+	errorChannelOption.title.text=title+": "+data.name;
 	errorChannelOption.series[0].data=result;
-	$("#chart_error_channel").empty();
+	$("#chart_error_channel").highcharts().destroy();
 	$("#chart_error_channel").highcharts(errorChannelOption);
 }
 //验证时间日期文本框内容有效性
 function datetimeValidate(e){if(e.value==""||e.value==null){e.classList.add("error");return}else if(e.id=="startDate"||e.id=="startTime"){e.classList.remove("error");return}else{if(e.id=="endDate"){($("#endDate").val())>($("#startDate").val())?(e.classList.remove("error")):(e.classList.add("error"))}else if(e.id=="endTime"){($("#endTime").val())>($("#startTime").val())?(e.classList.remove("error")):(e.classList.add("error"))}}}
+Array.prototype.addition=function(){var count=0;for(var i=0;i<this.length;i++){count+=this.valueOf()[i];}return count;};Array.prototype.countall=function(array){if(this.length!=array.length)return;var result=[];for(var i=0;i<this.length;i++){result.push(this.valueOf()[i]+array[i]);}return result;};

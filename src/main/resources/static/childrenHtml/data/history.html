@@ -94,6 +94,7 @@
 			$("#chart_history").highcharts(historyOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
+				equiId2=equiId0;
 				if(equiId!=null){
 					var startTime = $("#startTime").val();
 					var endTime = $("#endTime").val();
@@ -113,7 +114,7 @@
 			//加载历史数据统计图【开始】
 			function searchChartResult() {
 				var param = {
-					"equipmentId" : equiId,
+					"equipmentId" : equiId2,
 					"startTime" : $("#startTime").val(),
 					"endTime" : $("#endTime").val()
 				};
@@ -126,7 +127,7 @@
 				//设置DIV高度
 				$(".ssjc_right_bottom").css({"height" : ($(window).height()) * 0.4 });
 				var param = {
-					"equipmentId" : equiId,
+					"equipmentId" : equiId0,
 					"startTime" : $("#startTime").val(),
 					"endTime" : $("#endTime").val(),
 					"state" : $("#data-type").val(),
