@@ -58,7 +58,7 @@ var extremumOption={
 var errorTypeOption={
 	chart: {backgroundColor: "#21242e" },
 	title: { text: "设备故障类型统计图", style: {color: "#ffffff"} },
-	lang: { noData: "无异常数据" }, loading: loading, colors: colors, credits:{enabled: false},
+	loading: loading, colors: colors, credits:{enabled: false},
 	legend:{enabled: true, itemStyle:{"color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
 			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
@@ -69,7 +69,6 @@ var errorTypeOption={
 var errorChannelOption={
 	chart: { backgroundColor: "#21242e" },
 	title: { text: "通道发生故障次数统计图", style: {color: "#ffffff"} },
-	lang: { noData: "无异常数据" }, noData:{itemStyle:{"fontSize": "14px", "color":"#fff"}},
 	loading: loading, colors: colors, credits:{enabled: false},
 	legend:{enabled: true, itemStyle:{ "color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
@@ -391,11 +390,16 @@ function fetchErrorChartData(url,param){
 function drawingErrorTypesChart(param){
 	var equiName=param.equipment.equipmentName;
 	errorTypeOption.title.text="设备故障类型统计图("+equiName+")";
-	
-	errorTypeOption.series=[{type: "pie", name: "故障类型",
-		data: [{name: '485通信故障', y: param.code2.addition()}, {name: '光纤故障', y: param.code3.addition()}, 
-			{name: '测温仪故障', y: param.code4.addition()}, {name: '超温故障', y: param.code9.addition()}]
-	}];
+	if(param.code2.addition()+param.code3.addition()+param.code4.addition()+param.code9.addition()==0){
+		errorTypeOption.series=[{type: "pie", name: "故障类型",
+			data: [{name: '无异常数据', y: 1}]
+		}];
+	}else{
+		errorTypeOption.series=[{type: "pie", name: "故障类型",
+			data: [{name: '485通信故障', y: param.code2.addition()}, {name: '光纤故障', y: param.code3.addition()}, 
+				{name: '测温仪故障', y: param.code4.addition()}, {name: '超温故障', y: param.code9.addition()}]
+		}];
+	}
 	$("#chart_error_type").highcharts().destroy();
 	$("#chart_error_type").highcharts(errorTypeOption);
 }
@@ -406,11 +410,15 @@ function drawingErrorChannelsChart(param){
 	var equiName=param.equipment.equipmentName;
 	var resultData=param.code2.countall(param.code3).countall(param.code4).countall(param.code9);
 	if(resultData.length!=channels.length) return;
-	var result=[];
-	for(var i=0;i<channels.length;i++){
-		result.push({name:channels[i], y: resultData[i]});
+	if(resultData.addition()==0){
+		errorChannelOption.series=[{type: "pie", name: "故障类型",data:[{name: '无异常数据', y: 1}]}];
+	}else{
+		var result=[];
+		for(var i=0;i<channels.length;i++){
+			result.push({name:channels[i], y: resultData[i]});
+		}
+		errorChannelOption.series[0].data=result;
 	}
-	errorChannelOption.series[0].data=result;
 	errorChannelOption.title.text="通道故障次数统计图("+equiName+")";
 	$("#chart_error_channel").highcharts().destroy();
 	$("#chart_error_channel").highcharts(errorChannelOption);
