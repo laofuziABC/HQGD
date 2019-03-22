@@ -185,6 +185,13 @@
 				var result = y+"-"+M+"-"+d+" 00:00:00";
 				return result;
 			}
+			function formatDate2String(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var result = y+"-"+M+"-"+d;
+				return result;
+			}
 			function unifiedFormat(param){
 				return (param<10)?("0"+param):param;
 			}
