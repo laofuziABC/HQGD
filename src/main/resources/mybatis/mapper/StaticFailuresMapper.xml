@@ -18,6 +18,14 @@
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, COMMUNICATE, 
     FIBER, THERMOMETER, OVER_TEMPERATURE, DATE
   </sql>
+  <select id="selectByDate" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+	COUNT( * ) 
+    FROM
+	hq_static_failures 
+    WHERE
+	DATE= #{date,jdbcType=VARCHAR}
+  </select>
   <select id="errorStateStatic" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     SELECT
 	CHANNEL_NUM,

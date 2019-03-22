@@ -363,27 +363,32 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		// 检查数据库这一天的数据是否已经统计
+		int count = staticFailuresMapper.selectByDate(startTime);
+		if (count == 0) {
 
-		// L表 ——表示查询出一天的数据，然后批量处理
-		param.put("table", "hq_equipment_monitor_data_1");
-		List<DataAcquisitionVo> L1 = dataAcquisitionVoMapper.selectAllFailures(param);
-		staticFailuer(L1, yesterday, "hq_equipment_monitor_data_1");
+			// L表 ——表示查询出一天的数据，然后批量处理
+			param.put("table", "hq_equipment_monitor_data_1");
+			List<DataAcquisitionVo> L1 = dataAcquisitionVoMapper.selectAllFailures(param);
+			staticFailuer(L1, yesterday, "hq_equipment_monitor_data_1");
 
-		param.put("table", "hq_equipment_monitor_data_2");
-		List<DataAcquisitionVo> L2 = dataAcquisitionVoMapper.selectAllFailures(param);
-		staticFailuer(L2, yesterday, "hq_equipment_monitor_data_2");
+			param.put("table", "hq_equipment_monitor_data_2");
+			List<DataAcquisitionVo> L2 = dataAcquisitionVoMapper.selectAllFailures(param);
+			staticFailuer(L2, yesterday, "hq_equipment_monitor_data_2");
 
-		param.put("table", "hq_equipment_monitor_data_3");
-		List<DataAcquisitionVo> L3 = dataAcquisitionVoMapper.selectAllFailures(param);
-		staticFailuer(L3, yesterday, "hq_equipment_monitor_data_3");
+			param.put("table", "hq_equipment_monitor_data_3");
+			List<DataAcquisitionVo> L3 = dataAcquisitionVoMapper.selectAllFailures(param);
+			staticFailuer(L3, yesterday, "hq_equipment_monitor_data_3");
 
-		param.put("table", "hq_equipment_monitor_data_4");
-		List<DataAcquisitionVo> L4 = dataAcquisitionVoMapper.selectAllFailures(param);
-		staticFailuer(L4, yesterday, "hq_equipment_monitor_data_4");
-
+			param.put("table", "hq_equipment_monitor_data_4");
+			List<DataAcquisitionVo> L4 = dataAcquisitionVoMapper.selectAllFailures(param);
+			staticFailuer(L4, yesterday, "hq_equipment_monitor_data_4");
+		} else {
+			log.info("startTime =" + startTime + "已经统计过了！");
+		}
 	}
 
-	// 统计一天的故障，除去每个通道的第一次记录
+	// 统计一天的故障
 	private void staticFailuer(List<DataAcquisitionVo> L, String yesterday, String table) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		for (int i = 0; i < L.size() - 1; i++) {

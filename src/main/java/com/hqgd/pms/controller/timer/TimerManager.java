@@ -73,7 +73,6 @@ public class TimerManager {
 	/**
 	 * 服务器向客户端发送请求数据命令定时任务
 	 */
-	// private StaticFailuresTask staticFailuresTask = null;
 	@Autowired
 	private YouXinConfiguration youXinConfiguration;
 
@@ -169,13 +168,11 @@ public class TimerManager {
 	public void startFailuresTask1(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("统计故障次数定时器开始");
 		resp.setContentType("application/json; charset=UTF-8");
-		timer.purge();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DATE, -1);
 		String startTime = format.format(c.getTime());// 前一天
 		if (future1 == null) {
-
 			future1 = threadPoolTaskScheduler.schedule(new StaticFailuresTask(startTime), new Trigger() {
 				@Override
 				public Date nextExecutionTime(TriggerContext triggerContext) {
@@ -183,6 +180,7 @@ public class TimerManager {
 				}
 			});
 		} else {
+			log.info("定时器已经处于启动状态！");
 			resp.getWriter().write(new Gson().toJson("定时器已经处于启动状态！"));
 		}
 	}

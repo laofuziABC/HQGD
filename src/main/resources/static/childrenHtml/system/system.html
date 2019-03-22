@@ -36,7 +36,7 @@
 									</div>  -->
 									<div class="form-group">
 										<label>服务器绑定端口</label>
-										<div class="input-group">
+										<div class="input-group col-sm-4">
 											<input id="SERVER_PORT" type="text" class="form-control">
 											<div class="input-group-btn">
 												<button id="add-new-event" type="button"
@@ -48,7 +48,7 @@
 									</div>
 									<div class="form-group">
 										<label>服务器采集数据间隔时间(单位：秒)</label>
-										<div class="input-group">
+										<div class="input-group col-sm-4">
 											<input id="TIME_INTERVAL" type="text" class="form-control">
 											<div class="input-group-btn">
 												<button id="add-new-event" type="button"
@@ -105,8 +105,10 @@
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
+
 					</div>
 					<!--/.col (right) -->
+
 				</div>
 				<!-- /.row -->
 			</section>
@@ -119,7 +121,7 @@
 	<!-- ./wrapper -->
 	<script src="../../bower_components/moment/min/moment.min.js"></script>
 	<script
-		src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+		src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 	<script type="text/javascript">
 		$('#startDate').datepicker({
 			autoclose : true
@@ -185,6 +187,7 @@
 			debugger;
 			var startTime = $("#startDate").val();
 			var endTime = $("#endDate").val();
+			var today = getNowFormatDate();
 			if (endTime >= today) {
 				alert("终止日期不能大于当天日期！");
 			} else {
@@ -220,6 +223,50 @@
 			var currentdate = year + seperator1 + month + seperator1 + strDate;
 			return currentdate;
 		}
+		/* function serialPortOperate() {
+			debugger;
+			var text = document.getElementById("spOperate").innerHTML;
+			if (text == "打开串口") {
+				$("#serialPortParam select").attr("disabled", "disabled");
+				$("#serialPortParam input").attr("disabled", "disabled");
+				document.getElementById("spOperate").innerHTML = "关闭串口";
+				document.getElementById("spOperate").className = "btn btn-default";
+				openSerialPort();
+			} else {
+				$("#serialPortParam select").attr("disabled", false);
+				$("#serialPortParam input").attr("disabled", false);
+				document.getElementById("spOperate").innerHTML = "打开串口";
+				document.getElementById("spOperate").className = "btn btn-primary";
+			}
+
+		}
+		function openSerialPort(param) {
+			var serialPort = $("#mSerialPort option:selected").text(),
+			if (serialPort == null || serialPort == "") {
+				alert("没有搜索到有效串口！");
+			} else {
+				var baudrate = $("#baudrate option:selected").text(),
+				var dataBits = $("#dataBits option:selected").text(),
+				var parity = $("#parity option:selected").text(),
+				var stopBits = $("#stopBits option:selected").text(),
+				var url = "serialPort/" + param;
+				$.ajax({
+					url : url,
+					type : "post",
+					dataType : "json",
+					data : {
+						"serialPort" : serialPort,
+						"baudrate" : baudrate,
+						"dataBits" : dataBits,
+						"parity" : parity,
+						"stopBits" : stopBits
+					},
+					success : function(result) {
+						alert(result);
+					}
+				});
+			}
+		} */
 	</script>
 	<script src="dist/js/app.min.js"></script>
 

@@ -19,4 +19,6 @@ public interface StaticFailuresMapper {
     int updateByPrimaryKey(StaticFailures record);
 
 	List<StaticFailures> errorStateStatic(Map<String, Object> param);
+
+	int selectByDate(String startTime);
 }
