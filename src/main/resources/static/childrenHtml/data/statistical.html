@@ -38,36 +38,33 @@
 			$("#chart_extremum").highcharts(extremumOption);
 			$("#chart_error_type").highcharts(errorTypeOption);
 			$("#chart_error_channel").highcharts(errorChannelOption);
-			function showStatisticalContent() {
+			function showStatisticalContent(){
 				equiId3=equiId0;
 				if (equiId != null) {
 					var startDate = $("#startDate").val();
 					var endDate = $("#endDate").val();
-					if (startDate == "") {
+					if (startDate == "" || startDate == null) {
 						$("#startDate").addClass("error");
 						return;
 					}
-					if (endDate == "") {
+					if (endDate == "" || endDate == null) {
 						$("#endDate").addClass("error");
 						return;
 					}
-					if (startDate >= endDate) {
+					if (startDate>endDate) {
 						$("#endDate").addClass("error");
 						return;
 					}
-					$("#startDate").removeClass("error");
-					$("#endDate").removeClass("error");
+					if($("#startDate").hasClass("error")){$("#startDate").removeClass("error");}
+					if($("#endDate").hasClass("error")){$("#endDate").removeClass("error");}
 					var chart = $("#chart_extremum").highcharts();
 					chart.showLoading();
-					var param = {
-						"equipmentId" : equiId3,
-						"startTime" : startDate,
-						"endTime" : endDate
-					};
+					var statistical_param = {"equipmentId" : equiId3, "startTime" : startDate+" 00:00:00", "endTime" : endDate+" 23:59:59" };
+					var errors_param = {"equipmentId" : equiId3, "startTime" : startDate, "endTime" : endDate };
 					var statistical_url = "dataAcquisition/historicalCurve";
 					var errors_url = "dataAcquisition/errorStateStatic";
-					fetchExtremumChartData(statistical_url, param);
-					fetchErrorChartData(errors_url, param);
+					fetchExtremumChartData(statistical_url, statistical_param);
+					fetchErrorChartData(errors_url, errors_param);
 				}
 			}
 		</script>

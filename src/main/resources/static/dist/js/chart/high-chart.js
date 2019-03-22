@@ -63,7 +63,7 @@ var errorTypeOption={
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
 			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
 	plotOptions:{pie: {cursor: "pointer", dataLabels: {color: "#fff" },  showInLegend: true }, series:{events:{click: changeChannelChart}} },
-	series:[{type: "pie", name: "故障类型",data: []}]
+	series:[{type: "pie", name: "故障类型",data:[]}]
 };
 //配置设备各通道发生故障次数统计图
 var errorChannelOption={
@@ -74,7 +74,7 @@ var errorChannelOption={
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
 			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
 	plotOptions:{pie: {cursor: "pointer", dataLabels: {color: "#fff" },  showInLegend: true } },
-	series:[{type: "pie", name: "通道次数统计",data: []}]
+	series:[{type: "pie", name: "通道次数统计",data:[]}]
 };
 
 /**
@@ -372,7 +372,13 @@ function fetchErrorChartData(url,param){
 		error: function(){resultMap=null; }
 	});
 	var result_data=resultMap.data;
-	if(result_data==null || result_data.length==0) return;
+//	if(result_data==null || result_data.length==0) return;
+	if(result_data==null || result_data.length==0) {
+		errorChannelOption.series=[{type: "pie", name: "故障类型",data:[{name: '无异常数据', y: 1}]}];
+		errorTypeOption.series=[{type: "pie", name: "通道次数统计",data: [{name: '无异常数据', y: 1}]}];
+		$("#chart_error_channel").highcharts(errorChannelOption);
+		$("#chart_error_type").highcharts(errorTypeOption);
+	}
 	var channels=[], code2=[], code3=[], code4=[], code9=[];
 	for(var i=0; i<result_data.length; i++){
 		channels.push(result_data[i].channelNum);
@@ -411,7 +417,7 @@ function drawingErrorChannelsChart(param){
 	var resultData=param.code2.countall(param.code3).countall(param.code4).countall(param.code9);
 	if(resultData.length!=channels.length) return;
 	if(resultData.addition()==0){
-		errorChannelOption.series=[{type: "pie", name: "故障类型",data:[{name: '无异常数据', y: 1}]}];
+		errorChannelOption.series=[{type: "pie", name: "通道次数统计",data:[{name: '无异常数据', y: 1}]}];
 	}else{
 		var result=[];
 		for(var i=0;i<channels.length;i++){
@@ -444,5 +450,5 @@ function changeChannelChart(e){
 	$("#chart_error_channel").highcharts(errorChannelOption);
 }
 //验证时间日期文本框内容有效性
-function datetimeValidate(e){if(e.value==""||e.value==null){e.classList.add("error");return}else if(e.id=="startDate"||e.id=="startTime"){e.classList.remove("error");return}else{if(e.id=="endDate"){($("#endDate").val())>($("#startDate").val())?(e.classList.remove("error")):(e.classList.add("error"))}else if(e.id=="endTime"){($("#endTime").val())>($("#startTime").val())?(e.classList.remove("error")):(e.classList.add("error"))}}}
+function datetimeValidate(e){if(e.value==""||e.value==null){e.classList.add("error");return}else if(e.id=="startDate"||e.id=="startTime"){e.classList.remove("error");return}else{if(e.id=="endDate"){($("#startDate").val())>($("#endDate").val())?(e.classList.add("error")):(e.classList.remove("error"))}else if(e.id=="endTime"){($("#endTime").val())>($("#startTime").val())?(e.classList.remove("error")):(e.classList.add("error"))}}};
 Array.prototype.addition=function(){var count=0;for(var i=0;i<this.length;i++){count+=this.valueOf()[i];}return count;};Array.prototype.countall=function(array){if(this.length!=array.length)return;var result=[];for(var i=0;i<this.length;i++){result.push(this.valueOf()[i]+array[i]);}return result;};
