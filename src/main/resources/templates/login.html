@@ -85,19 +85,6 @@ form .message-error {
 </style>
 </head>
 <body>
-	<div class="fuceng" id="searchPass" style="z-index: 9965;">
-		<div class="fuqu">
-			<div class="fuquzone">
-				<div class="fuqulogo"></div>
-				<p class="fuqutitle">
-					找回密码 <span class="fuclose">×</span>
-				</p>
-				<div class="fuqubiao">
-					<span>请联系工作人员，联系方式：15129284506</span>
-				</div>
-			</div>
-		</div>
-	</div>
 	<div class="tyg-div">
 		<ul>
 			<li><div>让</div></li>
@@ -137,9 +124,8 @@ form .message-error {
 				</div>
 				<div class="form-actions">
 					<span style="width: 40%; float: left; font-size: 14px;"><input
-						type="checkbox" /> 记住我</span> <span
-						style="width: 60%; float: right; font-size: 14px;">忘记密码？<a
-						onclick="searchPass()" id="forget-password">点击找回密码</a></span>
+						type="checkbox" /> 记住我</span> <a href="register.html"
+						style="font-size: 14px; color: #2ec0f6;">忘记密码？点击找回</a>
 				</div>
 				<button onclick="userLoginIn();return false;">
 					<span style="font-size: 16px;">登</span><span
@@ -188,7 +174,7 @@ form .message-error {
 
 		}
 		function searchPass() {
-			window.location.href = encodeURI(encodeURI("searchPass.html"));
+			window.location.href = encodeURI(encodeURI("register.html"));
 		}
 	</script>
 	<!-- 用户登录【结束】 -->

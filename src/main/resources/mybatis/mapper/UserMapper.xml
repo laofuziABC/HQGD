@@ -19,13 +19,19 @@
     UPDATER, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME
   </sql>
   
+  <select id="selectByPhUn" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from access_control_user
+    where USER_NAME = #{userName,jdbcType=VARCHAR}
+    and TEL = #{tel,jdbcType=VARCHAR}
+  </select>
   <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from access_control_user
     where USER_NAME = #{userName,jdbcType=VARCHAR}
   </select>
-  
   <select id="selectUserRoleType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     SELECT 
   		r.TYPE AS ID
@@ -39,6 +45,10 @@
   </select>
   <update id="initUserPassword">
         UPDATE access_control_user SET PASSWORD = '123456' WHERE ID = #{id}
+  </update>
+  <update id="resetPassword" parameterType="java.util.HashMap">
+        UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE USER_NAME = #{userName,jdbcType=VARCHAR}
+    and TEL = #{tel,jdbcType=VARCHAR}
   </update>
   <update id="updatePassword" parameterType="java.lang.String">
         UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE ID = #{id}

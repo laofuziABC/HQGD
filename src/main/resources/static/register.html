@@ -37,34 +37,41 @@
 	<div class="register-box">
 
 		<div class="register-box-body">
-
-			<form action="../../index.html" method="post">
+			<p class="login-box-msg">重新设置新密码</p>
+			<form>
 				<div class="form-group has-feedback">
-					<input type="text" class="form-control" placeholder="用户名">
-					<span class="glyphicon glyphicon-user form-control-feedback"></span>
+					<input type="text" class="form-control" placeholder="用户名"
+						id="userName" required="required"> <span
+						class="glyphicon glyphicon-user form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="email" class="form-control" placeholder="联系方式">
-					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+					<input type="text" class="form-control" placeholder="联系方式"
+						id="phone" required="required"> <span
+						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="新密码">
-					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+					<input type="password" class="form-control" placeholder="新密码"
+						id="password" required="required"> <span
+						class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="确认新密码">
-					<span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+					<input type="password" class="form-control" placeholder="确认新密码"
+						id="newPassword" required="required"> <span
+						class="glyphicon glyphicon-log-in form-control-feedback"></span>
 				</div>
 				<div class="row">
 					<!-- /.col -->
 					<div class="col-xs-4">
-						<button type="submit" class="btn btn-primary btn-block btn-flat">确定</button>
+						<button class="btn btn-primary" onclick="submitPassInfo()">确定</button>
 					</div>
 					<!-- /.col -->
 				</div>
 			</form>
 		</div>
 		<!-- /.form-box -->
+		<div class="register-logo">
+			<a href="hqgd"><b>点击</b>返回登录页面</a>
+		</div>
 	</div>
 	<!-- /.register-box -->
 
@@ -72,16 +79,33 @@
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap 3.3.7 -->
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<!-- iCheck -->
-	<script src="plugins/iCheck/icheck.min.js"></script>
+
 	<script>
-		$(function() {
-			$('input').iCheck({
-				checkboxClass : 'icheckbox_square-blue',
-				radioClass : 'iradio_square-blue',
-				increaseArea : '20%' /* optional */
-			});
-		});
+		function submitPassInfo() {
+			var password = $("#password").val();
+			var newPassword = $("#newPassword").val();
+			var phone = $("#phone").val();
+			var userName = $("#userName").val();
+			if (password != newPassword) {
+				alert("两次密码不一致！");
+			} else {
+				$.ajax({
+					url : "user/resetPassword",
+					type : "post",
+					async : false,
+					data : {
+						"userName" : userName,
+						"phone" : phone,
+						"password" : password,
+						"newPassword" : newPassword
+					},
+					dataType : "json",
+					success : function(result) {
+						alert(result);
+					}
+				});
+			}
+		}
 	</script>
 </body>
 </html>
