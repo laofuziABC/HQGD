@@ -12,12 +12,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.dataAcquisition.StaticFailuresMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
+import com.hqgd.pms.domain.ChannelExtremum;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.QueryParametersVo;
@@ -609,6 +611,35 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				overT = 0;
 			}
 		}
+	}
+
+	/**
+	 * 通过设备主键，获取指定时间段内的通道温度最值
+	 */
+	@Override
+	public Map<String, Object> getHistoryExtremums(QueryParametersVo queryVo) {
+		String startTime = queryVo.getStartTime();
+		String endTime = queryVo.getEndTime();
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> param = new HashMap<>();
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", startTime);
+		param.put("endTime", endTime);
+		long inTime = System.currentTimeMillis();
+		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
+		String type = equipment.getType();
+		switch (type) {
+			case "1": param.put("table", "hq_equipment_monitor_data_1"); break;
+			case "2": param.put("table", "hq_equipment_monitor_data_2"); break;
+			case "3": param.put("table", "hq_equipment_monitor_data_3"); break;
+			case "4": param.put("table", "hq_equipment_monitor_data_4"); break;
+		}
+		List<ChannelExtremum> extremumList = dataAcquisitionVoMapper.findChannelExtremums(param);
+		long outTime = System.currentTimeMillis();
+		log.info("查询extremum时长为：" + (outTime - inTime));
+		result.put("equipment", equipment);
+		result.put("extremumList", extremumList);
+		return result;
 	}
 
 }

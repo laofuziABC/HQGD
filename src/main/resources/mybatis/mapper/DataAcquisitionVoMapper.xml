@@ -31,6 +31,13 @@
   <resultMap id="TempertureList" type="java.lang.Float">
     <result column="TEMPERATURE" jdbcType="DECIMAL" property="temperature" />
   </resultMap>
+  <resultMap id="ExtremumList" type="com.hqgd.pms.domain.ChannelExtremum">
+  	<result column="CHANNEL_NUM" jdbcType="VARCHAR" property="channel" />
+  	<result column="MAXINUM" jdbcType="DECIMAL" property="max" />
+    <result column="MININUM" jdbcType="DECIMAL" property="min" />
+  </resultMap>
+  
+  
   <sql id="Base_Column_List">
     ID, EQUIPMENT_ID, EQUIPMENT_NAME, ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, TEMPERATURE, 
     PD, UV, STATE, MESSAGE, CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS RECEIVE_TIME, DUTY_PERSON, TEL,NUM_OF_CH
@@ -715,5 +722,22 @@ WHERE
 	ORDER BY
 	EQUIPMENT_ID,
 	CHANNEL_NUM
+  </select>
+  <!-- 获取所有的通道的最值集合 -->
+  <select id="findChannelExtremums" parameterType="java.util.Map" resultMap="ExtremumList">
+  	SELECT 
+  		CHANNEL_NUM, 
+  		MAX(CAST(TEMPERATURE AS DECIMAL(10,1))) MAXINUM, 
+  		MIN(CAST(TEMPERATURE AS DECIMAL(10,1))) MININUM
+  	FROM
+  		${table}
+  	WHERE
+		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+		AND RECEIVE_TIME <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
+		GROUP BY
+			CHANNEL_NUM 
+		ORDER BY
+			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
   </select>
 </mapper>

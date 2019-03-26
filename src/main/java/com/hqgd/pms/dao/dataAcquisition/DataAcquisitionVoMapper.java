@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.hqgd.pms.domain.ChannelExtremum;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 
 public interface DataAcquisitionVoMapper {
@@ -79,5 +80,6 @@ public interface DataAcquisitionVoMapper {
 
 	List<DataAcquisitionVo> selectEqu(Map<String, Object> param);
 
+	List<ChannelExtremum> findChannelExtremums(Map<String, Object> param);
 
 }

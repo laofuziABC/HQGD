@@ -329,37 +329,35 @@ function fetchExtremumChartData(url, param){
 	$.ajax({
 		url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
-			var data = result.data;
-			if(JSON.stringify(data) != '{}'){
-				var names=data.channelNumArr;
-				var seriesData = data.channelTemArr;
-				var equiName = data.equipment.equipmentName;
-				var maxs=[];
-				var mins=[];
-				for(let i=0; i<seriesData.length; i++){
-					maxs.push(Math.max.apply(null, seriesData[i]));
-					mins.push(Math.min.apply(null, seriesData[i]));
+			var equiName = result.equipment.equipmentName;
+			var dataList = result.extremumList;
+			var channels=[], maxs=[], mins=[];
+			if(dataList.length>0){
+				for(var i=0; i<dataList.length; i++){
+					channels.push(dataList[i].channel);
+					maxs.push(dataList[i].max);
+					mins.push(dataList[i].min);
 				}
-				loadingExtremumChart(maxs, mins, names, equiName);
 			}
+			loadingExtremumChart(maxs, mins, channels, equiName);
 		}
 	});
 }
-function loadingExtremumChart(maxs, mins, names, equiName){
-	if(maxs.length!=names.length) return;
-	if(mins.length!=names.length) return;
-	var series=[
-		{name: "最大值", data: maxs, type: 'column'},
-		{name: "最小值", data: mins, type: 'column'}
-	];
-	var maxValue=(maxValue>Math.max.apply(null, maxs))?maxValue:(Math.max.apply(null, maxs));
-	var minValue=(minValue<Math.min.apply(null, mins))?minValue:(Math.min.apply(null, mins));
-	extremumOption.title.text="通道温度最值统计图("+equiName+")";
-	extremumOption.yAxis.min=(minValue<0)?minValue:0;
-	extremumOption.yAxis.max=maxValue;
-	extremumOption.xAxis.categories=names;
-	extremumOption.series=series;
+function loadingExtremumChart(maxs, mins, channels, equiName){
+	if(maxs.length!=channels.length) return;
+	if(mins.length!=channels.length) return;
+	if(channels.length>0){
+		var maxValue=(maxValue>Math.max.apply(null, maxs))?maxValue:(Math.max.apply(null, maxs));
+		var minValue=(minValue<Math.min.apply(null, mins))?minValue:(Math.min.apply(null, mins));
+		extremumOption.yAxis.min=(minValue<0)?minValue:0;
+		extremumOption.yAxis.max=maxValue;
+		extremumOption.xAxis.categories=channels;
+		extremumOption.series=[{name: "最大值", data: maxs, type: 'column'}, {name: "最小值", data: mins, type: 'column'}];
+	}else{
+		extremumOption.series=[{name: "无相关数据", data: [], type: 'column'}];
+	}
 	/*加载最值图表数据*/
+	extremumOption.title.text="通道温度最值统计图("+equiName+")";
 	$("#chart_extremum").highcharts().destroy();
 	$("#chart_extremum").highcharts(extremumOption);
 }
@@ -372,12 +370,12 @@ function fetchErrorChartData(url,param){
 		error: function(){resultMap=null; }
 	});
 	var result_data=resultMap.data;
-//	if(result_data==null || result_data.length==0) return;
 	if(result_data==null || result_data.length==0) {
 		errorChannelOption.series=[{type: "pie", name: "故障类型",data:[{name: '无异常数据', y: 1}]}];
 		errorTypeOption.series=[{type: "pie", name: "通道次数统计",data: [{name: '无异常数据', y: 1}]}];
 		$("#chart_error_channel").highcharts(errorChannelOption);
 		$("#chart_error_type").highcharts(errorTypeOption);
+		return;
 	}
 	var channels=[], code2=[], code3=[], code4=[], code9=[];
 	for(var i=0; i<result_data.length; i++){

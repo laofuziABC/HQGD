@@ -68,7 +68,7 @@
 					chart.showLoading();
 					var statistical_param = {"equipmentId" : equiId3, "startTime" : startDate+" 00:00:00", "endTime" : endDate+" 23:59:59" };
 					var errors_param = {"equipmentId" : equiId3, "startTime" : startDate, "endTime" : endDate };
-					var statistical_url = "dataAcquisition/historicalCurve";
+					var statistical_url = "dataAcquisition/historicalExtremum";
 					var errors_url = "dataAcquisition/errorStateStatic";
 					fetchExtremumChartData(statistical_url, statistical_param);
 					fetchErrorChartData(errors_url, errors_param);

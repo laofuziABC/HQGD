@@ -141,12 +141,7 @@ public class DataAcquisitionController {
 	@RequestMapping("/periodDate")
 	public void getPeriodDate(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		long inTime = System.currentTimeMillis();
-		log.info("periodDate接口开始：" + inTime);
 		Map<String, Object> resultList = dataAcquisitionService.getPeriodDataByQuery(queryVo);
-		long outTime = System.currentTimeMillis();
-		log.info("periodDate接口结束：" + outTime);
-		log.info("接口访问时长：" + (outTime - inTime));
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultList));
 	}
@@ -185,5 +180,22 @@ public class DataAcquisitionController {
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("故障次数统计开始 ");
+	}
+	
+	/**
+	 * 通过设备主键，获取指定时间段内的通道温度最值
+	 * 结果用于设备最值统计表 03.26
+	 * @param model
+	 * @param queryVo
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/historicalExtremum")
+	public void extremun(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, Object> resultMap = dataAcquisitionService.getHistoryExtremums(queryVo);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
 	}
 }

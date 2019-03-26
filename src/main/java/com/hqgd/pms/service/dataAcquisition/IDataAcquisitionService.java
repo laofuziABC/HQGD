@@ -28,4 +28,6 @@ public interface IDataAcquisitionService {
 
 	void run(String startTime);
 
+	Map<String, Object> getHistoryExtremums(QueryParametersVo queryVo);
+
 }

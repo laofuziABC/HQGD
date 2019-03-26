@@ -32,12 +32,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		String classpath = "localhost:7070";
 		registry.addInterceptor(interceptor()).addPathPatterns("/*")
             .excludePathPatterns("/hqgd")							//登录页
             .excludePathPatterns("/hqgd/login")					//登录
             .excludePathPatterns("/hqgd/loginout")			//退出
-            .excludePathPatterns("/*.html")							//忘记密码
+            .excludePathPatterns("/register.html")							//忘记密码
 //            .excludePathPatterns("/user/*")
             .excludePathPatterns("/myWebSocket/*")
 			.excludePathPatterns("classpath:/static/**");	//静态资源
