@@ -84,18 +84,11 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-
-		<dependency>
-			<groupId>org.mybatis.generator</groupId>
-			<artifactId>mybatis-generator-core</artifactId>
-			<version>1.3.7</version>
-		</dependency>
 		<!-- com.google.code.gson/gson引入【开始】 -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.8.0</version>
-		</dependency>
+			</dependency>
 		<!-- com.google.code.gson/gson引入【结束】 设置SpringBoot依赖【开始】 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -126,40 +119,17 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
-
-		<!-- <dependency> <groupId>org.attoparser</groupId> <artifactId>attoparser</artifactId> 
-			<version>1.0-beta2</version> </dependency> -->
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
-		<!-- <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> 
-			<version>1.3.0-alpha4</version> <scope>test</scope> </dependency> <dependency> 
-			<groupId>org.slf4j</groupId> <artifactId>slf4j-nop</artifactId> <version>1.7.24</version> 
-			</dependency> -->
 	</dependencies>
 
 	<build>
-
-		<!-- <resource> <directory>src/main/resources</directory> <includes> <include>**/*.*</include> 
-			</includes> <filtering>true</filtering> </resource> -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.mybatis.generator</groupId>
-				<artifactId>mybatis-generator-maven-plugin</artifactId>
-				<version>1.3.7</version>
 				<configuration>
-					<!-- mybatis用于生成代码的配置文件 -->
-					<configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
-					<verbose>true</verbose>
-					<overwrite>true</overwrite>
+					<includeSystemScope>true</includeSystemScope>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	<!-- <resource> <directory>src/main/resources</directory> <includes> <include>**/*.*</include> 
-		</includes> <filtering>true</filtering> </resource> -->
-
-
 </project>
