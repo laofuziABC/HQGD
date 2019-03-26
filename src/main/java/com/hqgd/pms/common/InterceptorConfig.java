@@ -29,16 +29,15 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	 * 配置拦截器的拦截规则
 	 * addPathPatterns ——添加拦截规则
 	 * excludePathPatterns ——排除拦截
-	 * 需要注意的是，在配置拦截规则时，
-	 * 		“/*”		——表示的是当前路径下的一级url地址
-	 * 		“/**”	——表示的是当前目录下的所有层级url地址(甚至静态资源)
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		String classpath = "localhost:7070";
 		registry.addInterceptor(interceptor()).addPathPatterns("/*")
             .excludePathPatterns("/hqgd")							//登录页
             .excludePathPatterns("/hqgd/login")					//登录
             .excludePathPatterns("/hqgd/loginout")			//退出
+            .excludePathPatterns("/*.html")							//忘记密码
 //            .excludePathPatterns("/user/*")
             .excludePathPatterns("/myWebSocket/*")
 			.excludePathPatterns("classpath:/static/**");	//静态资源
