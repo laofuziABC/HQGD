@@ -45,7 +45,11 @@ public class UserService implements IUserService {
 			int i = userMapper.insert(user);
 			result = (i == 0) ? false : true;
 			message = (result == true) ? "添加用户成功！" : "添加用户失败！";
-		} else {
+		} else if (userfind.getIsdel().equals("Y")) {
+			int i = userMapper.reUse(userfind.getId());
+			result = (i == 0) ? false : true;
+			message = (result == true) ? "添加用户成功！" : "添加用户失败！";
+		} else if (userfind.getIsdel().equals("N")) {
 			message = "该用户名已被注册！";
 		}
 		Map<String, Object> map = new HashMap<>();

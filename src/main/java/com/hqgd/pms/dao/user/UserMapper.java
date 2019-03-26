@@ -31,4 +31,6 @@ public interface UserMapper {
 	void resetPassword(Map<String, Object> map);
 
 	User selectByPhUn(Map<String, Object> map);
+
+	int reUse(Integer id);
 }

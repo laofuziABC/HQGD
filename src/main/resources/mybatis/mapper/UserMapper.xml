@@ -56,6 +56,9 @@
   <update id="deleteByPrimaryKey">
         UPDATE access_control_user SET ISDEL = 'Y' WHERE ID = #{id}
   </update>
+  <update id="reUse">
+        UPDATE access_control_user SET ISDEL = 'N' WHERE ID = #{id}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -68,7 +71,7 @@
     <include refid="Base_Column_List" />
     from access_control_user
     where 1=1
-   
+   and ISDEL = 'N'
   </select>
   <!-- <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from access_control_user
