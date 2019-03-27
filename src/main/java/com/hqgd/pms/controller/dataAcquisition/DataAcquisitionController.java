@@ -118,21 +118,12 @@ public class DataAcquisitionController {
 	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		long inTime = System.currentTimeMillis();
-		log.info("查询历史数据曲线开始 " + inTime);
 		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
 		long outTime = System.currentTimeMillis();
-		log.info("查询历史数据曲线结束：" + outTime);
 		long midTime = outTime - inTime;
-		log.info("接口访问时长为：" + midTime);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000000");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "查询历史数据成功");
-		resultMap.put("data", historicalDataList);
+		log.info("历史数据曲线接口访问时长为：" + midTime);
 		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(resultMap));
-
+		response.getWriter().write(new Gson().toJson(historicalDataList));
 	}
 
 	/**

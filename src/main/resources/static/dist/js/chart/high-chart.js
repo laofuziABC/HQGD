@@ -100,14 +100,13 @@ function getChartData(url, param){
 
 function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
-		success: function(result){
+		success: function(data){
 			var series=[];
-			var data = result.data;
-			if(JSON.stringify(data) != '{}'){
-				var legendData = data.channelNumArr;
-				var seriesData = data.channelTemArr;
+			var equiName = data.equipment.equipmentName;
+			var legendData = data.channelNumArr;
+			var seriesData = data.channelTemArr;
+			if(seriesData.length>0){
 				var totalCount = seriesData[0].length;
-				var equiName = data.equipment.equipmentName;
 				//根据温度值，设置纵轴上下限【开始】
 				//逻辑一：通过逐步比较，取出所有系列最值
 				var max, min;
@@ -122,7 +121,6 @@ function drawingHistoryChart(url, param){
 //				}
 //				var max=Math.max.apply(null, tempArray);
 //				var min=Math.min.apply(null, tempArray);
-				historyOption.title.text="历史温度曲线图("+equiName+")";
 				historyOption.yAxis.min=(min > -10)?(min-10):0;
 				historyOption.yAxis.max=(max < 100)?(max+10):100;
 				//根据温度值，设置纵轴上下限【结束】
@@ -135,13 +133,11 @@ function drawingHistoryChart(url, param){
 				historyOption.xAxis.tickInterval=Math.floor(totalCount/11);
 				historyOption.series = series;
 			}else{
-				var chart = $("#chart_history").highcharts();
-				chart.hideLoading();
-				historyOption.title.text="历史温度曲线图";
 				historyOption.yAxis.min=0;
 				historyOption.yAxis.max=100;
 				historyOption.series=[{name: '无相关数据', data: [], type:"spline", pointInterval: 6e4}];
 			}
+			historyOption.title.text="历史温度曲线图("+equiName+")";
 			$("#chart_history").highcharts().destroy();
 			$("#chart_history").highcharts(historyOption);
 		}
