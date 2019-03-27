@@ -179,15 +179,15 @@ public class ClientSocketHandler implements Runnable {
 									break;
 								// case "2":
 								// dataAcquisitionVoMapper.insert2(d);
-								// dataAcquisitionVoMapper.insertf2(d);
+								// dataAcquisitionVoMapper.insertr2(d);
 								// break;
 								// case "3":
 								// dataAcquisitionVoMapper.insert3(d);
-								// dataAcquisitionVoMapper.insertf3(d);
+								// dataAcquisitionVoMapper.insertr3(d);
 								// break;
 								// case "4":
 								// dataAcquisitionVoMapper.insert4(d);
-								// dataAcquisitionVoMapper.insertf4(d);
+								// dataAcquisitionVoMapper.insertr4(d);
 								// break;
 								}
 							}
