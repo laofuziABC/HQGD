@@ -53,7 +53,7 @@ public class ClientSocketHandler implements Runnable {
 
 	DataInputStream socketIn = null;
 	PrintStream socketOut = null;
-	String heartbeat = "";
+	String heartbeat = "ht1";
 
 	@Override
 	public void run() {
@@ -66,35 +66,40 @@ public class ClientSocketHandler implements Runnable {
 			String inputString = "";
 			while (socketIn.read(bytes) != -1) {
 				ret += bytesToHexString(bytes);
-				//log.info(" ret :" + ret);
 				if (socketIn.available() == 0) { // 一个请求
-					System.out.println(Thread.currentThread().getName() + " say :" + ret);
 					inputString = ret;
 					ret = "";
 					String frameStru = "";
 					int len = inputString.length();
 					// 获取心跳包id,判断数据长度，当最少只有一个通道的时候，数据为“0103040121CDB6",长度为14，而14已经亿亿，不会有那么多id编号
-					if (count < 2) {
-						heartbeat = inputString.substring(0, 30);
-						heartbeat = hexStr2Str(heartbeat);
-						log.info(Thread.currentThread().getName() + " say :" + heartbeat);
-						List<Map<String, String>> el = equipmentService.selectAllByHb(heartbeat);
-						Map<String, String> resultMap = new HashMap<String, String>();
-						String ip = String.valueOf(socket.getInetAddress()).substring(1);
-						resultMap.put("id", heartbeat);
-						resultMap.put("text", ip);
-						resultMap.put("parent", "#");
-						el.add(resultMap);
-						simpMessage.convertAndSend("/topic/ip", "该路由下的设备有" + el);
-						routerInfoMapper.updateIp(heartbeat, ip);
-						count++;
-					} else if (len > 21 && count > 1) {
-						// 解析客户端发送过来的数据
-						log.info(Thread.currentThread().getName() + " say :inputString=" + inputString);
+					// if (count < 2) {
+					// heartbeat = inputString.substring(0, 30);
+					// heartbeat = hexStr2Str(heartbeat);
+					// log.info(Thread.currentThread().getName() + " say :" + heartbeat);
+					// List<Map<String, String>> el = equipmentService.selectAllByHb(heartbeat);
+					// Map<String, String> resultMap = new HashMap<String, String>();
+					// String ip = String.valueOf(socket.getInetAddress()).substring(1);
+					// resultMap.put("id", heartbeat);
+					// resultMap.put("text", ip);
+					// resultMap.put("parent", "#");
+					// el.add(resultMap);
+					// simpMessage.convertAndSend("/topic/ip", "该路由下的设备有" + el);
+					// routerInfoMapper.updateIp(heartbeat, ip);
+					// count++;
+					// } else if (len > 21 && count > 1) {
+
+					log.info(Thread.currentThread().getName() + " say :inputString=" + inputString);
+					// 校验客户端发送过来的数据
+					String rameStru = inputString.substring(inputString.length() - 4);
+					String validInput = inputString.substring(0, inputString.length() - 4);
+					String crc = CommonUtil.getCRC(validInput).replace(" ", "").toLowerCase();
+					if (crc.equals(rameStru)) {
 						// 获取设备地址编码
 						Map<String, String> param = new HashMap<>();
 						frameStru = Integer.valueOf(inputString.substring(0, 2), 16).toString();
 						int num = Integer.valueOf(inputString.substring(4, 6), 16) / 4;
+						log.info("客户端返回数据获取的通道数量为：" + num + "----祯是：" + frameStru);
+						// 去掉前六个标识性字符，真正的有效字符是从第七个开始
 						inputString = inputString.substring(6);
 						param.put("frameStru", frameStru);
 						param.put("heartbeatId", heartbeat);
@@ -131,20 +136,7 @@ public class ClientSocketHandler implements Runnable {
 							d.setTel(e.getTel());
 							d.setNumOfCh(e.getNumOfCh());
 							String type = e.getType();
-							switch (type) {
-							case "1":
-								dataAcquisitionVoMapper.truncatef1();
-								break;
-							case "2":
-								dataAcquisitionVoMapper.truncatef2();
-								break;
-							case "3":
-								dataAcquisitionVoMapper.truncatef3();
-								break;
-							case "4":
-								dataAcquisitionVoMapper.truncatef4();
-								break;
-							}
+
 							for (int i = 0; i < num; i++) {
 								Float value = Integer.valueOf(inputString.substring(i * 8, i * 8 + 4), 16) / 10F;
 								Integer pd = Integer.valueOf(inputString.substring(i * 8 + 4, i * 8 + 6), 16);
@@ -175,7 +167,7 @@ public class ClientSocketHandler implements Runnable {
 									d.setMessage("正常");
 									break;
 								}
-								if (value != 3000.0 && value != -6116.6 && value != 2999.9&& value != 6548.3
+								if (value != 3000.0F && value != -6116.6F && value != 2999.9F && value != 6548.3F
 										&& (value < Float.valueOf(minl.get(i)) || value > Float.valueOf(maxl.get(i)))) {
 									d.setState("9");
 								}
@@ -183,20 +175,20 @@ public class ClientSocketHandler implements Runnable {
 								switch (type) {
 								case "1":
 									dataAcquisitionVoMapper.insert1(d);
-									dataAcquisitionVoMapper.insertf1(d);
+									dataAcquisitionVoMapper.insertr1(d);
 									break;
-								case "2":
-									dataAcquisitionVoMapper.insert2(d);
-									dataAcquisitionVoMapper.insertf2(d);
-									break;
-								case "3":
-									dataAcquisitionVoMapper.insert3(d);
-									dataAcquisitionVoMapper.insertf3(d);
-									break;
-								case "4":
-									dataAcquisitionVoMapper.insert4(d);
-									dataAcquisitionVoMapper.insertf4(d);
-									break;
+								// case "2":
+								// dataAcquisitionVoMapper.insert2(d);
+								// dataAcquisitionVoMapper.insertf2(d);
+								// break;
+								// case "3":
+								// dataAcquisitionVoMapper.insert3(d);
+								// dataAcquisitionVoMapper.insertf3(d);
+								// break;
+								// case "4":
+								// dataAcquisitionVoMapper.insert4(d);
+								// dataAcquisitionVoMapper.insertf4(d);
+								// break;
 								}
 							}
 						}

@@ -157,9 +157,11 @@ public class TimerManager {
 	 */
 	@RequestMapping("/socket/stop")
 	public void stopSocketTask(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		socketTask.cancel();
-		socketTask = null;// 如果不重新new，会报异常
-		log.info("服务器向客户端发送请求数据命令定时器关闭！");
+		if (socketTask != null) {
+			socketTask.cancel();
+			socketTask = null;// 如果不重新new，会报异常
+			log.info("服务器向客户端发送请求数据命令定时器关闭！");
+		}
 		resp.setContentType("application/json; charset=UTF-8");
 		resp.getWriter().write(new Gson().toJson("服务器向客户端发送请求数据命令定时器关闭！"));
 	}

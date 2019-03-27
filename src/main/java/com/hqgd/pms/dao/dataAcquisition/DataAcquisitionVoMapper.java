@@ -56,21 +56,13 @@ public interface DataAcquisitionVoMapper {
 
 	void insert4(DataAcquisitionVo d);
 
-	void insertf1(DataAcquisitionVo d);
+	void insertr1(DataAcquisitionVo d);
 
 	void insertf2(DataAcquisitionVo d);
 
 	void insertf3(DataAcquisitionVo d);
 
 	void insertf4(DataAcquisitionVo d);
-
-	void truncatef1();
-
-	void truncatef2();
-
-	void truncatef3();
-
-	void truncatef4();
 
 	List<DataAcquisitionVo> selectAllFailures(Map<String, Object> param);
 

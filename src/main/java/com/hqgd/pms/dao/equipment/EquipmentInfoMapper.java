@@ -36,4 +36,6 @@ public interface EquipmentInfoMapper {
 
 	List<Map<String, String>> selectConEqui1();
 
+	List<EquipmentInfo> selectAllType1(String type);
+
 }

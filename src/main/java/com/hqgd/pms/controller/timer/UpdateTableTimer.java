@@ -32,7 +32,7 @@ public class UpdateTableTimer extends TimerTask {
 			param.put("table", "hq_equipment_monitor_data_r" + i);
 			dataAcquisitionVoMapper.deleter(param);
 		}
-		for (int i = 1; i <= 4; i++) {
+		for (int i = 2; i <= 4; i++) {
 			param.put("tabler", "hq_equipment_monitor_data_r" + i);
 			param.put("tablef", "hq_equipment_monitor_data_f" + i);
 			dataAcquisitionVoMapper.insertt(param);
