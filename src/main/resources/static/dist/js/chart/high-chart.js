@@ -134,9 +134,16 @@ function drawingHistoryChart(url, param){
 				historyOption.xAxis.categories=data.receiveTime;
 				historyOption.xAxis.tickInterval=Math.floor(totalCount/11);
 				historyOption.series = series;
-				$("#chart_history").highcharts().destroy();
-				$("#chart_history").highcharts(historyOption);
+			}else{
+				var chart = $("#chart_history").highcharts();
+				chart.hideLoading();
+				historyOption.title.text="历史温度曲线图";
+				historyOption.yAxis.min=0;
+				historyOption.yAxis.max=100;
+				historyOption.series=[{name: '无相关数据', data: [], type:"spline", pointInterval: 6e4}];
 			}
+			$("#chart_history").highcharts().destroy();
+			$("#chart_history").highcharts(historyOption);
 		}
 	});
 }
