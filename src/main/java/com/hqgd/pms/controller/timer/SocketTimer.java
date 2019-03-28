@@ -69,7 +69,7 @@ public class SocketTimer extends TimerTask {
 				log.info(s);
 				dos.write(bytes);
 				dos.flush();
-				Thread.sleep(500);
+				Thread.sleep(600);
 			}
 		}
 	}
