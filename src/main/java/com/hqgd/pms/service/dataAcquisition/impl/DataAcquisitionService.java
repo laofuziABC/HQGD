@@ -196,37 +196,35 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("SQL结束：" + outTime);
 		long midTime = outTime - inTime;
 		log.info("时长为：" + midTime);
-
 		List<String> channelNumArr = new ArrayList<>();// 通道号数组
 		List<List<Float>> channelTemArr = new ArrayList<List<Float>>();// 通道号温度数数组
 		List<String> tem = new ArrayList<>();
+		List<String> receiveTime = new ArrayList<>();
+		//使用map为返参，封装查询结果
 		Map<String, Object> map = new HashMap<>();
-		if (historicalDataList.isEmpty()) {
-			return map;
-		}
-		DataAcquisitionVo vo = historicalDataList.get(0);
-		// String equipmentId = queryVo.getEquipmentId();
-		long inTime1 = System.currentTimeMillis();
-		log.info("处理数据开始：" + inTime);
-		List<String> receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
-		for (int i = 0; i < historicalDataList.size(); i++) {
-			channelNumArr.add(historicalDataList.get(i).getChannelNum());
-			tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-			// 避免空指针的情况下，将List<String>更改为List<Float>
-			if (tem.size() > 0) {
-				List<Float> temFloat = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
-				channelTemArr.add(temFloat);
+		if (!historicalDataList.isEmpty()) {
+			DataAcquisitionVo vo = historicalDataList.get(0);
+			long inTime1 = System.currentTimeMillis();
+			log.info("处理数据开始：" + inTime);
+			receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
+			for (int i = 0; i < historicalDataList.size(); i++) {
+				channelNumArr.add(historicalDataList.get(i).getChannelNum());
+				tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
+				// 避免空指针的情况下，将List<String>更改为List<Float>
+				if (tem.size() > 0) {
+					List<Float> temFloat = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
+					channelTemArr.add(temFloat);
+				}
 			}
+			long outTime1 = System.currentTimeMillis();
+			log.info("处理数据结束：" + outTime1);
+			long midTime1 = outTime1 - inTime1;
+			log.info("时长为：" + midTime1);
 		}
-		long outTime1 = System.currentTimeMillis();
-		log.info("处理数据结束：" + outTime1);
-		long midTime1 = outTime1 - inTime1;
-		log.info("时长为：" + midTime1);
 		map.put("equipment", equipment);
 		map.put("receiveTime", receiveTime);
 		map.put("channelNumArr", channelNumArr);
 		map.put("channelTemArr", channelTemArr);
-		// map.put("stateArr", stateArr);
 		return map;
 	}
 
