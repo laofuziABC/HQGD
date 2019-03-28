@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.ScheduledFuture;
 
@@ -98,12 +100,17 @@ public class TimerManager {
 		timer.purge();
 		if (tableTask == null) {
 			tableTask = new UpdateTableTimer();
-
-			// 从系统参数获取定时器的执行间隔
-			int timeInter = Integer.valueOf(sysParamMapper.selectByPrimaryKey("TIME_INTERVAL").getParamValue());
-			Timer timer = new Timer();
-			timer.schedule(tableTask, 0, timeInter * 1000);
-			resp.getWriter().write(new Gson().toJson("操作成功！"));
+			Map<String, Object> param = new HashMap<>();
+			param.put("paramCode", "UPDATE_TABLE_TIMER");
+			param.put("paramValue", "1");
+			int u = sysParamMapper.setSysParam(param);
+			if (u > 0) {
+				// 从系统参数获取定时器的执行间隔
+				int timeInter = Integer.valueOf(sysParamMapper.selectByPrimaryKey("TIME_INTERVAL").getParamValue());
+				Timer timer = new Timer();
+				timer.schedule(tableTask, 0, timeInter * 1000);
+				resp.getWriter().write(new Gson().toJson("操作成功！"));
+			}
 		} else {
 			resp.getWriter().write(new Gson().toJson("定时器已经处于启动状态！"));
 		}
@@ -121,6 +128,10 @@ public class TimerManager {
 		tableTask.cancel();
 		tableTask = null;// 如果不重新new，会报异常
 		log.info("定时器关闭！");
+		Map<String, Object> param = new HashMap<>();
+		param.put("paramCode", "UPDATE_TABLE_TIMER");
+		param.put("paramValue", "0");
+		sysParamMapper.setSysParam(param);
 		resp.setContentType("application/json; charset=UTF-8");
 		resp.getWriter().write(new Gson().toJson("定时器关闭！"));
 	}
@@ -137,7 +148,10 @@ public class TimerManager {
 		timer.purge();
 		if (socketTask == null) {
 			socketTask = new SocketTimer();
-
+			Map<String, Object> param = new HashMap<>();
+			param.put("paramCode", "TCP_CONNECT");
+			param.put("paramValue", "1");
+			sysParamMapper.setSysParam(param);
 			// 从系统参数获取定时器的执行间隔
 			int timeInter = Integer.valueOf(sysParamMapper.selectByPrimaryKey("TIME_INTERVAL").getParamValue());
 			Timer timer = new Timer();
@@ -160,6 +174,10 @@ public class TimerManager {
 		if (socketTask != null) {
 			socketTask.cancel();
 			socketTask = null;// 如果不重新new，会报异常
+			Map<String, Object> param = new HashMap<>();
+			param.put("paramCode", "TCP_CONNECT");
+			param.put("paramValue", "0");
+			sysParamMapper.setSysParam(param);
 			log.info("服务器向客户端发送请求数据命令定时器关闭！");
 		}
 		resp.setContentType("application/json; charset=UTF-8");
@@ -175,6 +193,10 @@ public class TimerManager {
 		c.add(Calendar.DATE, -1);
 		String startTime = format.format(c.getTime());// 前一天
 		if (future1 == null) {
+			Map<String, Object> param = new HashMap<>();
+			param.put("paramCode", "STATIC_FAIL");
+			param.put("paramValue", "1");
+			sysParamMapper.setSysParam(param);
 			future1 = threadPoolTaskScheduler.schedule(new StaticFailuresTask(startTime), new Trigger() {
 				@Override
 				public Date nextExecutionTime(TriggerContext triggerContext) {
@@ -194,6 +216,10 @@ public class TimerManager {
 		}
 		future1 = null;
 		log.info("统计故障次数定时器关闭！");
+		Map<String, Object> param = new HashMap<>();
+		param.put("paramCode", "STATIC_FAIL");
+		param.put("paramValue", "0");
+		sysParamMapper.setSysParam(param);
 		resp.setContentType("application/json; charset=UTF-8");
 		resp.getWriter().write(new Gson().toJson("统计故障次数定时器关闭！"));
 	}

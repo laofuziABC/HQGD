@@ -61,28 +61,22 @@
 									<div class="form-group">
 										<label>更新临时表定时器</label>
 										<div class="box-footer">
-											<button type="button" class="btn btn-primary "
-												onclick="timerMan('start')">开启</button>
-											<button type="button" class="btn btn-default"
-												onclick="timerMan('stop')">停止</button>
+											<input id="UPDATE_TABLE_TIMER" class="btn btn-primary "
+												type="button" onclick="timerMan()" value="开启" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label>服务器向客户端发送请求数据命令定时器</label>
 										<div class="box-footer">
-											<button type="button" class="btn btn-primary "
-												onclick="socketMan('start')">开启</button>
-											<button type="button" class="btn btn-default"
-												onclick="socketMan('stop')">停止</button>
+											<input id="TCP_CONNECT" class="btn btn-primary "
+												type="button" onclick="socketMan()" value="开启" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label>统计故障次数定时器</label>
 										<div class="box-footer">
-											<button type="button" class="btn btn-primary "
-												onclick="staticFailures('start')">开启</button>
-											<button type="button" class="btn btn-default"
-												onclick="staticFailures('stop')">停止</button>
+											<input id="STATIC_FAIL" class="btn btn-primary "
+												type="button" onclick="staticFailures()" value="开启" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -137,10 +131,19 @@
 						type : "post",
 						dataType : "json",
 						success : function(result) {
+							debugger;
 							var data = result.data;
 							for (let i = 0; i < data.length; i++) {
 								var paramCode = data[i].paramCode;
-								document.getElementById(paramCode).value = data[i].paramValue;
+								var paramValue = data[i].paramValue;
+								if (paramValue == "1") {
+									document.getElementById(paramCode).value = "关闭";
+								} else if (paramValue == "0") {
+									document.getElementById(paramCode).value = "开启";
+								} else {
+									document.getElementById(paramCode).value = data[i].paramValue;
+								}
+
 							}
 						}
 					});
@@ -161,7 +164,17 @@
 				}
 			});
 		}
-		function timerMan(param) {
+		function timerMan() {
+			var paramCode = "UPDATE_TABLE_TIMER";
+			var paramValue = $("#UPDATE_TABLE_TIMER").val();
+			var param;
+			if (paramValue == "开启") {
+				param = "start";
+				document.getElementById(paramCode).value = "关闭";
+			} else {
+				param = "stop";
+				document.getElementById(paramCode).value = "开启";
+			}
 			var url = "timer/table/" + param;
 			$.ajax({
 				url : url,
@@ -173,6 +186,16 @@
 			});
 		}
 		function socketMan(param) {
+			var paramCode = "TCP_CONNECT";
+			var paramValue = $("#TCP_CONNECT").val();
+			var param;
+			if (paramValue == "开启") {
+				param = "start";
+				document.getElementById(paramCode).value = "关闭";
+			} else {
+				param = "stop";
+				document.getElementById(paramCode).value = "开启";
+			}
 			var url = "timer/socket/" + param;
 			$.ajax({
 				url : url,
@@ -183,8 +206,7 @@
 				}
 			});
 		}
-		function staticFailures(param) {
-			debugger;
+		function staticFailures1(param) {
 			var startTime = $("#startDate").val();
 			var endTime = $("#endDate").val();
 			var today = getNowFormatDate();
@@ -205,6 +227,30 @@
 					}
 				});
 			}
+
+		}
+		function staticFailures(param) {
+			var paramCode = "STATIC_FAIL";
+			var paramValue = $("#STATIC_FAIL").val();
+			var param;
+			if (paramValue == "开启") {
+				param = "start";
+				document.getElementById(paramCode).value = "关闭";
+			} else {
+				param = "stop";
+				document.getElementById(paramCode).value = "开启";
+			}
+
+			var url = "timer/failures/" + param;
+			$.ajax({
+				url : url,
+				type : "post",
+				dataType : "json",
+
+				success : function(result) {
+					alert(result);
+				}
+			});
 
 		}
 		//获取当前时间，格式YYYY-MM-DD
