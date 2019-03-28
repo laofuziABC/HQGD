@@ -79,8 +79,7 @@
 									<p>
 										<span class="float_left"><span>设备名称：</span><input
 											type="text" id="searchByName"></span> <span>设备类型: <select
-											id="searchtype"
-											style="height: 26px;">
+											id="searchtype" style="height: 26px;">
 												<option value="0" selected="selected">所有设备</option>
 												<option value="1">开关柜</option>
 												<option value="2">干式变压器</option>
@@ -110,8 +109,7 @@
 											<td>经纬度</td>
 											<td>帧结构</td>
 											<td>所属用户</td>
-											<td>心跳包ID</td>
-											<td>心跳包名称</td>
+											<td>路由器ID</td>
 											<td>更新时间</td>
 											<td>更新者</td>
 											<td>操作</td>
@@ -151,9 +149,9 @@
 			var roleId = parent.getParam("roleId");
 			var userName = parent.getParam("userName");
 			if (roleId == "1") {
-				getEquipmentList();
+				getEquipmentList("1", null);
 			} else {
-				getEquipmentListByUser(userName);
+				getEquipmentList("0", userName);
 			}
 
 		});
@@ -161,11 +159,20 @@
 		var add;
 		var parami;
 		//获取所有设备信息列表
-		function getEquipmentList() {
+		function getEquipmentList(p1, userName) {
+			debugger;
+			if (p1 == "1") {
+				path = "selectAll";
+			} else {
+				path = "searchEquiByParam";
+			}
 			$.ajax({
-				url : "equipment/selectAll",
+				url : "equipment/" + path,
 				type : "post",
 				dataType : "json",
+				data : {
+					"userName" : userName
+				},
 				success : function(result) {
 					globalData = result.data;
 					var data = result.data;
@@ -211,7 +218,6 @@
 				equipList += "<td>" + data[i].frameStru + "</td>";
 				equipList += "<td>" + data[i].userName + "</td>";
 				equipList += "<td>" + data[i].heartbeatId + "</td>";
-				equipList += "<td>" + data[i].heartbeatName + "</td>";
 				equipList += "<td>" + data[i].updateTime + "</td>";
 				equipList += "<td>" + data[i].updater + "</td>";
 				equipList += "<td class=\"center\">";
@@ -224,35 +230,6 @@
 			}
 			return equipList;
 		};
-		function getEquipmentListByUser(userName) {
-			$.ajax({
-				url : "equipment/searchEquiByParam",
-				type : "post",
-				data : {
-					"userName" : userName
-				},
-				dataType : "json",
-				success : function(result) {
-					globalData = result.data;
-					var data = result.data;
-					var equipList = "";
-					//设置分页信息——当前为假分页
-					var totalSize = data.length;
-					var pageSize = 15;
-					var totalNum = Math.ceil(totalSize / pageSize);
-					var startIndex = (pageNum - 1) * pageSize;
-					var endIndex = (pageNum * pageSize > totalSize) ? totalSize
-							: pageNum * pageSize;
-					equipList = getequipList(startIndex, endIndex, data,
-							equipList);
-					$("#equipmentList").html(equipList);
-					//加载页码
-					$("#equi-show-pager").html(
-							loadPages(pageSize, totalSize, pageNum));
-					$("#equi-show-pager").setActivePage(3);
-				}
-			});
-		}
 
 		//温度值域
 		function getChan(param) {
@@ -318,25 +295,24 @@
 		function searchResult() {
 			var name = $("#searchByName").val().trim();
 			var type = $("#searchtype option:selected").val();
-			
-				$.ajax({
-					url : "equipment/searchEquiByParam",
-					type : "post",
-					data : {
-						"equipmentName" : name,
-						"type" : type
-					},
-					dataType : "json",
-					success : function(result) {
-						globalData = result.data;
-						var data = result.data;
-						var equipList = "";
-						equipList = getequipList(0, data.length, data,
-								equipList);
-						$("#equipmentList").html(equipList);
-					}
-				});
-			
+
+			$.ajax({
+				url : "equipment/searchEquiByParam",
+				type : "post",
+				data : {
+					"equipmentName" : name,
+					"type" : type
+				},
+				dataType : "json",
+				success : function(result) {
+					globalData = result.data;
+					var data = result.data;
+					var equipList = "";
+					equipList = getequipList(0, data.length, data, equipList);
+					$("#equipmentList").html(equipList);
+				}
+			});
+
 		}
 		//导出
 		function report() {

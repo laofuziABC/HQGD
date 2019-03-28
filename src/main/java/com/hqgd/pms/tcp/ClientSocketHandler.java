@@ -64,7 +64,7 @@ public class ClientSocketHandler implements Runnable {
 			byte[] bytes = new byte[1]; // 一次读取一个byte
 			String ret = "";
 			String inputString = "";
-			while (socketIn.read(bytes) != -1) {
+			while (socketIn.read(bytes) > 0) {
 				ret += bytesToHexString(bytes);
 				if (socketIn.available() == 0) { // 一个请求
 					inputString = ret;
