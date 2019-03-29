@@ -25,8 +25,8 @@ public interface IUserService {
 
 	Map<String, Object> updatePassword(String userId, String password, String newPassword);
 
-	String execRecordExport(String path);
-
 	User selectByUserName(String userName);
+
+	String resetPassword(String userName, String phone, String password, String newPassword);
 
 }

@@ -28,7 +28,7 @@
 					通道温度 <span class="fuclose">×</span>
 				</p>
 				<div class="fuqubiao">
-					<div class="container" style="padding: 0px 0px 0px 40px;">
+					<div class="container">
 						<div class="row">
 							<div class="col-md-12"
 								style="width: 40%; max-height: 300px; overflow-y: auto;">
@@ -38,6 +38,7 @@
 										<thead>
 											<tr>
 												<td style="background: #399ad7; color: #f6f6f6;">通道号</td>
+												<td style="background: #399ad7; color: #f6f6f6;">光纤位置</td>
 												<td style="background: #399ad7; color: #f6f6f6;">温度上限</td>
 												<td style="background: #399ad7; color: #f6f6f6;">温度下限</td>
 											</tr>
@@ -77,9 +78,16 @@
 								<div class="sbaz_table">
 									<p>
 										<span class="float_left"><span>设备名称：</span><input
-											type="text" id="searchByName"></span> <span
-											class="float_right" style="margin-right: 70%;"> <input
-											type="button" onclick="searchResult();" value="查询"
+											type="text" id="searchByName"></span> <span>设备类型: <select
+											id="searchtype" style="height: 26px;">
+												<option value="0" selected="selected">所有设备</option>
+												<option value="1">开关柜</option>
+												<option value="2">干式变压器</option>
+												<option value="3">变压器绕阻</option>
+												<option value="4">环网柜</option>
+										</select>
+										</span> <span class="float_right" style="margin-right: 70%;">
+											<input type="button" onclick="searchResult();" value="查询"
 											class="in_sub"> <input type="button"
 											onclick="report();" value="导出" class="in_sub">
 										</span>
@@ -95,12 +103,13 @@
 											<td>设备名称</td>
 											<td>设备类型</td>
 											<td>通道温度</td>
+											<td>通道数</td>
 											<td>安装地址</td>
 											<td>地区编码</td>
 											<td>经纬度</td>
 											<td>帧结构</td>
 											<td>所属用户</td>
-											<!-- <td>创建时间</td> -->
+											<td>路由器ID</td>
 											<td>更新时间</td>
 											<td>更新者</td>
 											<td>操作</td>
@@ -135,216 +144,7 @@
 	<script src="vince/js/demo.js"></script>
 	<script src="dist/js/pager/data_table_pager.js"></script>
 	<!-- page script -->
-	<script>
-		jQuery(document).ready(function() {
-			var roleId = parent.getParam("roleId");
-			var userName = parent.getParam("userName");
-			if (roleId == "1") {
-				getEquipmentList();
-			} else {
-				getEquipmentListByUser(userName);
-			}
-
-		});
-		var globalData;
-		var add;
-		var parami;
-		//获取所有设备信息列表
-		function getEquipmentList() {
-			$.ajax({
-				url : "equipment/selectAll",
-				type : "post",
-				dataType : "json",
-				success : function(result) {
-					globalData = result.data;
-					var data = result.data;
-					var equipList = "";
-					//设置分页信息——当前为假分页
-					var totalSize = data.length;
-					var pageSize = 15;
-					var totalNum = Math.ceil(totalSize / pageSize);
-					var startIndex = (pageNum - 1) * pageSize;
-					var endIndex = (pageNum * pageSize > totalSize) ? totalSize
-							: pageNum * pageSize;
-					equipList = getequipList(startIndex, endIndex, data,
-							equipList);
-					$("#equipmentList").html(equipList);
-					//加载页码
-					$("#equi-show-pager").html(
-							loadPages(pageSize, totalSize, pageNum));
-					$("#equi-show-pager").setActivePage(3);
-				}
-			});
-		}
-		function getequipList(startIndex, endIndex, data, equipList) {
-			for (let i = startIndex; i < endIndex; i++) {
-				equipList += "<tr>";
-				equipList += "<td>" + (i + 1) + "</td>";
-				equipList += "<td>" + data[i].equipmentId + "</td>";
-				equipList += "<td>" + data[i].equipmentName + "</td>";
-				equipList += "<td>" + data[i].type + "</td>";
-				equipList += "<td colspan=\"1\" class=\"text_al_rig\"><a href=\"#\" class=\"lindianjia\" onclick=\"getChan('"
-						+ i + "')\">详情</a></td>";
-				equipList += "<td>" + data[i].address + "</td>";
-				equipList += "<td>" + data[i].adcode + "</td>";
-				equipList += "<td>" + data[i].lngLat + "</td>";
-				equipList += "<td>" + data[i].frameStru + "</td>";
-				equipList += "<td>" + data[i].userName + "</td>";
-				equipList += "<td>" + data[i].updateTime + "</td>";
-				equipList += "<td>" + data[i].updater + "</td>";
-				equipList += "<td class=\"center\">";
-				equipList += "<a class=\" edit\" onclick=\"getEquiEdit('" + i
-						+ "');\">编辑</a>&nbsp;";
-				equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-						+ data[i].equipmentId + "');\">删除</a>&nbsp;";
-				equipList += "</td>";
-				equipList += "</tr>";
-			}
-			return equipList;
-		};
-		function getEquipmentListByUser(userName) {
-			$.ajax({
-				url : "equipment/selectAllByUser",
-				type : "post",
-				data : {
-					"userName" : userName
-				},
-				dataType : "json",
-				success : function(result) {
-					globalData = result.data;
-					var data = result.data;
-					var equipList = "";
-					//设置分页信息——当前为假分页
-					var totalSize = data.length;
-					var pageSize = 15;
-					var totalNum = Math.ceil(totalSize / pageSize);
-					var startIndex = (pageNum - 1) * pageSize;
-					var endIndex = (pageNum * pageSize > totalSize) ? totalSize
-							: pageNum * pageSize;
-					equipList = getequipList(startIndex, endIndex, data,
-							equipList);
-					$("#equipmentList").html(equipList);
-					//加载页码
-					$("#equi-show-pager").html(
-							loadPages(pageSize, totalSize, pageNum));
-					$("#equi-show-pager").setActivePage(3);
-				}
-			});
-		}
-
-		//温度值域
-		function getChan(param) {
-			$("#equipmentfuceng").css({
-				"display" : "block"
-			});
-			if (globalData[param].channelTem != undefined) {
-				var v = JSON.parse(globalData[param].channelTem);
-				var channelTemList = "";
-				for (let i = 0; i < v.length; i++) {
-					channelTemList += "<tr>";
-					channelTemList += "<td>" + v[i][0] + "</td>";
-					channelTemList += "<td>" + v[i][1] + "</td>";
-					channelTemList += "<td>" + v[i][2] + "</td>";
-					channelTemList += "</tr>"
-				}
-				$("#channelTemList").html(channelTemList);
-			} else {
-				var channelTemList = "";
-				channelTemList += "<tr>";
-				channelTemList += "<td></td>";
-				channelTemList += "<td></td>";
-				channelTemList += "<td></td>";
-				channelTemList += "</tr>"
-				$("#channelTemList").html(channelTemList);
-			}
-		}
-		function addEquip() {
-			add = true;
-			$("#equip-content-wrapper").load(
-					"childrenHtml/equipment/equipmentForm.html");
-		}
-		function getEquiEdit(param) {
-			add = false;
-			parami=param;
-			$("#equip-content-wrapper").load(
-					"childrenHtml/equipment/equipmentForm.html");
-		}
-
-		//删除一条设备信息
-		function getEquiDelete(param) {
-			if (confirm("确定删除此设备？")) {
-				$.ajax({
-					url : "equipment/delete",
-					type : "post",
-					data : {
-						"equipmentId" : param
-					},
-					dataType : "json",
-					success : function(result) {
-						if (!result.success) {
-							alert("设备删除失败！");
-						}
-						getEquipmentList();
-					}
-				});
-			}
-		}
-
-		//通过设备名称查询设备
-		function searchResult() {
-			var name = $("#searchByName").val().trim();
-			if (name != "") {
-				$.ajax({
-					url : "equipment/selectByEquipmentName",
-					type : "post",
-					data : {
-						"equipmentName" : name
-					},
-					dataType : "json",
-					success : function(result) {
-						globalData = result.data;
-						var data = result.data;
-						var equipList = "";
-						equipList = getequipList(0, data.length, data,
-								equipList);
-						$("#equipmentList").html(equipList);
-					}
-				});
-			} else {
-				getEquipmentList();
-			}
-		}
-		//导出
-		function report() {
-			var equipList = "<tr><td>设备ID</td><td>设备名称</td><td>设备类型</td><td>通道温度</td><td>安装地址</td><td>地区编码</td><td>经纬度</td><td>帧结构</td>"
-					+ "<td>所属用户</td><td>更新时间</td><td>更新者</td></tr>";
-			var data = globalData;
-			for (let i = 0; i < data.length; i++) {
-				equipList += "<tr>";
-				equipList += "<td>" + data[i].equipmentId + "</td>";
-				equipList += "<td>" + data[i].equipmentName + "</td>";
-				equipList += "<td>" + data[i].type + "</td>";
-				equipList += "<td>" + data[i].channelTem + "</td>";
-				equipList += "<td>" + data[i].address + "</td>";
-				equipList += "<td>" + data[i].adcode + "</td>";
-				equipList += "<td>" + data[i].lngLat + "</td>";
-				equipList += "<td>" + data[i].frameStru + "</td>";
-				equipList += "<td>" + data[i].userName + "</td>";
-				equipList += "<td>" + data[i].updateTime + "</td>";
-				equipList += "<td>" + data[i].updater + "</td>";
-				equipList += "</tr>";
-			}
-			$("#equipmentreport").html(equipList);
-			$("#equipmentreport").table2excel({
-				exclude : ".noExl",
-				name : "Excel Document Name",
-				filename : "设备信息",
-				exclude_img : true,
-				exclude_links : true,
-				exclude_inputs : true
-			});
-		}
-	</script>
+	<script src="childrenHtml/equipment/equipmentList.js"></script>
 	<script src="dist/js/app.min.js"></script>
 </body>
 </html>

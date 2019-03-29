@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.hqgd.pms.domain.User">
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="TEL" jdbcType="VARCHAR" property="tel" />
     <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
     <result column="COMMENTS" jdbcType="VARCHAR" property="comments" />
     <result column="ISDEL" jdbcType="VARCHAR" property="isdel" />
@@ -14,17 +15,23 @@
   <!--   <result column="TYPE" jdbcType="INTEGER" property="type" /> -->
   </resultMap>
   <sql id="Base_Column_List">
-    ID, USER_NAME, PASSWORD, COMMENTS, ISDEL, CONVERT ( VARCHAR ( 100 ), CREATE_TIME, 20 ) AS CREATE_TIME, 
+    ID, USER_NAME, TEL, PASSWORD, COMMENTS, ISDEL, CONVERT ( VARCHAR ( 100 ), CREATE_TIME, 20 ) AS CREATE_TIME, 
     UPDATER, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME
   </sql>
   
+  <select id="selectByPhUn" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from access_control_user
+    where USER_NAME = #{userName,jdbcType=VARCHAR}
+    and TEL = #{tel,jdbcType=VARCHAR}
+  </select>
   <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from access_control_user
     where USER_NAME = #{userName,jdbcType=VARCHAR}
   </select>
-  
   <select id="selectUserRoleType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     SELECT 
   		r.TYPE AS ID
@@ -39,11 +46,18 @@
   <update id="initUserPassword">
         UPDATE access_control_user SET PASSWORD = '123456' WHERE ID = #{id}
   </update>
+  <update id="resetPassword" parameterType="java.util.HashMap">
+        UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE USER_NAME = #{userName,jdbcType=VARCHAR}
+    and TEL = #{tel,jdbcType=VARCHAR}
+  </update>
   <update id="updatePassword" parameterType="java.lang.String">
         UPDATE access_control_user SET PASSWORD = #{newPassword} WHERE ID = #{id}
   </update>
   <update id="deleteByPrimaryKey">
         UPDATE access_control_user SET ISDEL = 'Y' WHERE ID = #{id}
+  </update>
+  <update id="reUse">
+        UPDATE access_control_user SET ISDEL = 'N' WHERE ID = #{id}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -57,17 +71,17 @@
     <include refid="Base_Column_List" />
     from access_control_user
     where 1=1
-    and ISDEL = 'N'
+   and ISDEL = 'N'
   </select>
   <!-- <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from access_control_user
     where ID = #{id,jdbcType=INTEGER}
   </delete> -->
   <insert id="insert" parameterType="com.hqgd.pms.domain.User">
-    insert into access_control_user (USER_NAME, PASSWORD, 
+    insert into access_control_user (USER_NAME,TEL, PASSWORD, 
       COMMENTS, ISDEL, CREATOR, CREATE_TIME, 
       UPDATER, UPDATE_TIME)
-    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+    values (#{userName,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{comments,jdbcType=VARCHAR}, #{isdel,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
@@ -77,6 +91,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userName != null">
         USER_NAME,
+      </if>
+      <if test="tel != null">
+        TEL,
       </if>
       <if test="password != null">
         PASSWORD,
@@ -105,6 +122,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
@@ -137,6 +157,9 @@
       <if test="userName != null">
         USER_NAME = #{userName,jdbcType=VARCHAR},
       </if>
+      <if test="tel != null">
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
       <if test="password != null">
         PASSWORD = #{password,jdbcType=VARCHAR},
       </if>
@@ -166,6 +189,7 @@
   <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.User">
     update access_control_user
     set USER_NAME = #{userName,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
       PASSWORD = #{password,jdbcType=VARCHAR},
       COMMENTS = #{comments,jdbcType=VARCHAR},
       

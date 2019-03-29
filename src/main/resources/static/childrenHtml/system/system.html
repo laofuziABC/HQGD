@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet"
+	href="../../bower_components/bootstrap-daterangepicker/daterangepicker.css">
+<link rel="stylesheet"
+	href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<h1>系统参数设置</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li class="active">系统参数设置</li>
+				</ol>
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="box box-primary">
+							<!-- /.box-header -->
+							<div class="box-body">
+								<form role="form">
+									<!--<div class="form-group">
+										<label>浮动飘窗</label> <select id="FLOAT_WINDOW"
+											class="form-control" onchange="setSystem('FLOAT_WINDOW')">
+											<option value="1">开启</option>
+											<option value="2">关闭</option>
+										</select>
+									</div>  -->
+									<div class="form-group">
+										<label>服务器绑定端口</label>
+										<div class="input-group col-sm-4">
+											<input id="SERVER_PORT" type="text" class="form-control">
+											<div class="input-group-btn">
+												<button id="add-new-event" type="button"
+													onclick="setSystem('SERVER_PORT')"
+													class="btn btn-primary btn-flat">保存</button>
+											</div>
+											<!-- /btn-group -->
+										</div>
+									</div>
+									<div class="form-group">
+										<label>服务器采集数据间隔时间(单位：秒)</label>
+										<div class="input-group col-sm-4">
+											<input id="TIME_INTERVAL" type="text" class="form-control">
+											<div class="input-group-btn">
+												<button id="add-new-event" type="button"
+													onclick="setSystem('TIME_INTERVAL')"
+													class="btn btn-primary btn-flat">保存</button>
+											</div>
+											<!-- /btn-group -->
+										</div>
+									</div>
+									<div class="form-group">
+										<label>更新临时表定时器</label>
+										<div class="box-footer">
+											<input id="UPDATE_TABLE_TIMER" class="btn btn-primary "
+												type="button" onclick="timerMan()" value="开启" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label>服务器向客户端发送请求数据命令定时器</label>
+										<div class="box-footer">
+											<input id="TCP_CONNECT" class="btn btn-primary "
+												type="button" onclick="socketMan()" value="开启" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label>统计故障次数定时器</label>
+										<div class="box-footer">
+											<input id="STATIC_FAIL" class="btn btn-primary "
+												type="button" onclick="staticFailures()" value="开启" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label>统计指定日期内的故障次数</label>
+										<div class="box-footer">
+											<div class="input-group">
+												<div class="input-group date">
+													<label> 开始日期：</label><input type="text" id="startDate">
+												</div>
+												<div class="input-group date">
+													<label> 结束日期：</label><input type="text" id="endDate">
+												</div>
+												<button type="button" class="btn btn-primary "
+													onclick="staticFailures('run')">统计</button>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+					</div>
+					<!--/.col (right) -->
+
+				</div>
+				<!-- /.row -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<div class="control-sidebar-bg"></div>
+	</div>
+	<!-- ./wrapper -->
+	<script src="../../bower_components/moment/min/moment.min.js"></script>
+	<script
+		src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+		$('#startDate').datepicker({
+			autoclose : true
+		})
+		$('#endDate').datepicker({
+			autoclose : true
+		})
+		selectSysParam();
+		function selectSysParam() {
+			$
+					.ajax({
+						url : "system/selectSysParam",
+						type : "post",
+						dataType : "json",
+						success : function(result) {
+							debugger;
+							var data = result.data;
+							for (let i = 0; i < data.length; i++) {
+								var paramCode = data[i].paramCode;
+								var paramValue = data[i].paramValue;
+								if (paramValue == "1") {
+									document.getElementById(paramCode).value = "关闭";
+								} else if (paramValue == "0") {
+									document.getElementById(paramCode).value = "开启";
+								} else {
+									document.getElementById(paramCode).value = data[i].paramValue;
+								}
+
+							}
+						}
+					});
+		}
+		function setSystem(param) {
+			var paramCode = param;
+			var paramValue = $("#" + paramCode).val();
+			$.ajax({
+				url : "system/setSysParam",
+				type : "post",
+				dataType : "json",
+				data : {
+					"paramCode" : paramCode,
+					"paramValue" : paramValue
+				},
+				success : function(result) {
+					alert("操作成功！");
+				}
+			});
+		}
+		function timerMan() {
+			var paramCode = "UPDATE_TABLE_TIMER";
+			var paramValue = $("#UPDATE_TABLE_TIMER").val();
+			var param;
+			if (paramValue == "开启") {
+				param = "start";
+				document.getElementById(paramCode).value = "关闭";
+			} else {
+				param = "stop";
+				document.getElementById(paramCode).value = "开启";
+			}
+			var url = "timer/table/" + param;
+			$.ajax({
+				url : url,
+				type : "post",
+				dataType : "json",
+				success : function(result) {
+					alert(result);
+				}
+			});
+		}
+		function socketMan(param) {
+			var paramCode = "TCP_CONNECT";
+			var paramValue = $("#TCP_CONNECT").val();
+			var param;
+			if (paramValue == "开启") {
+				param = "start";
+				document.getElementById(paramCode).value = "关闭";
+			} else {
+				param = "stop";
+				document.getElementById(paramCode).value = "开启";
+			}
+			var url = "timer/socket/" + param;
+			$.ajax({
+				url : url,
+				type : "post",
+				dataType : "json",
+				success : function(result) {
+					alert(result);
+				}
+			});
+		}
+		function staticFailures1(param) {
+			var startTime = $("#startDate").val();
+			var endTime = $("#endDate").val();
+			var today = getNowFormatDate();
+			if (endTime >= today) {
+				alert("终止日期不能大于当天日期！");
+			} else {
+				var url = "timer/failures/" + param;
+				$.ajax({
+					url : url,
+					type : "post",
+					dataType : "json",
+					data : {
+						"startTime" : startTime,
+						"endTime" : endTime
+					},
+					success : function(result) {
+						alert(result);
+					}
+				});
+			}
+
+		}
+		function staticFailures(param) {
+			var paramCode = "STATIC_FAIL";
+			var paramValue = $("#STATIC_FAIL").val();
+			var param;
+			if (paramValue == "开启") {
+				param = "start";
+				document.getElementById(paramCode).value = "关闭";
+			} else {
+				param = "stop";
+				document.getElementById(paramCode).value = "开启";
+			}
+
+			var url = "timer/failures/" + param;
+			$.ajax({
+				url : url,
+				type : "post",
+				dataType : "json",
+
+				success : function(result) {
+					alert(result);
+				}
+			});
+
+		}
+		//获取当前时间，格式YYYY-MM-DD
+		function getNowFormatDate() {
+			var date = new Date();
+			var seperator1 = "-";
+			var year = date.getFullYear();
+			var month = date.getMonth() + 1;
+			var strDate = date.getDate();
+			if (month >= 1 && month <= 9) {
+				month = "0" + month;
+			}
+			if (strDate >= 0 && strDate <= 9) {
+				strDate = "0" + strDate;
+			}
+			var currentdate = year + seperator1 + month + seperator1 + strDate;
+			return currentdate;
+		}
+		/* function serialPortOperate() {
+			debugger;
+			var text = document.getElementById("spOperate").innerHTML;
+			if (text == "打开串口") {
+				$("#serialPortParam select").attr("disabled", "disabled");
+				$("#serialPortParam input").attr("disabled", "disabled");
+				document.getElementById("spOperate").innerHTML = "关闭串口";
+				document.getElementById("spOperate").className = "btn btn-default";
+				openSerialPort();
+			} else {
+				$("#serialPortParam select").attr("disabled", false);
+				$("#serialPortParam input").attr("disabled", false);
+				document.getElementById("spOperate").innerHTML = "打开串口";
+				document.getElementById("spOperate").className = "btn btn-primary";
+			}
+
+		}
+		function openSerialPort(param) {
+			var serialPort = $("#mSerialPort option:selected").text(),
+			if (serialPort == null || serialPort == "") {
+				alert("没有搜索到有效串口！");
+			} else {
+				var baudrate = $("#baudrate option:selected").text(),
+				var dataBits = $("#dataBits option:selected").text(),
+				var parity = $("#parity option:selected").text(),
+				var stopBits = $("#stopBits option:selected").text(),
+				var url = "serialPort/" + param;
+				$.ajax({
+					url : url,
+					type : "post",
+					dataType : "json",
+					data : {
+						"serialPort" : serialPort,
+						"baudrate" : baudrate,
+						"dataBits" : dataBits,
+						"parity" : parity,
+						"stopBits" : stopBits
+					},
+					success : function(result) {
+						alert(result);
+					}
+				});
+			}
+		} */
+	</script>
+	<script src="dist/js/app.min.js"></script>
+
+</body>
+</html>

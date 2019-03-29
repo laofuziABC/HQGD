@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,10 +30,8 @@ public class MapController {
 
 	@ResponseBody
 	@RequestMapping("/getPositions")
-	public void getJson(ServletRequest request, HttpServletRequest hrequest, HttpServletResponse response) throws IOException {
-		String roleId = request.getParameter("roleId");
-		String userName = request.getParameter("userName");
-		List<EquipmentInfo> list = mapService.getLonLats(roleId,userName);
+	public void getJson( HttpServletRequest request, HttpServletResponse response) throws IOException {
+		List<EquipmentInfo> list = mapService.getLonLats(request);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
 		resultMap.put("resultCode", "00000000");

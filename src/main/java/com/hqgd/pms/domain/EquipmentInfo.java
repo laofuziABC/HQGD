@@ -1,42 +1,81 @@
 package com.hqgd.pms.domain;
 
 public class EquipmentInfo {
-    private Integer id;
+	private Integer id;
 
-    private String equipmentId;
+	private String equipmentId;
 
-    private String equipmentName;
-    private String type;
+	private String equipmentName;
+	private String type;
 
-    private String userName;
+	private String userName;
+	private String tel;
 
-    private String userId;
+	private String userId;
 
-    private String channelTem;
+	private String channelTem;
 
-    private String address;
+	private Integer numOfCh;
 
-    private String adcode;
+	private String heartbeatId;
 
-    private String cadcode;
+	private String heartbeatName;
 
-    private String padcode;
+	private String address;
 
-    private String lngLat;
+	private String adcode;
 
-    private String frameStru;
+	private String cadcode;
 
-    private String icon;
+	private String padcode;
 
-    private String creator;
+	private String lngLat;
 
-    private String createTime;
+	private String frameStru;
 
-    private String updater;
+	private String icon;
 
-    private String updateTime;
+	private String creator;
 
-    public String getType() {
+	private String createTime;
+
+	private String updater;
+
+	private String updateTime;
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getHeartbeatId() {
+		return heartbeatId;
+	}
+
+	public void setHeartbeatId(String heartbeatId) {
+		this.heartbeatId = heartbeatId;
+	}
+
+	public String getHeartbeatName() {
+		return heartbeatName;
+	}
+
+	public void setHeartbeatName(String heartbeatName) {
+		this.heartbeatName = heartbeatName;
+	}
+
+	public Integer getNumOfCh() {
+		return numOfCh;
+	}
+
+	public void setNumOfCh(Integer numOfCh) {
+		this.numOfCh = numOfCh;
+	}
+
+	public String getType() {
 		return type;
 	}
 
@@ -69,115 +108,115 @@ public class EquipmentInfo {
 	}
 
 	public Integer getId() {
-        return id;
-    }
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getEquipmentId() {
-        return equipmentId;
-    }
+	public String getEquipmentId() {
+		return equipmentId;
+	}
 
-    public void setEquipmentId(String equipmentId) {
-        this.equipmentId = equipmentId == null ? null : equipmentId.trim();
-    }
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId == null ? null : equipmentId.trim();
+	}
 
-    public String getEquipmentName() {
-        return equipmentName;
-    }
+	public String getEquipmentName() {
+		return equipmentName;
+	}
 
-    public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName == null ? null : equipmentName.trim();
-    }
+	public void setEquipmentName(String equipmentName) {
+		this.equipmentName = equipmentName == null ? null : equipmentName.trim();
+	}
 
-    public String getUserName() {
-        return userName;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
+	public void setUserName(String userName) {
+		this.userName = userName == null ? null : userName.trim();
+	}
 
-    public String getUserId() {
-        return userId;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
-    }
+	public void setUserId(String userId) {
+		this.userId = userId == null ? null : userId.trim();
+	}
 
-    public String getChannelTem() {
-        return channelTem;
-    }
+	public String getChannelTem() {
+		return channelTem;
+	}
 
-    public void setChannelTem(String channelTem) {
-        this.channelTem = channelTem == null ? null : channelTem.trim();
-    }
+	public void setChannelTem(String channelTem) {
+		this.channelTem = channelTem == null ? null : channelTem.trim();
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
+	public void setAddress(String address) {
+		this.address = address == null ? null : address.trim();
+	}
 
-    public String getAdcode() {
-        return adcode;
-    }
+	public String getAdcode() {
+		return adcode;
+	}
 
-    public void setAdcode(String adcode) {
-        this.adcode = adcode == null ? null : adcode.trim();
-    }
+	public void setAdcode(String adcode) {
+		this.adcode = adcode == null ? null : adcode.trim();
+	}
 
-    public String getCadcode() {
-        return cadcode;
-    }
+	public String getCadcode() {
+		return cadcode;
+	}
 
-    public void setCadcode(String cadcode) {
-        this.cadcode = cadcode == null ? null : cadcode.trim();
-    }
+	public void setCadcode(String cadcode) {
+		this.cadcode = cadcode == null ? null : cadcode.trim();
+	}
 
-    public String getPadcode() {
-        return padcode;
-    }
+	public String getPadcode() {
+		return padcode;
+	}
 
-    public void setPadcode(String padcode) {
-        this.padcode = padcode == null ? null : padcode.trim();
-    }
+	public void setPadcode(String padcode) {
+		this.padcode = padcode == null ? null : padcode.trim();
+	}
 
-    public String getLngLat() {
-        return lngLat;
-    }
+	public String getLngLat() {
+		return lngLat;
+	}
 
-    public void setLngLat(String lngLat) {
-        this.lngLat = lngLat == null ? null : lngLat.trim();
-    }
+	public void setLngLat(String lngLat) {
+		this.lngLat = lngLat == null ? null : lngLat.trim();
+	}
 
-    public String getFrameStru() {
-        return frameStru;
-    }
+	public String getFrameStru() {
+		return frameStru;
+	}
 
-    public void setFrameStru(String frameStru) {
-        this.frameStru = frameStru == null ? null : frameStru.trim();
-    }
+	public void setFrameStru(String frameStru) {
+		this.frameStru = frameStru == null ? null : frameStru.trim();
+	}
 
-    public String getIcon() {
-        return icon;
-    }
+	public String getIcon() {
+		return icon;
+	}
 
-    public void setIcon(String icon) {
-        this.icon = icon == null ? null : icon.trim();
-    }
+	public void setIcon(String icon) {
+		this.icon = icon == null ? null : icon.trim();
+	}
 
-    public String getCreator() {
-        return creator;
-    }
+	public String getCreator() {
+		return creator;
+	}
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
+	public void setCreator(String creator) {
+		this.creator = creator == null ? null : creator.trim();
+	}
 
 }

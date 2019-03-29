@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>数据统计分析</title>
+		<link rel="stylesheet" href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+		<style type="text/css">
+			#statisticalDiv .ssjc_ru_table {min-height: 350px; background: #21242e; }
+			#chart_extremum {height: 100%; }
+			#statisticalDiv .flex_box {display: flex; flex-wrap: wrap;}
+			#chart_error_type, #chart_error_channel {height: 100%; width: 50%; min-width: 300px; }
+		</style>
+	</head>
+	<body>
+		<div class="ssjc_right_up" id="statisticalDiv">
+			<!-- 时间选择【开始】 -->
+			<div class="nei">
+				<div class="ssjc_ru_title">
+					<span class="tiaoshijian">开始日期:<input type="text" class="shi datePicker" id="startDate" /></span>
+					<span class="tiaoshijian">结束日期:<input type="text" class="shi datePicker" id="endDate" /></span>
+					<span class="float_right"><input type="button" class="youcecha" onclick="showStatisticalContent();" value="查询" /></span>
+				</div>
+			</div>
+			<!-- 时间选择【结束】 -->
+			<!-- 展示图表【开始】 -->
+			<div class="ssjc_ru_table">
+				<div class="echarts_ssjc_one" id="chart_extremum"></div>
+			</div>
+			<p>&nbsp;</p>
+			<div class="ssjc_ru_table flex_box">
+				<div class="echarts_ssjc_two" id="chart_error_type"></div>
+				<div class="echarts_ssjc_two" id="chart_error_channel"></div>
+			</div>
+			<!-- 展示图表【结束】 -->
+		</div>
+	
+		<script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+		<script type="text/javascript">
+			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【开始】
+			$('.datePicker').datepicker({autoclose : true});
+			var intStr=parent.formatDate2String(new Date());
+			document.getElementById("startDate").value = intStr;
+			document.getElementById("endDate").value = intStr;
+			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【结束】
+			$("#chart_extremum").highcharts(extremumOption);
+			$("#chart_error_type").highcharts(errorTypeOption);
+			$("#chart_error_channel").highcharts(errorChannelOption);
+			function showStatisticalContent(){
+				equiId3=equiId0;
+				if (equiId != null) {
+					var startDate = $("#startDate").val();
+					var endDate = $("#endDate").val();
+					if (startDate == "" || startDate == null) {
+						$("#startDate").addClass("error");
+						return;
+					}
+					if (endDate == "" || endDate == null) {
+						$("#endDate").addClass("error");
+						return;
+					}
+					if (startDate>endDate) {
+						$("#endDate").addClass("error");
+						return;
+					}
+					if($("#startDate").hasClass("error")){$("#startDate").removeClass("error");}
+					if($("#endDate").hasClass("error")){$("#endDate").removeClass("error");}
+					var chart = $("#chart_extremum").highcharts();
+					chart.showLoading();
+					var statistical_param = {"equipmentId" : equiId3, "startTime" : startDate+" 00:00:00", "endTime" : endDate+" 23:59:59" };
+					var errors_param = {"equipmentId" : equiId3, "startTime" : startDate, "endTime" : endDate };
+					var statistical_url = "dataAcquisition/historicalExtremum";
+					var errors_url = "dataAcquisition/errorStateStatic";
+					fetchExtremumChartData(statistical_url, statistical_param);
+					fetchErrorChartData(errors_url, errors_param);
+				}
+			}
+		</script>
+	</body>
+</html>

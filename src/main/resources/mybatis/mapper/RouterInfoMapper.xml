@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqgd.pms.dao.equipment.RouterInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hqgd.pms.domain.RouterInfo">
+    <id column="ROUTER_ID" jdbcType="VARCHAR" property="routerId" />
+    <result column="ROUTER_NAME" jdbcType="VARCHAR" property="routerName" />
+    <result column="CONNECT" jdbcType="VARCHAR" property="connect" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ROUTER_ID, ROUTER_NAME, CONNECT, IP,CONVERT ( VARCHAR ( 100 ), CREATE_TIME, 20 ) AS CREATE_TIME, 
+    UPDATER, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME
+  </sql>
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_router_info
+  </select>
+  <update id="updateConnect">
+    update hq_router_info set CONNECT='N' where ROUTER_ID = #{routerId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateIp">
+    update hq_router_info set IP = #{param2},CONNECT = 'Y' where ROUTER_ID = #{param1}
+  </update>
+  <select id="selectConEqui"  resultType="java.util.HashMap">
+  SELECT
+	ROUTER_ID AS id,
+	IP AS text,
+	'#' AS parent 
+FROM
+	hq_router_info 
+WHERE
+	CONNECT = 'Y'
+  </select>
+  <select id="selectByRouterName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_router_info
+    where ROUTER_NAME = #{routerName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_router_info
+    where ROUTER_ID = #{routerId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from hq_router_info
+    where ROUTER_ID = #{routerId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hqgd.pms.domain.RouterInfo">
+    insert into hq_router_info (ROUTER_ID, ROUTER_NAME, CONNECT, IP,
+      CREATOR, CREATE_TIME, UPDATER, 
+      UPDATE_TIME)
+    values (#{routerId,jdbcType=VARCHAR}, #{routerName,jdbcType=VARCHAR}, #{connect,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hqgd.pms.domain.RouterInfo">
+    insert into hq_router_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="routerId != null">
+        ROUTER_ID,
+      </if>
+      <if test="routerName != null">
+        ROUTER_NAME,
+      </if>
+      <if test="connect != null">
+        CONNECT,
+      </if>
+      <if test="ip != null">
+        IP,
+      </if>
+      <if test="creator != null">
+        CREATOR,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updater != null">
+        UPDATER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="routerId != null">
+        #{routerId,jdbcType=VARCHAR},
+      </if>
+      <if test="routerName != null">
+        #{routerName,jdbcType=VARCHAR},
+      </if>
+      <if test="connect != null">
+        #{connect,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hqgd.pms.domain.RouterInfo">
+    update hq_router_info
+    <set>
+      <if test="routerName != null">
+        ROUTER_NAME = #{routerName,jdbcType=VARCHAR},
+      </if>
+      <if test="connect != null">
+        CONNECT = #{connect,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        UPDATER = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ROUTER_ID = #{routerId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hqgd.pms.domain.RouterInfo">
+    update hq_router_info
+    set ROUTER_NAME = #{routerName,jdbcType=VARCHAR},
+      CONNECT = #{connect,jdbcType=VARCHAR},
+      IP = #{ip,jdbcType=VARCHAR},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATER = #{updater,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ROUTER_ID = #{routerId,jdbcType=VARCHAR}
+  </update>
+</mapper>

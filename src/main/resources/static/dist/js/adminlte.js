@@ -866,6 +866,18 @@ throw new Error('AdminLTE requires jQuery')
   $(document).on('click', Selector.button, function (e) {
     e.preventDefault();
     Plugin.call($(this), 'toggle');
+    //设置数据监测页面图表自适应
+    var chartDivs=document.querySelectorAll(".echarts_ssjc_one");
+    if(chartDivs.length>0){
+    	$("#chart_current").highcharts().showLoading();
+    	$("#chart_history").highcharts().showLoading();
+    	$("#chart_extremum").highcharts().showLoading();
+    	setTimeout(function(){
+    		$("#chart_current").highcharts(currentOption);
+    		$("#chart_history").highcharts(historyOption);
+    		$("#chart_extremum").highcharts(extremumOption);
+    	},300);
+    }
   });
   $(window).on('load', function () {
     Plugin.call($(Selector.button));

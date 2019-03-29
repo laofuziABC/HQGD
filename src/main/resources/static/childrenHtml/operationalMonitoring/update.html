@@ -149,16 +149,6 @@
 						</form>
 					</div>
 				</section>
-				<!-- <form action="/images/add" method="post" enctype="multipart/form-data">
-					<div id="upBox">
-						<div id="inputBox">
-							<input type="file" title="请选择图片" id="file" multiple
-								accept="image/png,image/jpg,image/gif,image/JPEG" />点击选择图片
-						</div>
-						<div id="imgBox"></div>
-						<button id="btn">上传</button>
-					</div>
-				</form> -->
 			</div>
 		</div>
 	</div>
@@ -266,10 +256,11 @@
 							var startIndex = (pageNum - 1) * pageSize;
 							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
 									: pageNum * pageSize;
+							//debugger;
 							for (let i = startIndex; i < endIndex; i++) {
 								imagelist += "<tr class=\"\">";
 								imagelist += "<td>" + (i + 1) + "</td>";
-								imagelist += "<td><img src=\""+ data[i].path +"\" width=\"50\"></td>";
+								imagelist += "<td><img src=\""+ data[i].path.substring(data[i].path.indexOf("static"), data[i].path.length)+"\" width=\"50\"></td>";
 								imagelist += "<td>" + data[i].name + "</td>";
 								imagelist += "<td>" + data[i].path + "</td>";
 								imagelist += "<td>" + data[i].groups + "</td>";
@@ -362,17 +353,6 @@
 			});
 		}());
 	</script>
-
-	<!-- <script src="vince/js/uploadImg.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		imgUpload({
-			inputId : 'file', //input框id
-			imgBox : 'imgBox', //图片容器id
-			buttonId : 'btn', //提交按钮id
-			upUrl : '', //提交地址
-			data : 'file1' //参数名
-		})
-	</script> -->
 </body>
 </html>
 

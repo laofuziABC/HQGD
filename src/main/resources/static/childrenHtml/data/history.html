@@ -3,12 +3,15 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>历史监测数据</title>
-		<link rel="stylesheet" href="../../bower_components/bootstrap-daterangepicker/daterangepicker.css">
-		<link rel="stylesheet" href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
-		<link rel="stylesheet" href="../../plugins/timepicker/bootstrap-timepicker.min.css">
+		<link rel="stylesheet" href="dist/js/datetime/datetimepicker.css">
 		<style type="text/css">
-			.ssjc_ru_title span { margin:5px; }
-			.ssjc_ru_title { padding:5px; }
+			.ssjc_ru_title span {margin: 5px; }
+			.ssjc_ru_title {padding: 5px; }
+			.box-body2{padding: 2px 0; background-color: #21242e;}
+			#example1{color: #ffffff; width: 98%; margin: 2px auto;}
+			#data-show-pager a, #data-show-pager span{color: #ffffff; }
+			#data-show-pager a.goto-btn{margin: 3px; min-width: 20px;}
+			#enterNum{color: #000000;}
 		</style>
 	</head>
 	<body>
@@ -20,13 +23,13 @@
 					<span class="tiaoshijian">开始时间:<input type="text" class="shi datetimePicker" id="startTime" /></span>
 					<span class="tiaoshijian">结束时间:<input type="text" class="shi datetimePicker" id="endTime" /></span> 
 					<span>显示内容:
-						<select class="biaoti_select" id="data-type" onchange="searchTableResult(1);">
+						<select class="biaoti_select" id="data-type" onchange="searchTableResult(1);" style="height: 26px;">
 							<option value="0" selected="selected">显示所有数据</option>
 							<option value="1">显示异常数据</option>
 						</select>
 					</span> 
 					<span>页面大小:
-						<select class="biaoti_select" id="page-size" onchange="searchTableResult(1);">
+						<select class="biaoti_select" id="page-size" onchange="searchTableResult(1);" style="height: 26px;">
 							<option value="10" selected="selected">10条</option>
 							<option value="20">20条</option>
 							<option value="30">30条</option>
@@ -46,40 +49,32 @@
 		</div>
 		<!-- 上方的统计图【结束】 -->
 		<!-- 下方的统计表【开始】 -->
-		<!-- <div class="ssjc_right_bottom"> -->
-			<div class="box">
-				<div class="box-body">
-					<table id="example1" class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<td style="width: 25%;">设备名称</td>
-								<td style="width: 10%;">通道号</td>
-								<td style="width: 12.5%;">光纤位置</td>
-								<td style="width: 10%;">温度(单位:℃)</td>
-								<td style="width: 7.5%;">PD</td>
-								<td style="width: 7.5%;">UV</td>
-								<td style="width: 7.5%;">运行状态</td>
-								<td style="width: 20%;">采集时间</td>
-							</tr>
-						</thead>
-						<tbody id="history-table-body"></tbody>
-						<tbody id="historyreport"style = "display :none"></tbody>
-					</table>
-					<div>
-						<div class="list-page-tail page-down" id="data-show-pager"
-							style="margin: auto;"></div>
-					</div>
+		<div class="box">
+			<div class="box-body2">
+				<table id="example1" class="table table-bordered">
+					<thead>
+						<tr>
+							<td style="width: 25%;">设备名称</td>
+							<td style="width: 10%;">通道号</td>
+							<td style="width: 12.5%;">光纤位置</td>
+							<td style="width: 10%;">温度(单位:℃)</td>
+							<td style="width: 7.5%;">PD</td>
+							<td style="width: 7.5%;">UV</td>
+							<td style="width: 7.5%;">运行状态</td>
+							<td style="width: 20%;">采集时间</td>
+						</tr>
+					</thead>
+					<tbody id="history-table-body"></tbody>
+					<tbody id="historyreport"style = "display :none"></tbody>
+				</table>
+				<div>
+					<div class="list-page-tail page-down" id="data-show-pager"
+						style="margin: auto;"></div>
 				</div>
-				<!-- /.box-body -->
 			</div>
-		<!-- </div> -->
+		</div>
 		<!-- 下方的统计表【结束】 -->
 	
-		<!-- <script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-		<!-- bootstrap datepicker -->
-		<!-- <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
-		<!-- bootstrap time picker -->
-		<!-- <script src="../../plugins/timepicker/bootstrap-timepicker.min.js"></script> -->
 		<script src="dist/js/datetime/bootstrap-datetimepicker.js"></script>
 		<script type="text/javascript">
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【开始】
@@ -91,24 +86,35 @@
 			var endTimeInput = document.getElementById("endTime");
 			startTimeInput.value = parent.formatInitDateToString(new Date());
 			endTimeInput.value = parent.formatDateToString(new Date());
-			$("#chart_history").highcharts(blankOption);
+			//初始化图表配置项，添加空的图表（除非经过点击查询按钮，否则历史数据页面不在初始页面时展示数据内容）
+			historyOption.title.text="历史温度曲线图";
+			historyOption.yAxis.min=0;
+			historyOption.yAxis.max=100;
+			historyOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
+			$("#chart_history").highcharts(historyOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
-				var startTime = $("#startTime").val();
-				var endTime = $("#endTime").val();
-				if (startTime > endTime) {
-					alert("开始时间不能大于结束时间");
-				} else if (startTime == "" || endTime == "") {
-					alert("开始时间和结束时间不能为空");
-				} else {
-					searchChartResult();
+				equiId2=equiId0;
+				if(equiId!=null){
+					var startTime = $("#startTime").val();
+					var endTime = $("#endTime").val();
+					if(startTime==""){$("#startTime").addClass("error"); return; }
+					if(endTime==""){$("#endTime").addClass("error"); return; }
+					if(startTime>endTime){$("#endTime").addClass("error"); return; }
+					$("#startTime").removeClass("error");
+					$("#endTime").removeClass("error");
 					searchTableResult(1);
+					//加载历史数据图表
+					$("#chart_history").highcharts(historyOption);
+					var chart = $("#chart_history").highcharts();
+					chart.showLoading();
+					searchChartResult();
 				}
 			}
 			//加载历史数据统计图【开始】
 			function searchChartResult() {
 				var param = {
-					"equipmentId" : equiId,
+					"equipmentId" : equiId2,
 					"startTime" : $("#startTime").val(),
 					"endTime" : $("#endTime").val()
 				};
@@ -121,13 +127,12 @@
 				//设置DIV高度
 				$(".ssjc_right_bottom").css({"height" : ($(window).height()) * 0.4 });
 				var param = {
-					"equipmentId" : equiId,
+					"equipmentId" : equiId0,
 					"startTime" : $("#startTime").val(),
 					"endTime" : $("#endTime").val(),
 					"state" : $("#data-type").val(),
-					"page" : pageNo, //当前页码，相当于pageNum
-					"limit" : $("#page-size").val()
-				//当前页面大小，相当于pageSize
+					"page" : pageNo, 							//当前页码，相当于pageNum
+					"limit" : $("#page-size").val()		//当前页面大小，相当于pageSize
 				};
 				$.ajax({
 					url : "dataAcquisition/historical",
@@ -154,7 +159,6 @@
 							}
 						} else {
 							historyTable += "<h3 style='color: red;'>未查找到相关信息！</h3>";
-							$("#chart_history").highcharts(blankOption);
 						}
 						$("#history-table-body").html(historyTable);
 						//加载页码
@@ -187,21 +191,14 @@
 							//加载表格内容
 							for (let i = 0; i < data.length; i++) {
 								historyTable += "<tr>";
-								historyTable += "<td>" + data[i].equipmentName
-										+ "</td>";
-								historyTable += "<td>" + data[i].channelNum
-										+ "</td>";
-								historyTable += "<td>"
-										+ data[i].opticalFiberPosition
-										+ "</td>";
-								historyTable += "<td>" + data[i].temperature
-										+ "</td>";
+								historyTable += "<td>" + data[i].equipmentName + "</td>";
+								historyTable += "<td>" + data[i].channelNum + "</td>";
+								historyTable += "<td>" + data[i].opticalFiberPosition + "</td>";
+								historyTable += "<td>" + data[i].temperature + "</td>";
 								historyTable += "<td>" + data[i].pd + "</td>";
 								historyTable += "<td>" + data[i].uv + "</td>";
-								historyTable += "<td>" + data[i].message
-										+ "</td>";
-								historyTable += "<td>" + data[i].receiveTime
-										+ "</td>";
+								historyTable += "<td>" + data[i].message + "</td>";
+								historyTable += "<td>" + data[i].receiveTime + "</td>";
 								historyTable += "</tr>";
 							}
 						}
@@ -216,7 +213,6 @@
 						});
 					}
 				});
-				
 			}
 		</script>
 	</body>

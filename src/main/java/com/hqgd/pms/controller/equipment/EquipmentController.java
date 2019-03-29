@@ -1,8 +1,6 @@
 package com.hqgd.pms.controller.equipment;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,82 +75,25 @@ public class EquipmentController {
 		log.info("查询设备结束");
 	}
 
-	@RequestMapping(value = "/selectByEquipmentName")
-	public void selectByEquipmentName(Model model, String equipmentName, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		log.info("查询设备开始");
-		EquipmentInfo equipmentInfo = equipmentService.selectByEquipmentName(equipmentName);
-		List<EquipmentInfo> equipmentList = new ArrayList<EquipmentInfo>();
-		if (equipmentInfo != null) {
-			equipmentList.add(equipmentInfo);
-		}
+
+	@RequestMapping(value = "/searchEquiByParam")
+	@ResponseBody
+	public void searchEquiByParam(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		log.info("查询符合表单参数的所有设备开始");
+		List<EquipmentInfo> equipmentList = equipmentService.selectAllByParam(request);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000004");
+		resultMap.put("resultCode", "00000005");
 		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
 		resultMap.put("message", "");
 		resultMap.put("data", equipmentList);
 		resultMap.put("total", equipmentList.size());
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询设备结束");
+		log.info("查询符合表单参数的所有设备开始");
 	}
 
-	@RequestMapping(value = "/selectAllByUser")
-	@ResponseBody
-	public void selectAllByUser(Model model, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		log.info("查询该用户下所有设备开始");
-		String userName = request.getParameter("userName");
-		List<EquipmentInfo> equipmentList = equipmentService.selectAllByUser(userName);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000005");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "");
-		resultMap.put("data", equipmentList);
-		resultMap.put("total", equipmentList.size());
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询该用户下所有设备结束");
-	}
-
-	@RequestMapping(value = "/selectAllByAddress")
-	@ResponseBody
-	public void selectAllByAddress(Model model, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		log.info("查询该地区下所有设备开始");
-		String adcode = request.getParameter("adcode");
-		List<EquipmentInfo> equipmentList = equipmentService.selectAllByAddress(adcode);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000005");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "");
-		resultMap.put("data", equipmentList);
-		resultMap.put("total", equipmentList.size());
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询该地区下所有设备结束");
-	}
-	@RequestMapping(value = "/selectAllByType")
-	@ResponseBody
-	public void selectAllByType(Model model, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		log.info("查询该地区下所有设备开始");
-		String type = request.getParameter("type");
-		List<EquipmentInfo> equipmentList = equipmentService.selectAllByType(type);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000005");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "");
-		resultMap.put("data", equipmentList);
-		resultMap.put("total", equipmentList.size());
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("查询该地区下所有设备结束");
-	}
 	@RequestMapping(value = "/selectAll")
 	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -169,33 +110,4 @@ public class EquipmentController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("查询所有设备结束");
 	}
-
-	@RequestMapping("/recordExport")
-	public void recordExport(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String path = request.getParameter("path");
-		String classPath = equipmentService.execRecordExport(path);
-		try {
-			try {
-				path = new String(classPath.getBytes(), "ISO8859-1");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			response.setContentType("application/vnd.ms-excel;charset=gb2312");
-			// response.setContentType("application/octet-stream;charset=ISO8859-1");
-			response.setHeader("Content-Disposition", "attachment;filename=" + path);
-			response.addHeader("Pargam", "no-cache");
-			response.addHeader("Cache-Control", "no-cache");
-			Map<String, Object> resultMap = new HashMap<String, Object>();
-			resultMap.put("success", Boolean.TRUE.toString());
-			resultMap.put("resultCode", "00000000");
-			resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-			resultMap.put("message", "查询历史数据成功");
-			resultMap.put("data", path);
-			response.getWriter().write(new Gson().toJson(resultMap));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
 }

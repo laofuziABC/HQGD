@@ -17,7 +17,7 @@ public class UpdateOutTxtService implements IUpdateOutTxtService{
 	@Override
 	public Boolean insertBatch(ArrayList<ChannelTemp> channelTempList) {
 		for(ChannelTemp c:channelTempList) {
-			int i = channelTempMapper.insert(c);
+			channelTempMapper.insert(c);
 		}
 		return true;
 	}

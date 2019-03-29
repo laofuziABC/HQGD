@@ -1,6 +1,7 @@
 package com.hqgd.pms.dao.equipment;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hqgd.pms.domain.EquipmentInfo;
 
@@ -17,22 +18,24 @@ public interface EquipmentInfoMapper {
 
 	int updateByPrimaryKey(EquipmentInfo record);
 
-	List<EquipmentInfo> selectAllEquipmentByUser(String userName);
-
 	List<EquipmentInfo> selectAll();
-
-	int selectTotalChNum();
-
-	int selectEquipCh(String equipmentId);
 
 	List<EquipmentInfo> selectLngLat();
 
-	List<EquipmentInfo> selectAllEquipmentByAddress(String adcode);
-
-	EquipmentInfo selectByEquipmentName(String equipmentName);
-
-	List<EquipmentInfo> selectAllByType(String type);
-
 	List<EquipmentInfo> selectLngLatByUser(String userName);
+
+	List<EquipmentInfo> selectAllByParam(Map<String, String> param);
+	
+	List<String> selectFrame();
+
+	String selectTypeById(String equipmentId);
+
+	EquipmentInfo selectByHbid(Map<String, String> param);
+
+	List<Map<String, String>> selectAllByHb(String heartbeat);
+
+	List<Map<String, String>> selectConEqui1();
+
+	List<EquipmentInfo> selectAllType1(String type);
 
 }

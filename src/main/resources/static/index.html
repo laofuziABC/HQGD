@@ -22,23 +22,71 @@
 	href="bower_components/jvectormap/jquery-jvectormap.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-<!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
+<!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-
 	<div class="wrapper">
-
 		<!-- 页面顶部标题【开始】 -->
 		<header class="main-header" id="main-header"> </header>
 		<!-- 页面顶部标题【结束】 -->
 		<!-- 侧边栏【开始】 -->
-		<aside class="main-sidebar" id="main-sidebar"></aside>
+		<aside class="main-sidebar" id="main-sidebar">
+			<section class="sidebar">
+				<ul class="sidebar-menu" data-widget="tree">
+					<li class="header">菜单栏</li>
+					<li><a href="#" onclick="javascript: window.history.go(0);"
+						style="margin-top: 10px;"> <i class="fa fa-home"
+							style="font-size: 22px"></i> <span>首页</span>
+					</a></li>
+					<li><a href="#"
+						onclick="loadMainContent('childrenHtml/content/ssjc.html');">
+							<i class="fa fa-line-chart"></i> <span>数据监测</span>
+					</a></li>
+					<!-- <li class="manager"><a href="#"
+						onclick="loadMainContent('childrenHtml/equipment/connectMonitor.html');">
+							<i class="fa fa-unlink"></i> <span>通信监测</span>
+					</a></li> -->
+					<li><a href="#"
+						onclick="loadMainContent('childrenHtml/equipment/equipmentList.html');">
+							<i class="fa fa-gears"></i> <span>设备管理</span>
+					</a></li>
+					<!-- <li class="manager"><a href="#"
+						onclick="loadMainContent('childrenHtml/equipment/routerList.html');">
+							<i class="fa fa-wifi"></i> <span>路由器管理</span>
+					</a></li> -->
+					<!-- 管理员菜单manager -->
+					<li class="manager"><a href="#"
+						onclick="loadMainContent('childrenHtml/user/userList.html');">
+							<i class="fa fa-user"></i> <span>用户管理</span>
+					</a></li>
+					<li class="treeview"><a href="#"> <i class="fa fa-sliders"></i>
+							<span>系统集成</span> <span class="pull-right-container"><i
+								class="fa fa-angle-left pull-right"></i></span>
+					</a>
+						<ul class="treeview-menu">
+							<!-- <li><a href="#" onclick="network();"><i
+									class="fa fa-bookmark"></i><span>图形设计</span></a></li> -->
+							<!-- <li><a href="#"
+								onclick="loadMainContent('childrenHtml/operationalMonitoring/update.html');">
+									<i class="fa fa fa-bookmark"></i> 上传图例
+							</a></li> -->
+							<li><a href="#"
+								onclick="loadMainContent('childrenHtml/system/system.html');">
+									<i class="fa fa-bookmark"></i> 系统参数
+							</a></li>
+						</ul></li>
+
+					<!-- 微信二维码（图片） -->
+					<li><img id="sidebar-footer" src="vince/images/QRcode.jpg"
+						style="position: fixed; bottom: 0; width: 200px; height: 200px; padding: 20px;"
+						alt="Logo"></li>
+				</ul>
+			</section>
+		</aside>
 		<!-- 侧边栏【结束】 -->
 		<div id="content-wrapper">
 			<!-- Main content -->
@@ -46,11 +94,10 @@
 				<div id="mapContainer" class="map" tabindex="0"></div>
 			</section>
 		</div>
-		<!-- /.content-wrapper -->
 		<div id="updatepass"></div>
 		<footer class="main-footer">
 			<strong>Copyright &copy; 2018-2028 <a
-				href="https://adminlte.io">Almsaeed Studio</a>.
+				href="http://www.optsensor.com">Optsensor</a>.
 			</strong> All rights reserved.
 		</footer>
 
@@ -66,13 +113,9 @@
 			<!-- Tab panes -->
 			<div class="tab-content"></div>
 		</aside>
-		<!-- /.control-sidebar -->
-		<!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
+		<!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
 		<div class="control-sidebar-bg"></div>
-
 	</div>
-	<!-- ./wrapper -->
 
 	<!-- jQuery 3 -->
 	<!-- <script src="bower_components/jquery/dist/jquery.min.js"></script> -->
@@ -82,7 +125,8 @@
 	<!-- FastClick -->
 	<script src="bower_components/fastclick/lib/fastclick.js"></script>
 	<!-- AdminLTE App -->
-	<script src="dist/js/adminlte.min.js"></script>
+	<!-- <script src="dist/js/adminlte.min.js"></script> -->
+	<script src="dist/js/adminlte.js"></script>
 	<!-- Sparkline -->
 	<script
 		src="bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
@@ -98,49 +142,93 @@
 	<!-- 在主页面引入HighCharts插件 -->
 	<script type="text/javascript" src="dist/js/chart/highcharts.js"></script>
 	<script type="text/javascript" src="dist/js/chart/high-chart.js"></script>
-	
+
 	<script src="dist/js/jquery.table2excel.js"></script>
 	<script type="text/javascript">
-		//获取页面参数【开始】
-		function getParam(string) {
-		    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
-		    var l = decodeURI(window.location.search);
-		    var r = l.substr(1).match(reg);
-		    if (r != null){
-		    	var result = decodeURI(r[2]);
-		    	return unescape(result);
-		    }
-		}
-		//获取页面参数【结束】
-		function updatePass() {
-			$("#updatepass").load("childrenHtml/updatepass.html");
-		}
-		function updatePass1() {
-			$("#updatepass").empty();
-		}
-		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
-		function formatDateToString(param){
-			var y = param.getFullYear();
-			var M = unifiedFormat(param.getMonth()+1);
-			var d = unifiedFormat(param.getDate());
-			var H = unifiedFormat(param.getHours());
-			var m = unifiedFormat(param.getMinutes());
-			var s = unifiedFormat(param.getSeconds());
-			var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
-			return result;
-		}
-		function formatInitDateToString(param){
-			var y = param.getFullYear();
-			var M = unifiedFormat(param.getMonth()+1);
-			var d = unifiedFormat(param.getDate());
-			var result = y+"-"+M+"-"+d+" 00:00:00";
-			return result;
-		}
-		function unifiedFormat(param){
-			return (param<10)?("0"+param):param;
-		}
-		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
-	</script>
+			//获取页面参数【开始】
+			function getParam(string) {
+			    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
+			    var l = decodeURI(window.location.search);
+			    var r = l.substr(1).match(reg);
+			    if (r != null){
+			    	var result = decodeURI(r[2]);
+			    	return unescape(result);
+			    }
+			}
+			//获取页面参数【结束】
+			function updatePass() {
+				$("#updatepass").load("childrenHtml/updatepass.html");
+			}
+			function updatePass1() {
+				$("#updatepass").empty();
+			}
+			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
+			function formatDateToString(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var H = unifiedFormat(param.getHours());
+				var m = unifiedFormat(param.getMinutes());
+				var s = unifiedFormat(param.getSeconds());
+				var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
+				return result;
+			}
+			function formatInitDateToString(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var result = y+"-"+M+"-"+d+" 00:00:00";
+				return result;
+			}
+			function formatDate2String(param){
+				var y = param.getFullYear();
+				var M = unifiedFormat(param.getMonth()+1);
+				var d = unifiedFormat(param.getDate());
+				var result = y+"-"+M+"-"+d;
+				return result;
+			}
+			function unifiedFormat(param){
+				return (param<10)?("0"+param):param;
+			}
+			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
+			//根据用户角色，加载用户菜单【开始】
+			var roleId =getParam("roleId");
+			var userName =getParam("userName");
+			$("#main-header").load("childrenHtml/title.html");
+			//$("#main-sidebar").load("childrenHtml/side-menu.html");
+			var managerMenu=document.getElementsByClassName("manager");
+			var customerMenu=document.getElementsByClassName("customer");
+			for(let i=0; i<managerMenu.length; i++){
+				managerMenu[i].style.display=(roleId==1)?"block":"none";
+			}
+			for(let i=0; i<customerMenu.length; i++){
+				customerMenu[i].style.display=(roleId!=1)?"block":"none";
+			}
+			/* $(function(){
+				if(roleId=="0"){
+					$("#main-sidebar").load("childrenHtml/side-menu1.html");
+				}else{
+					$("#main-sidebar").load("childrenHtml/side-menu.html");
+				}
+				//$("#main-header").load("childrenHtml/title.html");
+			}); */
+			//根据用户角色，加载用户菜单【结束】
+			//关联菜单和页面
+			function loadMainContent(param) {
+				if($("body").hasClass("sidebar-open")){
+					$(".sidebar-toggle").click();
+				}
+				if (param != null) {
+					$("#content-wrapper").load(param);
+				}
+			}
+			//小屏幕指定菜单选择后隐藏
+			$(".selection>li").on("click",function(){
+				if($("body").hasClass("sidebar-open")){
+					$(".sidebar-toggle").click();
+				}
+			});
+		</script>
 	<!-- 页面地图【开始】 -->
 	<script type="text/javascript"
 		src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer">
@@ -154,18 +242,7 @@
 			myWindow.style.width=screenWidth+"px";
 			myWindow.style.height=screenHeight+"px";
 			//设定高度适应屏幕高度【结束】
-			var roleId =getParam("roleId");
-			var userName =getParam("userName");
-			$("#main-sidebar").load("childrenHtml/side-menu.html");
-			$("#main-header").load("childrenHtml/title.html");
-			$(function(){
-				if(roleId=="0"){
-					$("#main-sidebar").load("childrenHtml/side-menu1.html");
-				}else{$("#main-sidebar").load("childrenHtml/side-menu.html");}
-				
-				$("#main-header").load("childrenHtml/title.html");
-			});
-			 AMapUI.loadUI(['overlay/SimpleInfoWindow'], function(SimpleInfoWindow) {
+			AMapUI.loadUI(['overlay/SimpleInfoWindow'], function(SimpleInfoWindow) {
 			var cluster, markers = [];
 		    var points= [];
 		    var map = new AMap.Map("mapContainer", {
@@ -237,6 +314,7 @@
 		        if (tag == 2) {//完全自定义
 		            cluster = new AMap.MarkerClusterer(map, markers, {
 		                gridSize: 80,
+		                maxZoom:17,
 		                renderCluserMarker: _renderCluserMarker
 		            });
 		        }else if (tag == 1) {//自定义图标
@@ -336,6 +414,15 @@
 		    	}
 		    
 			 }); 
+			
+			function network() {
+				var screenHeight = window.screen.availHeight;
+				var screenWidth = window.screen.availWidth;
+				var iWidth = screenWidth * 0.875 + "px;";
+				var iHeight = screenHeight * 0.82 + "px;";
+				var iframe = "<div class=\"wrapper\"><iframe style='width: "+iWidth+"height: "+iHeight+"' src='childrenHtml/graphicDesign/network.html'></iframe></div>";
+				$("#content-wrapper").html(iframe);
+			}
 	</script>
 	<!-- 页面地图【结束】 -->
 

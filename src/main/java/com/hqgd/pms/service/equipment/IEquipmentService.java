@@ -3,6 +3,8 @@ package com.hqgd.pms.service.equipment;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.User;
 
@@ -16,14 +18,8 @@ public interface IEquipmentService {
 
 	List<EquipmentInfo> selectAll();
 
-	List<EquipmentInfo> selectAllByUser(String userName);
+	List<EquipmentInfo> selectAllByParam(HttpServletRequest request);
 
-	List<EquipmentInfo> selectAllByAddress(String code);
-
-	EquipmentInfo selectByEquipmentName(String equipmentName);
-
-	String execRecordExport(String path);
-
-	List<EquipmentInfo> selectAllByType(String type);
+	EquipmentInfo selectByHbid(Map<String, String> param);
 
 }

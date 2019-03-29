@@ -7,8 +7,12 @@
     <result column="EQUIPMENT_NAME" jdbcType="VARCHAR" property="equipmentName" />
     <result column="TYPE" jdbcType="VARCHAR" property="type" />
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="TEL" jdbcType="VARCHAR" property="tel" />
     <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
     <result column="CHANNEL_TEM" jdbcType="VARCHAR" property="channelTem" />
+    <result column="NUM_OF_CH" jdbcType="INTEGER" property="numOfCh" />
+    <result column="HEARTBEAT_ID" jdbcType="VARCHAR" property="heartbeatId" />
+    <result column="HEARTBEAT_NAME" jdbcType="VARCHAR" property="heartbeatName" />
     <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
     <result column="ADCODE" jdbcType="VARCHAR" property="adcode" />
     <result column="CADCODE" jdbcType="VARCHAR" property="cadcode" />
@@ -22,73 +26,99 @@
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    EQUIPMENT_ID, ID, EQUIPMENT_NAME,TYPE, USER_NAME, USER_ID, CHANNEL_TEM, ADDRESS, ADCODE, 
+    EQUIPMENT_ID, ID, EQUIPMENT_NAME,TYPE, USER_NAME, USER_ID, CHANNEL_TEM, NUM_OF_CH,HEARTBEAT_ID,HEARTBEAT_NAME,ADDRESS, ADCODE, 
     CADCODE, PADCODE, LNG_LAT, FRAME_STRU, ICON, CREATOR, CONVERT ( VARCHAR ( 100 ), CREATE_TIME, 20 ) AS CREATE_TIME, 
     UPDATER, CONVERT ( VARCHAR ( 100 ), UPDATE_TIME, 20 ) AS UPDATE_TIME
   </sql>
-    <select id="selectLngLat" resultMap="BaseResultMap">
+  <select id="selectLngLat" resultMap="BaseResultMap">
     select 
     LNG_LAT,EQUIPMENT_ID, EQUIPMENT_NAME
     from hq_equipment_info
   </select>
-  <select id="selectTotalChNum" resultType="java.lang.Integer" >
-	SELECT 
-  		COUNT(EQUIPMENT_ID) 
-	FROM
-  		hq_equipment_param
+  <select id="selectAllType1" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hq_equipment_info
+    where type='1'
   </select>
-  <select id="selectEquipCh" resultType="java.lang.Integer" >
-	SELECT 
-  		COUNT(EQUIPMENT_ID) 
-	FROM
-  		hq_equipment_param
-  	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+  <select id="selectConEqui1" resultType="java.util.HashMap">
+    SELECT
+	EQUIPMENT_ID AS id,
+	EQUIPMENT_NAME AS text,
+	HEARTBEAT_ID AS parent 
+FROM
+	hq_equipment_info e,
+	hq_router_info r 
+WHERE
+	r.CONNECT = 'Y' 
+	AND r.ROUTER_ID = e.HEARTBEAT_ID
   </select>
-  <select id="selectAllEquipmentByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectAllByHb" parameterType="java.lang.String" resultType="java.util.HashMap">
+    SELECT
+	EQUIPMENT_ID AS id,
+	EQUIPMENT_NAME AS text,
+	HEARTBEAT_ID AS parent
+    from hq_equipment_info
+    WHERE
+    HEARTBEAT_ID = #{heartbeatId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByHbid" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT
+	EQUIPMENT_ID,
+	EQUIPMENT_NAME,
+	CHANNEL_TEM,
+	TYPE,
+	NUM_OF_CH,
+	u.USER_NAME,
+	u.TEL 
+   FROM
+	hq_equipment_info h,
+	access_control_user u 
+   WHERE
+	u.ID = H.USER_ID
+    and HEARTBEAT_ID = #{heartbeatId,jdbcType=VARCHAR}
+    and FRAME_STRU = #{frameStru,jdbcType=VARCHAR}
+  </select>
+  <select id="selectTypeById" parameterType="java.lang.String" resultType="java.lang.String">
+    select 
+    TYPE
+    from hq_equipment_info
+    where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllByParam" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from hq_equipment_info
     where 1=1 
-     AND USER_NAME = #{userName,jdbcType=VARCHAR}
-  </select>
-  <select id="selectAllByType" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from hq_equipment_info
-    where 1=1 
-     AND TYPE = #{type,jdbcType=VARCHAR}
-  </select>
-  <select id="selectAllEquipmentByAddress"  resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from hq_equipment_info
-    where 1=1
-    <if test="_parameter.length() == 2">
-     and  PADCODE = #{_parameter,jdbcType=VARCHAR}
-    </if> 
-    <if test="_parameter.length() == 4">
-     and  CADCODE = #{_parameter,jdbcType=VARCHAR}
+    <if test="type!= null and type!= 0">
+     AND TYPE = #{type}
     </if>
-    <if test="_parameter.length() == 6">
-     and  ADCODE = #{_parameter,jdbcType=VARCHAR}
+    <if test="equipmentName!= null">
+     AND EQUIPMENT_NAME = #{equipmentName}
+    </if>
+    <if test="userName!= null and userName!=''">
+     AND USER_NAME = #{userName}
+    </if> 
+    <if test="adcode!= null and adcode.length() == 2">
+     and  PADCODE = #{adcode}
+    </if> 
+    <if test="adcode!= null and adcode.length() == 4">
+     and  CADCODE = #{adcode}
+    </if>
+    <if test="adcode!= null and adcode.length() == 6">
+     and  ADCODE = #{adcode}
     </if> 
   </select>
+  
   <select id="selectAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from hq_equipment_info
   </select>
-  <select id="selectEquipmentByGroup" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+  
+  <select id="selectFrame">
+    select FRAME_STRU
     from hq_equipment_info
-    where GROUP = #{group,jdbcType=VARCHAR}
-  </select>
-  <select id="selectByEquipmentName" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from hq_equipment_info
-    where EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -102,14 +132,14 @@
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     insert into hq_equipment_info (EQUIPMENT_ID, EQUIPMENT_NAME,TYPE, 
-      USER_NAME, USER_ID, CHANNEL_TEM, 
+      USER_NAME, USER_ID, CHANNEL_TEM, NUM_OF_CH,HEARTBEAT_ID,HEARTBEAT_NAME
       ADDRESS, ADCODE, CADCODE, 
       PADCODE, LNG_LAT, FRAME_STRU, 
       ICON, CREATOR, CREATE_TIME, 
       UPDATER, UPDATE_TIME)
     values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{userName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{channelTem,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{adcode,jdbcType=VARCHAR}, #{cadcode,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{channelTem,jdbcType=VARCHAR}, #{numOfCh,jdbcType=INTEGER},
+      #{heartbeatId,jdbcType=VARCHAR},#{heartbeatName,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR}, #{adcode,jdbcType=VARCHAR}, #{cadcode,jdbcType=VARCHAR}, 
       #{padcode,jdbcType=VARCHAR}, #{lngLat,jdbcType=VARCHAR}, #{frameStru,jdbcType=VARCHAR}, 
       #{icon,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
@@ -134,6 +164,15 @@
       </if>
       <if test="channelTem != null">
         CHANNEL_TEM,
+      </if>
+      <if test="numOfCh != null">
+        NUM_OF_CH,
+      </if>
+      <if test="heartbeatId != null">
+        HEARTBEAT_ID,
+      </if>
+      <if test="heartbeatName != null">
+        HEARTBEAT_NAME,
       </if>
       <if test="address != null">
         ADDRESS,
@@ -188,6 +227,15 @@
       <if test="channelTem != null">
         #{channelTem,jdbcType=VARCHAR},
       </if>
+      <if test="numOfCh != null">
+        #{numOfCh,jdbcType=INTEGER},
+      </if>
+      <if test="heartbeatId != null">
+        #{heartbeatId,jdbcType=INTEGER},
+      </if>
+      <if test="heartbeatName != null">
+        #{heartbeatName,jdbcType=INTEGER},
+      </if>
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
       </if>
@@ -238,8 +286,17 @@
       <if test="userId != null">
         USER_ID = #{userId,jdbcType=VARCHAR},
       </if>
+      <if test="numOfCh != null">
+        NUM_OF_CH = #{numOfCh,jdbcType=INTEGER},
+      </if>
       <if test="channelTem != null">
         CHANNEL_TEM = #{channelTem,jdbcType=VARCHAR},
+      </if>
+      <if test="heartbeatName != null">
+        HEARTBEAT_NAME = #{heartbeatName,jdbcType=VARCHAR},
+      </if>
+      <if test="heartbeatId != null">
+        HEARTBEAT_ID = #{heartbeatId,jdbcType=VARCHAR},
       </if>
       <if test="address != null">
         ADDRESS = #{address,jdbcType=VARCHAR},
@@ -285,6 +342,9 @@
       USER_NAME = #{userName,jdbcType=VARCHAR},
       USER_ID = #{userId,jdbcType=VARCHAR},
       CHANNEL_TEM = #{channelTem,jdbcType=VARCHAR},
+      NUM_OF_CH = #{numOfCh,jdbcType=INTEGER},
+      HEARTBEAT_ID = #{heartbeatId,jdbcType=VARCHAR},
+      HEARTBEAT_NAME = #{heartbeatName,jdbcType=VARCHAR},
       ADDRESS = #{address,jdbcType=VARCHAR},
       ADCODE = #{adcode,jdbcType=VARCHAR},
       CADCODE = #{cadcode,jdbcType=VARCHAR},

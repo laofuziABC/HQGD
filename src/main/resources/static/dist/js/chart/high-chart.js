@@ -17,35 +17,63 @@ var tooltip={shared: true, useHTML: true,
 			return '<br/><span style="color:'+this.color+'">\u25CF</span>'+this.series.name+'：'+s;
 		}
 };
-var yAxis={title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 };
-var plotOptions={spline: {marker: {radius: 1, lineWidth: 1 } } };
+var plotOptions={spline: {marker: {radius: 0, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
+var lang={loading: "数据载入中……"};
+var loading={labelStyle: {color: "red", fontWeight: "bold"}, 
+		style: {backgroundColor: "rgba(255,255,255,0.7)", backgroundImage: "url('login/img/jiazaizhong.gif')", backgroundSize: '100% 100%'}
+};
 //设置图表公用配置项【结束】
 //配置历史数据监测曲线图配置项
 var historyOption = {
-	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20},
+	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20, panning: true, panKey: 'ctrl'},
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
-	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
-	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, 
-		formatter: function(){ var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }
-	}}
+	lang: lang, loading: loading, legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+	yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
+	xAxis:{type: 'category', tickWidth: 0, labels: {style: {color: '#ffffff'}, formatter: function(){if(this.value){var str1=this.value.substr(0,10); var str2=this.value.substr(11,8); return String.prototype.concat(str2,"<br />", str1); }}	}},
+	series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
 //配置当前数据监测统计图
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
-    title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: { useUTC: false },
-    yAxis: yAxis, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+    title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: {useUTC: false },
+    lang: lang, loading: loading, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+    yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
+    series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
-//配置当空白统计图
-var blankOption={
-	chart: {zoomType: ['x','y'], backgroundColor: '#21242e' },
-	title: {text: '温度曲线图', style: {color: '#ffffff'}},
-	legend: legend, tooltip: tooltip, yAxis: yAxis, plotOptions: plotOptions, colors: colors,
-	xAxis:{type: 'category'}, credits:{enabled: false},
-	yAxis:{title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
-	series:[{name: '数据加载中', data: [], type:"spline", pointInterval: 6e4}]
-}
+//配置设备通道最值统计图
+var extremumOption={
+	chart: { type: 'column', backgroundColor: "#21242e", marginRight: 10 },
+    title: { text: '通道温度最值统计图', style: {color: '#ffffff'} },
+    lang: lang, loading: loading, legend: legend, colors: colors, credits:{enabled: false},
+    yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
+    xAxis: {type: 'category', labels: {style: {color: '#ffffff'} } },
+    plotOptions: {column: {dataLabels: {enabled: true, verticalAlign: 'top', inside: true, style:{color: '#ffffff'} } } },
+    series:[{name: '通道温度最值', data: []}]
+};
+//配置设备故障类型统计图
+var errorTypeOption={
+	chart: {backgroundColor: "#21242e" },
+	title: { text: "设备故障类型统计图", style: {color: "#ffffff"} },
+	loading: loading, colors: colors, credits:{enabled: false},
+	legend:{enabled: true, itemStyle:{"color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
+	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
+			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
+	plotOptions:{pie: {cursor: "pointer", dataLabels: {color: "#fff" },  showInLegend: true }, series:{events:{click: changeChannelChart}} },
+	series:[{type: "pie", name: "故障类型",data:[]}]
+};
+//配置设备各通道发生故障次数统计图
+var errorChannelOption={
+	chart: { backgroundColor: "#21242e" },
+	title: { text: "通道发生故障次数统计图", style: {color: "#ffffff"} },
+	loading: loading, colors: colors, credits:{enabled: false},
+	legend:{enabled: true, itemStyle:{ "color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
+	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
+			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
+	plotOptions:{pie: {cursor: "pointer", dataLabels: {color: "#fff" },  showInLegend: true } },
+	series:[{type: "pie", name: "通道次数统计",data:[]}]
+};
 
 /**
  * 以下的方法用于同步或者异步获取图表的数据资源
@@ -67,22 +95,30 @@ function getChartData(url, param){
 /*方法2：异步获取指定时间段内的图表数据
  * url：获取资源的途径，不能传空值；param：获取资源的传参。
 */
+
 function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
-		success: function(result){
+		success: function(data){
 			var series=[];
-			var data = result.data;
-			if(JSON.stringify(data) != '{}'){
-				var legendData = data.channelNumArr;
-				var seriesData = data.channelTemArr;
+			var equiName = data.equipment.equipmentName;
+			var legendData = data.channelNumArr;
+			var seriesData = data.channelTemArr;
+			if(seriesData.length>0){
 				var totalCount = seriesData[0].length;
 				//根据温度值，设置纵轴上下限【开始】
-				var tempArray=[];
+				//逻辑一：通过逐步比较，取出所有系列最值
+				var max, min;
 				for(let i=0; i<seriesData.length; i++){
-					tempArray=tempArray.concat(seriesData[i]);
+					max=(max>Math.max.apply(null, seriesData[i]))?max:(Math.max.apply(null, seriesData[i]));
+					min=(min<Math.min.apply(null, seriesData[i]))?min:(Math.min.apply(null, seriesData[i]));
 				}
-				var max=Math.max.apply(null, tempArray);
-				var min=Math.min.apply(null, tempArray);
+//				//逻辑二：先将所有的温度值合并为一个数组，取出最值(数据量大时浏览器可能会出现数据栈溢出)
+//				var tempArray=[];
+//				for(let i=0; i<seriesData.length; i++){
+//					tempArray=tempArray.concat(seriesData[i]);
+//				}
+//				var max=Math.max.apply(null, tempArray);
+//				var min=Math.min.apply(null, tempArray);
 				historyOption.yAxis.min=(min > -10)?(min-10):0;
 				historyOption.yAxis.max=(max < 100)?(max+10):100;
 				//根据温度值，设置纵轴上下限【结束】
@@ -94,12 +130,14 @@ function drawingHistoryChart(url, param){
 				historyOption.xAxis.categories=data.receiveTime;
 				historyOption.xAxis.tickInterval=Math.floor(totalCount/11);
 				historyOption.series = series;
-				$("#chart_history").empty();
-				$("#chart_history").highcharts(historyOption);
 			}else{
-				$("#chart_history").empty();
-				$("#chart_history").highcharts(blankOption);
+				historyOption.yAxis.min=0;
+				historyOption.yAxis.max=100;
+				historyOption.series=[{name: '无相关数据', data: [], type:"spline", pointInterval: 6e4}];
 			}
+			historyOption.title.text="历史温度曲线图("+equiName+")";
+			$("#chart_history").highcharts().destroy();
+			$("#chart_history").highcharts(historyOption);
 		}
 	});
 }
@@ -124,9 +162,9 @@ var START_TIME=new Date(parseInt(LOGIN_TIME));
 var ST_VALUE=START_TIME.getTime();
 var NOW_TIME=new Date();
 var NT_VALUE=NOW_TIME.getTime();
-START_TIME=(NT_VALUE-ST_VALUE>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(START_TIME);
 //获取并计算常量【结束】
 function initCurrentChart(){
+	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
 	var startTime = parent.formatDateToString(START_TIME);
 	var endTime = parent.formatDateToString(new Date());
 	var url = "dataAcquisition/periodDate";
@@ -136,6 +174,7 @@ function initCurrentChart(){
 	var channelList=result.channelList;
 	var timeList=result.timeList;
 	var dataList=result.dataList;
+	var equiName = result.equipment.equipmentName;
 	var series=[];
 	//只有通道数和系列数相等，才可以绘制图表
 	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
@@ -157,13 +196,14 @@ function initCurrentChart(){
 			series.push(serie);
 		}
 	}else{
-		for(let i=0; i<channelList.length; i++){
-			var serie = {name: channelList[i], data: [], type:"spline", pointInterval: 6e4};
+		for(let i=1; i<=result.equipment.numOfCh; i++){
+			var serie = {name: "CH"+i, data: [], type:"spline", pointInterval: 6e4};
 			series.push(serie);
 		}
 	}
+	currentOption.title.text="实时温度监测图("+equiName+")";
 	currentOption.series = series;
-	$("#chart_current").empty();
+	$("#chart_current").highcharts().destroy();
 	$("#chart_current").highcharts(currentOption);
 }
 //计算点的坐标，落在图表中
@@ -171,8 +211,9 @@ function addPoints(){
 	var interval = 60000;
 	var series = this.series;
 	var timing=setInterval(function (){
+		//在实时监测图表上加点
 		var url="dataAcquisition/realtime";
-		var param={"equipmentId": equiId};
+		var param={"equipmentId": equiId1};
 		var pointResult = getChartData(url, param);
 		var pointsData = (pointResult==null)?null:pointResult.data;
 		if(pointsData!=null && JSON.stringify(pointsData)!="{}" && (pointsData.length==pointsData[0].numOfCh)){
@@ -205,17 +246,38 @@ function addPoints(){
 	     clearInterval(i);
 	}
 }
-
+//初始化实时监控表
+function showCurrentContent(){
+	if(equiId!=null){
+		//加载通道温度
+		showBlocks();
+		//加载图表
+		$("#chart_current").highcharts(currentOption);
+		var chart = $("#chart_current").highcharts();
+		chart.showLoading();
+		initCurrentChart();
+	}
+}
+//展示实时监控通道最新监测的温度
+function showBlocks(){
+	var url="dataAcquisition/realtime";
+	var param={"equipmentId": equiId};
+	var result = getChartData(url, param);
+	var data = (result==null)?null:(result.data);
+	drawCurrentChannels(data);
+}
 function drawCurrentChannels(param){
 	//设置DIV高度
-	$("#channelDiv").css({"height":($(window).height())*0.45});
 	var channel = "";
-	let num = (param==null)?0:(param.length);
+	var num;
+	if(param==null){ num=0; $("#channelDiv").css({"height":($(window).height())*0.45}); }
+	else{ num=param.length; }
 	if(num>0){
 		//超过2分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
 		cTime=(new Date()).getTime();
-		$("#last-time").text("最后监测时间："+param[0].receiveTime);
+		var timetext = "最新通道温度(单位:℃，最后监测时间："+param[0].receiveTime+")";
+		$("#last-time").text(timetext);
 		if((cTime-lTime)>(2*60*1000)){ $("#last-time").css({"color":"red"}); }
 		else{$("#last-time").css({"color":"#21242e"});}
 		//设定尺寸适应容器【开始】
@@ -236,11 +298,11 @@ function drawCurrentChannels(param){
 				let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
 				if(state==5){
 					var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
-					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>"+resultMsg+"</span></td>"; 
+					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+resultMsg+"</span></td>"; 
 				}
-				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>- - - - -</span></td>"; }
-				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>- - -</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+":</span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - - - -</span></td>"; }
+				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - -</span></td>"; }
+				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 			}
 			channel+="</tr>";
 		}
@@ -263,3 +325,129 @@ function setValueRangeForCChart(param){
 		currentOption.yAxis.min=0;
 	}
 }
+//加载通道温度最值统计图
+function fetchExtremumChartData(url, param){
+	$.ajax({
+		url: url, type: "post", data: param, dataType: "json",
+		success: function(result){
+			var equiName = result.equipment.equipmentName;
+			var dataList = result.extremumList;
+			var channels=[], maxs=[], mins=[];
+			if(dataList.length>0){
+				for(var i=0; i<dataList.length; i++){
+					channels.push(dataList[i].channel);
+					maxs.push(dataList[i].max);
+					mins.push(dataList[i].min);
+				}
+			}
+			loadingExtremumChart(maxs, mins, channels, equiName);
+		}
+	});
+}
+function loadingExtremumChart(maxs, mins, channels, equiName){
+	if(maxs.length!=channels.length) return;
+	if(mins.length!=channels.length) return;
+	if(channels.length>0){
+		var maxValue=(maxValue>Math.max.apply(null, maxs))?maxValue:(Math.max.apply(null, maxs));
+		var minValue=(minValue<Math.min.apply(null, mins))?minValue:(Math.min.apply(null, mins));
+		extremumOption.yAxis.min=(minValue<0)?minValue:0;
+		extremumOption.yAxis.max=maxValue;
+		extremumOption.xAxis.categories=channels;
+		extremumOption.series=[{name: "最大值", data: maxs, type: 'column'}, {name: "最小值", data: mins, type: 'column'}];
+	}else{
+		extremumOption.series=[{name: "无相关数据", data: [], type: 'column'}];
+	}
+	/*加载最值图表数据*/
+	extremumOption.title.text="通道温度最值统计图("+equiName+")";
+	$("#chart_extremum").highcharts().destroy();
+	$("#chart_extremum").highcharts(extremumOption);
+}
+//加载通道报错信息统计图
+var errors_forchart;
+function fetchErrorChartData(url,param){
+	var resultMap={};
+	$.ajax({url: url, type: "post", data: param, dataType: "json", async:false,
+		success: function(result){resultMap=result;},
+		error: function(){resultMap=null; }
+	});
+	var result_data=resultMap.data;
+	if(result_data==null || result_data.length==0) {
+		errorChannelOption.series=[{type: "pie", name: "故障类型",data:[{name: '无异常数据', y: 1}]}];
+		errorTypeOption.series=[{type: "pie", name: "通道次数统计",data: [{name: '无异常数据', y: 1}]}];
+		$("#chart_error_channel").highcharts(errorChannelOption);
+		$("#chart_error_type").highcharts(errorTypeOption);
+		return;
+	}
+	var channels=[], code2=[], code3=[], code4=[], code9=[];
+	for(var i=0; i<result_data.length; i++){
+		channels.push(result_data[i].channelNum);
+		code2.push(result_data[i].communicate);
+		code3.push(result_data[i].fiber);
+		code4.push(result_data[i].thermometer);
+		code9.push(result_data[i].overTemperature);
+	}
+	var errors={"channels":channels, "code2":code2, "code3":code3, "code4":code4, "code9":code9, "equipment":resultMap.equipment };
+	errors_forchart=errors;
+	drawingErrorTypesChart(errors);
+	drawingErrorChannelsChart(errors);
+}
+//绘制设备异常类型统计图
+function drawingErrorTypesChart(param){
+	var equiName=param.equipment.equipmentName;
+	errorTypeOption.title.text="设备故障类型统计图("+equiName+")";
+	if(param.code2.addition()+param.code3.addition()+param.code4.addition()+param.code9.addition()==0){
+		errorTypeOption.series=[{type: "pie", name: "故障类型",
+			data: [{name: '无异常数据', y: 1}]
+		}];
+	}else{
+		errorTypeOption.series=[{type: "pie", name: "故障类型",
+			data: [{name: '485通信故障', y: param.code2.addition()}, {name: '光纤故障', y: param.code3.addition()}, 
+				{name: '测温仪故障', y: param.code4.addition()}, {name: '超温故障', y: param.code9.addition()}]
+		}];
+	}
+	$("#chart_error_type").highcharts().destroy();
+	$("#chart_error_type").highcharts(errorTypeOption);
+}
+
+//绘制通道异常次数统计图
+function drawingErrorChannelsChart(param){
+	var channels=param.channels;
+	var equiName=param.equipment.equipmentName;
+	var resultData=param.code2.countall(param.code3).countall(param.code4).countall(param.code9);
+	if(resultData.length!=channels.length) return;
+	if(resultData.addition()==0){
+		errorChannelOption.series=[{type: "pie", name: "通道次数统计",data:[{name: '无异常数据', y: 1}]}];
+	}else{
+		var result=[];
+		for(var i=0;i<channels.length;i++){
+			result.push({name:channels[i], y: resultData[i]});
+		}
+		errorChannelOption.series[0].data=result;
+	}
+	errorChannelOption.title.text="通道故障次数统计图("+equiName+")";
+	$("#chart_error_channel").highcharts().destroy();
+	$("#chart_error_channel").highcharts(errorChannelOption);
+}
+
+function changeChannelChart(e){
+	var data=e.point.options;
+	var channels=errors_forchart.channels;
+	var mydata=[], result=[];
+	if(data.name=="485通信故障"){mydata=errors_forchart.code2;}
+	if(data.name=="光纤故障"){mydata=errors_forchart.code3;}
+	if(data.name=="测温仪故障"){mydata=errors_forchart.code4;}
+	if(data.name=="超温故障"){mydata=errors_forchart.code9;}
+	if(mydata.addition()==0) return;
+	for(var i=0;i<mydata.length;i++){
+		result.push({name:channels[i], y: mydata[i]});
+	}
+	var title=errorChannelOption.title.text;
+	title=(title.indexOf(":")>-1)?title.substring(0,title.indexOf(":")):title;
+	errorChannelOption.title.text=title+": "+data.name;
+	errorChannelOption.series[0].data=result;
+	$("#chart_error_channel").highcharts().destroy();
+	$("#chart_error_channel").highcharts(errorChannelOption);
+}
+//验证时间日期文本框内容有效性
+function datetimeValidate(e){if(e.value==""||e.value==null){e.classList.add("error");return}else if(e.id=="startDate"||e.id=="startTime"){e.classList.remove("error");return}else{if(e.id=="endDate"){($("#startDate").val())>($("#endDate").val())?(e.classList.add("error")):(e.classList.remove("error"))}else if(e.id=="endTime"){($("#endTime").val())>($("#startTime").val())?(e.classList.remove("error")):(e.classList.add("error"))}}};
+Array.prototype.addition=function(){var count=0;for(var i=0;i<this.length;i++){count+=this.valueOf()[i];}return count;};Array.prototype.countall=function(array){if(this.length!=array.length)return;var result=[];for(var i=0;i<this.length;i++){result.push(this.valueOf()[i]+array[i]);}return result;};

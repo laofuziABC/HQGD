@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=10">
+<title>路由器管理</title>
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+
+<link rel="stylesheet" href="dist/js/pager/pager.css">
+<link rel="stylesheet" href="vince/css/vince.css">
+<link rel="stylesheet" href="vince/biao/css/font-awesome.min.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+<style type="text/css">
+.info_text {
+	padding: 10px;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+	<div class="fuceng" id="routerfuceng">
+		<div class="fuqu">
+			<div class="fuquzone">
+				<div class="fuqulogo"></div>
+				<p class="fuqutitle">
+					路由器信息 <span class="fuclose">×</span>
+				</p>
+				<div class="fuqubiao" id="routerForm">
+					<p>
+						<span>路由器ID</span><input type="text" class="right_input" value=""
+							id="routerId" />
+					</p>
+					<p>
+						<span>路由器名称</span><input type="text" class="right_input" value=""
+							id="routerName" />
+					</p>
+					<p>
+						<span>路由器IP</span><input type="text" class="right_input" value=""
+							id="routerIp" />
+					</p>
+					<p>
+						<span>状态：</span> <select id="connect">
+							<option value="Y" selected="selected">连接</option>
+							<option value="N">断开</option>
+						</select>
+					</p>
+				</div>
+				<div class="fuqusave">
+					<input type="button" onclick="submitRouterInfo();" value="保存">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1>路由器管理</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i>首页</a></li>
+					<li class="active">路由器管理</li>
+				</ol>
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<div>
+									<p>
+										<span class="float_left"><span>路由器名称：</span><input
+											type="text" id="searchByName"></span> <span
+											class="float_right" style="margin-right: 70%;"> <input
+											type="button" onclick="searchResult();" value="查询"
+											class="in_sub">
+										</span>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="box-body" style="overflow-x: scroll;">
+								<table id="example1" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>路由器ID</td>
+											<td>路由器名称</td>
+											<td>路由器IP</td>
+											<td>状态</td>
+											<td>创建时间</td>
+											<td>更新时间</td>
+											<td>更新者</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+									<tbody id="routerlist"></tbody>
+									<tbody id="routerListreport" style="display: none"></tbody>
+									<tr>
+										<td colspan="8" class="text_al_rig lindianjia"><input
+											type="submit" value="添加路由器" class="anniu lindianjia"
+											onclick="add1();"></td>
+									</tr>
+									<tr></tr>
+
+									</tbody>
+								</table>
+								<!-- 分页插件 -->
+								<div>
+									<div class="list-page-tail page-down" id="user-show-pager"
+										style="margin: auto;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="control-sidebar-bg"></div>
+	</div>
+	<!-- ./wrapper -->
+	<script type="text/javascript" src="vince/js/demo.js"></script>
+	<script src="dist/js/pager/data_table_pager.js"></script>
+	<!-- page script -->
+
+	<script src="dist/js/pager/data_table_pager.js"></script>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			getRouterList();
+		});
+		var globalResult;
+		var add = true;
+		//获取用户列表
+		function getRouterList() {
+			$
+					.ajax({
+						url : "router/selectAll",
+						type : "post",
+						dataType : "json",
+						success : function(result) {
+							globalResult = result;
+							var routerlist = "";
+							//设置分页信息——当前为假分页
+							var totalSize = result.length;
+							var pageSize = 15;
+							var totalNum = Math.ceil(totalSize / pageSize);
+							var startIndex = (pageNum - 1) * pageSize;
+							var endIndex = (pageNum * pageSize > totalSize) ? totalSize
+									: pageNum * pageSize;
+							for (let i = startIndex; i < endIndex; i++) {
+								routerlist += "<tr class=\"\">";
+								routerlist += "<td>" + (i + 1) + "</td>";
+								routerlist += "<td>" + result[i].routerId
+										+ "</td>";
+								routerlist += "<td>" + result[i].routerName
+										+ "</td>";
+								routerlist += "<td>" + result[i].ip + "</td>";
+								if (result[i].connect == "Y") {
+									routerlist += "<td>连接</td>";
+								} else {
+									routerlist += "<td>断开</td>";
+								}
+								routerlist += "<td>" + result[i].createTime
+										+ "</td>";
+								routerlist += "<td>" + result[i].updateTime
+										+ "</td>";
+								routerlist += "<td>" + result[i].updater
+										+ "</td>";
+
+								routerlist += "<td class=\"center\" >";
+								routerlist += "<a class=\" edit\" onclick=\"getRouterEdit('"
+										+ i + "');\">编辑</a>&nbsp;";
+								routerlist += "<a class=\"delete\" href=\"#\" onclick=\"getRouterDelete('"
+										+ result[i].routerId
+										+ "');\">删除</a>&nbsp;";
+								routerlist += "</td>";
+								routerlist += "</tr>";
+							}
+							$("#routerlist").html(routerlist);
+							//加载页码
+							$("#router-show-pager").html(
+									loadPages(pageSize, totalSize, pageNum));
+							$("#router-show-pager").setActivePage(5);
+						}
+					});
+		}
+		function close2() {
+			$(".fuceng").css({
+				"display" : "none"
+			});
+
+		}
+		function add1() {
+			add = true;
+			$("#routerfuceng").css({
+				"display" : "block"
+			});
+		}
+		//编辑用户
+		function getRouterEdit(param) {
+			add = false;
+			$("#routerfuceng").css({
+				"display" : "block"
+			});
+			$("#routerId").val(globalResult[param].routerId);
+			$("#routerName").val(globalResult[param].routerName);
+			$("#routerIp").val(globalResult[param].ip);
+			document.getElementById('connect').value = globalResult[param].connect;
+		}
+		//删除用户
+		function getRouterDelete(param) {
+			if (confirm("确定删除此路由器？")) {
+				$.ajax({
+					url : "router/delete",
+					type : "post",
+					data : {
+						"routerId" : param
+					},
+					dataType : "json",
+					success : function(result) {
+						if (!result.success) {
+							alert("删除失败！");
+						}
+						getRouterList();
+					}
+				});
+			}
+		}
+		//搜索用户
+		function searchResult() {
+			var name = $("#searchByName").val().trim();
+			if (name != "") {
+				$
+						.ajax({
+							url : "router/selectByRouterName",
+							type : "post",
+							data : {
+								"routerName" : name
+							},
+							dataType : "json",
+							success : function(result) {
+								var routerlist = "";
+								for (let i = 0; i < result.length; i++) {
+									routerlist += "<tr class=\"\">";
+									routerlist += "<td>" + (i + 1) + "</td>";
+									routerlist += "<td>" + result[i].routerId
+											+ "</td>";
+									routerlist += "<td>" + result[i].routerName
+											+ "</td>";
+									routerlist += "<td>" + result[i].ip
+											+ "</td>";
+									if (result[i].connect == "Y") {
+										routerlist += "<td>连接</td>";
+									} else {
+										routerlist += "<td>断开</td>";
+									}
+									routerlist += "<td>" + result[i].createTime
+											+ "</td>";
+									routerlist += "<td>" + result[i].updateTime
+											+ "</td>";
+									routerlist += "<td>" + result[i].updater
+											+ "</td>";
+
+									routerlist += "<td class=\"center\" >";
+									routerlist += "<a class=\" edit\" onclick=\"getRouterEdit('"
+											+ i + "');\">编辑</a>&nbsp;";
+									routerlist += "<a class=\"delete\" href=\"#\" onclick=\"getRouterDelete('"
+											+ result[i].id
+											+ "');\">删除</a>&nbsp;";
+									routerlist += "</td>";
+									routerlist += "</tr>";
+								}
+								$("#routerlist").html(routerlist);
+							}
+						});
+			}
+		}
+
+		//提交路由器信息
+		function submitRouterInfo() {
+			var routerId = $("#routerId").val();
+			var routerName = $("#routerName").val();
+			var ip = $("#routerIp").val();
+			var connect = $("#connect option:selected").val();
+			$.ajax({
+				url : "router/update",
+				type : "post",
+				data : {
+					"routerId" : routerId,
+					"routerName" : routerName,
+					"ip" : ip,
+					"connect" : connect,
+					"add" : add
+				},
+				dataType : "json",
+				success : function(result) {
+					if (!result.success) {
+						alert(result.message);
+					}
+					getRouterList();
+				}
+			});
+			$(".fuceng").css({
+				"display" : "none"
+			})
+		}
+	</script>
+	<script src="dist/js/app.min.js"></script>
+	<div id="sss" style="display: none; height: 200px; width: 200px;"></div>
+
+</body>
+</html>
+

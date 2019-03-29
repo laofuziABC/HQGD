@@ -427,7 +427,7 @@
     var defaultLongDateFormat = {
         LTS  : 'h:mm:ss A',
         LT   : 'h:mm A',
-        L    : 'MM/DD/YYYY',
+        L    : 'YYYY-MM-DD',
         LL   : 'MMMM D, YYYY',
         LLL  : 'MMMM D, YYYY h:mm A',
         LLLL : 'dddd, MMMM D, YYYY h:mm A'
@@ -2169,7 +2169,7 @@
         ['GGGG-[W]WW-E', /\d{4}-W\d\d-\d/],
         ['GGGG-[W]WW', /\d{4}-W\d\d/, false],
         ['YYYY-DDD', /\d{4}-\d{3}/],
-        ['YYYY-MM', /\d{4}-\d\d/, false],
+        ['YYYY-MM', /\d{4}-\d\d/],
         ['YYYYYYMMDD', /[+-]\d{10}/],
         ['YYYYMMDD', /\d{8}/],
         // YYYYMM is NOT allowed by the standard
