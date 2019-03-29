@@ -171,39 +171,41 @@ function initCurrentChart(){
 	var url = "dataAcquisition/periodDate";
 	var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime };
 	var result=getChartData(url, param);
-	//分别获取系列、横坐标、纵坐标集
-	var channelList=result.channelList;
-	var timeList=result.timeList;
-	var dataList=result.dataList;
-	var equiName = result.equipment.equipmentName;
-	var series=[];
-	//只有通道数和系列数相等，才可以绘制图表
-	if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
-		//组装系列值
-		var totalArray=[];
-		for(let i=0; i<dataList.length; i++){
-			var temp = dataList[i];
-			var singleArray=[];
-			for(let j=0; j<timeList.length; j++){
-				var tempTime=(new Date(timeList[j])).getTime();
-				var tempArray = [tempTime, temp[j]];
-				singleArray.push(tempArray);
+	if(result!=null){
+		//分别获取系列、横坐标、纵坐标集
+		var channelList=result.channelList;
+		var timeList=result.timeList;
+		var dataList=result.dataList;
+		var equiName = result.equipment.equipmentName;
+		var series=[];
+		//只有通道数和系列数相等，才可以绘制图表
+		if(dataList.length>0 && channelList.length==dataList.length && dataList[0].length>0){
+			//组装系列值
+			var totalArray=[];
+			for(let i=0; i<dataList.length; i++){
+				var temp = dataList[i];
+				var singleArray=[];
+				for(let j=0; j<timeList.length; j++){
+					var tempTime=(new Date(timeList[j])).getTime();
+					var tempArray = [tempTime, temp[j]];
+					singleArray.push(tempArray);
+				}
+				totalArray.push(singleArray);
 			}
-			totalArray.push(singleArray);
+			//为系列赋值
+			for(let i=0; i<channelList.length; i++){
+				var serie = {name: channelList[i], data: totalArray[i], type:"spline", pointInterval: 6e4};
+				series.push(serie);
+			}
+		}else{
+			for(let i=1; i<=result.equipment.numOfCh; i++){
+				var serie = {name: "CH"+i, data: [], type:"spline", pointInterval: 6e4};
+				series.push(serie);
+			}
 		}
-		//为系列赋值
-		for(let i=0; i<channelList.length; i++){
-			var serie = {name: channelList[i], data: totalArray[i], type:"spline", pointInterval: 6e4};
-			series.push(serie);
-		}
-	}else{
-		for(let i=1; i<=result.equipment.numOfCh; i++){
-			var serie = {name: "CH"+i, data: [], type:"spline", pointInterval: 6e4};
-			series.push(serie);
-		}
+		currentOption.title.text="实时温度监测图("+equiName+")";
+		currentOption.series = series;
 	}
-	currentOption.title.text="实时温度监测图("+equiName+")";
-	currentOption.series = series;
 	$("#chart_current").highcharts().destroy();
 	$("#chart_current").highcharts(currentOption);
 }
