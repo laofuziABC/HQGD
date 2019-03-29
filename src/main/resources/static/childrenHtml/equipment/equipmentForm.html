@@ -76,25 +76,40 @@ button {
 			</div>
 			<div class="box-body">
 				<div class="row">
-					<div class="col-md-6">
-						<form class="form-horizontal">
+					<form class="form-horizontal" action="equipment/update"
+						id="equipmentForm" method="post" onsubmit="return toVaild()">
+						<div class="col-md-6">
+
+							<p style="display: none">
+								<input type="text" class="form-control" id="channelTem11"
+									name="channelTem" />
+							</p>
+							<p style="display: none">
+								<input type="text" class="form-control" id="add" name="add" />
+							</p>
+							<p style="display: none">
+								<input type="text" class="form-control" id="userName"
+									name="userName" />
+							</p>
 							<div class="box-body">
 								<div class="form-group">
 									<label class="col-sm-2 control-label">设备ID</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="equipmentId">
+										<input type="text" class="form-control" id="equipmentId"
+											name="equipmentId" required="required">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">设备名称</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="equipmentName">
+										<input type="text" class="form-control" id="equipmentName"
+											name="equipmentName" required="required">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">设备类型</label>
 									<div class="col-sm-10">
-										<select id="type" class="form-control select2">
+										<select id="type" name="type" class="form-control select2">
 											<option value="1" selected="selected">开关柜</option>
 											<option value="2">干式变压器</option>
 											<option value="3">变压器绕组</option>
@@ -106,19 +121,22 @@ button {
 								<div class="form-group">
 									<label class="col-sm-2 control-label">帧结构</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="frameStru">
+										<input type="text" class="form-control" id="frameStru"
+											name="frameStru" required="required">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">通道数</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="numOfCh">
+										<input type="text" class="form-control" id="numOfCh"
+											name="numOfCh" required="required">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">路由器ID</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="heartbeatId">
+										<input type="text" class="form-control" id="heartbeatId"
+											name="heartbeatId" required="required">
 									</div>
 								</div>
 								<!-- <div class="form-group">
@@ -128,69 +146,70 @@ button {
 									</div>
 								</div> -->
 							</div>
-						</form>
-						<div class="col-md-12"
-							style="max-height: 370px; overflow-y: auto;">
-							<table class="table table-bordered table-striped "
-								id="channelTem1">
-								<thead>
-									<tr>
-										<td style="background: #399ad7; color: #f6f6f6;">通道号</td>
-										<td style="background: #399ad7; color: #f6f6f6;">光纤位置</td>
-										<td style="background: #399ad7; color: #f6f6f6;">温度上限</td>
-										<td style="background: #399ad7; color: #f6f6f6;">温度下限</td>
-									</tr>
-								</thead>
-								<tbody id="channelTemList1">
+							<div class="col-md-12"
+								style="max-height: 370px; overflow-y: auto;">
+								<table class="table table-bordered table-striped "
+									id="channelTem">
+									<thead>
+										<tr>
+											<td style="background: #399ad7; color: #f6f6f6;">通道号</td>
+											<td style="background: #399ad7; color: #f6f6f6;">光纤位置</td>
+											<td style="background: #399ad7; color: #f6f6f6;">温度上限</td>
+											<td style="background: #399ad7; color: #f6f6f6;">温度下限</td>
+										</tr>
+									</thead>
+									<tbody id="channelTemList1">
 
-								</tbody>
-							</table>
+									</tbody>
+								</table>
+							</div>
+							<div class="col-md-12">
+								<input type="button" value="添加通道" id="addBtn">
+								<!-- <button class="btn btn-primary" id="addBtn" onclick="">
+									<i class="fa fa-plus"></i> 添加通道
+								</button> -->
+							</div>
 						</div>
-						<div class="col-md-12">
-							<button class="btn btn-info" id="addBtn"
-								style="background: #399ad7;">
-								<i class="fa fa-plus"></i> 添加通道
-							</button>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<form class="form-horizontal">
+						<div class="col-md-6">
 							<div class="box-body">
 								<div class="form-group">
 									<label class="col-sm-2 control-label">所属用户</label>
 									<div class="col-sm-10">
-										<select id="userName" class="form-control select2">
+										<select id="userId" name="userId" class="form-control select2">
 										</select>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">经纬度</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="lnglat">
+										<input type="text" class="form-control" id="lnglat"
+											name="lngLat" required="required">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">地理编码</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="adcode">
+										<input type="text" class="form-control" id="adcode"
+											name="adcode" required="required">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">地址</label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="address">
+										<input type="text" class="form-control" id="address"
+											name="address" required="required">
 									</div>
 								</div>
 								<div id="containermap" style="height: 550px;" class="map"
 									tabindex="0"></div>
 							</div>
-						</form>
-						<div class="fuqusave" id="saves">
-							<button class="btn btn-info" onclick="submitEquiInfo();"
-								style="background: #399ad7;">保 存</button>
+							<div class="fuqusave">
+								<input type="submit" value="保存">
+								<!-- <button class="btn btn-info" onclick="submitEquiInfo();"
+								style="background: #399ad7;">保 存</button> -->
+							</div>
 						</div>
-					</div>
-
+					</form>
 				</div>
 			</div>
 		</div>
@@ -228,6 +247,7 @@ button {
 		});
 	</script>
 	<script type="text/javascript" src="vince/js/bootstable.js"></script>
+	<script src="dist/js/jquery.form.js"></script>
 	<script type="text/javascript"
 		src="childrenHtml/equipment/equipmentForm.js"></script>
 	<script src="dist/js/app.min.js"></script>
