@@ -192,6 +192,20 @@ ORDER BY
       AND state!=0  
      </if>
   </select>
+  
+  <select id="selectCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT
+	CHANNEL_NUM,
+	RECEIVE_TIME,
+	TEMPERATURE 
+	FROM
+  		${table} 
+	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+      AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+    ORDER BY
+	CAST( REPLACE ( CHANNEL_NUM, 'CH', '0' ) AS INT ),ID ASC  
+  </select>
   <select id="selectHistoricalCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     SELECT
     	CHANNEL_NUM,

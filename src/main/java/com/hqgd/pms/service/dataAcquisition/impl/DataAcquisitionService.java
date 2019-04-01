@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.hqgd.pms.common.CommonUtil;
@@ -173,10 +172,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("endTime", endTime);
 		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
 		String type = equipment.getType();
-		// String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
-		List<DataAcquisitionVo> historicalDataList = null;
-		long inTime = System.currentTimeMillis();
-		log.info("查询数据SQL开始：" + inTime);
+
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_1");
@@ -191,41 +187,59 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			param.put("table", "hq_equipment_monitor_data_4");
 			break;
 		}
-		historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
+		Map<String, Object> resultmap = selectCurveById(param);
+		return resultmap;
+	}
+
+	private Map<String, Object> selectCurveById(Map<String, Object> param) {
+		long inTime = System.currentTimeMillis();
+		log.info("查询数据SQL开始：" + inTime);
+		List<DataAcquisitionVo> historicalDataList = null;
+		historicalDataList = dataAcquisitionVoMapper.selectCurveById(param);
 		long outTime = System.currentTimeMillis();
-		log.info("SQL结束：" + outTime);
-		long midTime = outTime - inTime;
-		log.info("时长为：" + midTime);
-		List<String> channelNumArr = new ArrayList<>();// 通道号数组
-		List<List<Float>> channelTemArr = new ArrayList<List<Float>>();// 通道号温度数数组
-		List<String> tem = new ArrayList<>();
-		List<String> receiveTime = new ArrayList<>();
-		//使用map为返参，封装查询结果
-		Map<String, Object> map = new HashMap<>();
-		if (!historicalDataList.isEmpty()) {
-			DataAcquisitionVo vo = historicalDataList.get(0);
-			long inTime1 = System.currentTimeMillis();
-			log.info("处理数据开始：" + inTime);
-			receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
-			for (int i = 0; i < historicalDataList.size(); i++) {
-				channelNumArr.add(historicalDataList.get(i).getChannelNum());
-				tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-				// 避免空指针的情况下，将List<String>更改为List<Float>
-				if (tem.size() > 0) {
-					List<Float> temFloat = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
-					channelTemArr.add(temFloat);
+		log.info("查询历史曲线SQL时长为：" + (outTime - inTime));
+		Map<String, Object> resultmap = new HashMap<>();
+		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
+		Map<String, List<List<Double>>> map = new HashMap<>();
+		List<List<Double>> ll = new ArrayList<List<Double>>();
+		if (historicalDataList.size() > 0) {
+			for (int i = 0; i < historicalDataList.size() - 1; i++) {
+				DataAcquisitionVo dv = historicalDataList.get(i);
+				String ch = dv.getChannelNum();
+				String chn = historicalDataList.get(i + 1).getChannelNum();
+				Double receTime = CommonUtil.str2Time(dv.getReceiveTime());
+				Double tem = Double.valueOf(dv.getTemperature());
+				List<Double> l1 = new ArrayList<Double>();
+				l1.add(receTime);
+				l1.add(tem);
+				ll.add(l1);
+
+				if (!ch.equals(chn)) {
+					List<List<Double>> lll = new ArrayList<List<Double>>(ll);
+					map.put(ch, lll);
+					Map<String, List<List<Double>>> map1 = new HashMap<>(map);
+					result.add(map1);
+					map.clear();
+					ll.clear();
+				}
+				if (i == historicalDataList.size() - 2) {
+					DataAcquisitionVo dvl = historicalDataList.get(i + 1);
+					String chl = dvl.getChannelNum();
+					Double receTimel = CommonUtil.str2Time(dvl.getReceiveTime());
+					Double teml = Double.valueOf(dvl.getTemperature());
+					List<Double> l1l = new ArrayList<Double>();
+					l1l.add(receTimel);
+					l1l.add(teml);
+					ll.add(l1l);
+					map.put(chl, ll);
+					result.add(map);
 				}
 			}
-			long outTime1 = System.currentTimeMillis();
-			log.info("处理数据结束：" + outTime1);
-			long midTime1 = outTime1 - inTime1;
-			log.info("时长为：" + midTime1);
+		} else {
+			resultmap.put("date", null);
 		}
-		map.put("equipment", equipment);
-		map.put("receiveTime", receiveTime);
-		map.put("channelNumArr", channelNumArr);
-		map.put("channelTemArr", channelTemArr);
-		return map;
+		resultmap.put("date", result);
+		return resultmap;
 	}
 
 	/**
@@ -243,8 +257,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("endTime", endTime);
 		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
 		String type = equipment.getType();
-		List<DataAcquisitionVo> historicalDataList = null;
-		long inTime = System.currentTimeMillis();
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_r1");
@@ -259,35 +271,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			param.put("table", "hq_equipment_monitor_data_r4");
 			break;
 		}
-		historicalDataList = dataAcquisitionVoMapper.selectHistoricalCurveById(param);
-		long outTime = System.currentTimeMillis();
-		log.info("查询periodDate时长为：" + (outTime - inTime));
-
-		List<String> channelNumArr = new ArrayList<>();// 通道号数组
-		List<List<Float>> channelTemArr = new ArrayList<List<Float>>();// 通道号温度数数组
-		List<String> tem = new ArrayList<>();
-		List<String> receiveTime = new ArrayList<>();
-		Map<String, Object> map = new HashMap<>();
-		if (historicalDataList.isEmpty()) {
-			channelNumArr = dataAcquisitionVoMapper.selectAllChannels(param);
-		} else {
-			DataAcquisitionVo vo = historicalDataList.get(0);
-			receiveTime = Arrays.asList(vo.getReceiveTime().split(","));
-			for (int i = 0; i < historicalDataList.size(); i++) {
-				channelNumArr.add(historicalDataList.get(i).getChannelNum());
-				tem = Arrays.asList(historicalDataList.get(i).getTemperature().split(","));
-				// 避免空指针的情况下，将List<String>更改为List<Float>
-				if (tem.size() > 0) {
-					List<Float> temFloat = tem.stream().map(Float::parseFloat).collect(Collectors.toList());
-					channelTemArr.add(temFloat);
-				}
-			}
-		}
-		map.put("equipment", equipment);
-		map.put("timeList", receiveTime);
-		map.put("channelList", channelNumArr);
-		map.put("dataList", channelTemArr);
-		return map;
+		Map<String, Object> resultmap = selectCurveById(param);
+		resultmap.put("equipment", equipment);
+		return resultmap;
 	}
 
 	@Override
@@ -627,10 +613,18 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
 		String type = equipment.getType();
 		switch (type) {
-			case "1": param.put("table", "hq_equipment_monitor_data_1"); break;
-			case "2": param.put("table", "hq_equipment_monitor_data_2"); break;
-			case "3": param.put("table", "hq_equipment_monitor_data_3"); break;
-			case "4": param.put("table", "hq_equipment_monitor_data_4"); break;
+		case "1":
+			param.put("table", "hq_equipment_monitor_data_1");
+			break;
+		case "2":
+			param.put("table", "hq_equipment_monitor_data_2");
+			break;
+		case "3":
+			param.put("table", "hq_equipment_monitor_data_3");
+			break;
+		case "4":
+			param.put("table", "hq_equipment_monitor_data_4");
+			break;
 		}
 		List<ChannelExtremum> extremumList = dataAcquisitionVoMapper.findChannelExtremums(param);
 		long outTime = System.currentTimeMillis();
