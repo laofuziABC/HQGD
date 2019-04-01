@@ -57,14 +57,8 @@ public class DataAcquisitionController {
 		long inTime = System.currentTimeMillis();
 		log.info("查询实时数据开始 " + inTime);
 		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000000");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "查询实时数据成功");
-		resultMap.put("data", realTimeDateList);
 		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(resultMap));
+		response.getWriter().write(new Gson().toJson(realTimeDateList));
 		long outTime = System.currentTimeMillis();
 		log.info("查询实时数据结束：" + outTime);
 		long midTime = outTime - inTime;
