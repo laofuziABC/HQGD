@@ -1,6 +1,7 @@
 package com.hqgd.pms.controller.map;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,6 @@ import com.hqgd.pms.common.CommonUtil;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.service.map.IMapService;
 
-
 @Controller
 @Scope("request")
 
@@ -30,7 +30,7 @@ public class MapController {
 
 	@ResponseBody
 	@RequestMapping("/getPositions")
-	public void getJson( HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void getJson(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<EquipmentInfo> list = mapService.getLonLats(request);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("success", Boolean.TRUE.toString());
@@ -40,6 +40,19 @@ public class MapController {
 		resultMap.put("data", list);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		
+
+	}
+
+	public static void main(String[] args) {
+		List<List<String>> ll = new ArrayList<List<String>>();
+		List<String> l = new ArrayList<>();
+		l.add("111");
+		l.add("aaa");
+		List<String> l1 = new ArrayList<>();
+		l1.add("222");
+		l1.add("bbb");
+		ll.add(l);
+		ll.add(l1);
+		System.out.println(ll);
 	}
 }
