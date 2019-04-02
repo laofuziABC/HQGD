@@ -195,6 +195,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
 		Map<String, List<List<Double>>> map = new HashMap<>();
 		List<List<Double>> ll = new ArrayList<List<Double>>();
+		List<Double> allTemperatures = new ArrayList<Double>();
 		if (historicalDataList.size() > 0) {
 			for (int i = 0; i < historicalDataList.size() - 1; i++) {
 				DataAcquisitionVo dv = historicalDataList.get(i);
@@ -206,6 +207,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				l1.add(receTime);
 				l1.add(tem);
 				ll.add(l1);
+				allTemperatures.add(tem);
 
 				if (!ch.equals(chn)) {
 					List<List<Double>> lll = new ArrayList<List<Double>>(ll);
@@ -229,9 +231,10 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				}
 			}
 		} else {
-			resultmap.put("date", null);
+			resultmap.put("data", null);
 		}
-		resultmap.put("date", result);
+		resultmap.put("data", result);
+		resultmap.put("temperatures", allTemperatures);
 		return resultmap;
 	}
 

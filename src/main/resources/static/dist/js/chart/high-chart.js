@@ -101,7 +101,8 @@ function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(data){
 			var equiName = data.equipment.equipmentName;
-			var seriesData = data.date;
+			var seriesData = data.data;
+			var temperatures = data.temperatures;
 			if(seriesData.length>0){
 				var series=[];
 				for(var i=0; i<seriesData.length; i++){
@@ -110,8 +111,14 @@ function drawingHistoryChart(url, param){
 						series.push(serie);
 					});
 				}
+				var max=Math.max.apply(null, temperatures);
+				var min=Math.min.apply(null, temperatures);
+				historyOption.yAxis.max=(max>100)?100:(max+10);
+				historyOption.yAxis.min=(min<0)?0:(min-10);
 				historyOption.series = series;
 			}else{
+				historyOption.yAxis.max=100;
+				historyOption.yAxis.min=0;
 				historyOption.series=[{name: '无相关数据', data: [], type:"spline", pointInterval: 6e4}];
 			}
 			historyOption.title.text="历史温度曲线图("+equiName+")";
@@ -151,7 +158,7 @@ function initCurrentChart(){
 	var result=getChartData(url, param);
 	if(result!=null){
 		var equiName = result.equipment.equipmentName;
-		var seriesData=result.date;
+		var seriesData=result.data;
 		if(seriesData.length>0){
 			var series=[];
 			for(var i=0; i<seriesData.length; i++){
