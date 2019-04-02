@@ -31,7 +31,7 @@ var historyOption = {
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
 	lang: lang, loading: loading, legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false}, 
 	yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
-	xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%Y-%m-%d}' } },
+	xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%Y-%m-%d}', step:1 } },
 	series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
 
@@ -144,8 +144,8 @@ var NT_VALUE=NOW_TIME.getTime();
 //获取并计算常量【结束】
 function initCurrentChart(){
 	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
-	var startTime = parent.formatDateToString(START_TIME);
-	var endTime = parent.formatDateToString(new Date());
+	var startTime = parent.formatTimeToString(START_TIME);
+	var endTime = parent.formatTimeToString(new Date());
 	var url = "dataAcquisition/periodDate";
 	var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime };
 	var result=getChartData(url, param);

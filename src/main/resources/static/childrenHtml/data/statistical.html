@@ -38,7 +38,7 @@
 		<script type="text/javascript">
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【开始】
 			$('.datePicker').datepicker({autoclose : true});
-			var intStr=parent.formatDate2String(new Date());
+			var intStr=parent.formatDateToString(new Date());
 			document.getElementById("startDate").value = intStr;
 			document.getElementById("endDate").value = intStr;
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【结束】
