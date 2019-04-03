@@ -82,15 +82,9 @@
 				pickTime : true, hourStep : 1, minuteStep : 15, secondStep : 30, inputMask : true });
 			//调用bootstrap-datetimepicker.js，封装时间显示格式为“yyyy-mm-dd hh:ii:ss”【结束】
 			//初始化页面信息，历史数据页面的开始时间和结束时间默认为当天0点到当前时间
-			var startTimeInput = document.getElementById("startTime");
-			var endTimeInput = document.getElementById("endTime");
-			startTimeInput.value = parent.formatInitDateToString(new Date());
-			endTimeInput.value = parent.formatDateToString(new Date());
+			document.getElementById("startTime").value = parent.formatDateToString(new Date())+" 00:00:00";
+			document.getElementById("endTime").value = parent.formatTimeToString(new Date());
 			//初始化图表配置项，添加空的图表（除非经过点击查询按钮，否则历史数据页面不在初始页面时展示数据内容）
-			historyOption.title.text="历史温度曲线图";
-			historyOption.yAxis.min=0;
-			historyOption.yAxis.max=100;
-			historyOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
 			$("#chart_history").highcharts(historyOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
@@ -105,7 +99,6 @@
 					$("#endTime").removeClass("error");
 					searchTableResult(1);
 					//加载历史数据图表
-					$("#chart_history").highcharts(historyOption);
 					var chart = $("#chart_history").highcharts();
 					chart.showLoading();
 					searchChartResult();

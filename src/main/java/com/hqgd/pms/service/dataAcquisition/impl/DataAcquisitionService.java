@@ -39,10 +39,11 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	@Override
 	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
-		List<DataAcquisitionVo> realTimeDateList = null;
+		List<DataAcquisitionVo> realTimeDateList = new ArrayList<DataAcquisitionVo>();
 		Map<String, Object> param = new HashMap<>();
 		param.put("equipmentId", equipmentId);
-		String type = equipmentInfoMapper.selectTypeById(equipmentId);
+		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
+		String type = equipment.getType();
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_r1");
@@ -59,18 +60,14 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		}
 		realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
 		if (realTimeDateList.size() > 0) {
-			int numOfCh = realTimeDateList.get(0).getNumOfCh();
-			if (realTimeDateList.size() == numOfCh) {
-				EquipmentInfo e = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
-				String s = e.getChannelTem();
+			if (realTimeDateList.size() == equipment.getNumOfCh()) {
+				String s=equipment.getChannelTem();
 				s = s.substring(2, s.length() - 2);
 				String[] arr = s.split("\\],\\[");
 				if (arr.length == realTimeDateList.size()) {
 					for (int i = 0; i < realTimeDateList.size(); i++) {
 						String[] ta = arr[i].split(",");
 						String cn = ta[0].substring(1, ta[0].length() - 1);
-						// String max = ta[1].substring(1, ta[1].length() - 1);
-						// String min = ta[2].substring(1, ta[2].length() - 1);
 						String max = ta[2].substring(1, ta[2].length() - 1);
 						String min = ta[3].substring(1, ta[3].length() - 1);
 						String t = realTimeDateList.get(i).getTemperature();
@@ -81,13 +78,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 						}
 					}
 				}
-
 			}
-			return realTimeDateList;
-		} else {
-			return null;
 		}
-
+		return realTimeDateList;
 	}
 
 	@Override
@@ -173,7 +166,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("state", queryVo.getState());
 		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
 		String type = equipment.getType();
-
 		switch (type) {
 		case "1":
 			param.put("table", "hq_equipment_monitor_data_1");
@@ -189,6 +181,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			break;
 		}
 		Map<String, Object> resultmap = selectCurveById(param);
+		resultmap.put("equipment", equipment);
 		return resultmap;
 	}
 
@@ -203,6 +196,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
 		Map<String, List<List<Double>>> map = new HashMap<>();
 		List<List<Double>> ll = new ArrayList<List<Double>>();
+		List<Double> allTemperatures = new ArrayList<Double>();
 		if (historicalDataList.size() > 0) {
 			for (int i = 0; i < historicalDataList.size() - 1; i++) {
 				DataAcquisitionVo dv = historicalDataList.get(i);
@@ -214,6 +208,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				l1.add(receTime);
 				l1.add(tem);
 				ll.add(l1);
+				allTemperatures.add(tem);
 
 				if (!ch.equals(chn)) {
 					List<List<Double>> lll = new ArrayList<List<Double>>(ll);
@@ -237,9 +232,10 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				}
 			}
 		} else {
-			resultmap.put("date", null);
+			resultmap.put("data", null);
 		}
-		resultmap.put("date", result);
+		resultmap.put("data", result);
+		resultmap.put("temperatures", allTemperatures);
 		return resultmap;
 	}
 
