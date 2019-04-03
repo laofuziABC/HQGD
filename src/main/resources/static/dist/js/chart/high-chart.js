@@ -227,7 +227,6 @@ function showBlocks(){
 	var url="dataAcquisition/realtime";
 	var param={"equipmentId": equiId};
 	var result = getChartData(url, param);
-	var data = (result==null)?null:(result.data);
 	drawCurrentChannels(result);
 }
 function drawCurrentChannels(param){
