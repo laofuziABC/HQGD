@@ -360,9 +360,7 @@
 						"equipmentId" : equiId
 					},
 					dataType : "json",
-					success : function(result) {
-						debugger;					
-						var data = result;
+					success : function(data) {
 						if(data.length==0){
 							channel+="<h5 style='color: red;'>未查找到通道监测信息！</h5>"; 
 						}else{
