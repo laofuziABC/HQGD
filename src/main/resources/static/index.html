@@ -363,7 +363,7 @@
 					success : function(result) {
 						debugger;					
 						var data = result;
-						if(data==undefined){
+						if(data.length==0){
 							channel+="<h5 style='color: red;'>未查找到通道监测信息！</h5>"; 
 						}else{
 							var num =data.length;
