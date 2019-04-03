@@ -149,10 +149,8 @@ FROM
 WHERE
 	EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
 	AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-      AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
-     <if test="state != null and state != 0">  
-      AND state!=0  
-     </if>  
+    AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+    <if test="state != null and state != 0">AND state!=5</if> 
 ORDER BY
 	ID DESC 
 	) w 
@@ -173,11 +171,9 @@ ORDER BY
 	  AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
 	  AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
-     <if test="state != null and state != 0">  
-      AND state!=0  
-     </if>  
-      ORDER BY
-	    ID DESC 
+     <if test="state != null and state != 0">AND state!=5</if>  
+    ORDER BY
+      ID DESC 
   </select>
   
   <select id="selectTotal" parameterType="java.util.HashMap" resultType="java.lang.Integer">
@@ -188,9 +184,7 @@ ORDER BY
 	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
-      <if test="state != null and state != 0">  
-      AND state!=0  
-     </if>
+      <if test="state != null and state != 0">AND state!=5</if>
   </select>
   
   <select id="selectCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
@@ -203,11 +197,9 @@ ORDER BY
 	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
-      <if test="state != null and state != 0">  
-      AND state!=0  
-     </if> 
+      <if test="state != null and state != 0">AND state!=5</if> 
     ORDER BY
-	CAST( REPLACE ( CHANNEL_NUM, 'CH', '0' ) AS INT ),ID ASC  
+	  CAST( REPLACE ( CHANNEL_NUM, 'CH', '0' ) AS INT ),ID ASC  
   </select>
   <select id="selectHistoricalCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     SELECT

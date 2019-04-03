@@ -23,7 +23,7 @@
 					<span class="tiaoshijian">开始时间:<input type="text" class="shi datetimePicker" id="startTime" /></span>
 					<span class="tiaoshijian">结束时间:<input type="text" class="shi datetimePicker" id="endTime" /></span> 
 					<span>显示内容:
-						<select class="biaoti_select" id="data-type" onchange="searchTableResult(1);" style="height: 26px;">
+						<select class="biaoti_select" id="data-type" onchange="showHistoryContent();" style="height: 26px;">
 							<option value="0" selected="selected">显示所有数据</option>
 							<option value="1">显示异常数据</option>
 						</select>
@@ -109,7 +109,8 @@
 				var param = {
 					"equipmentId" : equiId2,
 					"startTime" : $("#startTime").val(),
-					"endTime" : $("#endTime").val()
+					"endTime" : $("#endTime").val(),
+					"state" : $("#data-type").val()
 				};
 				var url = "dataAcquisition/historicalCurve";
 				drawingHistoryChart(url, param);
