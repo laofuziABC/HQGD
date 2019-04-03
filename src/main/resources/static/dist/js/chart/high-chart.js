@@ -31,7 +31,7 @@ var historyOption = {
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
 	lang: lang, loading: loading, legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false}, 
 	yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
-	xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%Y-%m-%d}', step:1 } },
+	xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%Y-%m-%d}', step:2 } },
 	series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
 
@@ -113,8 +113,9 @@ function drawingHistoryChart(url, param){
 				}
 				var max=Math.max.apply(null, temperatures);
 				var min=Math.min.apply(null, temperatures);
-				historyOption.yAxis.max=(max>100)?100:(max+10);
-				historyOption.yAxis.min=(min<0)?0:(min-10);
+				var state=$("#data-type").val();
+				historyOption.yAxis.max=(state==0)?((max>100)?100:(max+10)):(max+10);
+				historyOption.yAxis.min=(state==0)?((min<0)?0:(min-10)):(min-10);
 				historyOption.series = series;
 			}else{
 				historyOption.yAxis.max=100;
