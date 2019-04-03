@@ -170,6 +170,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("equipmentId", queryVo.getEquipmentId());
 		param.put("startTime", startTime);
 		param.put("endTime", endTime);
+		param.put("state", queryVo.getState());
 		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
 		String type = equipment.getType();
 
@@ -197,7 +198,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		List<DataAcquisitionVo> historicalDataList = null;
 		historicalDataList = dataAcquisitionVoMapper.selectCurveById(param);
 		long outTime = System.currentTimeMillis();
-		log.info("查询历史曲线SQL时长为：" + (outTime - inTime));
+		log.info("查询曲线SQL时长为：" + (outTime - inTime));
 		Map<String, Object> resultmap = new HashMap<>();
 		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
 		Map<String, List<List<Double>>> map = new HashMap<>();

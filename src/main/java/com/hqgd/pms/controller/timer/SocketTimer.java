@@ -1,8 +1,6 @@
 package com.hqgd.pms.controller.timer;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +11,7 @@ import com.hqgd.pms.common.SpringContextUtil;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.tcp.MultiThreadSocketServer;
+import com.hqgd.pms.tcp.OutPutRunnable;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,19 +60,9 @@ public class SocketTimer extends TimerTask {
 		}
 
 		for (Socket socket : socketlist) {
-			OutputStream os = socket.getOutputStream();
-			DataOutputStream dos = new DataOutputStream(os);
-			for (String s : frameList) {
-				// 循环获取信息
-				byte[] bytes = CommonUtil.hexStringToByteArray(s);
-				log.info(s);
-				dos.write(bytes);
-				dos.flush();
-				Thread.sleep(1000);
-			}
+			Runnable outPutRunnable = new OutPutRunnable(socket, frameList);
+			new Thread(outPutRunnable).start();
 		}
 	}
-
-	
 
 }

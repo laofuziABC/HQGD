@@ -203,6 +203,9 @@ ORDER BY
 	WHERE EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
       AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+      <if test="state != null and state != 0">  
+      AND state!=0  
+     </if> 
     ORDER BY
 	CAST( REPLACE ( CHANNEL_NUM, 'CH', '0' ) AS INT ),ID ASC  
   </select>
