@@ -85,6 +85,10 @@
 			document.getElementById("startTime").value = parent.formatDateToString(new Date())+" 00:00:00";
 			document.getElementById("endTime").value = parent.formatTimeToString(new Date());
 			//初始化图表配置项，添加空的图表（除非经过点击查询按钮，否则历史数据页面不在初始页面时展示数据内容）
+			historyOption.title.text="历史温度曲线图";
+			historyOption.yAxis.min=0;
+			historyOption.yAxis.max=100;
+			historyOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
 			$("#chart_history").highcharts(historyOption);
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
