@@ -331,8 +331,11 @@ function fetchErrorChartData(url,param){
 	});
 	var result_data=resultMap.data;
 	if(result_data==null || result_data.length==0) {
-		errorChannelOption.series=[{type: "pie", name: "故障类型",data:[{name: '无异常数据', y: 1}]}];
+		var equiName=resultMap.equipment.equipmentName;
+		errorTypeOption.title.text="设备故障类型统计图("+equiName+")";
 		errorTypeOption.series=[{type: "pie", name: "通道次数统计",data: [{name: '无异常数据', y: 1}]}];
+		errorChannelOption.title.text="通道故障次数统计图("+equiName+")";
+		errorChannelOption.series=[{type: "pie", name: "故障类型",data:[{name: '无异常数据', y: 1}]}];
 		$("#chart_error_channel").highcharts(errorChannelOption);
 		$("#chart_error_type").highcharts(errorTypeOption);
 		return;
