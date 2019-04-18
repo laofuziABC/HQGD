@@ -51,20 +51,6 @@ public class DataAcquisitionController {
 	@Autowired
 	IEquipmentService equipmentService;
 
-	@RequestMapping("/realtime")
-	public void getRealTimeMonitoringData(Model model, String equipmentId, HttpServletRequest request,
-			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
-		long inTime = System.currentTimeMillis();
-		log.info("查询实时数据开始 " + inTime);
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId);
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(realTimeDateList));
-		long outTime = System.currentTimeMillis();
-		log.info("查询实时数据结束：" + outTime);
-		long midTime = outTime - inTime;
-		log.info("接口访问时长为：" + midTime);
-	}
-
 	// 飘窗报警需要知道所有设备的实时数据
 	@RequestMapping("/allEquipRealtime")
 	public void allEquipRealtime(Model model, String userName, String roleId, HttpServletRequest request,
@@ -91,15 +77,7 @@ public class DataAcquisitionController {
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询历史数据开始 " + inTime);
-		List<DataAcquisitionVo> historicalDataList = dataAcquisitionService.getHistoricalData(queryVo);
-		Integer total = dataAcquisitionService.selectTotal(queryVo);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("success", Boolean.TRUE.toString());
-		resultMap.put("resultCode", "00000000");
-		resultMap.put("time", CommonUtil.getSimpleFormatTimestamp());
-		resultMap.put("message", "查询历史数据成功");
-		resultMap.put("data", historicalDataList);
-		resultMap.put("total", total);
+		Map<String, Object> resultMap = dataAcquisitionService.getHistoricalData(queryVo);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		long outTime = System.currentTimeMillis();
@@ -108,27 +86,28 @@ public class DataAcquisitionController {
 		log.info("接口访问时长为：" + midTime);
 	}
 
-	@RequestMapping("/historicalCurve")
-	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	@RequestMapping("/realTimeCurve")
+	public void realTimeCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		long inTime = System.currentTimeMillis();
-		Map<String, Object> historicalDataList = dataAcquisitionService.historicalCurve(queryVo);
-		long outTime = System.currentTimeMillis();
-		long midTime = outTime - inTime;
-		log.info("历史数据曲线接口访问时长为：" + midTime);
-		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(historicalDataList));
-	}
-
-	/**
-	 * 获取指定时间段（自开机到当前时间）内的数据点的集合 用于初始化当前监控图表 2018.12.25
-	 */
-	@RequestMapping("/periodDate")
-	public void getPeriodDate(Model model, QueryParametersVo queryVo, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		Map<String, Object> resultList = dataAcquisitionService.getPeriodDataByQuery(queryVo);
+		log.info("查询实时曲线开始 " + inTime);
+		Map<String, Object> resultList = dataAcquisitionService.realTimeCurve(queryVo);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultList));
+		long outTime = System.currentTimeMillis();
+		log.info("实时曲线接口访问时长为：" + (outTime - inTime));
+	}
+
+	@RequestMapping("/historicalCurve")
+	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+		long inTime = System.currentTimeMillis();
+		log.info("查询历史曲线开始 " + inTime);
+		Map<String, Object> resultList = dataAcquisitionService.historicalCurve(queryVo);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultList));
+		long outTime = System.currentTimeMillis();
+		log.info("历史曲线接口访问时长为：" + (outTime - inTime));
 	}
 
 	@RequestMapping("/record")
@@ -166,10 +145,10 @@ public class DataAcquisitionController {
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("故障次数统计开始 ");
 	}
-	
+
 	/**
-	 * 通过设备主键，获取指定时间段内的通道温度最值
-	 * 结果用于设备最值统计表 03.26
+	 * 通过设备主键，获取指定时间段内的通道温度最值 结果用于设备最值统计表 03.26
+	 * 
 	 * @param model
 	 * @param queryVo
 	 * @param request

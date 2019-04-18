@@ -24,7 +24,7 @@ public class DataAcquisitionVo {
 
 	private String uv;
 
-	private String state;
+	private int state;
 
 	private String message;
 
@@ -142,11 +142,11 @@ public class DataAcquisitionVo {
 		this.uv = uv;
 	}
 
-	public String getState() {
+	public int getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 

@@ -1,17 +1,36 @@
 package com.hqgd.pms.service.dataAcquisition.impl;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.PageFilter;
+import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.SubstringComparator;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hqgd.pms.common.CommonUtil;
@@ -23,6 +42,7 @@ import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.EquipmentInfo;
 import com.hqgd.pms.domain.QueryParametersVo;
 import com.hqgd.pms.domain.StaticFailures;
+import com.hqgd.pms.hbase.HbaseConfig;
 import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,162 +56,139 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	private EquipmentInfoMapper equipmentInfoMapper;
 	@Resource
 	private StaticFailuresMapper staticFailuresMapper;
+	@Autowired
+	private HbaseConfig con;
 
 	@Override
-	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
-		List<DataAcquisitionVo> realTimeDateList = new ArrayList<DataAcquisitionVo>();
-		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", equipmentId);
-		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
-		String type = equipment.getType();
-		switch (type) {
-		case "1":
-			param.put("table", "hq_equipment_monitor_data_r1");
-			break;
-		case "2":
-			param.put("table", "hq_equipment_monitor_data_r2");
-			break;
-		case "3":
-			param.put("table", "hq_equipment_monitor_data_r3");
-			break;
-		case "4":
-			param.put("table", "hq_equipment_monitor_data_r4");
-			break;
-		}
-		realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
-		if (realTimeDateList.size() > 0) {
-			if (realTimeDateList.size() == equipment.getNumOfCh()) {
-				String s=equipment.getChannelTem();
-				s = s.substring(2, s.length() - 2);
-				String[] arr = s.split("\\],\\[");
-				if (arr.length == realTimeDateList.size()) {
-					for (int i = 0; i < realTimeDateList.size(); i++) {
-						String[] ta = arr[i].split(",");
-						String cn = ta[0].substring(1, ta[0].length() - 1);
-						String max = ta[2].substring(1, ta[2].length() - 1);
-						String min = ta[3].substring(1, ta[3].length() - 1);
-						String t = realTimeDateList.get(i).getTemperature();
-						String channelNum = realTimeDateList.get(i).getChannelNum();
-						if (!t.equals("3000") && !t.equals("-437") && !t.equals("2999") && channelNum.equals(cn)
-								&& (Float.valueOf(t) < Float.valueOf(min) || Float.valueOf(t) > Float.valueOf(max))) {
-							realTimeDateList.get(i).setState("9");
-						}
-					}
-				}
-			}
-		}
-		return realTimeDateList;
-	}
-
-	@Override
-	public List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo) {
-		int page = queryVo.getPage();
-		int limit = queryVo.getLimit();
-		int total = limit * page;
-		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", queryVo.getEquipmentId());
-		param.put("startTime", queryVo.getStartTime());
-		param.put("endTime", queryVo.getEndTime());
-		param.put("limit", queryVo.getLimit());
-		param.put("total", total);
-		param.put("state", queryVo.getState());
-		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
-		List<DataAcquisitionVo> historicalDataList = null;
-		switch (type) {
-		case "1":
-			param.put("table", "hq_equipment_monitor_data_1");
-			break;
-		case "2":
-			param.put("table", "hq_equipment_monitor_data_2");
-			break;
-		case "3":
-			param.put("table", "hq_equipment_monitor_data_3");
-			break;
-		case "4":
-			param.put("table", "hq_equipment_monitor_data_4");
-			break;
-		}
-		historicalDataList = dataAcquisitionVoMapper.selectHistoricalDataById(param);
-		for (DataAcquisitionVo d : historicalDataList) {
-			switch (d.getTemperature()) {
-			case "-437":
-				d.setTemperature("故障1");
-				break;
-			case "3000":
-				d.setTemperature("故障2");
-				break;
-			case "2999.9":
-				d.setTemperature("故障3");
-				break;
-			}
-		}
-		return historicalDataList;
-	}
-
-	@Override
-	public Integer selectTotal(QueryParametersVo queryVo) {
-		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", queryVo.getEquipmentId());
-		param.put("startTime", queryVo.getStartTime());
-		param.put("endTime", queryVo.getEndTime());
-		param.put("state", queryVo.getState());
-		String type = equipmentInfoMapper.selectTypeById(queryVo.getEquipmentId());
-		Integer total = null;
-		switch (type) {
-		case "1":
-			param.put("table", "hq_equipment_monitor_data_1");
-			break;
-		case "2":
-			param.put("table", "hq_equipment_monitor_data_2");
-			break;
-		case "3":
-			param.put("table", "hq_equipment_monitor_data_3");
-			break;
-		case "4":
-			param.put("table", "hq_equipment_monitor_data_4");
-			break;
-		}
-		total = dataAcquisitionVoMapper.selectTotal(param);
-		return total;
-	}
-
-	@Override
-	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws Exception {
+	public Map<String, Object> getHistoricalData(QueryParametersVo queryVo) throws IOException {
+		List<DataAcquisitionVo> historicalDataList = new ArrayList<DataAcquisitionVo>();
+		DataAcquisitionVo d = new DataAcquisitionVo();
+		String tableName = "ns1:hq_equipment_monitor_data";
 		String startTime = queryVo.getStartTime();
 		String endTime = queryVo.getEndTime();
-		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", queryVo.getEquipmentId());
-		param.put("startTime", startTime);
-		param.put("endTime", endTime);
-		param.put("state", queryVo.getState());
-		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
-		String type = equipment.getType();
-		switch (type) {
-		case "1":
-			param.put("table", "hq_equipment_monitor_data_1");
-			break;
-		case "2":
-			param.put("table", "hq_equipment_monitor_data_2");
-			break;
-		case "3":
-			param.put("table", "hq_equipment_monitor_data_3");
-			break;
-		case "4":
-			param.put("table", "hq_equipment_monitor_data_4");
-			break;
+		String equipmentId = queryVo.getEquipmentId();
+		int state = Integer.valueOf(queryVo.getState());
+		int limit = queryVo.getLimit();
+		int page = queryVo.getPage();
+		int failFlag = (state == 5) ? 1 : 0;
+
+		Table table = null;
+		Connection connection = null;
+		connection = ConnectionFactory.createConnection(con.configuration());
+		table = connection.getTable(TableName.valueOf(tableName));
+		Scan scan = new Scan();
+		String startRow = startTime + equipmentId + failFlag;
+		String endRow = endTime + equipmentId + failFlag;
+		scan.setStartRow(Bytes.toBytes(startRow));
+		scan.setStopRow(Bytes.toBytes(endRow));
+		scan.setMaxVersions();
+		long in = System.currentTimeMillis();
+		ResultScanner rs = table.getScanner(scan);
+		long out = System.currentTimeMillis();
+		System.out.println("历史数据Hbase查询耗时:" + (in - out) + "ms ");
+		Result[] rArray = rs.next(page * limit);
+		for (int i = (page - 1) * limit; i < page * limit; i++) {
+			Result r = rArray[i];
+			List<Cell> lc = r.listCells();
+			d.setAddress(Bytes.toString(lc.get(0).getValue()));
+			d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
+			d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
+			d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
+			d.setReceiveTime(Bytes.toString(lc.get(7).getValue()));
+			d.setState(Bytes.toInt(lc.get(8).getValue()));
+			d.setTemperature(Bytes.toString(lc.get(10).getValue()));
+			historicalDataList.add(d);
 		}
-		Map<String, Object> resultmap = selectCurveById(param);
-		resultmap.put("equipment", equipment);
+		int total = getTotal(rs, page);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("data", historicalDataList);
+		resultMap.put("total", total);
+		return resultMap;
+	}
+
+	private int getTotal(ResultScanner rs, int page) {
+		if (page == 1) {
+			int i = 0;
+			for (Result r : rs) {
+				i++;
+			}
+			return i;
+		}
+		return 0;
+	}
+
+	@Override
+	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) {
+		String startTime = queryVo.getStartTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
+		String endTime = queryVo.getEndTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
+		String equipmentId = queryVo.getEquipmentId();
+		int state = Integer.valueOf(queryVo.getState());
+		int failFlag = (state == 5) ? 1 : 0;
+		String startRow = startTime + equipmentId + failFlag;
+		String endRow = endTime + equipmentId + failFlag;
+		Map<String, Object> resultmap = curveDate(startRow, endRow);
 		return resultmap;
 	}
 
-	private Map<String, Object> selectCurveById(Map<String, Object> param) {
-		long inTime = System.currentTimeMillis();
-		log.info("查询数据SQL开始：" + inTime);
-		List<DataAcquisitionVo> historicalDataList = null;
-		historicalDataList = dataAcquisitionVoMapper.selectCurveById(param);
-		long outTime = System.currentTimeMillis();
-		log.info("查询曲线SQL时长为：" + (outTime - inTime));
+	@Override
+	public Map<String, Object> realTimeCurve(QueryParametersVo queryVo) {
+
+		String startTime = queryVo.getStartTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
+		String endTime = queryVo.getEndTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
+		String equipmentId = queryVo.getEquipmentId();
+		String startRow = startTime + equipmentId;
+		String endRow = endTime + equipmentId;
+		Map<String, Object> resultmap = curveDate(startRow, endRow);
+		// resultmap.put("equipment", equipment);
+		return resultmap;
+	}
+
+	private Map<String, Object> curveDate(String startRow, String endRow) {
+		List<DataAcquisitionVo> historicalDataList = new ArrayList<DataAcquisitionVo>();
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		String tableName = "ns1:hq_equipment_monitor_data";
+		Table table = null;
+		Connection connection = null;
+		try {
+			connection = ConnectionFactory.createConnection(con.configuration());
+			table = connection.getTable(TableName.valueOf(tableName));
+			Scan scan = new Scan();
+			scan.setStartRow(Bytes.toBytes(startRow));
+			scan.setStopRow(Bytes.toBytes(endRow));
+			scan.setMaxVersions();
+			long in = System.currentTimeMillis();
+			ResultScanner rs = table.getScanner(scan);
+			long out = System.currentTimeMillis();
+			System.out.println("数据曲线Hbase查询耗时:" + (in - out) + "ms ");
+			for (Result r : rs) {
+				resultmap = transformState(historicalDataList, r);
+			}
+		} catch (
+
+		IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				table.close();
+				connection.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return resultmap;
+	}
+
+	private Map<String, Object> transformState(List<DataAcquisitionVo> historicalDataList, Result r) {
+		DataAcquisitionVo d = new DataAcquisitionVo();
+		List<Cell> lc = r.listCells();
+		d.setAddress(Bytes.toString(lc.get(0).getValue()));
+		d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
+		d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
+		d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
+		d.setReceiveTime(Bytes.toString(lc.get(7).getValue()));
+		d.setState(Bytes.toInt(lc.get(8).getValue()));
+		d.setTemperature(Bytes.toString(lc.get(10).getValue()));
+		historicalDataList.add(d);
 		Map<String, Object> resultmap = new HashMap<>();
 		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
 		Map<String, List<List<Double>>> map = new HashMap<>();
@@ -236,40 +233,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		}
 		resultmap.put("data", result);
 		resultmap.put("temperatures", allTemperatures);
-		return resultmap;
-	}
-
-	/**
-	 * 获取指定时间段（自开机到当前时间）内的数据点的集合 channelList: 所有通道名称集合 各个通道在具体时间段内的采集温度集合
-	 * 各个通道在集体时间段内的采集时间集合
-	 */
-	@Override
-	public Map<String, Object> getPeriodDataByQuery(QueryParametersVo queryVo) {
-
-		String startTime = queryVo.getStartTime();
-		String endTime = queryVo.getEndTime();
-		Map<String, Object> param = new HashMap<>();
-		param.put("equipmentId", queryVo.getEquipmentId());
-		param.put("startTime", startTime);
-		param.put("endTime", endTime);
-		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
-		String type = equipment.getType();
-		switch (type) {
-		case "1":
-			param.put("table", "hq_equipment_monitor_data_r1");
-			break;
-		case "2":
-			param.put("table", "hq_equipment_monitor_data_r2");
-			break;
-		case "3":
-			param.put("table", "hq_equipment_monitor_data_r3");
-			break;
-		case "4":
-			param.put("table", "hq_equipment_monitor_data_r4");
-			break;
-		}
-		Map<String, Object> resultmap = selectCurveById(param);
-		resultmap.put("equipment", equipment);
 		return resultmap;
 	}
 
@@ -375,32 +338,32 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	private void staticFailuer(List<DataAcquisitionVo> L, String yesterday, String table) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		for (int i = 0; i < L.size() - 1; i++) {
-			if (i == 0 && !L.get(i).getState().equals("5")) {
+			if (i == 0 && L.get(i).getState() != 5) {
 				StaticFailCounts(yesterday, L.get(i), table);
 			}
 
 			String equipmentId = L.get(i).getEquipmentId();
 			String channelNum = L.get(i).getChannelNum();
-			String state = L.get(i).getState();
+			int state = L.get(i).getState();
 			String equipmentIda = L.get(i + 1).getEquipmentId();
 			String channelNuma = L.get(i + 1).getChannelNum();
-			String statea = L.get(i + 1).getState();
+			int statea = L.get(i + 1).getState();
 			// 逐条判断前一条数据和下一条数据，如果ID相同，就说明是同一个设备
 			// 继续判断通道号，通道号不同，就说明上一个通道统计结束，可以更新数据库了
 			// 当状态不等且下一条不是正常，就说明有新的故障产生，需要统计
 			if (channelNum.equals(channelNuma) && equipmentId.equals(equipmentIda)) {
-				if (!state.equals(statea) && !statea.equals("5")) {
+				if (state != statea && statea != 5) {
 					switch (statea) {
-					case "2":
+					case 2:
 						comm++;
 						break;
-					case "3":
+					case 3:
 						fiber++;
 						break;
-					case "4":
+					case 4:
 						therm++;
 						break;
-					case "9":
+					case 9:
 						overT++;
 						break;
 					}
@@ -420,7 +383,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				try {
 					sf.setDate(format.parse(L.get(i).getReceiveTime()));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				staticFailuresMapper.insert(sf);
@@ -428,7 +390,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				fiber = 0;
 				therm = 0;
 				overT = 0;
-				if (!statea.equals("5")) {
+				if (statea != 5) {
 					// 如果某个设备的某个通道的第一条数据不是正常状态，就需要判断昨天最后一条是否正常，若不正常则算做一次，若正常，今天的故障就要加1
 					StaticFailCounts(yesterday, L.get(i + 1), table);
 				}
@@ -447,7 +409,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				try {
 					sf.setDate(format.parse(L.get(i + 1).getReceiveTime()));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				staticFailuresMapper.insert(sf);
@@ -469,18 +430,18 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("table", table);
 		// 获取前一天最后一条数据
 		DataAcquisitionVo y1 = dataAcquisitionVoMapper.selectYesDayFailures(param);
-		if (!y1.getState().equals(d.getState())) {
+		if (y1.getState() != d.getState()) {
 			switch (d.getState()) {
-			case "2":
+			case 2:
 				comm++;
 				break;
-			case "3":
+			case 3:
 				fiber++;
 				break;
-			case "4":
+			case 4:
 				therm++;
 				break;
-			case "9":
+			case 9:
 				overT++;
 				break;
 			}
@@ -512,23 +473,23 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			for (int i = 0; i < t.size(); i++) {
 				String equipmentId = t.get(i).getEquipmentId();
 				String channelNum = t.get(i).getChannelNum();
-				String state = t.get(i).getState();
+				int state = t.get(i).getState();
 				String equipmentIdy = y.get(i).getEquipmentId();
 				String channelNumy = y.get(i).getChannelNum();
-				String statey = y.get(i).getState();
-				if (equipmentId.equals(equipmentIdy) && channelNum.equals(channelNumy) && !state.equals(statey)
-						&& !state.equals("5")) {
+				int statey = y.get(i).getState();
+				if (equipmentId.equals(equipmentIdy) && channelNum.equals(channelNumy) && state != statey
+						&& state != 5) {
 					switch (state) {
-					case "2":
+					case 2:
 						comm++;
 						break;
-					case "3":
+					case 3:
 						fiber++;
 						break;
-					case "4":
+					case 4:
 						therm++;
 						break;
-					case "9":
+					case 9:
 						overT++;
 						break;
 					}
@@ -557,19 +518,19 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			for (int i = 0; i < t.size(); i++) {
 				String equipmentId = t.get(i).getEquipmentId();
 				String channelNum = t.get(i).getChannelNum();
-				String state = t.get(i).getState();
-				if (state != "5") {
+				int state = t.get(i).getState();
+				if (state != 5) {
 					switch (state) {
-					case "2":
+					case 2:
 						comm++;
 						break;
-					case "3":
+					case 3:
 						fiber++;
 						break;
-					case "4":
+					case 4:
 						therm++;
 						break;
-					case "9":
+					case 9:
 						overT++;
 						break;
 					}
@@ -629,6 +590,35 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		result.put("equipment", equipment);
 		result.put("extremumList", extremumList);
 		return result;
+	}
+
+	@Override
+	public void insertHbase(DataAcquisitionVo d) throws IOException {
+		int state = d.getState();
+		int failFlag = (state == 5) ? 1 : 0;
+		Table table = null;
+		Connection connection = null;
+		String tableName = "ns1:hq_equipment_monitor_data";
+		connection = ConnectionFactory.createConnection(con.configuration());
+		table = connection.getTable(TableName.valueOf(tableName));
+		String rowkey = d.getReceiveTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "")
+				+ d.getEquipmentId() + failFlag + d.getState() + d.getChannelNum();
+		Put put = new Put(Bytes.toBytes(rowkey));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("EQUIPMENT_ID"), Bytes.toBytes(d.getEquipmentId()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("EQUIPMENT_NAME"), Bytes.toBytes(d.getEquipmentName()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("ADDRESS"), Bytes.toBytes(d.getAddress()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("CHANNEL_NUM"), Bytes.toBytes(d.getChannelNum()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("OPTICAL_FIBER_POSITION"),
+				Bytes.toBytes(d.getOpticalFiberPosition()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("TEMPERATURE"), Bytes.toBytes(d.getTemperature()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("PD"), Bytes.toBytes(d.getPd()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("UV"), Bytes.toBytes(d.getUv()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("STATE"), Bytes.toBytes(d.getState()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("MESSAGE"), Bytes.toBytes(d.getMessage()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("RECEIVE_TIME"), Bytes.toBytes(d.getReceiveTime()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("DUTY_PERSON"), Bytes.toBytes(d.getDutyPerson()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("TEL"), Bytes.toBytes(d.getTel()));
+		table.put(put);
 	}
 
 }

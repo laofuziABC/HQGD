@@ -1,5 +1,6 @@
 package com.hqgd.pms.service.dataAcquisition;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -9,16 +10,7 @@ import com.hqgd.pms.domain.StaticFailures;
 
 public interface IDataAcquisitionService {
 
-	List<DataAcquisitionVo> execGetRealTimeData(String equipmentId);
-
-	List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo);
-
-	Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws Exception;
-
-
-	Integer selectTotal(QueryParametersVo queryVo);
-
-	Map<String, Object> getPeriodDataByQuery(QueryParametersVo queryVo);
+	Map<String, Object> getHistoricalData(QueryParametersVo queryVo) throws IOException;
 
 	List<DataAcquisitionVo> allEquipRealtime(String userName, String roleId);
 
@@ -29,5 +21,11 @@ public interface IDataAcquisitionService {
 	void run(String startTime);
 
 	Map<String, Object> getHistoryExtremums(QueryParametersVo queryVo);
+
+	void insertHbase(DataAcquisitionVo d) throws IOException;
+
+	Map<String, Object> realTimeCurve(QueryParametersVo queryVo);
+
+	Map<String, Object> historicalCurve(QueryParametersVo queryVo);
 
 }

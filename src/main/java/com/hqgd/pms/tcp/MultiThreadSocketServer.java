@@ -15,6 +15,7 @@ import com.hqgd.pms.common.SpringContextUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.equipment.RouterInfoMapper;
 import com.hqgd.pms.dao.system.SysParamMapper;
+import com.hqgd.pms.service.dataAcquisition.IDataAcquisitionService;
 import com.hqgd.pms.service.equipment.impl.EquipmentService;
 
 /**
@@ -32,6 +33,7 @@ public class MultiThreadSocketServer implements Runnable {
 	private EquipmentService equipmentService;
 	private RouterInfoMapper routerInfoMapper;
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
+	private IDataAcquisitionService das;
 	private SimpMessagingTemplate simpMessage;// 消息发送模板
 	private SysParamMapper sysParamMapper;// 消息发送模板
 	public static List<Socket> CLIENT_SOCKET_LIST = new ArrayList<Socket>();
@@ -40,6 +42,7 @@ public class MultiThreadSocketServer implements Runnable {
 	public MultiThreadSocketServer() {
 		this.equipmentService = SpringContextUtil.getBean(EquipmentService.class);
 		this.dataAcquisitionVoMapper = SpringContextUtil.getBean(DataAcquisitionVoMapper.class);
+		this.das = SpringContextUtil.getBean(IDataAcquisitionService.class);
 		this.simpMessage = SpringContextUtil.getBean(SimpMessagingTemplate.class);
 		this.routerInfoMapper = SpringContextUtil.getBean(RouterInfoMapper.class);
 		this.sysParamMapper = SpringContextUtil.getBean(SysParamMapper.class);
@@ -70,8 +73,8 @@ public class MultiThreadSocketServer implements Runnable {
 				if (!IP_SET.contains(ip)) {
 					CLIENT_SOCKET_LIST.add(socket);
 					// 将接收到的客户端socket交给处理线程进行处理，实现多线程
-					new Thread(new ClientSocketHandler(socket, equipmentService, dataAcquisitionVoMapper, simpMessage,
-							routerInfoMapper)).start();
+					new Thread(new ClientSocketHandler(socket, equipmentService, dataAcquisitionVoMapper, das,
+							simpMessage, routerInfoMapper)).start();
 				}
 
 			}

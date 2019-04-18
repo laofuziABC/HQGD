@@ -1,8 +1,7 @@
 /**
- * 绘制highChart图表
- * 此文档用于设置图表的相关配置
+ * 绘制highChart图表 此文档用于设置图表的相关配置
  */
-//设置图表公用配置项【开始】
+// 设置图表公用配置项【开始】
 Highcharts.setOptions({global: { useUTC: false}});
 var legend={enabled: true, backgroundColor: '#ffffff'};
 var tooltip={shared: true, useHTML: true,
@@ -24,8 +23,8 @@ var lang={loading: "数据载入中……"};
 var loading={labelStyle: {color: "red", fontWeight: "bold"}, 
 		style: {backgroundColor: "rgba(255,255,255,0.7)", backgroundImage: "url('login/img/jiazaizhong.gif')", backgroundSize: '100% 100%'}
 };
-//设置图表公用配置项【结束】
-//配置历史数据监测曲线图配置项
+// 设置图表公用配置项【结束】
+// 配置历史数据监测曲线图配置项
 var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20, panning: true, panKey: 'ctrl'},
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
@@ -35,7 +34,7 @@ var historyOption = {
 	series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
 
-//配置当前数据监测统计图
+// 配置当前数据监测统计图
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
     title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: {useUTC: false },
@@ -44,7 +43,7 @@ var currentOption={
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
     series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
 };
-//配置设备通道最值统计图
+// 配置设备通道最值统计图
 var extremumOption={
 	chart: { type: 'column', backgroundColor: "#21242e", marginRight: 10 },
     title: { text: '通道温度最值统计图', style: {color: '#ffffff'} },
@@ -54,7 +53,7 @@ var extremumOption={
     plotOptions: {column: {dataLabels: {enabled: true, verticalAlign: 'top', inside: true, style:{color: '#ffffff'} } } },
     series:[{name: '通道温度最值', data: []}]
 };
-//配置设备故障类型统计图
+// 配置设备故障类型统计图
 var errorTypeOption={
 	chart: {backgroundColor: "#21242e" },
 	title: { text: "设备故障类型统计图", style: {color: "#ffffff"} },
@@ -65,7 +64,7 @@ var errorTypeOption={
 	plotOptions:{pie: {cursor: "pointer", dataLabels: {color: "#fff" },  showInLegend: true }, series:{events:{click: changeChannelChart}} },
 	series:[{type: "pie", name: "故障类型",data:[]}]
 };
-//配置设备各通道发生故障次数统计图
+// 配置设备各通道发生故障次数统计图
 var errorChannelOption={
 	chart: { backgroundColor: "#21242e" },
 	title: { text: "通道发生故障次数统计图", style: {color: "#ffffff"} },
@@ -78,14 +77,12 @@ var errorChannelOption={
 };
 
 /**
- * 以下的方法用于同步或者异步获取图表的数据资源
- * 其中实时监控图的相关内容，需同步获取
- * 其它无需依靠当前时间加载的图表数据，为异步获取
+ * 以下的方法用于同步或者异步获取图表的数据资源 其中实时监控图的相关内容，需同步获取 其它无需依靠当前时间加载的图表数据，为异步获取
  */
-/* 方法1：同步获取指定地址下的数据资源
- * url：获取资源的途径，不能传空值；param：获取资源的传参。
+/*
+ * 方法1：同步获取指定地址下的数据资源 url：获取资源的途径，不能传空值；param：获取资源的传参。
  * data：返回值，可能为null，也可能为空值，其本身为一个对象。
-*/
+ */
 function getChartData(url, param){
 	var resultMap={};
 	$.ajax({ url: url, type: "post", data: param, dataType: "json", async:false,
@@ -94,9 +91,9 @@ function getChartData(url, param){
 	});
 	return resultMap;
 }
-/*方法2：异步获取指定时间段内的图表数据
- * url：获取资源的途径，不能传空值；param：获取资源的传参。
-*/
+/*
+ * 方法2：异步获取指定时间段内的图表数据 url：获取资源的途径，不能传空值；param：获取资源的传参。
+ */
 function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(data){
@@ -129,11 +126,9 @@ function drawingHistoryChart(url, param){
 	});
 }
 /*
- * 方法3：绘制当前监测数据图
- * 首先获取登录时间到当前时间里的监测数据
- * 然后通过定时器，同步获取最新的数据点，添加在图表中
-*/
-//获取并计算常量
+ * 方法3：绘制当前监测数据图 首先获取登录时间到当前时间里的监测数据 然后通过定时器，同步获取最新的数据点，添加在图表中
+ */
+// 获取并计算常量
 function getUrlParam(string) {
     var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
     var l = decodeURI(window.location.search);
@@ -149,7 +144,7 @@ var START_TIME=new Date(parseInt(LOGIN_TIME));
 var ST_VALUE=START_TIME.getTime();
 var NOW_TIME=new Date();
 var NT_VALUE=NOW_TIME.getTime();
-//获取并计算常量【结束】
+// 获取并计算常量【结束】
 function initCurrentChart(){
 	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
 	var startTime = parent.formatTimeToString(START_TIME);
@@ -177,15 +172,10 @@ function initCurrentChart(){
 	$("#chart_current").highcharts().destroy();
 	$("#chart_current").highcharts(currentOption);
 }
-//计算点的坐标，落在图表中
-function addPoints(){
-	var interval = 60000;
-	var series = this.series;
-	var timing=setInterval(function (){
-		//在实时监测图表上加点
-		var url="dataAcquisition/realtime";
-		var param={"equipmentId": equiId1};
-		var pointsData = getChartData(url, param);
+// 计算点的坐标，落在图表中
+function addPoints(body){
+	debugger;
+		var pointsData = body.body;
 		if(pointsData!=null && pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
 			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 			var nowtime = (new Date()).getTime();
@@ -195,10 +185,10 @@ function addPoints(){
 				tempValues.push(yValue);
 			}
 			setValueRangeForCChart(tempValues);
-			//判断此点是否在图表中，再绘制此点
+			// 判断此点是否在图表中，再绘制此点
 			if(thisPointTime>ST_VALUE && nowtime-thisPointTime<1000*60*2){
 				for(let i=0; i<tempValues.length; i++){
-					//确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
+					// 确定图表是否需要平移，当前点的采集时间与开始时间（startTime）间隔超过一天，图表向左平移
 					if(thisPointTime-ST_VALUE>ONE_DAY){series[i].addPoint([thisPointTime, tempValues[i]], true, true); }
 					else{series[i].addPoint([thisPointTime, tempValues[i]], true, false); }
 				}
@@ -207,13 +197,10 @@ function addPoints(){
 				$("#last-time").css({"color":"red"});
 			}
 		}
-	}, interval);
-	var start = (timing-60000>0) ?(timing-60000):0;
-	for(var i=start; i<timing; i++){
-	     clearInterval(i);
-	}
+	
+	
 }
-//初始化实时监控表
+// 初始化实时监控表
 function showCurrentContent(){
 	if(equiId!=null){
 		showBlocks();
@@ -223,7 +210,7 @@ function showCurrentContent(){
 		initCurrentChart();
 	}
 }
-//展示实时监控通道最新监测的温度
+// 展示实时监控通道最新监测的温度
 function showBlocks(){
 	var url="dataAcquisition/realtime";
 	var param={"equipmentId": equiId};
@@ -231,13 +218,13 @@ function showBlocks(){
 	drawCurrentChannels(result);
 }
 function drawCurrentChannels(param){
-	//设置DIV高度
+	// 设置DIV高度
 	var channel = "";
 	var num;
 	if(param==null){ num=0; $("#channelDiv").css({"height":($(window).height())*0.45}); }
 	else{ num=param.length; }
 	if(num>0){
-		//超过2分钟提示
+		// 超过2分钟提示
 		lTime=(new Date(param[0].receiveTime)).getTime();
 		cTime=(new Date()).getTime();
 		var timetext = "最新通道温度(单位:℃，最后监测时间："+param[0].receiveTime+")";
@@ -271,7 +258,7 @@ function drawCurrentChannels(param){
 	}
 	$("#channelsInfo").html(channel);
 }
-//根据实际需求设定纵轴温度值域
+// 根据实际需求设定纵轴温度值域
 function setValueRangeForCChart(param){
 	if(param.length>0){
 		var chart = $("#chart_current").highcharts();
@@ -285,7 +272,7 @@ function setValueRangeForCChart(param){
 		currentOption.yAxis.min=0;
 	}
 }
-//加载通道温度最值统计图
+// 加载通道温度最值统计图
 function fetchExtremumChartData(url, param){
 	$.ajax({
 		url: url, type: "post", data: param, dataType: "json",
@@ -321,7 +308,7 @@ function loadingExtremumChart(maxs, mins, channels, equiName){
 	$("#chart_extremum").highcharts().destroy();
 	$("#chart_extremum").highcharts(extremumOption);
 }
-//加载通道报错信息统计图
+// 加载通道报错信息统计图
 var errors_forchart;
 function fetchErrorChartData(url,param){
 	var resultMap={};
@@ -353,7 +340,7 @@ function fetchErrorChartData(url,param){
 	drawingErrorTypesChart(errors);
 	drawingErrorChannelsChart(errors);
 }
-//绘制设备异常类型统计图
+// 绘制设备异常类型统计图
 function drawingErrorTypesChart(param){
 	var equiName=param.equipment.equipmentName;
 	errorTypeOption.title.text="设备故障类型统计图("+equiName+")";
@@ -370,7 +357,7 @@ function drawingErrorTypesChart(param){
 	$("#chart_error_type").highcharts().destroy();
 	$("#chart_error_type").highcharts(errorTypeOption);
 }
-//绘制通道异常次数统计图
+// 绘制通道异常次数统计图
 function drawingErrorChannelsChart(param){
 	var channels=param.channels;
 	var equiName=param.equipment.equipmentName;

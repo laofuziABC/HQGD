@@ -48,21 +48,7 @@ public interface DataAcquisitionVoMapper {
 
 	void insertt(Map<String, Object> param);
 
-	void insert1(DataAcquisitionVo d);
-
-	void insert2(DataAcquisitionVo d);
-
-	void insert3(DataAcquisitionVo d);
-
-	void insert4(DataAcquisitionVo d);
-
-	void insertr1(DataAcquisitionVo d);
-
-	void insertr2(DataAcquisitionVo d);
-
-	void insertr3(DataAcquisitionVo d);
-
-	void insertr4(DataAcquisitionVo d);
+	void insertSQL(DataAcquisitionVo d);
 
 	List<DataAcquisitionVo> selectAllFailures(Map<String, Object> param);
 

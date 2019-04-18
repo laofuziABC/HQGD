@@ -111,13 +111,15 @@ public class HbaseServiceImpl {
 			ResultScanner rs = table.getScanner(scan);
 			long endTime = System.currentTimeMillis();
 			System.out.println("总耗时:" + (endTime - startTime) + "ms ");
-//			for (Result r : rs) {
-//				for (Cell cell : r.listCells()) {
-//					System.out.println(Bytes.toString(cell.getRow()) + "   Familiy:Quilifier : "
-//							+ Bytes.toString(cell.getFamily()) + ":" + Bytes.toString(cell.getQualifier())
-//							+ "   Value : " + Bytes.toString(cell.getValue()) + "   Time : " + cell.getTimestamp());
-//				}
-//			}
+			// for (Result r : rs) {
+			// for (Cell cell : r.listCells()) {
+			// System.out.println(Bytes.toString(cell.getRow()) + " Familiy:Quilifier : "
+			// + Bytes.toString(cell.getFamily()) + ":" +
+			// Bytes.toString(cell.getQualifier())
+			// + " Value : " + Bytes.toString(cell.getValue()) + " Time : " +
+			// cell.getTimestamp());
+			// }
+			// }
 		} catch (
 
 		IOException e) {
@@ -141,7 +143,7 @@ public class HbaseServiceImpl {
 		param.put("equipmentId", "0x000009");
 		param.put("startTime", "2019-02-18 18:10:53");
 		param.put("endTime", endtime);
-//		param.put("state", "5");
+		// param.put("state", "5");
 		param.put("table", "hq_equipment_monitor_data");
 		long startTime = System.currentTimeMillis();
 		List<DataAcquisitionVo> historicalDataList = dataAcquisitionVoMapper.selectCurveById(param);
@@ -150,6 +152,11 @@ public class HbaseServiceImpl {
 				"总耗时:" + (endTime - startTime) + "ms     historicalDataList的size：" + historicalDataList.size());
 		return null;
 
+	}
+
+	public String put() throws IOException {
+		
+		return null;
 	}
 
 }
