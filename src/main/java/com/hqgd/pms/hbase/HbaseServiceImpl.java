@@ -77,7 +77,7 @@ public class HbaseServiceImpl {
 	 * 
 	 * @return
 	 */
-	public String scanValue(String endtime) throws IOException {
+	public String scanValue(String endtime,String starttime) throws IOException {
 		String tableName = "ns1:hq_equipment_monitor_data";
 		String rowkey = "row001";
 		String family = "f1";
@@ -98,11 +98,11 @@ public class HbaseServiceImpl {
 
 			FilterList filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL);
 			SingleColumnValueFilter filter1 = new SingleColumnValueFilter(Bytes.toBytes("f1"),
-					Bytes.toBytes("RECEIVE_TIME"), CompareOp.GREATER_OR_EQUAL, Bytes.toBytes("2019-03-01 18:10:53"));
+					Bytes.toBytes("RECEIVE_TIME"), CompareOp.GREATER_OR_EQUAL, Bytes.toBytes(starttime));
 			SingleColumnValueFilter filter2 = new SingleColumnValueFilter(Bytes.toBytes("f1"),
 					Bytes.toBytes("RECEIVE_TIME"), CompareOp.LESS_OR_EQUAL, Bytes.toBytes(endtime));
 			SingleColumnValueFilter filter3 = new SingleColumnValueFilter(Bytes.toBytes("f1"),
-					Bytes.toBytes("EQUIPMENT_ID"), CompareOp.EQUAL, Bytes.toBytes("0x000001"));
+					Bytes.toBytes("EQUIPMENT_ID"), CompareOp.EQUAL, Bytes.toBytes("0x000008"));
 			filterList.addFilter(filter1);
 			filterList.addFilter(filter2);
 			filterList.addFilter(filter3);
@@ -111,15 +111,13 @@ public class HbaseServiceImpl {
 			ResultScanner rs = table.getScanner(scan);
 			long endTime = System.currentTimeMillis();
 			System.out.println("总耗时:" + (endTime - startTime) + "ms ");
-			// for (Result r : rs) {
-			// for (Cell cell : r.listCells()) {
-			// System.out.println(Bytes.toString(cell.getRow()) + " Familiy:Quilifier : "
-			// + Bytes.toString(cell.getFamily()) + ":" +
-			// Bytes.toString(cell.getQualifier())
-			// + " Value : " + Bytes.toString(cell.getValue()) + " Time : " +
-			// cell.getTimestamp());
-			// }
-			// }
+			for (Result r : rs) {
+				for (Cell cell : r.listCells()) {
+					System.out.println(Bytes.toString(cell.getRow()) + " Familiy:Quilifier : "
+							+ Bytes.toString(cell.getFamily()) + ":" + Bytes.toString(cell.getQualifier()) + " Value : "
+							+ Bytes.toString(cell.getValue()) + " Time : " + cell.getTimestamp());
+				}
+			}
 		} catch (
 
 		IOException e) {

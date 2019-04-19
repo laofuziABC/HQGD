@@ -85,7 +85,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		long in = System.currentTimeMillis();
 		ResultScanner rs = table.getScanner(scan);
 		long out = System.currentTimeMillis();
-		System.out.println("历史数据Hbase查询耗时:" + (in - out) + "ms ");
+		System.out.println("历史数据Hbase查询耗时:" + (out - in) + "ms ");
 		Result[] rArray = rs.next(page * limit);
 		for (int i = (page - 1) * limit; i < page * limit; i++) {
 			Result r = rArray[i];
@@ -94,9 +94,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
 			d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
 			d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
-			d.setReceiveTime(Bytes.toString(lc.get(7).getValue()));
-			d.setState(Bytes.toInt(lc.get(8).getValue()));
-			d.setTemperature(Bytes.toString(lc.get(10).getValue()));
+			d.setReceiveTime(Bytes.toString(lc.get(8).getValue()));
+			d.setState(Bytes.toInt(lc.get(9).getValue()));
+			d.setTemperature(Bytes.toString(lc.get(11).getValue()));
 			historicalDataList.add(d);
 		}
 		int total = getTotal(rs, page);
@@ -138,12 +138,12 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		String equipmentId = queryVo.getEquipmentId();
 		String startRow = startTime + equipmentId;
 		String endRow = endTime + equipmentId;
-		Map<String, Object> resultmap = curveDate(startRow, endRow);
+		Map<String, Object> resultmap = curveDate(startRow, endRow, 1);
 		// resultmap.put("equipment", equipment);
 		return resultmap;
 	}
 
-	private Map<String, Object> curveDate(String startRow, String endRow) {
+	private Map<String, Object> curveDate(String startRow, String endRow, int flag) {
 		List<DataAcquisitionVo> historicalDataList = new ArrayList<DataAcquisitionVo>();
 		Map<String, Object> resultmap = new HashMap<String, Object>();
 		String tableName = "ns1:hq_equipment_monitor_data";
@@ -159,74 +159,62 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			long in = System.currentTimeMillis();
 			ResultScanner rs = table.getScanner(scan);
 			long out = System.currentTimeMillis();
-			System.out.println("数据曲线Hbase查询耗时:" + (in - out) + "ms ");
+			System.out.println("数据曲线Hbase查询耗时:" + (out - in) + "ms ");
 			for (Result r : rs) {
-				resultmap = transformState(historicalDataList, r);
+				DataAcquisitionVo d = new DataAcquisitionVo();
+				List<Cell> lc = r.listCells();
+				d.setAddress(Bytes.toString(lc.get(0).getValue()));
+				d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
+				d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
+				d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
+				d.setReceiveTime(Bytes.toString(lc.get(8).getValue()));
+				d.setState(Bytes.toInt(lc.get(9).getValue()));
+				d.setTemperature(Bytes.toString(lc.get(11).getValue()));
+				historicalDataList.add(d);
+			}
+
+			resultmap = transformState(historicalDataList);
+			resultmap.put("equipmentName", historicalDataList.get(0).getEquipmentName());
+			if (flag == 1) {
+				for (DataAcquisitionVo d : historicalDataList) {
+					d.r
+				}
 			}
 		} catch (
 
 		IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				table.close();
-				connection.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return resultmap;
 	}
 
-	private Map<String, Object> transformState(List<DataAcquisitionVo> historicalDataList, Result r) {
-		DataAcquisitionVo d = new DataAcquisitionVo();
-		List<Cell> lc = r.listCells();
-		d.setAddress(Bytes.toString(lc.get(0).getValue()));
-		d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
-		d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
-		d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
-		d.setReceiveTime(Bytes.toString(lc.get(7).getValue()));
-		d.setState(Bytes.toInt(lc.get(8).getValue()));
-		d.setTemperature(Bytes.toString(lc.get(10).getValue()));
-		historicalDataList.add(d);
+	private Map<String, Object> transformState(List<DataAcquisitionVo> historicalDataList) {
 		Map<String, Object> resultmap = new HashMap<>();
 		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
 		Map<String, List<List<Double>>> map = new HashMap<>();
-		List<List<Double>> ll = new ArrayList<List<Double>>();
+
 		List<Double> allTemperatures = new ArrayList<Double>();
 		if (historicalDataList.size() > 0) {
-			for (int i = 0; i < historicalDataList.size() - 1; i++) {
+			for (int i = 0; i < historicalDataList.size(); i++) {
 				DataAcquisitionVo dv = historicalDataList.get(i);
 				String ch = dv.getChannelNum();
-				String chn = historicalDataList.get(i + 1).getChannelNum();
 				Double receTime = CommonUtil.str2Time(dv.getReceiveTime());
 				Double tem = Double.valueOf(dv.getTemperature());
 				List<Double> l1 = new ArrayList<Double>();
 				l1.add(receTime);
 				l1.add(tem);
-				ll.add(l1);
 				allTemperatures.add(tem);
+				if (map.containsKey(ch)) {
+					map.get(ch).add(l1);
+				} else {
+					List<List<Double>> ll = new ArrayList<List<Double>>();
+					ll.add(l1);
+					map.put(ch, ll);
+				}
+			}
+			result.add(map);
+			for (Map<String, List<List<Double>>> m : result) {
 
-				if (!ch.equals(chn)) {
-					List<List<Double>> lll = new ArrayList<List<Double>>(ll);
-					map.put(ch, lll);
-					Map<String, List<List<Double>>> map1 = new HashMap<>(map);
-					result.add(map1);
-					map.clear();
-					ll.clear();
-				}
-				if (i == historicalDataList.size() - 2) {
-					DataAcquisitionVo dvl = historicalDataList.get(i + 1);
-					String chl = dvl.getChannelNum();
-					Double receTimel = CommonUtil.str2Time(dvl.getReceiveTime());
-					Double teml = Double.valueOf(dvl.getTemperature());
-					List<Double> l1l = new ArrayList<Double>();
-					l1l.add(receTimel);
-					l1l.add(teml);
-					ll.add(l1l);
-					map.put(chl, ll);
-					result.add(map);
-				}
 			}
 		} else {
 			resultmap.put("data", null);

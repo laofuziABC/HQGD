@@ -149,11 +149,11 @@ function initCurrentChart(){
 	START_TIME=(NT_VALUE-LOGIN_TIME>ONE_DAY)?(new Date(NT_VALUE-ONE_DAY)):(new Date((ST_VALUE-1000*60*15)));
 	var startTime = parent.formatTimeToString(START_TIME);
 	var endTime = parent.formatTimeToString(new Date());
-	var url = "dataAcquisition/periodDate";
+	var url = "dataAcquisition/realTimeCurve";
 	var param = {"equipmentId": equiId, "startTime": startTime, "endTime": endTime };
 	var result=getChartData(url, param);
 	if(result!=null){
-		var equiName = result.equipment.equipmentName;
+		var equiName = result.equipmentName;
 		var seriesData=result.data;
 		if(seriesData.length>0){
 			var series=[];
@@ -168,6 +168,7 @@ function initCurrentChart(){
 			currentOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
 		}
 		currentOption.title.text="实时温度监测图("+equiName+")";
+		drawCurrentChannels(result);
 	}
 	$("#chart_current").highcharts().destroy();
 	$("#chart_current").highcharts(currentOption);

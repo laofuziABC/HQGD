@@ -37,9 +37,9 @@ public class HbaseController {
 	}
 
 	@RequestMapping(value = "/scanValue")
-	public void scanValue(HttpServletRequest request, HttpServletResponse response, String endtime) throws IOException {
+	public void scanValue(HttpServletRequest request, HttpServletResponse response, String endtime,String startTime) throws IOException {
 		log.info("开始");
-		String result = hbaseServiceImpl.scanValue(endtime);
+		String result = hbaseServiceImpl.scanValue(endtime,startTime);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(result));
 		log.info("结束");
