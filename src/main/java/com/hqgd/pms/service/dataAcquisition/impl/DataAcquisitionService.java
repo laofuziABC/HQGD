@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,13 +66,15 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		List<DataAcquisitionVo> historicalDataList = new ArrayList<DataAcquisitionVo>();
 		DataAcquisitionVo d = new DataAcquisitionVo();
 		String tableName = "ns1:hq_equipment_monitor_data";
-		String startTime = queryVo.getStartTime();
-		String endTime = queryVo.getEndTime();
+		String startTime = queryVo.getStartTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
+		;
+		String endTime = queryVo.getEndTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
+		;
 		String equipmentId = queryVo.getEquipmentId();
 		int state = Integer.valueOf(queryVo.getState());
 		int limit = queryVo.getLimit();
 		int page = queryVo.getPage();
-		int failFlag = (state == 5) ? 1 : 0;
+		int failFlag = (state == 0) ? 1 : 0;
 
 		Table table = null;
 		Connection connection = null;
@@ -80,24 +84,30 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		String startRow = startTime + equipmentId + failFlag;
 		String endRow = endTime + equipmentId + failFlag;
 		scan.setStartRow(Bytes.toBytes(startRow));
-		scan.setStopRow(Bytes.toBytes(endRow));
+		scan.setStopRow(Bytes.toBytes(endRow+"{"));
 		scan.setMaxVersions();
 		long in = System.currentTimeMillis();
 		ResultScanner rs = table.getScanner(scan);
 		long out = System.currentTimeMillis();
 		System.out.println("历史数据Hbase查询耗时:" + (out - in) + "ms ");
 		Result[] rArray = rs.next(page * limit);
-		for (int i = (page - 1) * limit; i < page * limit; i++) {
-			Result r = rArray[i];
-			List<Cell> lc = r.listCells();
-			d.setAddress(Bytes.toString(lc.get(0).getValue()));
-			d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
-			d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
-			d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
-			d.setReceiveTime(Bytes.toString(lc.get(8).getValue()));
-			d.setState(Bytes.toInt(lc.get(9).getValue()));
-			d.setTemperature(Bytes.toString(lc.get(11).getValue()));
-			historicalDataList.add(d);
+		if (rArray.length > 0) {
+			for (int i = (page - 1) * limit; i < page * limit; i++) {
+				Result r = rArray[i];
+				List<Cell> lc = r.listCells();
+				d.setAddress(Bytes.toString(lc.get(0).getValue()));
+				d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
+				d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
+				d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
+				d.setMessage(Bytes.toString(lc.get(5).getValue()));
+				d.setOpticalFiberPosition(Bytes.toString(lc.get(6).getValue()));
+				d.setPd(Bytes.toString(lc.get(7).getValue()));
+				d.setReceiveTime(Bytes.toString(lc.get(8).getValue()));
+				d.setState(Bytes.toInt(lc.get(9).getValue()));
+				d.setTemperature(Bytes.toString(lc.get(11).getValue()));
+				d.setUv(Bytes.toString(lc.get(12).getValue()));
+				historicalDataList.add(d);
+			}
 		}
 		int total = getTotal(rs, page);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -126,7 +136,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		int failFlag = (state == 5) ? 1 : 0;
 		String startRow = startTime + equipmentId + failFlag;
 		String endRow = endTime + equipmentId + failFlag;
-		Map<String, Object> resultmap = curveDate(startRow, endRow);
+		Map<String, Object> resultmap = curveDate(startRow, endRow, 0, equipmentId);
 		return resultmap;
 	}
 
@@ -138,12 +148,12 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		String equipmentId = queryVo.getEquipmentId();
 		String startRow = startTime + equipmentId;
 		String endRow = endTime + equipmentId;
-		Map<String, Object> resultmap = curveDate(startRow, endRow, 1);
+		Map<String, Object> resultmap = curveDate(startRow, endRow, 1, equipmentId);
 		// resultmap.put("equipment", equipment);
 		return resultmap;
 	}
 
-	private Map<String, Object> curveDate(String startRow, String endRow, int flag) {
+	private Map<String, Object> curveDate(String startRow, String endRow, int flag, String equipmentId) {
 		List<DataAcquisitionVo> historicalDataList = new ArrayList<DataAcquisitionVo>();
 		Map<String, Object> resultmap = new HashMap<String, Object>();
 		String tableName = "ns1:hq_equipment_monitor_data";
@@ -154,7 +164,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			table = connection.getTable(TableName.valueOf(tableName));
 			Scan scan = new Scan();
 			scan.setStartRow(Bytes.toBytes(startRow));
-			scan.setStopRow(Bytes.toBytes(endRow));
+			scan.setStopRow(Bytes.toBytes(endRow+"{"));
 			scan.setMaxVersions();
 			long in = System.currentTimeMillis();
 			ResultScanner rs = table.getScanner(scan);
@@ -174,15 +184,26 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			}
 
 			resultmap = transformState(historicalDataList);
-			resultmap.put("equipmentName", historicalDataList.get(0).getEquipmentName());
-			if (flag == 1) {
-				for (DataAcquisitionVo d : historicalDataList) {
-					d.r
+			if (historicalDataList.size() == 0) {
+				String equipmentName = equipmentInfoMapper.selectByPrimaryKey(equipmentId).getEquipmentName();
+				resultmap.put("equipmentName", equipmentName);
+			} else {
+				resultmap.put("equipmentName", historicalDataList.get(0).getEquipmentName());
+				if (flag == 1) {
+					List<DataAcquisitionVo> rtdl = new ArrayList<DataAcquisitionVo>(historicalDataList);
+					List<DataAcquisitionVo> rtl = new ArrayList<DataAcquisitionVo>();
+					Collections.sort(rtdl);
+					for (int i = 0; i < rtdl.size(); i++) {
+						String rt = rtdl.get(0).getReceiveTime();
+						if (rtdl.get(i).getReceiveTime().equals(rt)) {
+							rtl.add(rtdl.get(i));
+						}
+					}
+					resultmap.put("realTimeDate", rtl);
 				}
 			}
-		} catch (
 
-		IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return resultmap;

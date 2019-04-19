@@ -97,7 +97,7 @@ function getChartData(url, param){
 function drawingHistoryChart(url, param){
 	$.ajax({url: url, type: "post", data: param, dataType: "json",
 		success: function(data){
-			var equiName = data.equipment.equipmentName;
+			var equiName = data.equipmentName;
 			var seriesData = data.data;
 			var temperatures = data.temperatures;
 			if(seriesData.length>0){
@@ -168,14 +168,13 @@ function initCurrentChart(){
 			currentOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
 		}
 		currentOption.title.text="实时温度监测图("+equiName+")";
-		drawCurrentChannels(result);
+		drawCurrentChannels(result.realTimeDate);
 	}
 	$("#chart_current").highcharts().destroy();
 	$("#chart_current").highcharts(currentOption);
 }
 // 计算点的坐标，落在图表中
 function addPoints(body){
-	debugger;
 		var pointsData = body.body;
 		if(pointsData!=null && pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
 			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
@@ -204,7 +203,7 @@ function addPoints(body){
 // 初始化实时监控表
 function showCurrentContent(){
 	if(equiId!=null){
-		showBlocks();
+// showBlocks();
 		$("#chart_current").highcharts(currentOption);
 		var chart = $("#chart_current").highcharts();
 		chart.showLoading();

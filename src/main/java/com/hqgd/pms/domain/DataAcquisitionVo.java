@@ -1,7 +1,7 @@
 package com.hqgd.pms.domain;
 
 //@Data
-public class DataAcquisitionVo {
+public class DataAcquisitionVo implements Comparable<DataAcquisitionVo> {
 	private Integer id;
 
 	private String equipmentId;
@@ -35,7 +35,7 @@ public class DataAcquisitionVo {
 	private String tel;
 
 	private Integer total;
-	
+
 	private Integer numOfCh;
 
 	public Integer getNumOfCh() {
@@ -182,4 +182,8 @@ public class DataAcquisitionVo {
 		this.tel = tel;
 	}
 
+	@Override
+	public int compareTo(DataAcquisitionVo d) {
+		return d.getReceiveTime().compareTo(receiveTime);
+	}
 }
