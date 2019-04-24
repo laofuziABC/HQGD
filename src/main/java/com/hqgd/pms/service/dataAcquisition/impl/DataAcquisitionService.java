@@ -84,7 +84,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		String startRow = startTime + equipmentId + failFlag;
 		String endRow = endTime + equipmentId + failFlag;
 		scan.setStartRow(Bytes.toBytes(startRow));
-		scan.setStopRow(Bytes.toBytes(endRow+"{"));
+		scan.setStopRow(Bytes.toBytes(endRow + "{"));
 		scan.setMaxVersions();
 		long in = System.currentTimeMillis();
 		ResultScanner rs = table.getScanner(scan);
@@ -164,8 +164,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			table = connection.getTable(TableName.valueOf(tableName));
 			Scan scan = new Scan();
 			scan.setStartRow(Bytes.toBytes(startRow));
-			scan.setStopRow(Bytes.toBytes(endRow+"{"));
-			scan.setMaxVersions();
+			scan.setStopRow(Bytes.toBytes(endRow + "{"));
 			long in = System.currentTimeMillis();
 			ResultScanner rs = table.getScanner(scan);
 			long out = System.currentTimeMillis();
@@ -205,6 +204,13 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				table.close();
+				connection.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return resultmap;
 	}
