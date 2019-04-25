@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +58,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	public Map<String, Object> getHistoricalData(QueryParametersVo queryVo) {
 		List<DataAcquisitionVo> historicalDataList = new ArrayList<DataAcquisitionVo>();
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		DataAcquisitionVo d = new DataAcquisitionVo();
+		int total = queryVo.getTotal();
 		String tableName = "ns1:hq_equipment_monitor_data";
 		String startRow;
 		String endRow;
@@ -88,14 +87,33 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			scan.setStopRow(Bytes.toBytes(endRow));
 			scan.setMaxVersions();
 			long in = System.currentTimeMillis();
-			ResultScanner rs = table.getScanner(scan);
+			ResultScanner rs0 = table.getScanner(scan);
 			long out = System.currentTimeMillis();
 			System.out.println("历史数据Hbase查询耗时:" + (out - in) + "ms ");
+			total = (total == 0) ? getTotal(rs0, page) : total;
+			long in1 = System.currentTimeMillis();
+			ResultScanner rs = table.getScanner(scan);
+			long out1 = System.currentTimeMillis();
+			System.out.println("历史数据Hbase查询耗时:" + (out1 - in1) + "ms ");
 			Result[] rArray = rs.next(page * limit);
 			if (rArray.length > 0) {
-				for (int i = (page - 1) * limit; i < page * limit; i++) {
+				int start = 0;
+				int end = 0;
+				if (page == 1) {
+					start = 0;
+					if (total < page * limit) {
+						end = total % (page * limit);
+					} else {
+						end = page * limit;
+					}
+				} else {
+					start = (page - 1) * limit;
+					end = (page - 1) * limit + total % ((page - 1) * limit);
+				}
+				for (int i = start; i < end; i++) {
 					Result r = rArray[i];
 					List<Cell> lc = r.listCells();
+					DataAcquisitionVo d = new DataAcquisitionVo();
 					d.setAddress(Bytes.toString(lc.get(0).getValue()));
 					d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
 					d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
@@ -110,7 +128,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 					historicalDataList.add(d);
 				}
 			}
-			int total = getTotal(rs, page);
+
 			resultMap.put("data", historicalDataList);
 			resultMap.put("total", total);
 

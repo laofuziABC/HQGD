@@ -90,6 +90,7 @@
 			historyOption.yAxis.max=100;
 			historyOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
 			$("#chart_history").highcharts(historyOption);
+			var totalSize = 0;
 			//加载同源数据的统计图和统计表
 			function showHistoryContent() {
 				equiId2=equiId0;
@@ -129,7 +130,8 @@
 					"startTime" : $("#startTime").val(),
 					"endTime" : $("#endTime").val(),
 					"state" : $("#data-type").val(),
-					"page" : pageNo, 							//当前页码，相当于pageNum
+					"page" : pageNo, 	//当前页码，相当于pageNum
+					"total" : totalSize,
 					"limit" : $("#page-size").val()		//当前页面大小，相当于pageSize
 				};
 				$.ajax({

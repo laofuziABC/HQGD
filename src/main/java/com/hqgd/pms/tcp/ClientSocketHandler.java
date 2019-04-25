@@ -88,7 +88,7 @@ public class ClientSocketHandler implements Runnable {
 					// routerInfoMapper.updateIp(heartbeat, ip);
 					// count++;
 					// } else if (len > 21 && count > 1) {
-
+					simpMessage.convertAndSend("/topic/ip", "inputString" + inputString);
 					log.info(Thread.currentThread().getName() + " say :inputString=" + inputString);
 					// 开始校验客户端发送过来的数据
 					// 获取返回祯的CRC校验

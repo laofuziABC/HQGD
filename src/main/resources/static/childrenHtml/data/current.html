@@ -89,7 +89,7 @@
 			connect();
 		});
 		function connect() {
-			var socket = new SockJS("http://127.0.0.1:7075/myWebSocket");
+			var socket = new SockJS("http://127.0.0.1:7070/myWebSocket");
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function(frame) {
 				stompClient.subscribe('/data/realTime', function(body) {
