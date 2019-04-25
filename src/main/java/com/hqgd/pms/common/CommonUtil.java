@@ -449,12 +449,10 @@ public class CommonUtil {
 	/*
 	 * 将时间转换为时间戳
 	 */
-	public static String dateToStamp(String s) throws ParseException {
-		String res;
+	public static long dateToStamp(String s) throws ParseException {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = simpleDateFormat.parse(s);
 		long ts = date.getTime();
-		res = String.valueOf(ts);
-		return res;
+		return ts;
 	}
 }
