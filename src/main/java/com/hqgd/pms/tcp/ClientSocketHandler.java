@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,19 +62,19 @@ public class ClientSocketHandler implements Runnable {
 	public void run() {
 		try {
 			socketIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-			// int count = 1;
+			int count = 1;
 			// 获取设备发送的数据
 			byte[] bytes = new byte[1]; // 一次读取一个byte
 			String ret = "";
 			String inputString = "";
 			List<DataAcquisitionVo> realTimeDateList = new ArrayList<DataAcquisitionVo>();
 			while (socketIn.read(bytes) > 0) {
-				ret += CommonUtil.bytesToHexString(bytes);
+				ret += bytesToHexString(bytes);
 				if (socketIn.available() == 0) { // 一个请求
 					inputString = ret;
 					ret = "";
 					String frameStru = "";
-					// int len = inputString.length();
+					int len = inputString.length();
 					// 获取心跳包id,判断数据长度，当最少只有一个通道的时候，数据为“0103040121CDB6",长度为14，而14已经亿亿，不会有那么多id编号
 					// if (count < 2) {
 					// heartbeat = inputString.substring(0, 30);
@@ -140,7 +141,7 @@ public class ClientSocketHandler implements Runnable {
 							d.setEquipmentId(equipmentId);
 							d.setEquipmentName(equipmentName);
 							d.setAddress(frameStru);
-							d.setReceiveTime(CommonUtil.getSimpleFormatTimestamp());
+							d.setReceiveTime(new Date());
 							d.setDutyPerson(e.getUserName());
 							d.setTel(e.getTel());
 							d.setNumOfCh(e.getNumOfCh());
@@ -219,4 +220,15 @@ public class ClientSocketHandler implements Runnable {
 		}
 	}
 
+	public String bytesToHexString(byte[] bytes) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < bytes.length; i++) {
+			String hex = Integer.toHexString(0xFF & bytes[i]);
+			if (hex.length() == 1) {
+				sb.append('0');
+			}
+			sb.append(hex);
+		}
+		return sb.toString();
+	}
 }

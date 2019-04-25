@@ -1,6 +1,7 @@
 package com.hqgd.pms.service.dataAcquisition;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public interface IDataAcquisitionService {
 
 	void insertHbase(DataAcquisitionVo d) throws IOException;
 
-	Map<String, Object> realTimeCurve(QueryParametersVo queryVo);
+	Map<String, Object> realTimeCurve(QueryParametersVo queryVo) throws ParseException;
 
-	Map<String, Object> historicalCurve(QueryParametersVo queryVo);
+	Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws ParseException;
 
 }

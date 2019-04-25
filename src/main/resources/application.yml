@@ -1,5 +1,5 @@
 server:
-   port: 7075
+   port: 7070
 
 mybatis:
   config: classpath:/mybatis/mybatis-config.xml

@@ -1,6 +1,7 @@
 package com.hqgd.pms.controller.dataAcquisition;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class DataAcquisitionController {
 
 	@RequestMapping("/realTimeCurve")
 	public void realTimeCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
-			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException, ParseException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询实时曲线开始 " + inTime);
 		Map<String, Object> resultList = dataAcquisitionService.realTimeCurve(queryVo);
@@ -100,7 +101,7 @@ public class DataAcquisitionController {
 
 	@RequestMapping("/historicalCurve")
 	public void historicalCurve(Model model, QueryParametersVo queryVo, HttpServletRequest request,
-			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException, ParseException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询历史曲线开始 " + inTime);
 		Map<String, Object> resultList = dataAcquisitionService.historicalCurve(queryVo);

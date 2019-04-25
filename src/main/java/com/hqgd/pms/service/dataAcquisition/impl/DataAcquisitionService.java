@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +22,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
-import org.apache.hadoop.hbase.filter.BinaryComparator;
-import org.apache.hadoop.hbase.filter.CompareFilter;
-import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
-import org.apache.hadoop.hbase.filter.Filter;
-import org.apache.hadoop.hbase.filter.FilterList;
-import org.apache.hadoop.hbase.filter.PageFilter;
-import org.apache.hadoop.hbase.filter.RowFilter;
-import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
-import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,58 +53,74 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	private HbaseConfig con;
 
 	@Override
-	public Map<String, Object> getHistoricalData(QueryParametersVo queryVo) throws IOException {
+	public Map<String, Object> getHistoricalData(QueryParametersVo queryVo) {
 		List<DataAcquisitionVo> historicalDataList = new ArrayList<DataAcquisitionVo>();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		DataAcquisitionVo d = new DataAcquisitionVo();
 		String tableName = "ns1:hq_equipment_monitor_data";
 		String startTime = queryVo.getStartTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
-		;
 		String endTime = queryVo.getEndTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
-		;
 		String equipmentId = queryVo.getEquipmentId();
 		int state = Integer.valueOf(queryVo.getState());
 		int limit = queryVo.getLimit();
 		int page = queryVo.getPage();
 		int failFlag = (state == 0) ? 1 : 0;
-
 		Table table = null;
 		Connection connection = null;
-		connection = ConnectionFactory.createConnection(con.configuration());
-		table = connection.getTable(TableName.valueOf(tableName));
-		Scan scan = new Scan();
-		String startRow = startTime + equipmentId + failFlag;
-		String endRow = endTime + equipmentId + failFlag;
-		scan.setStartRow(Bytes.toBytes(startRow));
-		scan.setStopRow(Bytes.toBytes(endRow + "{"));
-		scan.setMaxVersions();
-		long in = System.currentTimeMillis();
-		ResultScanner rs = table.getScanner(scan);
-		long out = System.currentTimeMillis();
-		System.out.println("历史数据Hbase查询耗时:" + (out - in) + "ms ");
-		Result[] rArray = rs.next(page * limit);
-		if (rArray.length > 0) {
-			for (int i = (page - 1) * limit; i < page * limit; i++) {
-				Result r = rArray[i];
-				List<Cell> lc = r.listCells();
-				d.setAddress(Bytes.toString(lc.get(0).getValue()));
-				d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
-				d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
-				d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
-				d.setMessage(Bytes.toString(lc.get(5).getValue()));
-				d.setOpticalFiberPosition(Bytes.toString(lc.get(6).getValue()));
-				d.setPd(Bytes.toString(lc.get(7).getValue()));
-				d.setReceiveTime(Bytes.toString(lc.get(8).getValue()));
-				d.setState(Bytes.toInt(lc.get(9).getValue()));
-				d.setTemperature(Bytes.toString(lc.get(11).getValue()));
-				d.setUv(Bytes.toString(lc.get(12).getValue()));
-				historicalDataList.add(d);
+		try {
+			connection = ConnectionFactory.createConnection(con.configuration());
+			table = connection.getTable(TableName.valueOf(tableName));
+			Scan scan = new Scan();
+			String startRow = startTime + equipmentId + failFlag;
+			String endRow = endTime + equipmentId + failFlag;
+			scan.setStartRow(Bytes.toBytes(startRow));
+			scan.setStopRow(Bytes.toBytes(endRow + "{"));
+			scan.setMaxVersions();
+			long in = System.currentTimeMillis();
+			ResultScanner rs = table.getScanner(scan);
+			long out = System.currentTimeMillis();
+			System.out.println("历史数据Hbase查询耗时:" + (out - in) + "ms ");
+			Result[] rArray = rs.next(page * limit);
+			if (rArray.length > 0) {
+				for (int i = (page - 1) * limit; i < page * limit; i++) {
+					Result r = rArray[i];
+					List<Cell> lc = r.listCells();
+					d.setAddress(Bytes.toString(lc.get(0).getValue()));
+					d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
+					d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
+					d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
+					d.setMessage(Bytes.toString(lc.get(5).getValue()));
+					d.setOpticalFiberPosition(Bytes.toString(lc.get(6).getValue()));
+					d.setPd(Bytes.toString(lc.get(7).getValue()));
+					try {
+						d.setReceiveTime(
+								CommonUtil.getDateBySimpleFormatTimestamp(Bytes.toString(lc.get(8).getValue())));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					d.setState(Bytes.toInt(lc.get(9).getValue()));
+					d.setTemperature(Bytes.toString(lc.get(11).getValue()));
+					d.setUv(Bytes.toString(lc.get(12).getValue()));
+					historicalDataList.add(d);
+				}
+			}
+			int total = getTotal(rs, page);
+
+			resultMap.put("data", historicalDataList);
+			resultMap.put("total", total);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				table.close();
+				connection.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-		int total = getTotal(rs, page);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("data", historicalDataList);
-		resultMap.put("total", total);
 		return resultMap;
+
 	}
 
 	private int getTotal(ResultScanner rs, int page) {
@@ -128,7 +135,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	}
 
 	@Override
-	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) {
+	public Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws ParseException {
 		String startTime = queryVo.getStartTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
 		String endTime = queryVo.getEndTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
 		String equipmentId = queryVo.getEquipmentId();
@@ -141,7 +148,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	}
 
 	@Override
-	public Map<String, Object> realTimeCurve(QueryParametersVo queryVo) {
+	public Map<String, Object> realTimeCurve(QueryParametersVo queryVo) throws ParseException {
 
 		String startTime = queryVo.getStartTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
 		String endTime = queryVo.getEndTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
@@ -176,7 +183,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
 				d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
 				d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
-				d.setReceiveTime(Bytes.toString(lc.get(8).getValue()));
+				d.setReceiveTime(CommonUtil.getDateBySimpleFormatTimestamp(Bytes.toString(lc.get(8).getValue())));
 				d.setState(Bytes.toInt(lc.get(9).getValue()));
 				d.setTemperature(Bytes.toString(lc.get(11).getValue()));
 				historicalDataList.add(d);
@@ -193,7 +200,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 					List<DataAcquisitionVo> rtl = new ArrayList<DataAcquisitionVo>();
 					Collections.sort(rtdl);
 					for (int i = 0; i < rtdl.size(); i++) {
-						String rt = rtdl.get(0).getReceiveTime();
+						Date rt = rtdl.get(0).getReceiveTime();
 						if (rtdl.get(i).getReceiveTime().equals(rt)) {
 							rtl.add(rtdl.get(i));
 						}
@@ -202,7 +209,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				}
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		} finally {
 			try {
@@ -225,7 +232,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			for (int i = 0; i < historicalDataList.size(); i++) {
 				DataAcquisitionVo dv = historicalDataList.get(i);
 				String ch = dv.getChannelNum();
-				Double receTime = CommonUtil.str2Time(dv.getReceiveTime());
+				Double receTime = (double) dv.getReceiveTime().getTime();
 				Double tem = Double.valueOf(dv.getTemperature());
 				List<Double> l1 = new ArrayList<Double>();
 				l1.add(receTime);
@@ -351,7 +358,6 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	// 统计一天的故障
 	private void staticFailuer(List<DataAcquisitionVo> L, String yesterday, String table) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		for (int i = 0; i < L.size() - 1; i++) {
 			if (i == 0 && L.get(i).getState() != 5) {
 				StaticFailCounts(yesterday, L.get(i), table);
@@ -395,11 +401,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				sf.setFiber(fiber);
 				sf.setThermometer(therm);
 				sf.setOverTemperature(overT);
-				try {
-					sf.setDate(format.parse(L.get(i).getReceiveTime()));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				sf.setDate(L.get(i).getReceiveTime());
 				staticFailuresMapper.insert(sf);
 				comm = 0;
 				fiber = 0;
@@ -421,11 +423,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				sf.setFiber(fiber);
 				sf.setThermometer(therm);
 				sf.setOverTemperature(overT);
-				try {
-					sf.setDate(format.parse(L.get(i + 1).getReceiveTime()));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				sf.setDate(L.get(i + 1).getReceiveTime());
 				staticFailuresMapper.insert(sf);
 				comm = 0;
 				fiber = 0;
@@ -477,12 +475,11 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	 * 描述： 统计每天第一组数据，并将结果保存数据库 作者：姚绒 日期：2019年3月14日 下午4:41:43
 	 *
 	 */
-	public void staticFailuerF(List<DataAcquisitionVo> t, List<DataAcquisitionVo> y) throws ParseException {
+	public void staticFailuerF(List<DataAcquisitionVo> t, List<DataAcquisitionVo> y) {
 		int comm = 0;// 458通信故障
 		int fiber = 0;// 光纤故障
 		int therm = 0;// 测温仪故障
 		int overT = 0;// 超温故障
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		if (t != null && y != null) {
 			// 先判断每个设备每个通道的今天的第一条数据和昨天的最后一条数据状态是否一致，不一致且今天故障，次数就+1，一致，就不加
 			for (int i = 0; i < t.size(); i++) {
@@ -520,7 +517,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 					sf.setFiber(fiber);
 					sf.setThermometer(therm);
 					sf.setOverTemperature(overT);
-					sf.setDate(format.parse(t.get(i).getReceiveTime()));
+					sf.setDate(t.get(i).getReceiveTime());
 					staticFailuresMapper.insert(sf);
 					comm = 0;
 					fiber = 0;
@@ -616,8 +613,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		String tableName = "ns1:hq_equipment_monitor_data";
 		connection = ConnectionFactory.createConnection(con.configuration());
 		table = connection.getTable(TableName.valueOf(tableName));
-		String rowkey = d.getReceiveTime().replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "")
-				+ d.getEquipmentId() + failFlag + d.getState() + d.getChannelNum();
+		String rowkey = d.getReceiveTime().getTime() + d.getEquipmentId() + failFlag + d.getState() + d.getChannelNum();
 		Put put = new Put(Bytes.toBytes(rowkey));
 		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("EQUIPMENT_ID"), Bytes.toBytes(d.getEquipmentId()));
 		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("EQUIPMENT_NAME"), Bytes.toBytes(d.getEquipmentName()));
@@ -630,7 +626,8 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("UV"), Bytes.toBytes(d.getUv()));
 		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("STATE"), Bytes.toBytes(d.getState()));
 		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("MESSAGE"), Bytes.toBytes(d.getMessage()));
-		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("RECEIVE_TIME"), Bytes.toBytes(d.getReceiveTime()));
+		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("RECEIVE_TIME"),
+				Bytes.toBytes(CommonUtil.getSimpleFormatTimestampByDate(d.getReceiveTime())));
 		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("DUTY_PERSON"), Bytes.toBytes(d.getDutyPerson()));
 		put.addColumn(Bytes.toBytes("f1"), Bytes.toBytes("TEL"), Bytes.toBytes(d.getTel()));
 		table.put(put);

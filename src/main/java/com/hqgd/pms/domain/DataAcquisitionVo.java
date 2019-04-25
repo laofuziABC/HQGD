@@ -1,5 +1,7 @@
 package com.hqgd.pms.domain;
 
+import java.util.Date;
+
 //@Data
 public class DataAcquisitionVo implements Comparable<DataAcquisitionVo> {
 	private Integer id;
@@ -28,7 +30,7 @@ public class DataAcquisitionVo implements Comparable<DataAcquisitionVo> {
 
 	private String message;
 
-	private String receiveTime;
+	private Date receiveTime;
 
 	private String dutyPerson;
 
@@ -158,11 +160,11 @@ public class DataAcquisitionVo implements Comparable<DataAcquisitionVo> {
 		this.message = message;
 	}
 
-	public String getReceiveTime() {
+	public Date getReceiveTime() {
 		return receiveTime;
 	}
 
-	public void setReceiveTime(String receiveTime) {
+	public void setReceiveTime(Date receiveTime) {
 		this.receiveTime = receiveTime;
 	}
 
