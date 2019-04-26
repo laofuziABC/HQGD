@@ -82,6 +82,7 @@
 	<script src="dist/js/sockjs.min.js"></script>
 	<script src="dist/js/stomp.min.js"></script>
 	<script type="text/javascript">
+		var stompClient = null;
 		//初始化页面信息
 		$(function() {
 			showCurrentContent();
@@ -89,10 +90,13 @@
 			connect();
 		});
 		function connect() {
-			var socket = new SockJS("http://127.0.0.1:7070/myWebSocket");
+			var socket = new SockJS("http://127.0.0.1:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function(frame) {
-				stompClient.subscribe('/data/realTime', function(body) {
+				console.log(frame);
+				stompClient.subscribe('/topic/real', function(body) {
+					debugger;
+					console.log(body);
 					addPoints(body);
 				});
 			});

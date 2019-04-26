@@ -65,7 +65,7 @@ public class ClientSocketHandler implements Runnable {
 			byte[] bytes = new byte[1]; // 一次读取一个byte
 			String ret = "";
 			String inputString = "";
-			List<DataAcquisitionVo> realTimeDateList = new ArrayList<DataAcquisitionVo>();
+
 			while (socketIn.read(bytes) > 0) {
 				ret += bytesToHexString(bytes);
 				if (socketIn.available() == 0) { // 一个请求
@@ -89,6 +89,7 @@ public class ClientSocketHandler implements Runnable {
 					// count++;
 					// } else if (len > 21 && count > 1) {
 					simpMessage.convertAndSend("/topic/ip", "inputString" + inputString);
+					List<DataAcquisitionVo> realTimeDateList = new ArrayList<DataAcquisitionVo>();
 					log.info(Thread.currentThread().getName() + " say :inputString=" + inputString);
 					// 开始校验客户端发送过来的数据
 					// 获取返回祯的CRC校验
@@ -134,16 +135,17 @@ public class ClientSocketHandler implements Runnable {
 								}
 							}
 							// 测温仪的公共信息
-							DataAcquisitionVo d = new DataAcquisitionVo();
-							d.setEquipmentId(equipmentId);
-							d.setEquipmentName(equipmentName);
-							d.setAddress(frameStru);
-							d.setReceiveTime(CommonUtil.getSimpleFormatTimestamp());
-							d.setDutyPerson(e.getUserName());
-							d.setTel(e.getTel());
-							d.setNumOfCh(e.getNumOfCh());
+							String receiveTime = CommonUtil.getSimpleFormatTimestamp();
 							// 测温仪 每个通道的信息
 							for (int i = 0; i < num; i++) {
+								DataAcquisitionVo d = new DataAcquisitionVo();
+								d.setEquipmentId(equipmentId);
+								d.setEquipmentName(equipmentName);
+								d.setAddress(frameStru);
+								d.setReceiveTime(receiveTime);
+								d.setDutyPerson(e.getUserName());
+								d.setTel(e.getTel());
+								d.setNumOfCh(e.getNumOfCh());
 								Float temp = Integer.valueOf(inputString.substring(i * 8, i * 8 + 4), 16) / 10F;
 								Integer pd = Integer.valueOf(inputString.substring(i * 8 + 4, i * 8 + 6), 16);
 								Integer uv = Integer.valueOf(inputString.substring(i * 8 + 6, i * 8 + 8), 16);
@@ -184,7 +186,8 @@ public class ClientSocketHandler implements Runnable {
 								realTimeDateList.add(d);
 							}
 							// 往前台推送
-							simpMessage.convertAndSend("/data/realTime", realTimeDateList);
+							simpMessage.convertAndSend("/topic/real", realTimeDateList);
+							log.info("realTimeDateList的size----" + realTimeDateList.size());
 						}
 					}
 				}

@@ -175,7 +175,13 @@ function initCurrentChart(){
 }
 // 计算点的坐标，落在图表中
 function addPoints(body){
+	debugger;
 		var pointsData = body.body;
+		if(pointsData==undefined){
+			
+		}else{
+			pointsData = JSON.parse(pointsData);
+		}
 		if(pointsData!=null && pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
 			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 			var nowtime = (new Date()).getTime();

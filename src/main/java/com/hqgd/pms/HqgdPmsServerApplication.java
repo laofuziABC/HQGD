@@ -22,7 +22,7 @@ public class HqgdPmsServerApplication {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(HqgdPmsServerApplication.class, args);
-//		//启动socket
+		//启动socket
 		SystemStartServlet server = new SystemStartServlet();
 		server.init();
 	}
