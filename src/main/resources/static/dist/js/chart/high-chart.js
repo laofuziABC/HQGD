@@ -176,6 +176,7 @@ function initCurrentChart(){
 // 计算点的坐标，落在图表中
 function addPoints(body){
 	debugger;
+	var series = $("#chart_current").highcharts().series;
 		var pointsData = body.body;
 		if(pointsData==undefined){
 			
