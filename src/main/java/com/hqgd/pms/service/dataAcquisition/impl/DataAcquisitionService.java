@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 
@@ -256,7 +257,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	private Map<String, Object> transformState(List<DataAcquisitionVo> historicalDataList) {
 		Map<String, Object> resultmap = new HashMap<>();
 		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
-		Map<String, List<List<Double>>> map = new HashMap<>();
+		Map<String, List<List<Double>>> map = new TreeMap<>();
 
 		List<Double> allTemperatures = new ArrayList<Double>();
 		if (historicalDataList.size() > 0) {

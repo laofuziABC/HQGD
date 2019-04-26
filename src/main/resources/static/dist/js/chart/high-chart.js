@@ -36,7 +36,7 @@ var historyOption = {
 
 // 配置当前数据监测统计图
 var currentOption={
-	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], events: {load: addPoints }, marginRight: 20 },
+	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], marginRight: 20 },
     title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: {useUTC: false },
     lang: lang, loading: loading, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
     yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
