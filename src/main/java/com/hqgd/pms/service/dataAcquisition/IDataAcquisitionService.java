@@ -19,8 +19,6 @@ public interface IDataAcquisitionService {
 
 	List<StaticFailures> errorStateStatic(QueryParametersVo queryVo);
 
-	void run(String startTime);
-
 	Map<String, Object> getHistoryExtremums(QueryParametersVo queryVo);
 
 	void insertHbase(DataAcquisitionVo d) throws IOException;

@@ -95,8 +95,6 @@
 			stompClient.connect({}, function(frame) {
 				console.log(frame);
 				stompClient.subscribe('/topic/real', function(body) {
-					debugger;
-					console.log(body);
 					addPoints(body);
 				});
 			});

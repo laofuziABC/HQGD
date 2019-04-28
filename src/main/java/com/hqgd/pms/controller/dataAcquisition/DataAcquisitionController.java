@@ -74,7 +74,7 @@ public class DataAcquisitionController {
 	}
 
 	@RequestMapping("/historical")
-	public void getHistoricalData(Model model, QueryParametersVo queryVo, HttpServletRequest request,
+	public void getHistoricalTable(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询历史数据开始 " + inTime);
@@ -144,7 +144,7 @@ public class DataAcquisitionController {
 		resultMap.put("equipment", equipmentInfo);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
-		log.info("故障次数统计开始 ");
+		log.info("故障次数统计结束 ");
 	}
 
 	/**
@@ -159,8 +159,19 @@ public class DataAcquisitionController {
 	@RequestMapping("/historicalExtremum")
 	public void extremun(Model model, QueryParametersVo queryVo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		log.info("温度最值统计开始 ");
 		Map<String, Object> resultMap = dataAcquisitionService.getHistoryExtremums(queryVo);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
+		log.info("温度最值统计结束 ");
+	}
+
+	public static void main(String[] args) {
+		long inTime = System.currentTimeMillis();
+		log.info("开始：" + inTime);
+		for (int i = 0; i < 10000000; i++) {
+		}
+		long outTime = System.currentTimeMillis();
+		log.info("结束耗时" + (outTime - inTime));
 	}
 }

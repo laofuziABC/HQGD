@@ -19,16 +19,16 @@ var tooltip={shared: true, useHTML: true,
 };
 var plotOptions={spline: {marker: {radius: 0, lineWidth: 1 } } };
 var colors=['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
-var lang={loading: "数据载入中……"};
-var loading={labelStyle: {color: "red", fontWeight: "bold"}, 
-		style: {backgroundColor: "rgba(255,255,255,0.7)", backgroundImage: "url('login/img/jiazaizhong.gif')", backgroundSize: '100% 100%'}
-};
+//var lang={loading: "数据载入中……"};
+//var loading={labelStyle: {color: "red", fontWeight: "bold"}, 
+//		style: {backgroundColor: "rgba(255,255,255,0.7)", backgroundImage: "url('login/img/jiazaizhong.gif')", backgroundSize: '100% 100%'}
+//};
 // 设置图表公用配置项【结束】
 // 配置历史数据监测曲线图配置项
 var historyOption = {
 	chart: {zoomType: ['x','y'], backgroundColor: '#21242e', marginRight: 20, panning: true, panKey: 'ctrl'},
 	title: {text: '历史温度曲线图', style: {color: '#ffffff'}},
-	lang: lang, loading: loading, legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false}, 
+	/*lang: lang, loading: loading,*/ legend: legend, tooltip: tooltip, plotOptions: plotOptions, colors: colors, credits:{enabled: false}, 
 	yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
 	xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%Y-%m-%d}', step:2 } },
 	series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
@@ -38,7 +38,7 @@ var historyOption = {
 var currentOption={
 	chart: { type: 'spline', backgroundColor: "#21242e", zoomType: ['x','y'], marginRight: 20 },
     title: { text: '实时温度监测图', style: {color: '#ffffff'} }, time: {useUTC: false },
-    lang: lang, loading: loading, tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
+    /*lang: lang, loading: loading, */tooltip: tooltip, legend: legend, plotOptions: plotOptions, colors: colors, credits:{enabled: false},
     yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
     xAxis: {type: 'datetime', tickWidth: 0, labels: {style: {color: '#ffffff'}, format: '{value: %H:%M:%S<br/>%m-%d}' } },
     series:[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}]
@@ -47,7 +47,7 @@ var currentOption={
 var extremumOption={
 	chart: { type: 'column', backgroundColor: "#21242e", marginRight: 10 },
     title: { text: '通道温度最值统计图', style: {color: '#ffffff'} },
-    lang: lang, loading: loading, legend: legend, colors: colors, credits:{enabled: false},
+    /*lang: lang, loading: loading,*/ legend: legend, colors: colors, credits:{enabled: false},
     yAxis: { title: {text: '温度值（℃）', style:{color: '#ffffff'} }, gridLineDashStyle: 'dot', gridLineColor: '#ffffff', labels: {style: {color: '#ffffff'}}, min: 0, max: 100 },
     xAxis: {type: 'category', labels: {style: {color: '#ffffff'} } },
     plotOptions: {column: {dataLabels: {enabled: true, verticalAlign: 'top', inside: true, style:{color: '#ffffff'} } } },
@@ -57,7 +57,7 @@ var extremumOption={
 var errorTypeOption={
 	chart: {backgroundColor: "#21242e" },
 	title: { text: "设备故障类型统计图", style: {color: "#ffffff"} },
-	loading: loading, colors: colors, credits:{enabled: false},
+	/*loading: loading,*/ colors: colors, credits:{enabled: false},
 	legend:{enabled: true, itemStyle:{"color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
 			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
@@ -68,7 +68,7 @@ var errorTypeOption={
 var errorChannelOption={
 	chart: { backgroundColor: "#21242e" },
 	title: { text: "通道发生故障次数统计图", style: {color: "#ffffff"} },
-	loading: loading, colors: colors, credits:{enabled: false},
+	/*loading: loading,*/ colors: colors, credits:{enabled: false},
 	legend:{enabled: true, itemStyle:{ "color": "#fff", "cursor": "pointer", "fontSize": "16px"}, align:"center" },
 	tooltip: {formatter: function(){var s=this.y+'，占比：'+Math.round(this.point.percentage*100)/100+'%';
 			return this.series.name+'<br><span style="color:'+this.color+'">\u25CF</span>'+this.point.name+'：'+s;} },
@@ -183,7 +183,7 @@ function addPoints(body){
 		}else{
 			pointsData = JSON.parse(pointsData);
 		}
-		if(pointsData!=null && pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
+		if(pointsData[0].equipmentId == equiId && pointsData!=null && pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
 			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 			var nowtime = (new Date()).getTime();
 			var tempValues=[];
@@ -284,7 +284,7 @@ function fetchExtremumChartData(url, param){
 	$.ajax({
 		url: url, type: "post", data: param, dataType: "json",
 		success: function(result){
-			var equiName = result.equipment.equipmentName;
+			var equiName=result.equipmentName;
 			var dataList = result.extremumList;
 			var channels=[], maxs=[], mins=[];
 			if(dataList.length>0){
