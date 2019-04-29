@@ -404,4 +404,20 @@ public class CommonUtil {
 		}
 		return bytes;
 	}
+
+	// 字符串转时间戳
+	public static Double str2Time(String datetime) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		// 设置要读取的时间字符串格式
+		Date date = null;
+		try {
+			date = format.parse(datetime);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// 转换为Date类
+		Double timestamp = (double) date.getTime();
+		return timestamp;
+	}
 }

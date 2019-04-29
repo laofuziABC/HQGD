@@ -132,7 +132,7 @@ WHERE
   </delete>
   <insert id="insert" parameterType="com.hqgd.pms.domain.EquipmentInfo">
     insert into hq_equipment_info (EQUIPMENT_ID, EQUIPMENT_NAME,TYPE, 
-      USER_NAME, USER_ID, CHANNEL_TEM, NUM_OF_CH,HEARTBEAT_ID,HEARTBEAT_NAME
+      USER_NAME, USER_ID, CHANNEL_TEM, NUM_OF_CH,HEARTBEAT_ID,HEARTBEAT_NAME,
       ADDRESS, ADCODE, CADCODE, 
       PADCODE, LNG_LAT, FRAME_STRU, 
       ICON, CREATOR, CREATE_TIME, 

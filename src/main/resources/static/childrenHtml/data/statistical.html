@@ -38,13 +38,23 @@
 		<script type="text/javascript">
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【开始】
 			$('.datePicker').datepicker({autoclose : true});
-			var intStr=parent.formatDate2String(new Date());
+			var intStr=parent.formatDateToString(new Date());
 			document.getElementById("startDate").value = intStr;
 			document.getElementById("endDate").value = intStr;
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【结束】
+			/* 初始化图表【开始】 */
+			extremumOption.title.text="通道温度最值统计图";
+			extremumOption.yAxis.min=0;
+			extremumOption.yAxis.max=100;
+			extremumOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
 			$("#chart_extremum").highcharts(extremumOption);
+			errorTypeOption.title.text="设备故障类型统计图";
+			errorTypeOption.series=[{type: "pie", name: "故障类型",data:[]}];
 			$("#chart_error_type").highcharts(errorTypeOption);
+			errorChannelOption.title.text="通道故障次数统计图";
+			errorChannelOption.series=[{type: "pie", name: "通道次数统计",data:[]}];
 			$("#chart_error_channel").highcharts(errorChannelOption);
+			/* 初始化图表【结束】 */
 			function showStatisticalContent(){
 				equiId3=equiId0;
 				if (equiId != null) {

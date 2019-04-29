@@ -1,4 +1,4 @@
-$('#channelTem1').SetEditable({
+$('#channelTem').SetEditable({
 	$addButton : $('#addBtn')
 });
 var globalUserList = [];
@@ -55,7 +55,7 @@ function getEquiEdit1(param) {
 				+ globalUserList[i].userName + "</option>";
 	}
 	document.getElementById('type').value = globalData[param].type;
-	$("#userName").html(userHtml);
+	$("#userId").html(userHtml);
 	$("#equipmentId").val(globalData[param].equipmentId);
 	$("#equipmentName").val(globalData[param].equipmentName);
 	$("#address").val(globalData[param].address);
@@ -65,7 +65,7 @@ function getEquiEdit1(param) {
 	$("#numOfCh").val(globalData[param].numOfCh);
 	$("#heartbeatId").val(globalData[param].heartbeatId);
 	$("#heartbeatName").val(globalData[param].heartbeatName);
-	$("#equipmentId").attr("disabled", "disabled");
+	$("#equipmentId").attr("readonly", "readonly");
 }
 function addEquip1() {
 	add = true;
@@ -86,15 +86,25 @@ function addEquip1() {
 		userHtml += "<option value='" + globalUserList[i].id + "'>"
 				+ globalUserList[i].userName + "</option>";
 	}
-	$("#userName").html(userHtml);
+	$("#userId").html(userHtml);
 
 }
 function backequlist() {
 	$("#content-wrapper").load("childrenHtml/equipment/equipmentList.html");
 }
 // 提交设备信息表单
-function submitEquiInfo() {
-	var mytable = document.getElementById("channelTem1");
+$(function() {
+	$("#equipmentForm").ajaxForm(function(data) {
+		if (data.result == "false") {
+			alert(data.message);
+		} else {
+			backequlist();
+		}
+	});
+});
+function toVaild() {
+	$("#add").val(add);
+	var mytable = document.getElementById("channelTem");
 	var channelInfos = [];
 	for (var i = 1, rows = mytable.rows.length; i < rows; i++) {
 		for (var j = 0, cells = mytable.rows[i].cells.length; j < cells - 1; j++) {
@@ -106,39 +116,12 @@ function submitEquiInfo() {
 	}
 	channelInfos.splice(0, 1);
 	var res = JSON.stringify(channelInfos);
-	var params = {
-		"equipmentId" : $("#equipmentId").val(),
-		"equipmentName" : $("#equipmentName").val(),
-		"type" : $("#type option:selected").val(),
-		"userId" : $("#userName").val(),
-		"userName" : $("#userName option:selected").text(),
-		"address" : $("#address").val(),
-		"lngLat" : $("#lnglat").val(),
-		"frameStru" : $("#frameStru").val(),
-		"numOfCh" : $("#numOfCh").val(),
-		"heartbeatName" : $("#heartbeatName").val(),
-		"heartbeatId" : $("#heartbeatId").val(),
-		"channelTem" : res,
-		"adcode" : $("#adcode").val(),
-		"add" : add
-	};
-	if ($("#equipmentId").val() != "" || $("#equipmentId").val() != null) {
-		params.equipmentId = $("#equipmentId").val();
-	}
-	$.ajax({
-		url : "equipment/update",
-		type : "post",
-		data : params,
-		dataType : "json",
-		success : function(result) {
-			if (result.success) {
-				alert("操作成功！");
-				backequlist();
-			} else {
-				alert(result.message);
-			}
-		}
-	});
+	$("#channelTem11").val(res);
+	var userId = $("#userId").val();
+	$("#userId").val(userId);
+	var userName = $("#userId option:selected").text();
+	$("#userName").val(userName);
+	return true;
 }
 
 /*
@@ -169,7 +152,7 @@ var colEdicHtml = '<td name="buttons">' + newColHtml + '</td>';
 $.fn.SetEditable = function(options) {
 	var defaults = {
 		columnsEd : null, // Index to editable columns. If null all td
-							// editables. Ex.: "1,2,3,4,5"
+		// editables. Ex.: "1,2,3,4,5"
 		$addButton : null, // Jquery object of "Add" button
 		onEdit : function() {
 		}, // Called after edition
@@ -185,10 +168,10 @@ $.fn.SetEditable = function(options) {
 			.find('thead tr')
 			.append(
 					'<th name="buttons" value="操作" style="background: #399ad7;color: #f6f6f6;">操作</th>'); // encabezado
-																											// vacío
+	// vacío
 	this.find('tbody tr').append(colEdicHtml);
 	var $tabedi = this; // Read reference to the current table, to resolve
-						// "this" here.
+	// "this" here.
 	// Process "addButton" parameter
 	if (params.$addButton != null) {
 		// Se proporcionó parámetro
@@ -287,7 +270,7 @@ function rowEdit(but) { // Inicia la edición de una fila
 	IterarCamposEdit($cols, function($td) { // itera por la columnas
 		var cont = $td.html(); // lee contenido
 		var div = '<div style="display: none;">' + cont + '</div>'; // guarda
-																	// contenido
+		// contenido
 		var input = '<input class="form-control input-sm"  value="' + cont
 				+ '">';
 		$td.html(div + input); // fija contenido

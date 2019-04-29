@@ -74,4 +74,6 @@ public interface DataAcquisitionVoMapper {
 
 	List<ChannelExtremum> findChannelExtremums(Map<String, Object> param);
 
+	List<DataAcquisitionVo> selectCurveById(Map<String, Object> param);
+
 }

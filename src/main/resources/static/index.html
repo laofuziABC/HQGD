@@ -96,9 +96,10 @@
 		</div>
 		<div id="updatepass"></div>
 		<footer class="main-footer">
-			<strong>Copyright &copy; 2018-2028 <a
-				href="http://www.optsensor.com">Optsensor</a>.
+			<strong>Copyright &copy; 2018-2028 
+				<a href="http://www.optsensor.com">Optsensor</a>.
 			</strong> All rights reserved.
+			<strong>v1.0.0</strong>
 		</footer>
 
 		<!-- Control Sidebar -->
@@ -163,7 +164,7 @@
 				$("#updatepass").empty();
 			}
 			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
-			function formatDateToString(param){
+			function formatTimeToString(param){
 				var y = param.getFullYear();
 				var M = unifiedFormat(param.getMonth()+1);
 				var d = unifiedFormat(param.getDate());
@@ -173,14 +174,7 @@
 				var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
 				return result;
 			}
-			function formatInitDateToString(param){
-				var y = param.getFullYear();
-				var M = unifiedFormat(param.getMonth()+1);
-				var d = unifiedFormat(param.getDate());
-				var result = y+"-"+M+"-"+d+" 00:00:00";
-				return result;
-			}
-			function formatDate2String(param){
+			function formatDateToString(param){
 				var y = param.getFullYear();
 				var M = unifiedFormat(param.getMonth()+1);
 				var d = unifiedFormat(param.getDate());
@@ -367,9 +361,8 @@
 						"equipmentId" : equiId
 					},
 					dataType : "json",
-					success : function(result) {
-						var data = result.data;
-						if(data==undefined){
+					success : function(data) {
+						if(data.length==0){
 							channel+="<h5 style='color: red;'>未查找到通道监测信息！</h5>"; 
 						}else{
 							var num =data.length;
