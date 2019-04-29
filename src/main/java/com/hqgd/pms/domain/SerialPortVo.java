@@ -2,10 +2,10 @@ package com.hqgd.pms.domain;
 
 public class SerialPortVo {
 	private String serialPort;// 串口号
-	private int baudrate;// 波特率
-	private int dataBits;// 数据位
-	private int parity;// 校验值
-	private int stopBits;// 停止位
+	private String baudrate;// 波特率
+	private String dataBits;// 数据位
+	private String parity;// 校验值
+	private String stopBits;// 停止位
 
 	public String getSerialPort() {
 		return serialPort;
@@ -15,35 +15,36 @@ public class SerialPortVo {
 		this.serialPort = serialPort;
 	}
 
-	public int getBaudrate() {
+	public String getBaudrate() {
 		return baudrate;
 	}
 
-	public void setBaudrate(int baudrate) {
+	public void setBaudrate(String baudrate) {
 		this.baudrate = baudrate;
 	}
 
-	public int getDataBits() {
+	public String getDataBits() {
 		return dataBits;
 	}
 
-	public void setDataBits(int dataBits) {
+	public void setDataBits(String dataBits) {
 		this.dataBits = dataBits;
 	}
 
-	public int getParity() {
+	public String getParity() {
 		return parity;
 	}
 
-	public void setParity(int parity) {
+	public void setParity(String parity) {
 		this.parity = parity;
 	}
 
-	public int getStopBits() {
+	public String getStopBits() {
 		return stopBits;
 	}
 
-	public void setStopBits(int stopBits) {
+	public void setStopBits(String stopBits) {
 		this.stopBits = stopBits;
 	}
+
 }

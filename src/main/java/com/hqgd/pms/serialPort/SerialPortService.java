@@ -9,9 +9,7 @@ import com.hqgd.pms.domain.SerialPortVo;
 
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class SerialPortService {
 	SerialPort mSerialport = null;
@@ -19,12 +17,11 @@ public class SerialPortService {
 	public Map<String, Object> openSort(SerialPortVo serialPortVo) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		// 串口对象
-
 		String commName = serialPortVo.getSerialPort();
-		int baudrate = serialPortVo.getBaudrate();
-		int dataBits = serialPortVo.getDataBits();
-		int parity = serialPortVo.getParity();
-		int stopBits = serialPortVo.getStopBits();
+		int baudrate = Integer.valueOf(serialPortVo.getBaudrate());
+		int dataBits = Integer.valueOf(serialPortVo.getDataBits());
+		int parity = Integer.valueOf(serialPortVo.getParity());
+		int stopBits = Integer.valueOf(serialPortVo.getStopBits());
 		try {
 			mSerialport = SerialPortManager.openPort(commName, baudrate, dataBits, parity, stopBits);
 			if (mSerialport != null) {
@@ -39,22 +36,21 @@ public class SerialPortService {
 
 			@Override
 			public void dataAvailable() {
-				String data = "";
-				byte[] bytes = null;
 				try {
 					if (mSerialport == null) {
 						resultMap.put("message", "串口对象为空，监听失败！");
 					} else {
 						// 读取串口数据
-						bytes = SerialPortManager.readFromPort(mSerialport);
-						// 以十六进制的形式接收数据
-						data = ByteUtils.byteArrayToHexString(bytes);
-						log.info(data);
+						SerialPortManager.readFromPort(mSerialport);
+						// bytes = SerialPortManager.readFromPort(mSerialport);
+						// // 以十六进制的形式接收数据
+						// data = ByteUtils.byteArrayToHexString(bytes);
+						// log.info(data);
+						// resultMap.put("data", data);
 					}
 				} catch (Exception e) {
-
 					// 发生读取错误时显示错误信息后退出系统
-					System.exit(0);
+					e.printStackTrace();
 				}
 			}
 		});
