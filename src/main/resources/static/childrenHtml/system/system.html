@@ -384,7 +384,6 @@
 
 		}
 		function openSerialPort(param) {
-			debugger;
 			var serialPort = $("#mSerialPort option:selected").text();
 			if (serialPort == null || serialPort == "") {
 				alert("没有搜索到有效串口！");
@@ -425,8 +424,7 @@
 					if (body.body.indexOf("closeSocket") > -1) {
 						clearSocket(body.body);
 					} */
-					setMessageInnerHTML( "-------"
-							+ body + "\n");
+					setMessageInnerHTML("-------" + body + "\n");
 				});
 			});
 		}
