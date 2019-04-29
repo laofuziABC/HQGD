@@ -186,21 +186,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		List<Map<String, List<List<Double>>>> result = new ArrayList<Map<String, List<List<Double>>>>();
 		Map<String, List<List<Double>>> map = new TreeMap<>();
 		List<Double> allTemperatures = new ArrayList<Double>();
-		if(historicalDataList.size() == 1) {
-			DataAcquisitionVo dv = historicalDataList.get(0);
-			Double receTime = CommonUtil.str2Time(dv.getReceiveTime());
-			Double tem = Double.valueOf(dv.getTemperature());
-			List<Double> l1 = new ArrayList<Double>();
-			l1.add(receTime);
-			l1.add(tem);
-			ll.add(l1);
-			allTemperatures.add(tem);
-			String ch = dv.getChannelNum();
-			map.put(ch, ll);
-			result.add(map);
-		}else if (historicalDataList.size() > 1) {
-			for (int i = 0; i < historicalDataList.size() - 1; i++) {
-				DataAcquisitionVo dv = historicalDataList.get(i);
+		if (dataList.size() > 0) {
+			for (int i = 0; i < dataList.size(); i++) {
+				DataAcquisitionVo dv = dataList.get(i);
 				String ch = dv.getChannelNum();
 				Double receTime = 0.0;
 				try {
