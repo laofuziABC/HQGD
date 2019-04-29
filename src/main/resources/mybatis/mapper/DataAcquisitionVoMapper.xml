@@ -99,8 +99,8 @@ FROM
 	CONVERT ( VARCHAR ( 100 ), t.RECEIVE_TIME, 20 ) AS RECEIVE_TIME,
 	CAST ( REPLACE ( CHANNEL_NUM, 'CH', '0' ) AS INT ) AS PD 
 FROM
-	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM ${table}  GROUP BY EQUIPMENT_ID ) AS temp
-	LEFT JOIN ${table} AS t ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
+	( SELECT EQUIPMENT_ID, CONVERT ( VARCHAR ( 100 ), MAX( RECEIVE_TIME ), 20 ) AS RECEIVE_TIME FROM hq_equipment_monitor_data GROUP BY EQUIPMENT_ID ) AS temp
+	LEFT JOIN hq_equipment_monitor_data AS t ON temp.EQUIPMENT_ID = t.EQUIPMENT_ID 
 	AND temp.RECEIVE_TIME = t.RECEIVE_TIME
 WHERE
 	t.EQUIPMENT_ID = #{equipmentId}
@@ -201,54 +201,6 @@ ORDER BY
     ORDER BY
 	  CAST( REPLACE ( CHANNEL_NUM, 'CH', '0' ) AS INT ),ID ASC  
   </select>
-  <select id="selectHistoricalCurveById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-    SELECT
-    	CHANNEL_NUM,
-    	[TEMPERATURE] = stuff (
-    	(
-    SELECT
-    	',' + CAST( TEMPERATURE AS VARCHAR ) 
-    FROM
-    	${table} t 
-    WHERE
-    	t.CHANNEL_NUM = m.CHANNEL_NUM 
-    	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-        AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} ORDER BY RECEIVE_TIME FOR XML path ( '' ) 
-    	),
-    	1,
-    	1,
-    	'' 
-    	),
-    	[RECEIVE_TIME] = stuff (
-    	(
-    SELECT
-    	',' + CAST( CONVERT ( VARCHAR ( 100 ), RECEIVE_TIME, 20 ) AS VARCHAR ) 
-    FROM
-    	${table} t 
-    WHERE
-    	t.CHANNEL_NUM = m.CHANNEL_NUM 
-    	AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-        AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-        AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} ORDER BY RECEIVE_TIME FOR XML path ( '' ) 
-    	),
-    	1,
-    	1,
-    	'' 
-    	)     	
-    FROM
-    	${table} m
-    WHERE
-      1=1
-      AND EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-      AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-      AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
-    GROUP BY
-    	CHANNEL_NUM 
-    ORDER BY
-    	CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
-    	<!-- CHANNEL_NUM ASC -->
-  </select>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -260,7 +212,7 @@ ORDER BY
     delete from hq_equipment_monitor_data
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
+  <insert id="insertSQL" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
     insert into hq_equipment_monitor_data (EQUIPMENT_ID, EQUIPMENT_NAME, 
       ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
       TEMPERATURE, PD, UV, 
@@ -272,103 +224,7 @@ ORDER BY
       #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
       #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
   </insert>
-  <insert id="insert1" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_1 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
-  <insert id="insert2" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_2 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
-  <insert id="insert3" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_3 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
-  <insert id="insert4" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_4 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
   
-  <insert id="insertr1" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_r1 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertr2" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_r2 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertr3" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_r3 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertr4" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
-    insert into hq_equipment_monitor_data_r4 (EQUIPMENT_ID, EQUIPMENT_NAME, 
-      ADDRESS, CHANNEL_NUM, OPTICAL_FIBER_POSITION, 
-      TEMPERATURE, PD, UV, 
-      STATE, MESSAGE, RECEIVE_TIME, 
-      DUTY_PERSON, TEL,NUM_OF_CH)
-    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{channelNum,jdbcType=VARCHAR}, #{opticalFiberPosition,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=DECIMAL}, #{pd,jdbcType=VARCHAR}, #{uv,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{dutyPerson,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},#{numOfCh,jdbcType=INTEGER})
-  </insert>
   <insert id="insertSelective" parameterType="com.hqgd.pms.domain.DataAcquisitionVo">
     insert into hq_equipment_monitor_data
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -523,107 +379,7 @@ ORDER BY
     where ID = #{id,jdbcType=INTEGER}
   </update>
   
-  <!-- 获取所有的通道名称集合 -->
-  <select id="selectAllChannels" parameterType="String" resultMap="ChannelResultMap">
-  	select CHANNEL_NUM 
-  	from
-  		${table}
-  	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		GROUP BY
-			CHANNEL_NUM 
-		ORDER BY
-			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
-  </select>
-  <select id="selectAllChannels1" parameterType="String" resultMap="ChannelResultMap">
-  	select CHANNEL_NUM 
-  	from hq_equipment_monitor_data_r 
-  	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		GROUP BY
-			CHANNEL_NUM 
-		ORDER BY
-			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
-  </select>
-  <select id="selectAllChannels2" parameterType="String" resultMap="ChannelResultMap">
-  	select CHANNEL_NUM 
-  	from hq_equipment_monitor_data_r 
-  	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		GROUP BY
-			CHANNEL_NUM 
-		ORDER BY
-			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
-  </select>
-  <select id="selectAllChannels3" parameterType="String" resultMap="ChannelResultMap">
-  	select CHANNEL_NUM 
-  	from hq_equipment_monitor_data_r 
-  	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		GROUP BY
-			CHANNEL_NUM 
-		ORDER BY
-			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
-  </select>
-  <select id="selectAllChannels4" parameterType="String" resultMap="ChannelResultMap">
-  	select CHANNEL_NUM 
-  	from hq_equipment_monitor_data_r 
-  	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		GROUP BY
-			CHANNEL_NUM 
-		ORDER BY
-			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
-  </select>
-  <select id="selectAllTimestamp1" parameterType="java.util.Map" resultMap="TimeResultMap">
-	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
-	from hq_equipment_monitor_data_r 
-	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
-		ORDER BY RECEIVE_TIME ASC
-  </select>
-  <select id="selectAllTimestamp2" parameterType="java.util.Map" resultMap="TimeResultMap">
-	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
-	from hq_equipment_monitor_data_r 
-	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
-		ORDER BY RECEIVE_TIME ASC
-  </select>
-  <select id="selectAllTimestamp3" parameterType="java.util.Map" resultMap="TimeResultMap">
-	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
-	from hq_equipment_monitor_data_r 
-	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
-		ORDER BY RECEIVE_TIME ASC
-  </select>
-  <select id="selectAllTimestamp4" parameterType="java.util.Map" resultMap="TimeResultMap">
-	select DISTINCT CONVERT(DATETIME,RECEIVE_TIME) AS RECEIVE_TIME
-	from hq_equipment_monitor_data_r 
-	where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
-		ORDER BY RECEIVE_TIME ASC
-  </select>
-  <!-- 获取单一通道在具体时间段内的数据集合 -->
-  <select id="selectChanDataByParam" parameterType="java.util.Map" resultMap="TempertureList">
- 	select
- 		TEMPERATURE
-    from hq_equipment_monitor_data_r
-    where
-		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
-		AND CHANNEL_NUM = #{channelNum,jdbcType=VARCHAR}
-		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
-		AND RECEIVE_TIME <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
-		ORDER BY
-			RECEIVE_TIME ASC
-  </select>
+  
   <select id="selectAllFailures" parameterType="java.util.Map" resultMap="BaseResultMap">
  	SELECT
 	<include refid="Base_Column_List" /> 

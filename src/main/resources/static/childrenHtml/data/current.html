@@ -1,50 +1,104 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>当前监测数据</title>
-		<style type="text/css">
-			#channelDiv .tiaoshijian{font-size: 20px;}
-			#channelsInfo td{text-align: left; border: 1px solid #ffffff; /* border-radius: 15%; */}
-			#channelsInfo td .span_left{font-size: 25px; color: #ffffff;}
-			#channelsInfo td .span_right{font-size: 32px;}
-			#channelsInfo .green{background-color: #21242e; color: #00ff00;}
-			#channelsInfo .yellow{background-color: #21242e; color: #ffff00;}
-			#channelsInfo .red{background-color: #21242e; color: #ff0000;}
-			#jk_state{margin-top: 1%; text-align: center;}
-		</style>
-	</head>
-	<body>
-		<!-- 上方的统计图【开始】 -->
-		<div class="ssjc_right_up" id="chartDiv">
-			<div class="nei">
-				<div class="ssjc_ru_table">
-					<div class="echarts_ssjc_one" id="chart_current" style="width: 100%;"></div>
-				</div>
+<head>
+<meta charset="UTF-8">
+<title>当前监测数据</title>
+<style type="text/css">
+#channelDiv .tiaoshijian {
+	font-size: 20px;
+}
+
+#channelsInfo td {
+	text-align: left;
+	border: 1px solid #ffffff; /* border-radius: 15%; */
+}
+
+#channelsInfo td .span_left {
+	font-size: 25px;
+	color: #ffffff;
+}
+
+#channelsInfo td .span_right {
+	font-size: 32px;
+}
+
+#channelsInfo .green {
+	background-color: #21242e;
+	color: #00ff00;
+}
+
+#channelsInfo .yellow {
+	background-color: #21242e;
+	color: #ffff00;
+}
+
+#channelsInfo .red {
+	background-color: #21242e;
+	color: #ff0000;
+}
+
+#jk_state {
+	margin-top: 1%;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<!-- 上方的统计图【开始】 -->
+	<div class="ssjc_right_up" id="chartDiv">
+		<div class="nei">
+			<div class="ssjc_ru_table">
+				<div class="echarts_ssjc_one" id="chart_current"
+					style="width: 100%;"></div>
 			</div>
 		</div>
-		<!-- 上方的统计图【结束】 -->
-		<!-- 下方的统计表【开始】 -->
-		<div class="ssjc_right_bottom" id="channelDiv">
-			<div class="nei">
-				<div class="ssjc_ru_title" id="ssjc_ru_title" style="background: #ecf0f5;">
-					<span class="tiaoshijian" id="last-time">最新通道温度(单位:℃)</span>
-				</div>
-				<!-- 通道温度【开始】 -->
-				<div class="ssjc_rub_table">
-					<table class="tj_table" border="0" id="channelsInfo">
-						<tr style="height: 150px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-						<tr style="height: 150px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-					</table>
-			</div></div>
+	</div>
+	<!-- 上方的统计图【结束】 -->
+	<!-- 下方的统计表【开始】 -->
+	<div class="ssjc_right_bottom" id="channelDiv">
+		<div class="nei">
+			<div class="ssjc_ru_title" id="ssjc_ru_title"
+				style="background: #ecf0f5;">
+				<span class="tiaoshijian" id="last-time">最新通道温度(单位:℃)</span>
+			</div>
+			<!-- 通道温度【开始】 -->
+			<div class="ssjc_rub_table">
+				<table class="tj_table" border="0" id="channelsInfo">
+					<tr style="height: 150px;">
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr style="height: 150px;">
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
 		</div>
-		<!-- 通道温度【结束】 -->
-		
-		<script type="text/javascript">
-			//初始化页面信息
-			$(function(){
-				showCurrentContent();
+	</div>
+	<!-- 通道温度【结束】 -->
+	<script src="dist/js/sockjs.min.js"></script>
+	<script src="dist/js/stomp.min.js"></script>
+	<script type="text/javascript">
+		/* var stompClient = null; */
+		//初始化页面信息
+		$(function() {
+			showCurrentContent();
+			//通过websocket后台将实时数据推送给前端
+			connect();
+		});
+		function connect() {
+			var socket = new SockJS("http://47.106.225.170:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
+			stompClient = Stomp.over(socket);
+			stompClient.connect({}, function(frame) {
+				console.log(frame);
+				stompClient.subscribe('/topic/real', function(body) {
+					addPoints(body);
+				});
 			});
-		</script>
-	</body>
+		}
+	</script>
+</body>
 </html>

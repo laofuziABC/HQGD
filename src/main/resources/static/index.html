@@ -49,7 +49,7 @@
 					<!-- <li class="manager"><a href="#"
 						onclick="loadMainContent('childrenHtml/equipment/connectMonitor.html');">
 							<i class="fa fa-unlink"></i> <span>通信监测</span>
-					</a></li> -->
+					</a></li>  -->
 					<li><a href="#"
 						onclick="loadMainContent('childrenHtml/equipment/equipmentList.html');">
 							<i class="fa fa-gears"></i> <span>设备管理</span>
@@ -208,11 +208,16 @@
 			}); */
 			//根据用户角色，加载用户菜单【结束】
 			//关联菜单和页面
+			var stompClient = null;
 			function loadMainContent(param) {
 				if($("body").hasClass("sidebar-open")){
 					$(".sidebar-toggle").click();
 				}
 				if (param != null) {
+					if (stompClient != null) {
+						stompClient.disconnect();
+						stompClient = null;
+					}
 					$("#content-wrapper").load(param);
 				}
 			}

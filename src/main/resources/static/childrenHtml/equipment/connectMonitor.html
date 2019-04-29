@@ -81,15 +81,14 @@
 		});
 	</script>
 	<script>
-		var websocket = null;
-		var stompClient = null;
+		/* var websocket = null;
+		var stompClient = null; */
 		$(function() {
 			$('#routerip').jstree({
 				"core" : {
 					'data' : {
 						'url' : "router/selectConEqui",
 						'data' : function(node) {
-							console.log(node);
 							return node;
 
 						}
@@ -121,7 +120,7 @@
 		});
 		
 		function connect() {
-			var socket = new SockJS("http://47.106.225.170:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
+			var socket = new SockJS("http://127.0.0.1:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function(frame) {
 				setMessageInnerHTML("连接成功！" + "\n")
@@ -142,6 +141,7 @@
 		function setMessageInnerHTML(innerHTML) {
 			document.getElementById('compose-textarea').innerHTML += innerHTML;
 		}
+		
 		//关闭连接
 		function closeSocket() {
 			if (stompClient != null) {
@@ -151,7 +151,6 @@
 			}
 		}
 		function clearSocket(param) {
-			debugger;
 			var ip = param.substring(13);
 			var oUl = document.querySelector("#routerip");
 			var oList = oUl.querySelectorAll("li");
@@ -167,7 +166,6 @@
 		function display(param) {
 			var euiplist = "";
 			var object = JSON.parse(param);
-			debugger;
 			var json = $("#routerip").jstree(true).get_json();
 			var ip = object.ip;
 			var el = object.equipList;
