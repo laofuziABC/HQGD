@@ -26,7 +26,7 @@ public class SerialPortController {
 		List<String> mCommList = null;
 		mCommList = SerialPortManager.findPorts();
 		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(mCommList == null || mCommList.size() < 1 ? "null" : mCommList));
+		response.getWriter().write(new Gson().toJson((mCommList == null || mCommList.size() < 1) ? "null" : mCommList));
 	}
 
 	@RequestMapping("open")
