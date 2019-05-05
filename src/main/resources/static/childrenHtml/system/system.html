@@ -197,6 +197,13 @@
 										readonly="readonly" style="height: 300px"></textarea>
 								</div>
 							</div>
+							<div class="box-footer">
+								<div class="pull-right">
+									<button type="reset" class="btn btn-primary" id="clear">
+										<i class="fa fa-trash"></i> 清屏
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -215,11 +222,14 @@
 	<script src="dist/js/sockjs.min.js"></script>
 	<script src="dist/js/stomp.min.js"></script>
 	<script type="text/javascript">
-		$('#startDate').datepicker({
+		/* $('#startDate').datepicker({
 			autoclose : true
 		})
 		$('#endDate').datepicker({
 			autoclose : true
+		}) */
+		$("#clear").click(function() {
+			document.getElementById('compose-textarea').innerHTML = "";
 		})
 		selectSysParam();
 		function selectSysParam() {
@@ -303,7 +313,7 @@
 				}
 			});
 		}
-		function staticFailures1(param) {
+		/* function staticFailures1(param) {
 			var startTime = $("#startDate").val();
 			var endTime = $("#endDate").val();
 			var today = getNowFormatDate();
@@ -349,7 +359,7 @@
 				}
 			});
 
-		}
+		} */
 		//获取当前时间，格式YYYY-MM-DD
 		function getNowFormatDate() {
 			var date = new Date();
@@ -404,27 +414,20 @@
 						"parity" : parity,
 						"stopBits" : stopBits
 					},
-					success : function(result) {
+					/* success : function(result) {
 						alert(result);
-					}
+					} */
 				});
 			}
 		}
 		connect();
 		function connect() {
-			var socket = new SockJS("http://47.106.225.170:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
+			var socket = new SockJS("http://127.0.0.1:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function(frame) {
 				setMessageInnerHTML("连接成功！" + "\n")
-				console.log(frame);
 				stompClient.subscribe('/topic/serialPort', function(body) {
-					/* if (body.body.indexOf("parent") > -1) {
-						display(body.body);
-					}
-					if (body.body.indexOf("closeSocket") > -1) {
-						clearSocket(body.body);
-					} */
-					setMessageInnerHTML("-------" + body + "\n");
+					setMessageInnerHTML("-------" + body.body + "\n");
 				});
 			});
 		}

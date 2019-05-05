@@ -58,6 +58,10 @@ public class TimerManager {
 	 * 服务器向客户端发送请求数据命令定时任务
 	 */
 	private SocketTimer socketTask = null;
+	/**
+	 * 串口通信发送请求数据命令定时任务
+	 */
+	private SerialPortTimer serialPortTimer = null;
 
 	@Bean
 	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
@@ -138,6 +142,49 @@ public class TimerManager {
 		}
 		log.info("服务器向客户端发送请求数据命令定时器结束");
 
+	}
+
+	/**
+	 * 启动定时任务
+	 * 
+	 * @throws IOException
+	 */
+	@RequestMapping("/serial/start")
+	public void startSerialTask(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("串口发送请求数据命令定时器开始");
+		resp.setContentType("application/json; charset=UTF-8");
+		timer.purge();
+		if (serialPortTimer == null) {
+			serialPortTimer = new SerialPortTimer();
+			Map<String, Object> param = new HashMap<>();
+			param.put("paramCode", "TCP_CONNECT");
+			param.put("paramValue", "1");
+			sysParamMapper.setSysParam(param);
+			// 从系统参数获取定时器的执行间隔
+			int timeInter = Integer.valueOf(sysParamMapper.selectByPrimaryKey("TIME_INTERVAL").getParamValue());
+			Timer timer = new Timer();
+			timer.schedule(serialPortTimer, 0, timeInter * 1000);
+			resp.getWriter().write(new Gson().toJson("操作成功！"));
+		} else {
+			resp.getWriter().write(new Gson().toJson("定时器已经处于启动状态！"));
+		}
+		log.info("串口发送请求数据命令定时器结束");
+
+	}
+
+	@RequestMapping("/serial/stop")
+	public void stopSerialTask(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		if (serialPortTimer != null) {
+			serialPortTimer.cancel();
+			serialPortTimer = null;// 如果不重新new，会报异常
+			Map<String, Object> param = new HashMap<>();
+			param.put("paramCode", "TCP_CONNECT");
+			param.put("paramValue", "0");
+			sysParamMapper.setSysParam(param);
+			log.info("串口发送请求数据命令定时器关闭！");
+		}
+		resp.setContentType("application/json; charset=UTF-8");
+		resp.getWriter().write(new Gson().toJson("串口发送请求数据命令定时器关闭！"));
 	}
 
 	/**

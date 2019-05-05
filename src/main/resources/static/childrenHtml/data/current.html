@@ -90,7 +90,7 @@
 			connect();
 		});
 		function connect() {
-			var socket = new SockJS("http://47.106.225.170:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
+			var socket = new SockJS("http://127.0.0.1:7070/myWebSocket");//如果前后端分离项目需要拼接具体地址，前后端分离index.html可放在
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function(frame) {
 				console.log(frame);

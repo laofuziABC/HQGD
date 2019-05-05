@@ -27,4 +27,6 @@ public interface IDataAcquisitionService {
 
 	Map<String, Object> historicalCurve(QueryParametersVo queryVo) throws ParseException;
 
+	List<DataAcquisitionVo> parseReceivedData(String inputString, String url) throws IOException;;
+
 }

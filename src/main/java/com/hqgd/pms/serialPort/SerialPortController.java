@@ -24,7 +24,7 @@ public class SerialPortController {
 	public void selectPorts(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 串口列表
 		List<String> mCommList = null;
-		mCommList = SerialPortManager.findPorts();
+		mCommList = serialPortService.findPorts();
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson((mCommList == null || mCommList.size() < 1) ? "null" : mCommList));
 	}
@@ -38,7 +38,9 @@ public class SerialPortController {
 	}
 
 	@RequestMapping("close")
-	private void closePort() {
+	private void closePort(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		serialPortService.closePort();
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson("关闭成功"));
 	}
 }
