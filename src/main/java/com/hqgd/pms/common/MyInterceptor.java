@@ -25,7 +25,7 @@ public class MyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 		
-		log.info("当前请求处理之前被拦截。");
+		log.info("当前请求即将处理。");
 	    User user = (User) request.getSession().getAttribute("user");
 	    if (user == null) {
 	        response.sendRedirect("/hqgd");
@@ -37,13 +37,13 @@ public class MyInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o,
                            ModelAndView modelAndView) throws Exception {
-    	log.info("当前请求进行处理时被拦截。");
+    	log.info("当前请求正在处理中……");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                 Object o, Exception e) throws Exception {
-    	log.info("当前请求处理之后被拦截。");
+    	log.info("当前请求已完成处理。");
     }
 
 }

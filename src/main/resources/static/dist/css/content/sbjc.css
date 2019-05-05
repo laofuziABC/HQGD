@@ -1,0 +1,21 @@
+/* 设备监测页面(sbjc.html)的样式文件
+laofuzi 2019.04.24
+ */
+.content-main-sbjc{max-height: 843px; overflow-y: scroll; background-color: #ecf0f5; display: flex; flex-wrap: wrap;}
+.upper-query{width: 100%; height: 50px;}
+.lower-monitor{width: 100%; height: 793px; overflow-y: scroll; display: flex; flex-wrap: wrap; }
+.upper-query form{width: 100%; height: 100%; display: flex; flex-wrap: wrap; padding: 10px;}
+form .query-single{width: 20%; vertical-align: middle; font-size: 16px;}
+form .query-several{width: 45%; vertical-align: middle; font-size: 16px;}
+form .selectbox1{width: 70%; font-size: 14px; height: 100%;}
+form .selectbox2{width: 30%; font-size: 14px; height: 100%;}
+form input[type='button'], form input[type='reset']{background-color: #3c8dbe; width: 90px; height: 100%; 
+	font-size: 16px; border: 0px; border-radius: 2px; color: #fff; margin: 0 5px;}
+.lower-monitor .moni-block{width: 24%; height: 330px; min-width: 300px; min-height: 300px; margin: 20px 10px; background-color: #21242e; color: #fff;}
+.moni-block label{width: 100%; font-size: 2.0em; text-align: center; margin: 5px 0;}
+.moni-block p{margin: 5px;}
+.moni-block .moni-block-title{width: 24%; display: inline-block; font-size: 1.5em; text-align: center; font-weight: bold;}
+.block-red{color: red;} .block-yellow{color: yellow;} .block-green{color: green;} .block-blue{color: #1970c8;} .error{color: #f00; background-color: #fff;}
+.moni-block table{margin: 10px; width: 95%; font-size: 1.2em;}
+table td{border: 1px solid #fff; text-align: center; height: 30px;}
+table td.error{color: #f00; background-color: #fff;}

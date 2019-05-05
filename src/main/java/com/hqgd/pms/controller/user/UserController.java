@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +123,29 @@ public class UserController {
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(message));
 	}
-
+	
+	/**
+	 * 根据当前用户，通过用户角色获取用户名称或者用户集
+	 * 用户角色为管理员，返回其下用户集合
+	 * 用户角色为普通用户，返回当前用户
+	 */
+	@RequestMapping("/session")
+	public void getUsersFromSession(Model model, HttpServletRequest request, 
+			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException{
+		
+		List<User> userList = new ArrayList<User>();
+		//获取当前Session，根据用户角色返回结果
+		HttpSession session = request.getSession();
+		if(session != null) {
+			User user = (User) session.getAttribute("user");
+			if(userService.isSystemUser(user.getId())) {
+				userList=userService.selectAll();
+			}else{
+				userList.add(user);
+			}
+			response.setContentType("application/json; charset=UTF-8");
+			response.getWriter().write(new Gson().toJson(userList));
+		}
+	}
+	
 }

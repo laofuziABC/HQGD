@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>设备检测</title>
+		<link rel="stylesheet" href="dist/css/content/sbjc.css">
+	</head>
+	<body>
+		<div class="content-wrapper content-main-sbjc">
+			<div class="upper-query">
+				<form action="#" method="post" id="queryform-sbjc">
+					<div class="query-single">用户:
+						<select id="user-select" class="selectbox1" name="userName">
+							<option value="0" selected="selected">选择用户</option>
+						</select>
+					</div>
+					<div class="query-several">地区:
+						<select id="prov-select" class="selectbox2" onchange="getCities();" name="provCode"><option value="0" selected="selected">选择省</option></select>
+						<select id="city-select" class="selectbox2" onchange="getTowns();" name="cityCode"><option value="0" selected="selected">选择市</option></select>
+						<select id="town-select" class="selectbox2" name="townCode"><option value="0" selected="selected">选择区</option></select>
+					</div>
+					<div class="query-single">类型:
+						<select id="type-select" class="selectbox1" name="type">
+							<option value="1" selected="selected">开关柜</option>
+							<!-- <option value="2">干式变压器</option> -->
+							<!-- <option value="3">变压器绕阻</option> -->
+							<!-- <option value="4">环网柜</option> -->
+						</select>
+					</div>
+					<input type="button" onclick="$(this).getAllEquiDataInfo();" value="查询"/>
+					<input type="reset" value="重置"/>
+				</form>
+			</div>
+			<div class="lower-monitor" id="monitors">
+				
+				<div class="moni-block">
+					<label id="template">1号测温仪</label>
+					<p>
+						<div class="moni-block-title block-red">高温报警		<br/>110.0	</div>		<div class="moni-block-title block-blue">低温报警		<br/>0.0</div>
+						<div class="moni-block-title block-green">设备预警	<br/>正常</div>		<div class="moni-block-title block-yellow">环境温度	<br/>N/A</div>
+					</p>
+					<table>
+						<tr><td>位置</td><td class="edit-text">A相</td><td class="edit-text">B相</td><td class="edit-text">C相</td></tr>
+						<tr><td class="edit-text">上触头</td><td>温度</td><td>温度</td><td>温度</td></tr>
+						<tr><td class="edit-text">下触头</td><td>温度</td><td>温度</td><td>温度</td></tr>
+					</table>
+				</div>
+				<div class="moni-block">
+					<label>1号测温仪</label>
+					<p>
+						<div class="moni-block-title block-red">高温报警		<br/>110.0	</div>		<div class="moni-block-title block-blue">低温报警		<br/>0.0</div>
+						<div class="moni-block-title block-green">设备预警	<br/>正常</div>		<div class="moni-block-title block-yellow">环境温度	<br/>N/A</div>
+					</p>
+					<table>
+						<tr><td>位置</td><td>A相</td><td>B相</td><td>C相</td></tr>
+						<tr><td>上触头</td><td>温度</td><td>温度</td><td>温度</td></tr>
+						<tr><td>下触头</td><td>温度</td><td>温度</td><td>温度</td></tr>
+					</table>
+				</div>
+				
+			</div>
+		</div>
+		
+		
+		<script type="text/javascript" src="dist/js/AllCities.js"></script>
+		<script type="text/javascript" src="dist/js/sbjc.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				getProvs();
+				$(document).fetchUserInformations();
+			})
+			
+			
+		</script>
+	</body>
+</html>
