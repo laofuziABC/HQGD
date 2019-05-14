@@ -198,20 +198,13 @@ public class TimerManager implements ApplicationRunner {
 		timer.purge();
 		if (tableTask == null) {
 			tableTask = new UpdateTableTimer();
-			Map<String, Object> param = new HashMap<>();
-			param.put("paramCode", "UPDATE_TABLE_TIMER");
-			param.put("paramValue", "1");
-			int u = sysParamMapper.setSysParam(param);
-			if (u > 0) {
-				// 从系统参数获取定时器的执行间隔
-				int timeInter = Integer.valueOf(sysParamMapper.selectByPrimaryKey("TIME_INTERVAL").getParamValue());
-				Timer timer = new Timer();
-				timer.schedule(tableTask, 0, timeInter * 1000);
-			}
-		} else {
-		}
-		log.info("创建临时表定时器结束");
+			// 从系统参数获取定时器的执行间隔
+			int timeInter = Integer.valueOf(sysParamMapper.selectByPrimaryKey("TIME_INTERVAL").getParamValue());
+			Timer timer = new Timer();
+			timer.schedule(tableTask, 0, timeInter * 1000);
+			log.info("创建临时表定时器结束");
 
+		}
 	}
 
 }

@@ -170,7 +170,7 @@
 			var endTime = $("#endDate").val();
 			var today = getNowFormatDate();
 			if (endTime >= today) {
-				alert("终止日期不能大于当天日期！");
+				alert("终止日期不能大于等于当天日期！");
 			} else {
 				var url = "timer/failures/" + param;
 				$.ajax({
