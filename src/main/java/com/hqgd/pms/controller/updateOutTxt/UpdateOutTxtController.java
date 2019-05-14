@@ -40,6 +40,7 @@ public class UpdateOutTxtController {
 			updateOutTxtService.insertBatch(channelTempList); // 将集合中的数据批量入库
 			channelTempList.clear();
 		}
+		System.out.println("执行完毕");
 	}
 
 	/** 读取数据，存入集合中 */
@@ -59,7 +60,7 @@ public class UpdateOutTxtController {
 						channelTemp.setChannelNum(lineArr[0].substring(1, lineArr[0].length()-1));
 					}
 					channelTemp.setTem(lineArr[1].substring(1, lineArr[1].length()-1));
-					channelTemp.setReceiveTime(lineArr[2].substring(1, lineArr[2].length()-1));
+					channelTemp.setReceiveTime(lineArr[2].substring(1, lineArr[2].length()-1).replaceAll("/", "-"));
 					channelTempList.add(channelTemp);
 				}
 			}

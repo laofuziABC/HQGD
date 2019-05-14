@@ -12,8 +12,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.hqgd.pms.tcp.SystemStartServlet;
-
 @EnableCaching
 @EnableScheduling
 @SpringBootApplication
@@ -23,8 +21,8 @@ public class HqgdPmsServerApplication {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(HqgdPmsServerApplication.class, args);
 		//启动socket
-		SystemStartServlet server = new SystemStartServlet();
-		server.init();
+//		SystemStartServlet server = new SystemStartServlet();
+//		server.init();
 	}
 
 	@Bean

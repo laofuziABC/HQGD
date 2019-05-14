@@ -12,7 +12,7 @@ public class ChannelTemp {
     }
 
     public void setChannelNum(String channelNum) {
-        this.channelNum = channelNum.trim();
+        this.channelNum = channelNum == null ? null : channelNum.trim();
     }
 
     public String getTem() {
@@ -20,7 +20,7 @@ public class ChannelTemp {
     }
 
     public void setTem(String tem) {
-        this.tem = tem;
+        this.tem = tem == null ? null : tem.trim();
     }
 
     public String getReceiveTime() {
@@ -28,6 +28,6 @@ public class ChannelTemp {
     }
 
     public void setReceiveTime(String receiveTime) {
-        this.receiveTime = receiveTime;
+        this.receiveTime = receiveTime == null ? null : receiveTime.trim();
     }
 }

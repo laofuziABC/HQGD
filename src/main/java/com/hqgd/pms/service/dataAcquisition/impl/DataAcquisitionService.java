@@ -471,17 +471,17 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	private DataAcquisitionVo newDataAcquisitionVo(List<Cell> lc) {
 		DataAcquisitionVo d = new DataAcquisitionVo();
-		d.setAddress(Bytes.toString(lc.get(0).getValue()));
-		d.setChannelNum(Bytes.toString(lc.get(1).getValue()));
-		d.setEquipmentId(Bytes.toString(lc.get(3).getValue()));
-		d.setEquipmentName(Bytes.toString(lc.get(4).getValue()));
-		d.setMessage(Bytes.toString(lc.get(5).getValue()));
-		d.setOpticalFiberPosition(Bytes.toString(lc.get(6).getValue()));
-		d.setPd(Bytes.toString(lc.get(7).getValue()));
-		d.setReceiveTime(Bytes.toString(lc.get(8).getValue()));
-		d.setState(Integer.valueOf(Bytes.toString(lc.get(9).getValue())));
-		d.setTemperature(Bytes.toString(lc.get(11).getValue()));
-		d.setUv(Bytes.toString(lc.get(12).getValue()));
+		d.setAddress(Bytes.toString(lc.get(0).getValueArray()));
+		d.setChannelNum(Bytes.toString(lc.get(1).getValueArray()));
+		d.setEquipmentId(Bytes.toString(lc.get(3).getValueArray()));
+		d.setEquipmentName(Bytes.toString(lc.get(4).getValueArray()));
+		d.setMessage(Bytes.toString(lc.get(5).getValueArray()));
+		d.setOpticalFiberPosition(Bytes.toString(lc.get(6).getValueArray()));
+		d.setPd(Bytes.toString(lc.get(7).getValueArray()));
+		d.setReceiveTime(Bytes.toString(lc.get(8).getValueArray()));
+		d.setState(Integer.valueOf(Bytes.toString(lc.get(9).getValueArray())));
+		d.setTemperature(Bytes.toString(lc.get(11).getValueArray()));
+		d.setUv(Bytes.toString(lc.get(12).getValueArray()));
 		return d;
 	}
 
