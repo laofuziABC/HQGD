@@ -62,10 +62,10 @@
 					debugger;
 					var startDate = $("#startDate").val();
 					var endDate = $("#endDate").val();
-					if(!startDate){ alert("起始时间不能为空！"); return; }
-					if(!endDate){ alert("终止时间不能为空！"); return; }
-					if (startDate>endDate) {alert("终止时间不能小于起始时间！"); return; }
-					if(new Date(endDate).getTime()>yesterdayStamp){ alert("建议查询之前的数据，请重新选择时间段！"); return; }
+					if(!startDate){ alert("开始日期不能为空！"); return; }
+					if(!endDate){ alert("结束日期不能为空！"); return; }
+					if (startDate>endDate) {alert("开始日期不能大于结束日期！"); return; }
+					if(new Date(endDate).getTime()>yesterdayStamp){ alert("结束日期不能大于等于当天日期！"); return; }
 					if($("#startDate").hasClass("error")){$("#startDate").removeClass("error");}
 					if($("#endDate").hasClass("error")){$("#endDate").removeClass("error");}
 					var chart = $("#chart_extremum").highcharts();
