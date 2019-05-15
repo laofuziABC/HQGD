@@ -730,6 +730,7 @@ WHERE
 		EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
 		AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
 		AND RECEIVE_TIME <![CDATA[ < ]]> #{endTime,jdbcType=VARCHAR}
+		AND STATE=5
 		GROUP BY
 			CHANNEL_NUM 
 		ORDER BY
