@@ -38,7 +38,8 @@
 		<script type="text/javascript">
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【开始】
 			$('.datePicker').datepicker({autoclose : true});
-			var intStr=parent.formatDateToString(new Date());
+			var yesterdayStamp=new Date().getTime()-24*60*60*1000;
+			var intStr=parent.formatDateToString(new Date(yesterdayStamp));
 			document.getElementById("startDate").value = intStr;
 			document.getElementById("endDate").value = intStr;
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【结束】
@@ -58,20 +59,13 @@
 			function showStatisticalContent(){
 				equiId3=equiId0;
 				if (equiId != null) {
+					debugger;
 					var startDate = $("#startDate").val();
 					var endDate = $("#endDate").val();
-					if (startDate == "" || startDate == null) {
-						$("#startDate").addClass("error");
-						return;
-					}
-					if (endDate == "" || endDate == null) {
-						$("#endDate").addClass("error");
-						return;
-					}
-					if (startDate>endDate) {
-						$("#endDate").addClass("error");
-						return;
-					}
+					if(!startDate){ alert("起始时间不能为空！"); return; }
+					if(!endDate){ alert("终止时间不能为空！"); return; }
+					if (startDate>endDate) {alert("终止时间不能小于起始时间！"); return; }
+					if(new Date(endDate).getTime()>yesterdayStamp){ alert("建议查询之前的数据，请重新选择时间段！"); return; }
 					if($("#startDate").hasClass("error")){$("#startDate").removeClass("error");}
 					if($("#endDate").hasClass("error")){$("#endDate").removeClass("error");}
 					var chart = $("#chart_extremum").highcharts();
@@ -80,29 +74,9 @@
 					var errors_param = {"equipmentId" : equiId3, "startTime" : startDate, "endTime" : endDate };
 					var statistical_url = "dataAcquisition/historicalExtremum";
 					var errors_url = "dataAcquisition/errorStateStatic";
-					var today = getNowFormatDate();
-					if (endDate >= today) {
-						alert("结束日期不能大于等于当天日期！");
-					} else {
 					fetchExtremumChartData(statistical_url, statistical_param);
 					fetchErrorChartData(errors_url, errors_param);
-				}}
-			}
-			//获取当前时间，格式YYYY-MM-DD
-			function getNowFormatDate() {
-				var date = new Date();
-				var seperator1 = "-";
-				var year = date.getFullYear();
-				var month = date.getMonth() + 1;
-				var strDate = date.getDate();
-				if (month >= 1 && month <= 9) {
-					month = "0" + month;
 				}
-				if (strDate >= 0 && strDate <= 9) {
-					strDate = "0" + strDate;
-				}
-				var currentdate = year + seperator1 + month + seperator1 + strDate;
-				return currentdate;
 			}
 		</script>
 	</body>
