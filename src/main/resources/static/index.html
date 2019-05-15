@@ -77,8 +77,7 @@
 						<ul class="treeview-menu">
 							<!-- <li><a href="#" onclick="network();"><i
 									class="fa fa-bookmark"></i><span>图形设计</span></a></li> -->
-							<!-- <li><a href="#"
-								onclick="loadMainContent('childrenHtml/operationalMonitoring/update.html');">
+							<!-- <li><a href="#" onclick="loadMainContent('childrenHtml/operationalMonitoring/update.html');">
 									<i class="fa fa fa-bookmark"></i> 上传图例
 							</a></li> -->
 							<li><a href="#"
@@ -97,9 +96,16 @@
 		<!-- 侧边栏【结束】 -->
 		<div id="content-wrapper">
 			<!-- Main content -->
-			<section class="content" style="background: #ecf0f5;">
+			<!-- <section class="content" style="background: #ecf0f5;">
+				暂时隐藏地图
 				<div id="mapContainer" class="map" tabindex="0"></div>
-			</section>
+			</section> -->
+			<!-- 使用一线图作为界面显示内容 -->
+			<div class="wrapper">
+				<div id="circuitry" class="content-wrapper" style="overflow: scroll;">
+					<img class="circuitry" alt="circuitry" src="dist/img/back.jpg">
+				</div>
+			</div>
 		</div>
 		<div id="updatepass"></div>
 		<footer class="main-footer">
@@ -153,90 +159,81 @@
 
 	<script src="dist/js/jquery.table2excel.js"></script>
 	<script type="text/javascript">
-			//获取页面参数【开始】
-			function getParam(string) {
-			    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
-			    var l = decodeURI(window.location.search);
-			    var r = l.substr(1).match(reg);
-			    if (r != null){
-			    	var result = decodeURI(r[2]);
-			    	return unescape(result);
-			    }
+		//获取页面参数【开始】
+		function getParam(string) {
+		    var reg = new RegExp("(^|&)" + string + "=([^&]*)(&|$)", "i");  
+		    var l = decodeURI(window.location.search);
+		    var r = l.substr(1).match(reg);
+		    if (r != null){
+		    	var result = decodeURI(r[2]);
+		    	return unescape(result);
+		    }
+		}
+		//获取页面参数【结束】
+		function updatePass() {
+			$("#updatepass").load("childrenHtml/updatepass.html");
+		}
+		function updatePass1() {
+			$("#updatepass").empty();
+		}
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
+		function formatTimeToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var H = unifiedFormat(param.getHours());
+			var m = unifiedFormat(param.getMinutes());
+			var s = unifiedFormat(param.getSeconds());
+			var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
+			return result;
+		}
+		function formatDateToString(param){
+			var y = param.getFullYear();
+			var M = unifiedFormat(param.getMonth()+1);
+			var d = unifiedFormat(param.getDate());
+			var result = y+"-"+M+"-"+d;
+			return result;
+		}
+		function unifiedFormat(param){
+			return (param<10)?("0"+param):param;
+		}
+		//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
+		//根据用户角色，加载用户菜单【开始】
+		var roleId =getParam("roleId");
+		var userName =getParam("userName");
+		$("#main-header").load("childrenHtml/title.html");
+		var managerMenu=document.getElementsByClassName("manager");
+		var customerMenu=document.getElementsByClassName("customer");
+		for(let i=0; i<managerMenu.length; i++){
+			managerMenu[i].style.display=(roleId==1)?"block":"none";
+		}
+		for(let i=0; i<customerMenu.length; i++){
+			customerMenu[i].style.display=(roleId!=1)?"block":"none";
+		}
+		//根据用户角色，加载用户菜单【结束】
+		//关联菜单和页面
+		var stompClient = null;
+		function loadMainContent(param) {
+			if($("body").hasClass("sidebar-open")){
+				$(".sidebar-toggle").click();
 			}
-			//获取页面参数【结束】
-			function updatePass() {
-				$("#updatepass").load("childrenHtml/updatepass.html");
-			}
-			function updatePass1() {
-				$("#updatepass").empty();
-			}
-			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【开始】
-			function formatTimeToString(param){
-				var y = param.getFullYear();
-				var M = unifiedFormat(param.getMonth()+1);
-				var d = unifiedFormat(param.getDate());
-				var H = unifiedFormat(param.getHours());
-				var m = unifiedFormat(param.getMinutes());
-				var s = unifiedFormat(param.getSeconds());
-				var result = y+"-"+M+"-"+d+" "+H+":"+m+":"+s;
-				return result;
-			}
-			function formatDateToString(param){
-				var y = param.getFullYear();
-				var M = unifiedFormat(param.getMonth()+1);
-				var d = unifiedFormat(param.getDate());
-				var result = y+"-"+M+"-"+d;
-				return result;
-			}
-			function unifiedFormat(param){
-				return (param<10)?("0"+param):param;
-			}
-			//组装时间：将时间转化成“yyyy-MM-dd HH:mm:ss”格式的字符串【结束】
-			//根据用户角色，加载用户菜单【开始】
-			var roleId =getParam("roleId");
-			var userName =getParam("userName");
-			$("#main-header").load("childrenHtml/title.html");
-			//$("#main-sidebar").load("childrenHtml/side-menu.html");
-			var managerMenu=document.getElementsByClassName("manager");
-			var customerMenu=document.getElementsByClassName("customer");
-			for(let i=0; i<managerMenu.length; i++){
-				managerMenu[i].style.display=(roleId==1)?"block":"none";
-			}
-			for(let i=0; i<customerMenu.length; i++){
-				customerMenu[i].style.display=(roleId!=1)?"block":"none";
-			}
-			/* $(function(){
-				if(roleId=="0"){
-					$("#main-sidebar").load("childrenHtml/side-menu1.html");
-				}else{
-					$("#main-sidebar").load("childrenHtml/side-menu.html");
+			if (param != null) {
+				if (stompClient != null) {
+					stompClient.disconnect();
+					stompClient = null;
 				}
-				//$("#main-header").load("childrenHtml/title.html");
-			}); */
-			//根据用户角色，加载用户菜单【结束】
-			//关联菜单和页面
-			var stompClient = null;
-			function loadMainContent(param) {
-				if($("body").hasClass("sidebar-open")){
-					$(".sidebar-toggle").click();
-				}
-				if (param != null) {
-					if (stompClient != null) {
-						stompClient.disconnect();
-						stompClient = null;
-					}
-					$("#content-wrapper").load(param);
-				}
+				$("#content-wrapper").load(param);
 			}
-			//小屏幕指定菜单选择后隐藏
-			$(".selection>li").on("click",function(){
-				if($("body").hasClass("sidebar-open")){
-					$(".sidebar-toggle").click();
-				}
-			});
-		</script>
+		}
+		//小屏幕指定菜单选择后隐藏
+		$(".selection>li").on("click",function(){
+			if($("body").hasClass("sidebar-open")){
+				$(".sidebar-toggle").click();
+			}
+		});
+	</script>
 	<!-- 页面地图【开始】 -->
-	<script type="text/javascript"
+	<!-- <script type="text/javascript"
 		src="https://webapi.amap.com/maps?v=1.4.11&key=f6ee07ce6b36ef10876b7d1ed533dadc&plugin=AMap.MarkerClusterer">
 		</script>
 	<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
@@ -428,7 +425,7 @@
 				var iframe = "<div class=\"wrapper\"><iframe style='width: "+iWidth+"height: "+iHeight+"' src='childrenHtml/graphicDesign/network.html'></iframe></div>";
 				$("#content-wrapper").html(iframe);
 			}
-	</script>
+	</script> -->
 	<!-- 页面地图【结束】 -->
 
 

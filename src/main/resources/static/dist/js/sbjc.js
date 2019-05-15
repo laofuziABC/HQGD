@@ -30,17 +30,17 @@ $.fn.extend({
 	getAllEquiDataInfo: function(){
 		var formdata=$("#queryform-sbjc").serializeObject();
 		$.ajax({
-			url: "serialPort/equipmentInfos",
+			url: "monitors/equipDataInfos",		//测试的url
+//			url: "serialPort/equipmentInfos",	//串口通信的url
 			type: "post",
 			data: formdata,
 			dataType: "json",
 			success: function(result){
-				console.log(result);
+//				console.log(result);
 				var len=result.length;		//设备数量
 				var warningMax;				//设备最高警示温度
 				var warningMin;				//设备最低警示温度
 				if(!len>0){
-					$("#monitors").empty();
 					$("#monitors").html("<div class='moni-none'>无相关监测设备</div>");
 					return;
 				}
@@ -48,7 +48,7 @@ $.fn.extend({
 				for(var i=0; i<len; i++){
 					var equipment=result[i].equipment;
 					var dataList=result[i].dateList;
-					var channlNum=dataList.length;
+					var channelNum=dataList.length;
 					monitorHtml+="<div class='moni-block' id='moni-for-"+equipment.equipmentId+"'>";
 					monitorHtml+="<label>"+equipment.equipmentName+"</label><p>";
 					monitorHtml+="<div class='moni-block-title block-red'>高温报警<br/>"+simplifyData(equipment.maxTem)+"</div>";
@@ -56,7 +56,7 @@ $.fn.extend({
 					monitorHtml+="<div class='moni-block-title block-green'>设备预警<br/>"+checkEquipmentRunningState(dataList)+"</div>";
 					monitorHtml+="<div class='moni-block-title block-yellow'>环境温度<br/>"+simplifyData(equipment.ambientTem)+"</div>";
 					monitorHtml+="</p><table><tr><td>位置</td><td class='edit-text'>A相</td><td class='edit-text'>B相</td><td class='edit-text'>C相</td></tr>";
-					var rownum = (channlNum%3===0)?(channlNum/3):(channlNum/3+1);
+					var rownum = Math.ceil(channelNum/3);
 					if(!rownum>0){
 						monitorHtml+="<tr><td>/</td><td>(无数据)</td><td>(无数据)</td><td>(无数据)</td></tr>";
 					}else{
@@ -109,6 +109,8 @@ $.fn.extend({
 					result+=simplifyData(obj.temperature)+"</b>";
 					return result;
 				}
+				
+				
 			}
 		})
 	},
@@ -134,7 +136,7 @@ $.fn.extend({
  * 在页面上修改文本（主要内容是光纤位置）
  * 暂时可以实现在页面直接修改，但修改效果不持久
  * 后续计划与数据库交互，将修改前后的位置信息存储在数据库中
- * 具体业务流程待定			——2019.05.06
+ * 文本存储到数据库中的具体业务流程待定			——2019.05.06
  */
 document.addEventListener("click", function(event){
 	if(!event.target.classList.contains("edit-text")) return;
@@ -162,7 +164,8 @@ function getIdByNode(node){
 	}
 	return equipmentId;
 }
-//保存修改后的文本到数据库中
+//保存修改后的文本到数据库中（暂且保留此功能，具体业务实现方法待后续根据数据库做决定）
 function updateLocation(equipmentId, origintext, newText){
 	console.log("equipmentId="+equipmentId+"；origintext="+origintext+"；newText="+newText);
+	
 }
