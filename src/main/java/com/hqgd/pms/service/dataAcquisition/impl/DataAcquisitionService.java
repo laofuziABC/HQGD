@@ -61,7 +61,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		realTimeDateList = dataAcquisitionVoMapper.selectRealTimeDataById(param);
 		if (realTimeDateList.size() > 0) {
 			if (realTimeDateList.size() == equipment.getNumOfCh()) {
-				String s=equipment.getChannelTem();
+				String s = equipment.getChannelTem();
 				s = s.substring(2, s.length() - 2);
 				String[] arr = s.split("\\],\\[");
 				if (arr.length == realTimeDateList.size()) {
@@ -197,7 +197,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		Map<String, List<List<Double>>> map = new HashMap<>();
 		List<List<Double>> ll = new ArrayList<List<Double>>();
 		List<Double> allTemperatures = new ArrayList<Double>();
-		if(historicalDataList.size() == 1) {
+		if (historicalDataList.size() == 1) {
 			DataAcquisitionVo dv = historicalDataList.get(0);
 			Double receTime = CommonUtil.str2Time(dv.getReceiveTime());
 			Double tem = Double.valueOf(dv.getTemperature());
@@ -209,7 +209,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			String ch = dv.getChannelNum();
 			map.put(ch, ll);
 			result.add(map);
-		}else if (historicalDataList.size() > 1) {
+		} else if (historicalDataList.size() > 1) {
 			for (int i = 0; i < historicalDataList.size() - 1; i++) {
 				DataAcquisitionVo dv = historicalDataList.get(i);
 				String ch = dv.getChannelNum();
@@ -331,7 +331,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		param.put("startTime", queryVo.getStartTime());
 		String endTime = queryVo.getEndTime();
 		try {
-			endTime = getAfterDay(endTime);
+			endTime = CommonUtil.getAfterDay(endTime);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -351,13 +351,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		Map<String, Object> param = new HashMap<>();
 		param.put("startTime", startTime + " 00:00:00");
 		param.put("endTime", startTime + " 23:59:59");
-		// 获取前一天的时间
-		String yesterday = null;
-		try {
-			yesterday = CommonUtil.getBeforeDay(startTime);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+
 		// 检查数据库这一天的数据是否已经统计
 		int count = staticFailuresMapper.selectByDate(startTime);
 		if (count == 0) {
@@ -365,32 +359,28 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			// L表 ——表示查询出一天的数据，然后批量处理
 			param.put("table", "hq_equipment_monitor_data_1");
 			List<DataAcquisitionVo> L1 = dataAcquisitionVoMapper.selectAllFailures(param);
-			staticFailuer(L1, yesterday, "hq_equipment_monitor_data_1");
+			staticFailuer(L1);
 
 			param.put("table", "hq_equipment_monitor_data_2");
 			List<DataAcquisitionVo> L2 = dataAcquisitionVoMapper.selectAllFailures(param);
-			staticFailuer(L2, yesterday, "hq_equipment_monitor_data_2");
+			staticFailuer(L2);
 
 			param.put("table", "hq_equipment_monitor_data_3");
 			List<DataAcquisitionVo> L3 = dataAcquisitionVoMapper.selectAllFailures(param);
-			staticFailuer(L3, yesterday, "hq_equipment_monitor_data_3");
+			staticFailuer(L3);
 
 			param.put("table", "hq_equipment_monitor_data_4");
 			List<DataAcquisitionVo> L4 = dataAcquisitionVoMapper.selectAllFailures(param);
-			staticFailuer(L4, yesterday, "hq_equipment_monitor_data_4");
+			staticFailuer(L4);
 		} else {
 			log.info("startTime =" + startTime + "已经统计过了！");
 		}
 	}
 
 	// 统计一天的故障
-	private void staticFailuer(List<DataAcquisitionVo> L, String yesterday, String table) {
+	private void staticFailuer(List<DataAcquisitionVo> L) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		for (int i = 0; i < L.size() - 1; i++) {
-			if (i == 0 && !L.get(i).getState().equals("5")) {
-				StaticFailCounts(yesterday, L.get(i), table);
-			}
-
 			String equipmentId = L.get(i).getEquipmentId();
 			String channelNum = L.get(i).getChannelNum();
 			String state = L.get(i).getState();
@@ -401,21 +391,11 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 			// 继续判断通道号，通道号不同，就说明上一个通道统计结束，可以更新数据库了
 			// 当状态不等且下一条不是正常，就说明有新的故障产生，需要统计
 			if (channelNum.equals(channelNuma) && equipmentId.equals(equipmentIda)) {
+				if (i == 0 && !state.equals("5")) {
+					sumError(state);
+				}
 				if (!state.equals(statea) && !statea.equals("5")) {
-					switch (statea) {
-					case "2":
-						comm++;
-						break;
-					case "3":
-						fiber++;
-						break;
-					case "4":
-						therm++;
-						break;
-					case "9":
-						overT++;
-						break;
-					}
+					sumError(statea);
 				}
 
 			} else if (!equipmentId.equals(equipmentIda) || !channelNum.equals(channelNuma)) {
@@ -441,8 +421,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				therm = 0;
 				overT = 0;
 				if (!statea.equals("5")) {
-					// 如果某个设备的某个通道的第一条数据不是正常状态，就需要判断昨天最后一条是否正常，若不正常则算做一次，若正常，今天的故障就要加1
-					StaticFailCounts(yesterday, L.get(i + 1), table);
+					sumError(statea);
 				}
 			}
 			if (i == L.size() - 2) {
@@ -472,137 +451,20 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 
 	}
 
-	public void StaticFailCounts(String yesterday, DataAcquisitionVo d, String table) {
-		Map<String, String> param = new HashMap<>();
-		param.put("startTime", yesterday + " 00:00:00");
-		param.put("endTime", yesterday + " 23:59:59");
-		param.put("equipmentId", d.getEquipmentId());
-		param.put("channelNum", d.getChannelNum());
-		param.put("table", table);
-		// 获取前一天最后一条数据
-		DataAcquisitionVo y1 = dataAcquisitionVoMapper.selectYesDayFailures(param);
-		if (!y1.getState().equals(d.getState())) {
-			switch (d.getState()) {
-			case "2":
-				comm++;
-				break;
-			case "3":
-				fiber++;
-				break;
-			case "4":
-				therm++;
-				break;
-			case "9":
-				overT++;
-				break;
-			}
-		}
-	}
-
-	public String getAfterDay(String today) throws ParseException {
-		Calendar c = Calendar.getInstance();
-		c.setTime(new SimpleDateFormat("yy-MM-dd").parse(today));
-		int date = c.get(Calendar.DATE);
-		c.set(Calendar.DATE, date + 1);
-		String afterDay = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
-		System.out.println(afterDay);
-		return afterDay;
-	}
-
-	/**
-	 * 描述： 统计每天第一组数据，并将结果保存数据库 作者：姚绒 日期：2019年3月14日 下午4:41:43
-	 *
-	 */
-	public void staticFailuerF(List<DataAcquisitionVo> t, List<DataAcquisitionVo> y) throws ParseException {
-		int comm = 0;// 458通信故障
-		int fiber = 0;// 光纤故障
-		int therm = 0;// 测温仪故障
-		int overT = 0;// 超温故障
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		if (t != null && y != null) {
-			// 先判断每个设备每个通道的今天的第一条数据和昨天的最后一条数据状态是否一致，不一致且今天故障，次数就+1，一致，就不加
-			for (int i = 0; i < t.size(); i++) {
-				String equipmentId = t.get(i).getEquipmentId();
-				String channelNum = t.get(i).getChannelNum();
-				String state = t.get(i).getState();
-				String equipmentIdy = y.get(i).getEquipmentId();
-				String channelNumy = y.get(i).getChannelNum();
-				String statey = y.get(i).getState();
-				if (equipmentId.equals(equipmentIdy) && channelNum.equals(channelNumy) && !state.equals(statey)
-						&& !state.equals("5")) {
-					switch (state) {
-					case "2":
-						comm++;
-						break;
-					case "3":
-						fiber++;
-						break;
-					case "4":
-						therm++;
-						break;
-					case "9":
-						overT++;
-						break;
-					}
-				} else {
-
-					StaticFailures sf = new StaticFailures();
-					sf.setEquipmentId(equipmentId);
-					sf.setEquipmentName(t.get(i).getEquipmentName());
-					sf.setAddress(t.get(i).getAddress());
-					sf.setChannelNum(channelNum);
-					sf.setOpticalFiberPosition(t.get(i).getOpticalFiberPosition());
-					sf.setCommunicate(comm);
-					sf.setFiber(fiber);
-					sf.setThermometer(therm);
-					sf.setOverTemperature(overT);
-					sf.setDate(format.parse(t.get(i).getReceiveTime()));
-					staticFailuresMapper.insert(sf);
-					comm = 0;
-					fiber = 0;
-					therm = 0;
-					overT = 0;
-				}
-
-			}
-		} else if (t != null && y == null) {
-			for (int i = 0; i < t.size(); i++) {
-				String equipmentId = t.get(i).getEquipmentId();
-				String channelNum = t.get(i).getChannelNum();
-				String state = t.get(i).getState();
-				if (state != "5") {
-					switch (state) {
-					case "2":
-						comm++;
-						break;
-					case "3":
-						fiber++;
-						break;
-					case "4":
-						therm++;
-						break;
-					case "9":
-						overT++;
-						break;
-					}
-				}
-
-				StaticFailures sf = new StaticFailures();
-				sf.setEquipmentId(equipmentId);
-				sf.setEquipmentName(t.get(i).getEquipmentName());
-				sf.setAddress(t.get(i).getAddress());
-				sf.setChannelNum(channelNum);
-				sf.setOpticalFiberPosition(t.get(i).getOpticalFiberPosition());
-				sf.setCommunicate(comm);
-				sf.setFiber(fiber);
-				sf.setThermometer(therm);
-				sf.setOverTemperature(overT);
-				staticFailuresMapper.insert(sf);
-				comm = 0;
-				fiber = 0;
-				therm = 0;
-				overT = 0;
-			}
+	private void sumError(String statea) {
+		switch (statea) {
+		case "2":
+			comm++;
+			break;
+		case "3":
+			fiber++;
+			break;
+		case "4":
+			therm++;
+			break;
+		case "9":
+			overT++;
+			break;
 		}
 	}
 
