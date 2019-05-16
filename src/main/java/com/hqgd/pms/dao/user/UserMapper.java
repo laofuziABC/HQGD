@@ -32,5 +32,6 @@ public interface UserMapper {
 
 	User selectByPhUn(Map<String, Object> map);
 
-	int reUse(Integer id);
+	int reUse(Integer id, User user);
+
 }

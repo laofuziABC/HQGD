@@ -46,7 +46,8 @@ public class UserService implements IUserService {
 			result = (i == 0) ? false : true;
 			message = (result == true) ? "添加用户成功！" : "添加用户失败！";
 		} else if (userfind.getIsdel().equals("Y")) {
-			int i = userMapper.reUse(userfind.getId());
+			user.setId(userfind.getId());
+			int i = userMapper.updateByPrimaryKeySelective(user);
 			result = (i == 0) ? false : true;
 			message = (result == true) ? "添加用户成功！" : "添加用户失败！";
 		} else if (userfind.getIsdel().equals("N")) {

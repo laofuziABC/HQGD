@@ -33,7 +33,7 @@ public class LoginService implements ILoginService {
 		log.info("登录开始，参数为userName=" + userName + "password=" + password + "isRemember=" + isRemember);
 		User userFind = userService.selectByUserName(userName);
 		Map<String, Object> map = authUser(userFind,
-				new User(null, userName,null, password, null, null, null, null, null, null));
+				new User(null, userName, null, password, null, null, null, null, null, null));
 		Boolean authUser = (Boolean) map.get("success");
 		if (authUser) {
 			log.info("用户名密码正确");
@@ -76,7 +76,7 @@ public class LoginService implements ILoginService {
 			message = "用户名密码不能为空!";
 			success = false;
 		} else {
-			if (userFind == null) { // 系统中没查到用户输入的用户名的相关信息
+			if (userFind == null || userFind.getIsdel().equals("Y")) { // 系统中没查到用户输入的用户名的相关信息
 				message = "用户名不存在或已被禁用！";
 				success = false;
 			} else if (!userFind.getPassword().equals(userNew.getPassword())) { // 用户名或密码输入不正确
@@ -92,5 +92,4 @@ public class LoginService implements ILoginService {
 		return map;
 	}
 
-	
 }

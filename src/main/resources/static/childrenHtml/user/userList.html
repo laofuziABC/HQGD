@@ -30,10 +30,10 @@
 					用户信息 <span class="fuclose">×</span>
 				</p>
 				<div class="fuqubiao">
-					<form action="user/update" id="userForm" method="post">
+					<form action="user/update" id="userForm" method="post" onsubmit="return check()">
 						<p style="display: none">
-							<span>add</span><input type="text" class="right_input" value=""
-								id="add" name="add" />
+							<span>add</span><input type="text" class="right_input"
+								value="true" id="add" name="add" />
 						</p>
 						<p style="display: none">
 							<span>ID</span><input type="text" class="right_input" value=""

@@ -57,7 +57,7 @@
         UPDATE access_control_user SET ISDEL = 'Y' WHERE ID = #{id}
   </update>
   <update id="reUse">
-        UPDATE access_control_user SET ISDEL = 'N' WHERE ID = #{id}
+        UPDATE access_control_user SET ISDEL = 'N', PASSWORD = #{param2} WHERE ID = #{param1}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 

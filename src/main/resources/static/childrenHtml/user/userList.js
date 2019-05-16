@@ -10,11 +10,11 @@ $(function() {
 			$(".fuceng").css({
 				"display" : "none"
 			})
-			alert(data.message);
+			alert("操作成功");
 		}
 	});
 });
-userForm.onsubmit = function() {
+function check() {
 	var password = $("#password").val();
 	var confirm = $("#confirm").val();
 	$("#add").val(add);
