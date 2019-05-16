@@ -38,7 +38,8 @@
 		<script type="text/javascript">
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【开始】
 			$('.datePicker').datepicker({autoclose : true});
-			var intStr=parent.formatDateToString(new Date());
+			var yesterdayStamp=new Date().getTime()-24*60*60*1000;
+			var intStr=parent.formatDateToString(new Date(yesterdayStamp));
 			document.getElementById("startDate").value = intStr;
 			document.getElementById("endDate").value = intStr;
 			//调用bootstrap-datepicker.js，封装时间显示格式为“yyyy-mm-dd”，同时初始化页面参数为当前日期【结束】
@@ -60,18 +61,10 @@
 				if (equiId != null) {
 					var startDate = $("#startDate").val();
 					var endDate = $("#endDate").val();
-					if (startDate == "" || startDate == null) {
-						$("#startDate").addClass("error");
-						return;
-					}
-					if (endDate == "" || endDate == null) {
-						$("#endDate").addClass("error");
-						return;
-					}
-					if (startDate>endDate) {
-						$("#endDate").addClass("error");
-						return;
-					}
+					if(!startDate){ alert("开始日期不能为空！"); return; }
+					if(!endDate){ alert("结束日期不能为空！"); return; }
+					if (startDate>endDate) {alert("开始日期不能大于结束日期！"); return; }
+					if(new Date(endDate).getTime()>yesterdayStamp){ alert("结束日期不能大于等于当天日期！"); return; }
 					if($("#startDate").hasClass("error")){$("#startDate").removeClass("error");}
 					if($("#endDate").hasClass("error")){$("#endDate").removeClass("error");}
 					var chart = $("#chart_extremum").highcharts();
