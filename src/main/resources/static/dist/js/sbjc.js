@@ -25,36 +25,28 @@ $.fn.extend({
 		})
 	},
 	//检查串口通信是否连接
-	fetchEquipmentsInfos: function(){},
-	//提交用户表单，查询符合条件的设备
-	getAllEquiDataInfo: function(){
+	fetchEquipmentsInfos: function(){
 		var formdata=$("#queryform-sbjc").serializeObject();
 		$.ajax({
-			url: "monitors/equipDataInfos",		//测试的url
-//			url: "serialPort/equipmentInfos",	//串口通信的url
+			url: "equipment/searchEquiByParam",
 			type: "post",
 			data: formdata,
 			dataType: "json",
 			success: function(result){
-//				console.log(result);
-				var len=result.length;		//设备数量
-				var warningMax;				//设备最高警示温度
-				var warningMin;				//设备最低警示温度
-				if(!len>0){
-					$("#monitors").html("<div class='moni-none'>无相关监测设备</div>");
-					return;
-				}
+				console.log(result.data);
+				result=result.data;
+				var len=result.length;
+				if(!len>0){$("#monitors").html("<div class='moni-none'>无相关监测设备</div>"); return; }
 				var monitorHtml="";
 				for(var i=0; i<len; i++){
-					var equipment=result[i].equipment;
-					var dataList=result[i].dateList;
-					var channelNum=dataList.length;
+					var equipment=result[i];
+					var channelNum=equipment.numOfCh;
 					monitorHtml+="<div class='moni-block' id='moni-for-"+equipment.equipmentId+"'>";
 					monitorHtml+="<label>"+equipment.equipmentName+"</label><p>";
-					monitorHtml+="<div class='moni-block-title block-red'>高温报警<br/>"+simplifyData(equipment.maxTem)+"</div>";
-					monitorHtml+="<div class='moni-block-title block-blue'>低温报警<br/>"+simplifyData(equipment.minTem)+"</div>";
-					monitorHtml+="<div class='moni-block-title block-green'>设备预警<br/>"+checkEquipmentRunningState(dataList)+"</div>";
-					monitorHtml+="<div class='moni-block-title block-yellow'>环境温度<br/>"+simplifyData(equipment.ambientTem)+"</div>";
+					monitorHtml+="<div class='moni-block-title block-red'>高温报警<br/><b id='highest-for-"+equipment.equipmentId+"'>N/A</b></div>";
+					monitorHtml+="<div class='moni-block-title block-blue'>低温报警<br/><b id='lower-for-"+equipment.equipmentId+"'>N/A</b></div>";
+					monitorHtml+="<div class='moni-block-title block-green'>设备预警<br/><b id='state-for-"+equipment.equipmentId+"'>N/A</b></div>";
+					monitorHtml+="<div class='moni-block-title block-yellow'>环境温度<br/><b id='envi-for-"+equipment.equipmentId+"'>N/A</b></div>";
 					monitorHtml+="</p><table><tr><td>位置</td><td class='edit-text'>A相</td><td class='edit-text'>B相</td><td class='edit-text'>C相</td></tr>";
 					var rownum = Math.ceil(channelNum/3);
 					if(!rownum>0){
@@ -70,7 +62,7 @@ $.fn.extend({
 							}
 							var si=m*3,ei=(m+1)*3;
 							for(var n=si; n<ei; n++){
-								monitorHtml+="<td>"+checkFiberRunningState(dataList[n])+"</td>";
+								monitorHtml+="<td id='tem-for-"+equipment.equipmentId+"CH"+(n+1)+"'>N/A</td>";
 							}
 							monitorHtml+="</tr>";
 						}
@@ -78,6 +70,42 @@ $.fn.extend({
 					monitorHtml+="</table></div>";
 				}
 				$("#monitors").html(monitorHtml);
+			}
+		})
+		
+	},
+	//提交用户表单，查询符合条件的设备
+	getAllEquiDataInfo: function(){
+		var formdata=$("#queryform-sbjc").serializeObject();
+		$.ajax({
+//			url: "monitors/equipDataInfos",		//测试的url
+			url: "serialPort/equipmentInfos",	//串口通信的url
+			type: "post",
+			data: formdata,
+			dataType: "json",
+			success: function(result){
+				var len=result.length;		//设备数量
+				var warningMax;				//设备最高警示温度
+				var warningMin;				//设备最低警示温度
+				if(!len>0){
+					$("#monitors").html("<div class='moni-none'>无相关监测设备</div>");
+					return;
+				}
+				for(var i=0; i<len; i++){
+					var equipment=result[i].equipment;
+					var dataList=result[i].dateList;
+					//更改设备监测状态
+					var id="#state-for-"+dataList[i].equipmentId;
+					var equiState=document.querySelector(id);
+					equiState.innerHTML=checkEquipmentRunningState(dataList);
+					//更新温度数据
+					for(var j=0; j<dataList.length; j++){
+						var queryId="#tem-for-"+dataList[j].equipmentId+dataList[j].channelNum;
+						var target = document.querySelector(queryId);
+						target.innerHTML=simplifyData(dataList[j].temperature);
+					}
+				}
+				//辅助方法：核查温度数据
 				function simplifyData(data){
 					if(!data) return "(无)";
 					switch(data){
@@ -87,7 +115,8 @@ $.fn.extend({
 			    		default: return data; break;
 		    		}
 			    };
-				function checkEquipmentRunningState(arr){
+			    //辅助方法：核查设备状态
+			    function checkEquipmentRunningState(arr){
 					if(!arr.length>0) return "(无)";
 					var codes=[];
 					for(var i=0; i<arr.length; i++){
@@ -101,6 +130,7 @@ $.fn.extend({
 					else if($.inArray(10,codes)>-1){return "<small class='error'>通道低温</small>"; }
 					else{return "正常"; }
 				};
+				//辅助方法：监测温度预警结果
 				function checkFiberRunningState(obj){
 					var result;
 					if(obj.temperature>obj.maxTem){ result="<b class='block-red'>"; }
@@ -109,8 +139,6 @@ $.fn.extend({
 					result+=simplifyData(obj.temperature)+"</b>";
 					return result;
 				}
-				
-				
 			}
 		})
 	},

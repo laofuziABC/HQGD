@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>设备检测</title>
+		<title>设备监测</title>
 		<link rel="stylesheet" href="dist/css/content/sbjc.css">
 	</head>
 	<body>
@@ -28,7 +28,7 @@
 							<!-- <option value="4">环网柜</option> -->
 						</select>
 					</div>
-					<input type="button" onclick="$(this).getAllEquiDataInfo();" value="查询"/>
+					<input type="button" onclick="getResult();" value="查询"/>
 					<input type="reset" value="重置"/>
 				</form>
 			</div>
@@ -70,7 +70,10 @@
 				getProvs();
 				$(document).fetchUserInformations();
 			})
-			
+			function getResult(){
+				$(document).fetchEquipmentsInfos();
+				$(document).getAllEquiDataInfo();
+			}
 			
 		</script>
 	</body>
