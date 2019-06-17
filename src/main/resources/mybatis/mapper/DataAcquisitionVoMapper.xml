@@ -736,4 +736,24 @@ WHERE
 		ORDER BY
 			CAST(REPLACE(CHANNEL_NUM, 'CH','0') AS int) ASC
   </select>
+  <delete id="deleteByEquipmentId" >
+    delete from HQTemp_Cloud.dbo.${param2}
+    where EQUIPMENT_ID = #{param1,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByEquipmentIf" >
+    delete from HQTemp_Cloud.dbo.${param2}
+    where EQUIPMENT_ID = #{param1,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByEquipmentIdd" >
+    delete from ${param2}
+    where EQUIPMENT_ID = #{param1,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByEquipmentIdr" >
+    delete from ${param2}
+    where EQUIPMENT_ID = #{param1,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByEquipmentIdf" >
+    delete from ${param2}
+    where EQUIPMENT_ID = #{param1,jdbcType=VARCHAR}
+  </delete>
 </mapper>

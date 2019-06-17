@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.hqgd.pms.common.CommonUtil;
@@ -38,10 +37,10 @@ public class EquipmentController {
 	IUserService userService;
 
 	@RequestMapping(value = "/delete")
-	public void delete(Model model, String equipmentId, HttpServletRequest request, HttpServletResponse response)
+	public void delete(Model model, String param, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("删除设备开始");
-		Map<String, Object> resultMap = equipmentService.delete(equipmentId);
+		Map<String, Object> resultMap = equipmentService.delete(param);
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 		log.info("删除设备结束");
@@ -77,7 +76,6 @@ public class EquipmentController {
 
 
 	@RequestMapping(value = "/searchEquiByParam")
-	@ResponseBody
 	public void searchEquiByParam(Model model, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("查询符合表单参数的所有设备开始");
@@ -95,7 +93,6 @@ public class EquipmentController {
 	}
 
 	@RequestMapping(value = "/selectAll")
-	@ResponseBody
 	public void selectAll(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("查询所有设备开始");
 		List<EquipmentInfo> equipmentList = equipmentService.selectAll();

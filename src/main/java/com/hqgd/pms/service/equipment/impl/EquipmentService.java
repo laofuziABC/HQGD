@@ -25,9 +25,15 @@ public class EquipmentService implements IEquipmentService {
 	private DataAcquisitionVoMapper dataAcquisitionVoMapper;
 
 	@Override
-	public Map<String, Object> delete(String equipmentId) {
+	public Map<String, Object> delete(String param) {
 		Map<String, Object> resultMap = new HashMap<>();
-		int i = equipmentInfoMapper.deleteByPrimaryKey(equipmentId);
+		String[] params = param.split("&");
+		int i = equipmentInfoMapper.deleteByPrimaryKey(params[0]);
+		int p = dataAcquisitionVoMapper.deleteByEquipmentId(params[0], "hq_equipment_monitor_data_" + params[1]);
+		int j = dataAcquisitionVoMapper.deleteByEquipmentIf(params[0], "hq_equipment_monitor_data_f" + params[1]);
+		int k = dataAcquisitionVoMapper.deleteByEquipmentIdd(params[0], "hq_equipment_monitor_data_" + params[1]);
+		int m = dataAcquisitionVoMapper.deleteByEquipmentIdr(params[0], "hq_equipment_monitor_data_r" + params[1]);
+		int n = dataAcquisitionVoMapper.deleteByEquipmentIdf(params[0], "hq_equipment_monitor_data_f" + params[1]);
 		Boolean result = (i == 0) ? false : true;
 		resultMap.put("success", result);
 		resultMap.put("resultCode", "00000002");
@@ -84,19 +90,20 @@ public class EquipmentService implements IEquipmentService {
 		Map<String, String> param = new HashMap<>();
 		param.put("userName", request.getParameter("userName"));
 		param.put("adcode", request.getParameter("adcode"));
-		if(request.getParameter("type")==null||request.getParameter("type").equals("0")) {
+		if (request.getParameter("type") == null || request.getParameter("type").equals("0")) {
 			param.put("type", null);
-		}else {
+		} else {
 			param.put("type", request.getParameter("type"));
 		}
-		if(request.getParameter("equipmentName")==null||request.getParameter("equipmentName")=="") {
+		if (request.getParameter("equipmentName") == null || request.getParameter("equipmentName") == "") {
 			param.put("equipmentName", null);
-		}else {
+		} else {
 			param.put("equipmentName", request.getParameter("equipmentName"));
 		}
 		List<EquipmentInfo> equipmentInfoList = equipmentInfoMapper.selectAllByParam(param);
 		return equipmentInfoList;
 	}
+
 	@Override
 	public EquipmentInfo selectByHbid(Map<String, String> param) {
 		EquipmentInfo equipmentInfo = equipmentInfoMapper.selectByHbid(param);

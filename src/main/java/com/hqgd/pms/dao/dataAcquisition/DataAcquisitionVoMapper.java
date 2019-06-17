@@ -76,4 +76,14 @@ public interface DataAcquisitionVoMapper {
 
 	List<DataAcquisitionVo> selectCurveById(Map<String, Object> param);
 
+	int deleteByEquipmentId(String equipmentId, String data);
+
+	int deleteByEquipmentIdd(String string, String string2);
+
+	int deleteByEquipmentIdr(String string, String string2);
+
+	int deleteByEquipmentIdf(String string, String string2);
+
+	int deleteByEquipmentIf(String string, String string2);
+
 }

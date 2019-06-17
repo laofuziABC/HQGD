@@ -77,7 +77,8 @@ function getequipList(startIndex, endIndex, data, equipList) {
 		equipList += "<a class=\" edit\" onclick=\"getEquiEdit('" + i
 				+ "');\">编辑</a>&nbsp;";
 		equipList += "<a class=\"delete\" href=\"#\"onclick=\"getEquiDelete('"
-				+ data[i].equipmentId + "');\">删除</a>&nbsp;";
+				+ data[i].equipmentId + "&" + data[i].type
+				+ "');\">删除</a>&nbsp;";
 		equipList += "</td>";
 		equipList += "</tr>";
 	}
@@ -131,7 +132,7 @@ function getEquiDelete(param) {
 			url : "equipment/delete",
 			type : "post",
 			data : {
-				"equipmentId" : param
+				"param" : param
 			},
 			dataType : "json",
 			success : function(result) {
