@@ -9,56 +9,55 @@
 	href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
-		<div class="content-wrapper">
-			<section class="content-header">
-				<h1>系统参数设置</h1>
-				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-					<li class="active">系统参数设置</li>
-				</ol>
-			</section>
+	<div class="content-wrapper">
+		<section class="content-header">
+			<h1>系统参数设置</h1>
+			<ol class="breadcrumb">
+				<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+				<li class="active">系统参数设置</li>
+			</ol>
+		</section>
 
-			<!-- Main content -->
-			<section class="content">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="box box-primary">
-							<!-- /.box-header -->
-							<div class="box-body">
-								<form role="form">
-									<!--<div class="form-group">
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="box box-primary">
+						<!-- /.box-header -->
+						<div class="box-body">
+							<form role="form">
+								<!--<div class="form-group">
 										<label>浮动飘窗</label> <select id="FLOAT_WINDOW"
 											class="form-control" onchange="setSystem('FLOAT_WINDOW')">
 											<option value="1">开启</option>
 											<option value="2">关闭</option>
 										</select>
 									</div>  -->
-									<div class="form-group">
-										<label>服务器绑定端口</label>
-										<div class="input-group col-sm-4">
-											<input id="SERVER_PORT" type="text" class="form-control">
-											<div class="input-group-btn">
-												<button id="add-new-event" type="button"
-													onclick="setSystem('SERVER_PORT')"
-													class="btn btn-primary btn-flat">保存</button>
-											</div>
-											<!-- /btn-group -->
+								<div class="form-group">
+									<label>服务器绑定端口</label>
+									<div class="input-group col-sm-4">
+										<input id="SERVER_PORT" type="text" class="form-control">
+										<div class="input-group-btn">
+											<button id="add-new-event" type="button"
+												onclick="setSystem('SERVER_PORT')"
+												class="btn btn-primary btn-flat">保存</button>
 										</div>
+										<!-- /btn-group -->
 									</div>
-									<div class="form-group">
-										<label>服务器采集数据间隔时间(单位：秒)</label>
-										<div class="input-group col-sm-4">
-											<input id="TIME_INTERVAL" type="text" class="form-control">
-											<div class="input-group-btn">
-												<button id="add-new-event" type="button"
-													onclick="setSystem('TIME_INTERVAL')"
-													class="btn btn-primary btn-flat">保存</button>
-											</div>
-											<!-- /btn-group -->
+								</div>
+								<div class="form-group">
+									<label>服务器采集数据间隔时间(单位：秒)</label>
+									<div class="input-group col-sm-4">
+										<input id="TIME_INTERVAL" type="text" class="form-control">
+										<div class="input-group-btn">
+											<button id="add-new-event" type="button"
+												onclick="setSystem('TIME_INTERVAL')"
+												class="btn btn-primary btn-flat">保存</button>
 										</div>
+										<!-- /btn-group -->
 									</div>
-									<!-- <div class="form-group">
+								</div>
+								<!-- <div class="form-group">
 										<label>更新临时表定时器</label>
 										<div class="box-footer">
 											<input id="UPDATE_TABLE_TIMER" class="btn btn-primary "
@@ -72,45 +71,45 @@
 												type="button" onclick="socketMan()" value="开启" />
 										</div>
 									</div> -->
-									<div class="form-group">
-										<label>统计故障次数定时器</label>
-										<div class="box-footer">
-											<input id="STATIC_FAIL" class="btn btn-primary "
-												type="button" onclick="staticFailures()" value="开启" />
-										</div>
+								<div class="form-group">
+									<label>统计故障次数定时器</label>
+									<div class="box-footer">
+										<input id="STATIC_FAIL" class="btn btn-primary " type="button"
+											onclick="staticFailures()" value="开启" />
 									</div>
-									<div class="form-group">
-										<label>统计指定日期内的故障次数</label>
-										<div class="box-footer">
-											<div class="input-group">
-												<div class="input-group date">
-													<label> 开始日期：</label><input type="text" id="startDate">
-												</div>
-												<div class="input-group date">
-													<label> 结束日期：</label><input type="text" id="endDate">
-												</div>
-												<button type="button" class="btn btn-primary "
-													onclick="staticFailures1('run')">统计</button>
+								</div>
+								<div class="form-group">
+									<label>统计指定日期内的故障次数</label>
+									<div class="box-footer">
+										<div class="input-group">
+											<div class="input-group date">
+												<label> 开始日期：</label><input type="text" id="startDate">
 											</div>
+											<div class="input-group date">
+												<label> 结束日期：</label><input type="text" id="endDate">
+											</div>
+											<button type="button" class="btn btn-primary "
+												onclick="staticFailures1('run')">统计</button>
 										</div>
 									</div>
-								</form>
-							</div>
-							<!-- /.box-body -->
+								</div>
+							</form>
 						</div>
-						<!-- /.box -->
-
+						<!-- /.box-body -->
 					</div>
-					<!--/.col (right) -->
+					<!-- /.box -->
 
 				</div>
-				<!-- /.row -->
-			</section>
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
+				<!--/.col (right) -->
 
-		<div class="control-sidebar-bg"></div>
+			</div>
+			<!-- /.row -->
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+
+	<div class="control-sidebar-bg"></div>
 	</div>
 	<!-- ./wrapper -->
 	<script src="../../bower_components/moment/min/moment.min.js"></script>
@@ -163,8 +162,7 @@
 				}
 			});
 		}
-		
-		
+
 		function staticFailures1(param) {
 			var startTime = $("#startDate").val();
 			var endTime = $("#endDate").val();
