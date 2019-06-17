@@ -56,9 +56,9 @@ public class DataAcquisitionController {
 			HttpServletResponse response) throws ExecutionException, InterruptedException, IOException {
 		long inTime = System.currentTimeMillis();
 		log.info("查询实时数据开始 " + inTime);
-		List<DataAcquisitionVo> realTimeDateList = dataAcquisitionService.execGetRealTimeData(equipmentId);
+		Map<String, Object> result = dataAcquisitionService.execGetRealTimeData(equipmentId);
 		response.setContentType("application/json; charset=UTF-8");
-		response.getWriter().write(new Gson().toJson(realTimeDateList));
+		response.getWriter().write(new Gson().toJson(result));
 		long outTime = System.currentTimeMillis();
 		log.info("查询实时数据结束：" + outTime);
 		long midTime = outTime - inTime;

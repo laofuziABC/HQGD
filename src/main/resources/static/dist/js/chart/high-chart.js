@@ -186,6 +186,8 @@ function addPoints(){
 		var url="dataAcquisition/realtime";
 		var param={"equipmentId": equiId1};
 		var pointsData = getChartData(url, param);
+		var equip = pointsData.equipment;
+		var pointsData=pointsData.data;
 		if(pointsData!=null && pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
 			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
 			var nowtime = (new Date()).getTime();
@@ -231,6 +233,8 @@ function showBlocks(){
 	drawCurrentChannels(result);
 }
 function drawCurrentChannels(param){
+	var equip = param.equipment;
+	var param=param.data;
 	//设置DIV高度
 	var channel = "";
 	var num;

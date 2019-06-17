@@ -38,9 +38,10 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 	private StaticFailuresMapper staticFailuresMapper;
 
 	@Override
-	public List<DataAcquisitionVo> execGetRealTimeData(String equipmentId) {
+	public Map<String, Object> execGetRealTimeData(String equipmentId) {
 		List<DataAcquisitionVo> realTimeDateList = new ArrayList<DataAcquisitionVo>();
 		Map<String, Object> param = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		param.put("equipmentId", equipmentId);
 		EquipmentInfo equipment = equipmentInfoMapper.selectByPrimaryKey(equipmentId);
 		String type = equipment.getType();
@@ -80,7 +81,9 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 				}
 			}
 		}
-		return realTimeDateList;
+		result.put("data", realTimeDateList);
+		result.put("equipment", equipment);
+		return result;
 	}
 
 	@Override

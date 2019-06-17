@@ -96,10 +96,9 @@
 		</div>
 		<div id="updatepass"></div>
 		<footer class="main-footer">
-			<strong>Copyright &copy; 2018-2028 
-				<a href="http://www.optsensor.com">Optsensor</a>.
-			</strong> All rights reserved.
-			<strong>v1.0.0</strong>
+			<strong>Copyright &copy; 2018-2028 <a
+				href="http://www.optsensor.com">Optsensor</a>.
+			</strong> All rights reserved. <strong>v1.0.0</strong>
 		</footer>
 
 		<!-- Control Sidebar -->
@@ -362,9 +361,12 @@
 					},
 					dataType : "json",
 					success : function(data) {
+						var equip = data.equipment;
+						var data=data.data;
 						if(data.length==0){
 							channel+="<h5 style='color: red;'>未查找到通道监测信息！</h5>"; 
 						}else{
+							var v = JSON.parse(equip.channelTem);
 							var num =data.length;
 							//超过5分钟提示
 							lTime=(new Date(data[0].receiveTime)).getTime();
@@ -382,13 +384,14 @@
 								//通道结果每三个循环一回，缘于界面展示效果较规整
 								for(let j=startIndex; j<endIndex; j++){
 									let state=parseFloat(data[j].state);
+									var opticalFiberPosition=(data[j].opticalFiberPosition=="")?(v[j][1]):(data[j].opticalFiberPosition);
 									if(state==5){
 										var resultMsg=(data[j].temperature==2999)?("系统调整中"):(data[j].temperature);
-										channel+="<td class='green' style='padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+resultMsg+"</span></td>"; 
+										channel+="<td class='green' style='padding: 10px;'><span class='span_left'>"+opticalFiberPosition+"：</span><span class='span_right'>"+resultMsg+"</span></td>"; 
 									}
-									else if(state==4){channel+="<td class='red' style=' padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>- - - - -</span></td>"; }
-									else if(state==3){channel+="<td class='red' style='padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>- - -</span></td>"; }
-									else{channel+="<td class='yellow' style='padding: 10px;'><span class='span_left'>"+data[j].opticalFiberPosition+"：</span><span class='span_right'>"+data[j].temperature+"</span></td>"; }
+									else if(state==4){channel+="<td class='red' style=' padding: 10px;'><span class='span_left'>"+opticalFiberPosition+"：</span><span class='span_right'>- - - - -</span></td>"; }
+									else if(state==3){channel+="<td class='red' style='padding: 10px;'><span class='span_left'>"+opticalFiberPosition+"：</span><span class='span_right'>- - -</span></td>"; }
+									else{channel+="<td class='yellow' style='padding: 10px;'><span class='span_left'>"+opticalFiberPosition+"：</span><span class='span_right'>"+data[j].temperature+"</span></td>"; }
 								}
 								channel+="</tr>";
 							}

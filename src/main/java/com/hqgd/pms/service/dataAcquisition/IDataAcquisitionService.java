@@ -9,7 +9,7 @@ import com.hqgd.pms.domain.StaticFailures;
 
 public interface IDataAcquisitionService {
 
-	List<DataAcquisitionVo> execGetRealTimeData(String equipmentId);
+	Map<String, Object> execGetRealTimeData(String equipmentId);
 
 	List<DataAcquisitionVo> getHistoricalData(QueryParametersVo queryVo);
 

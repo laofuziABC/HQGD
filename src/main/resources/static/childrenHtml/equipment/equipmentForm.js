@@ -1,4 +1,3 @@
-
 var globalUserList = [];
 if (add) {
 	addEquip1();
@@ -68,7 +67,7 @@ function addEquip1() {
 	if (globalUserList == "") {
 		getUserList();
 	}
-	var userHtml = "<option value=\"\" checked>—请选择用户—</option>";
+	var userHtml = "<option value=\"1\" checked>admin</option>";
 	for (let i = 0; i < globalUserList.length; i++) {
 		userHtml += "<option value='" + globalUserList[i].id + "'>"
 				+ globalUserList[i].userName + "</option>";
@@ -115,7 +114,7 @@ function generateForm() {
 	for (let i = 0; i < num; i++) {
 		thtml += "<tr>";
 		thtml += "<td contenteditable='true' >CH" + (i + 1) + "</td>";
-		thtml += "<td contenteditable='true' ></td>";
+		thtml += "<td contenteditable='true' >CH" + (i + 1) + "</td>";
 		thtml += "<td contenteditable='true' >120</td>";
 		thtml += "<td contenteditable='true' >-20</td>";
 		thtml += "</tr>";
