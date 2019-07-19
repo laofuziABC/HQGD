@@ -68,9 +68,7 @@ function getequipList(startIndex, endIndex, data, equipList) {
 		equipList += "<td>" + data[i].address + "</td>";
 		equipList += "<td>" + data[i].adcode + "</td>";
 		equipList += "<td>" + data[i].lngLat + "</td>";
-		equipList += "<td>" + data[i].frameStru + "</td>";
 		equipList += "<td>" + data[i].userName + "</td>";
-		equipList += "<td>" + data[i].heartbeatId + "</td>";
 		equipList += "<td>" + data[i].updateTime + "</td>";
 		equipList += "<td>" + data[i].updater + "</td>";
 		equipList += "<td class=\"center\">";
@@ -99,12 +97,14 @@ function getChan(param) {
 			channelTemList += "<td>" + v[i][1] + "</td>";
 			channelTemList += "<td>" + v[i][2] + "</td>";
 			channelTemList += "<td>" + v[i][3] + "</td>";
+			channelTemList += "<td>" + v[i][4] + "</td>";
 			channelTemList += "</tr>"
 		}
 		$("#channelTemList").html(channelTemList);
 	} else {
 		var channelTemList = "";
 		channelTemList += "<tr>";
+		channelTemList += "<td></td>";
 		channelTemList += "<td></td>";
 		channelTemList += "<td></td>";
 		channelTemList += "<td></td>";
@@ -168,10 +168,10 @@ function searchResult() {
 	});
 
 }
-// 导出
+//导出
 function report() {
-	var equipList = "<tr><td>设备ID</td><td>设备名称</td><td>设备类型</td><td>通道温度</td><td>通道数</td><td>安装地址</td><td>地区编码</td><td>经纬度</td><td>帧结构</td>"
-			+ "<td>所属用户</td><td>心跳包ID</td><td>心跳包名称</td><td>更新时间</td><td>更新者</td></tr>";
+	var equipList = "<tr><td>设备ID</td><td>设备名称</td><td>设备类型</td><td>通道温度</td><td>通道数</td><td>安装地址</td><td>地区编码</td><td>经纬度</td>"
+			+ "<td>所属用户</td><td>更新时间</td><td>更新者</td></tr>";
 	var data = globalData;
 	for (let i = 0; i < data.length; i++) {
 		equipList += "<tr>";
@@ -183,12 +183,7 @@ function report() {
 		equipList += "<td>" + data[i].address + "</td>";
 		equipList += "<td>" + data[i].adcode + "</td>";
 		equipList += "<td>" + data[i].lngLat + "</td>";
-		equipList += "<td>" + data[i].frameStru + "</td>";
 		equipList += "<td>" + data[i].userName + "</td>";
-		equipList += "<td>" + data[i].heartbeatId + "</td>";
-		equipList += "<td>" + data[i].heartbeatName + "</td>";
-		equipList += "<td>" + data[i].heartbeatId + "</td>";
-		equipList += "<td>" + data[i].heartbeatName + "</td>";
 		equipList += "<td>" + data[i].updateTime + "</td>";
 		equipList += "<td>" + data[i].updater + "</td>";
 		equipList += "</tr>";

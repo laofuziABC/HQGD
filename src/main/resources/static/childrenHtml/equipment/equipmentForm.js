@@ -26,12 +26,14 @@ function getEquiEdit1(param) {
 			channelTemList += "<td contenteditable='true'>" + v[i][1] + "</td>";
 			channelTemList += "<td contenteditable='true'>" + v[i][2] + "</td>";
 			channelTemList += "<td contenteditable='true'>" + v[i][3] + "</td>";
+			channelTemList += "<td contenteditable='true'>" + v[i][4] + "</td>";
 			channelTemList += "</tr>"
 		}
 		$("#channelTemList1").html(channelTemList);
 	} else {
 		var channelTemList = "";
 		channelTemList += "<tr>";
+		channelTemList += "<td contenteditable='true'></td>";
 		channelTemList += "<td contenteditable='true'></td>";
 		channelTemList += "<td contenteditable='true'></td>";
 		channelTemList += "<td contenteditable='true'></td>";
@@ -115,6 +117,7 @@ function generateForm() {
 		thtml += "<tr>";
 		thtml += "<td contenteditable='true' >CH" + (i + 1) + "</td>";
 		thtml += "<td contenteditable='true' >CH" + (i + 1) + "</td>";
+		thtml += "<td contenteditable='true' >100</td>";
 		thtml += "<td contenteditable='true' >120</td>";
 		thtml += "<td contenteditable='true' >-20</td>";
 		thtml += "</tr>";
