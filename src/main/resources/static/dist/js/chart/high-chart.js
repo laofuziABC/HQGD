@@ -160,18 +160,23 @@ function initCurrentChart(){
 	if(result!=null){
 		var equiName = result.equipment.equipmentName;
 		var seriesData=result.data;
+		var series=[];
 		if(seriesData.length>0){
-			var series=[];
 			for(var i=0; i<seriesData.length; i++){
 				$.each(seriesData[i],function(item,value){
 					var serie = {name: item, data: value, type:"spline", pointInterval: 6e4};
 					series.push(serie);
 				});
 			}
-			currentOption.series = series;
 		}else{
-			currentOption.series=[{name: '查询数据', data: [], type:"spline", pointInterval: 6e4}];
+			var num=result.equipment.numOfCh;
+			console.log(num);
+			for(var i=0; i<num; i++){
+				var serie = {name: 'CH'+(i+1), data: [], type:"spline", pointInterval: 6e4};
+				series.push(serie);
+			}
 		}
+		currentOption.series = series;
 		currentOption.title.text="实时温度监测图("+equiName+")";
 	}
 	$("#chart_current").highcharts().destroy();
@@ -187,13 +192,13 @@ function addPoints(){
 		var param={"equipmentId": equiId1};
 		var pointsData = getChartData(url, param);
 		var equip = pointsData.equipment;
-		var pointsData=pointsData.data;
-		if(pointsData!=null && pointsData.length>0 && (pointsData.length==pointsData[0].numOfCh)){
-			var thisPointTime = (new Date(pointsData[0].receiveTime)).getTime();
+		var pointData=pointsData.data;
+		if(pointData!=null && pointData.length>0 && (pointData.length==pointData[0].numOfCh)){
+			var thisPointTime = (new Date(pointData[0].receiveTime)).getTime();
 			var nowtime = (new Date()).getTime();
 			var tempValues=[];
-			for(let i=0; i<pointsData.length; i++){
-				var yValue=parseFloat(pointsData[i].temperature);
+			for(let i=0; i<pointData.length; i++){
+				var yValue=parseFloat(pointData[i].temperature);
 				tempValues.push(yValue);
 			}
 			setValueRangeForCChart(tempValues);
@@ -208,6 +213,15 @@ function addPoints(){
 			}else{
 				$("#last-time").css({"color":"red"});
 			}
+		}
+		//添加页面弹框，预警设备异常
+		var allErrorEquiData=getChartData("dataAcquisition/allEquiRunningState", null);
+		var list=allErrorEquiData.list;
+		if(list.length>0){
+			$("#result_list_div2").css({"display":"block"});
+			showErrorStateEquiList(list);
+		}else{
+			$("#result_list_div2").css({"display":"none"});
 		}
 	}, interval);
 	var start = (timing-60000>0) ?(timing-60000):0;
@@ -264,8 +278,10 @@ function drawCurrentChannels(param){
 					var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
 					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+resultMsg+"</span></td>"; 
 				}
-				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - - - -</span></td>"; }
+				else if(state==2){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>通信故障</span></td>"; }
 				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - -</span></td>"; }
+				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - - - -</span></td>"; }
+				else if(state==11){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 			}
 			channel+="</tr>";
@@ -288,6 +304,34 @@ function setValueRangeForCChart(param){
 		currentOption.yAxis.max=100;
 		currentOption.yAxis.min=0;
 	}
+}
+//添加异常设备列表
+function showErrorStateEquiList(list){
+	var errorEqui="";
+	var id,name,state;
+	for(var i=0; i<list.length; i++){
+		id=list[i].equipmentId;
+		name=list[i].equipmentName;
+		switch(list[i].state){
+			case "2": state="(通信故障)"; break;
+			case "3": state="(光纤故障)"; break;
+			case "4": state="(测温仪故障)"; break;
+			case "9": state="(高温)"; break;
+			case "10": state="(低温)"; break;
+			case "11": state="(超高温)"; break;
+		}
+		errorEqui+="<li onclick=\"showActiveEqui('"+id+"');\"><span><em>"+name+state+"</em></span></li>"
+	}
+	$("#equipErrorList").html(errorEqui);
+}
+function showActiveEqui(id){
+	var target = document.getElementById(id);
+	target.parentElement.classList.remove("hide");
+	if (!target.classList.contains("disabled")) {
+		$("#equipResultList li[class='checked']").removeClass("checked");
+		target.classList.add("checked");
+	}
+	getEquiData(id);
 }
 //加载通道温度最值统计图
 function fetchExtremumChartData(url, param){

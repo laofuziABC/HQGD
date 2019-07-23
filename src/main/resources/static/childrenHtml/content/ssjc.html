@@ -29,7 +29,8 @@
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <style type="text/css">
-	#result_list_div { margin: 10px 0 0 0; padding: 0; min-height: 150px; overflow-y: scroll; max-height: 400px;}
+	#result_list_div,#result_list_div2 { margin: 10px 0 0 0; padding: 0; min-height: 150px; overflow-y: scroll; max-height: 300px;}
+	#result_list_div2,#result_list_div2 li{color: red;}
 	.equipResultList{padding: 0 0 0 10%;}
 	#equipResultList .hide{display: none;}
 	#equipResultList p{font-size: 16px; cursor: pointer;}
@@ -133,6 +134,18 @@
 									<!-- 结果列表【结束】 -->
 								</div>
 							</div>
+							
+							<div class="box-body">
+								<!-- 监测异常预警设备列表 -->
+								<div class="tree_menu">
+									<div class="tree well tree_one" id="result_list_div2" style="display: none;">
+										<h4>监测异常设备列表：</h4>
+										<ul style="color: #151414;" class="box-body no-padding nav nav-pills nav-stacked" id="equipErrorList">
+										</ul>
+									</div>
+								</div>
+							</div>
+							
 						</div>
 					</div>
 					<!-- /.col -->

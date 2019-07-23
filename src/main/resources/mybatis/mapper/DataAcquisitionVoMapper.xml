@@ -756,4 +756,19 @@ WHERE
     delete from ${param2}
     where EQUIPMENT_ID = #{param1,jdbcType=VARCHAR}
   </delete>
+  
+  <select id="findRealRunningState" resultMap="BaseResultMap">
+  	select e.EQUIPMENT_ID,e.EQUIPMENT_NAME,d.STATE
+	from hq_equipment_monitor_data_f1 d join hq_equipment_info e on d.EQUIPMENT_ID=e.EQUIPMENT_ID 
+	where d.STATE!=5 union
+	select e.EQUIPMENT_ID,e.EQUIPMENT_NAME,d.STATE
+	from hq_equipment_monitor_data_f2 d join hq_equipment_info e on d.EQUIPMENT_ID=e.EQUIPMENT_ID 
+	where d.STATE!=5 union
+	select e.EQUIPMENT_ID,e.EQUIPMENT_NAME,d.STATE
+	from hq_equipment_monitor_data_f3 d join hq_equipment_info e on d.EQUIPMENT_ID=e.EQUIPMENT_ID 
+	where d.STATE!=5 union
+	select e.EQUIPMENT_ID,e.EQUIPMENT_NAME,d.STATE
+	from hq_equipment_monitor_data_f4 d join hq_equipment_info e on d.EQUIPMENT_ID=e.EQUIPMENT_ID 
+	where d.STATE!=5 
+  </select>
 </mapper>

@@ -30,4 +30,6 @@ public interface IDataAcquisitionService {
 
 	Map<String, Object> getHistoryExtremums(QueryParametersVo queryVo);
 
+	Map<String, Object> getAllEquiRunningState();
+
 }

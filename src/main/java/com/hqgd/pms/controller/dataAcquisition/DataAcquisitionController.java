@@ -183,4 +183,19 @@ public class DataAcquisitionController {
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 	}
+	
+	/**
+	 * 获取所有设备实时运行状态
+	 * 通过获取实时监测数据中的异常通道信息
+	 * 判断设备运行状态是否异常	07.22
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/allEquiRunningState")
+	public void runningState(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> resultMap = dataAcquisitionService.getAllEquiRunningState();
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(resultMap));
+	}
 }

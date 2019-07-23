@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -514,6 +515,17 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		log.info("查询extremum时长为：" + (outTime - inTime));
 		result.put("equipment", equipment);
 		result.put("extremumList", extremumList);
+		return result;
+	}
+
+	/**
+	 * 获取所有设备实时运行状态
+	 */
+	@Override
+	public Map<String, Object> getAllEquiRunningState() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<ChannelExtremum> equiStateList = dataAcquisitionVoMapper.findRealRunningState();
+		result.put("list", equiStateList);
 		return result;
 	}
 

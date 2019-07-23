@@ -53,7 +53,7 @@ function AjaxPostForEquiSubList(url,param){
 				//根据设备列表，初始化第一台设备的展示信息
 				if(totalSize>0){
 					equiId=data[0].equipmentId;
-					var activeStr="<li class=\"checked\" onclick=\"getEquiData('"+equiId+"');\"><span><em>"+data[0].equipmentName+"</em></span></li>";
+					var activeStr="<li class=\"checked\" onclick=\"getEquiData('"+equiId+"');\" id='"+equiId+"'><span><em>"+data[0].equipmentName+"</em></span></li>";
 					switch(data[0].type){
 						case "1": kgg_list+=activeStr; $("#kgglist").removeClass("hide"); break;
 						case "2": gsbyq_list+=activeStr; $("#gsbyqlist").removeClass("hide"); break;
@@ -62,10 +62,10 @@ function AjaxPostForEquiSubList(url,param){
 					}
 					for(let i=1; i<totalSize; i++){
 						switch(data[i].type){
-							case "1": kgg_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
-							case "2": gsbyq_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
-							case "3": byqrz_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
-							case "4": hwg_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\"><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
+							case "1": kgg_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\" id='"+data[i].equipmentId+"'><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
+							case "2": gsbyq_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\" id='"+data[i].equipmentId+"'><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
+							case "3": byqrz_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\" id='"+data[i].equipmentId+"'><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
+							case "4": hwg_list+="<li class=\"\" onclick=\"getEquiData('"+data[i].equipmentId+"');\" id='"+data[i].equipmentId+"'><span><em>"+data[i].equipmentName+"</em></span></li>"; break;
 						}
 					}
 					kgg_list=(kgg_list.length==0)?("<li class=\"disabled\"><span><em style=\"color: red;\">无相关设备</em></span></li>"):(kgg_list);

@@ -86,4 +86,6 @@ public interface DataAcquisitionVoMapper {
 
 	int deleteByEquipmentIf(String string, String string2);
 
+	List<ChannelExtremum> findRealRunningState();
+
 }
