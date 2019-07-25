@@ -38,7 +38,8 @@
 					</span> 
 					<span class="float_right">
 						<input type="button" class="youcecha" onclick="showHistoryContent();" value="查询" />
-						<input type="button" class="youcecha" onclick="reportHistory();" value="导出" /> 
+						<input type="button" class="youcecha" onclick="reportHistory();" value="导出" />
+						<input type="button" class="youcecha" onclick="exportHistoryData();" value="导出2" />  
 					</span>
 				</div>
 				<!-- 筛选条件【结束】 -->
@@ -209,6 +210,31 @@
 							exclude_links: true,
 							exclude_inputs: true
 						});
+					}
+				});
+			}
+			
+			function exportHistoryData(){
+				var param = {
+					"equipmentId" : equiId2,
+					"startTime" : $("#startTime").val(),
+					"endTime" : $("#endTime").val(),
+					"state" : $("#data-type").val()
+				};
+				$.ajax({
+					url : "dataAcquisition/exportHistoryData",
+					type : "post",
+					data : param,
+					dataType : "json",
+					success : function(result){
+						if(result){
+							alert("成功导出！请在桌面查看导出结果！");
+						}else{
+							alert("导出失败！");
+						}
+					},
+					error: function(){
+						alert("操作失败！");
 					}
 				});
 			}

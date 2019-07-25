@@ -198,4 +198,19 @@ public class DataAcquisitionController {
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().write(new Gson().toJson(resultMap));
 	}
+	
+	/**
+	 * 导出历史监测数据
+	 * @param queryVo		查询参数
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/exportHistoryData")
+	public void exportDataToExcel(QueryParametersVo queryVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		log.info("开始导出历史监测数据");
+		boolean result=dataAcquisitionService.exportHistoryData(response,queryVo);
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().write(new Gson().toJson(result));
+	}
 }

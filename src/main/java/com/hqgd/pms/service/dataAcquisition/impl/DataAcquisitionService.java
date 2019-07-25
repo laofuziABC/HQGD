@@ -4,21 +4,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 
 import com.hqgd.pms.common.CommonUtil;
+import com.hqgd.pms.common.ExportToExcelUtil;
 import com.hqgd.pms.dao.dataAcquisition.DataAcquisitionVoMapper;
 import com.hqgd.pms.dao.dataAcquisition.StaticFailuresMapper;
 import com.hqgd.pms.dao.equipment.EquipmentInfoMapper;
+import com.hqgd.pms.domain.ChannelDatasUtil;
 import com.hqgd.pms.domain.ChannelExtremum;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 import com.hqgd.pms.domain.EquipmentInfo;
@@ -528,5 +530,96 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		result.put("list", equiStateList);
 		return result;
 	}
+
+	/**
+	 * 导出历史监测数据
+	 * 先获取要导出的监测内容，再组装结果，
+	 * 最后由工具类导出
+	 * PS：当前默认导出地址是用户桌面		2019.07.23
+	 */
+	@Override
+	public boolean exportHistoryData(HttpServletResponse response,QueryParametersVo queryVo) {
+		Map<String, Object> param=new HashMap<String, Object>();
+		EquipmentInfo equipment=equipmentInfoMapper.selectByPrimaryKey(queryVo.getEquipmentId());
+		param.put("equipmentId", queryVo.getEquipmentId());
+		param.put("startTime", queryVo.getStartTime());
+		param.put("endTime", queryVo.getEndTime());
+		param.put("state", queryVo.getState());
+		String type = equipment.getType();
+		int num=equipment.getNumOfCh();
+		String name=equipment.getEquipmentName();
+		switch (type) {
+			case "1": param.put("table", "hq_equipment_monitor_data_1"); break;
+			case "2": param.put("table", "hq_equipment_monitor_data_2"); break;
+			case "3": param.put("table", "hq_equipment_monitor_data_3"); break;
+			case "4": param.put("table", "hq_equipment_monitor_data_4"); break;
+		}
+		List<ChannelDatasUtil> temList = dataAcquisitionVoMapper.findReportHistoricalDataTem(param);
+		List<ChannelDatasUtil> pdList = dataAcquisitionVoMapper.findReportHistoricalDataPD(param);
+		List<ChannelDatasUtil> uvList = dataAcquisitionVoMapper.findReportHistoricalDataUV(param);
+		List<ChannelDatasUtil> stateList = dataAcquisitionVoMapper.findReportHistoricalDataState(param);
+		//将数据对象转换成数组
+		List<Object[]> temArr = getChannelDataList(temList,num);
+		List<Object[]> pdArr = getChannelDataList(pdList,num);
+		List<Object[]> uvArr = getChannelDataList(uvList,num);
+		List<Object[]> stateArr = getChannelDataList(stateList,num);
+		if(temArr.size()!=pdArr.size() || temArr.size()!=uvArr.size() || temArr.size()!=stateArr.size()) {return false;}
+		if(temArr.size()>0) {
+			List<Object[]> list = new ArrayList<Object[]>();
+			for(int i=0;i<temArr.size();i++) {
+				Object[] tem=temArr.get(i);
+				Object[] pd=pdArr.get(i);
+				Object[] uv=uvArr.get(i);
+				Object[] state=stateArr.get(i);
+				Object[] obj=formRowData(name,tem,pd,uv,state,num);
+				list.add(obj);
+			}
+			ExportToExcelUtil.outExcel(response,list,name,num);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	//组装Excel中的每行数据
+	private Object[] formRowData(String name, Object[] tem, Object[] pd, Object[] uv, Object[] state, int num) {
+		Object[] result=new Object[num*3+3];
+		result[0]=name;
+		result[num*3+1]=findRunningState(state);
+		result[num*3+2]=tem[num];
+		for(int i=0; i<num; i++) {
+			result[i*3+1]=tem[i];
+			result[i*3+2]=pd[i];
+			result[i*3+3]=uv[i];
+		}
+		return result;
+	}
+	//将数据对象转换成数组
+	private List<Object[]> getChannelDataList(List<ChannelDatasUtil> list, int num) {
+		List<Object[]> result = new ArrayList<Object[]>();
+		for(int i=0; i<list.size(); i++) {
+			result.add(list.get(i).exchangeToArray(num));
+		}
+		return result;
+	}
+	//判断设备运行状态
+	private String findRunningState(Object[] state) {
+		Set<Object> sets = new HashSet<Object>(Arrays.asList(state));
+		String msg="";
+        if(sets.contains(2.0)) {
+        	msg+="通信故障";
+        }else if(sets.contains(3.0)) {
+        	msg+="光纤故障";
+        }else if(sets.contains(4.0)) {
+        	msg+="测温仪故障";
+        }else if(sets.contains(9.0)) {
+        	msg+="通道高温";
+        }else if(sets.contains(10.0)) {
+        	msg+="通道低温";
+        }else if(sets.contains(11.0)) {
+        	msg+="通道超高温";
+        }
+        return msg;
+	}
+		
 
 }

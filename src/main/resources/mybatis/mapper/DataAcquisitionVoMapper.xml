@@ -36,6 +36,27 @@
   	<result column="MAXINUM" jdbcType="DECIMAL" property="max" />
     <result column="MININUM" jdbcType="DECIMAL" property="min" />
   </resultMap>
+  <resultMap id="channelDataMap"  type="com.hqgd.pms.domain.ChannelDatasUtil">
+  	<result column="RECEIVE_TIME" jdbcType="VARCHAR" property="receiveTime" />
+  	<result column="CH1" jdbcType="DECIMAL" property="CH1" />
+  	<result column="CH2" jdbcType="DECIMAL" property="CH2" />
+  	<result column="CH3" jdbcType="DECIMAL" property="CH3" />
+  	<result column="CH4" jdbcType="DECIMAL" property="CH4" />
+  	<result column="CH5" jdbcType="DECIMAL" property="CH5" />
+  	<result column="CH6" jdbcType="DECIMAL" property="CH6" />
+  	<result column="CH7" jdbcType="DECIMAL" property="CH7" />
+  	<result column="CH8" jdbcType="DECIMAL" property="CH8" />
+  	<result column="CH9" jdbcType="DECIMAL" property="CH9" />
+  	<result column="CH10" jdbcType="DECIMAL" property="CH10" />
+  	<result column="CH11" jdbcType="DECIMAL" property="CH11" />
+  	<result column="CH12" jdbcType="DECIMAL" property="CH12" />
+  	<result column="CH13" jdbcType="DECIMAL" property="CH13" />
+  	<result column="CH14" jdbcType="DECIMAL" property="CH14" />
+  	<result column="CH15" jdbcType="DECIMAL" property="CH15" />
+  	<result column="CH16" jdbcType="DECIMAL" property="CH16" />
+  	<result column="CH17" jdbcType="DECIMAL" property="CH17" />
+  	<result column="CH18" jdbcType="DECIMAL" property="CH18" />
+  </resultMap>
   
   
   <sql id="Base_Column_List">
@@ -757,6 +778,7 @@ WHERE
     where EQUIPMENT_ID = #{param1,jdbcType=VARCHAR}
   </delete>
   
+  <!-- 获取实时监测数据中的异常监测结果 -->
   <select id="findRealRunningState" resultMap="BaseResultMap">
   	select e.EQUIPMENT_ID,e.EQUIPMENT_NAME,d.STATE
 	from hq_equipment_monitor_data_f1 d join hq_equipment_info e on d.EQUIPMENT_ID=e.EQUIPMENT_ID 
@@ -770,5 +792,110 @@ WHERE
 	select e.EQUIPMENT_ID,e.EQUIPMENT_NAME,d.STATE
 	from hq_equipment_monitor_data_f4 d join hq_equipment_info e on d.EQUIPMENT_ID=e.EQUIPMENT_ID 
 	where d.STATE!=5 
+  </select>
+  <!-- 获取要导出的历史监测数据 -->
+  <select id="findReportHistoricalDataTem" parameterType="java.util.Map" resultMap="channelDataMap">
+	    select RECEIVE_TIME,
+        	max(case CHANNEL_NUM when 'CH1' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH1,
+			max(case CHANNEL_NUM when 'CH2' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH2,
+			max(case CHANNEL_NUM when 'CH3' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH3,
+			max(case CHANNEL_NUM when 'CH4' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH4,
+			max(case CHANNEL_NUM when 'CH5' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH5,
+			max(case CHANNEL_NUM when 'CH6' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH6,
+			max(case CHANNEL_NUM when 'CH7' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH7,
+			max(case CHANNEL_NUM when 'CH8' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH8,
+			max(case CHANNEL_NUM when 'CH9' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH9,
+			max(case CHANNEL_NUM when 'CH10' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH10,
+			max(case CHANNEL_NUM when 'CH11' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH11,
+			max(case CHANNEL_NUM when 'CH12' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH12,
+			max(case CHANNEL_NUM when 'CH13' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH13,
+			max(case CHANNEL_NUM when 'CH14' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH14,
+			max(case CHANNEL_NUM when 'CH15' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH15,
+			max(case CHANNEL_NUM when 'CH16' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH16,
+			max(case CHANNEL_NUM when 'CH17' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH17,
+			max(case CHANNEL_NUM when 'CH18' then convert(numeric(10,2), TEMPERATURE) else -999 end) CH18
+		from ${table} where
+			EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+			GROUP BY RECEIVE_TIME ORDER BY RECEIVE_TIME ASC
+  </select>
+  <select id="findReportHistoricalDataPD" parameterType="java.util.Map" resultMap="channelDataMap">
+	    select RECEIVE_TIME,
+        	max(case CHANNEL_NUM when 'CH1' then convert(numeric(5,0), PD) else 0 end) CH1,
+			max(case CHANNEL_NUM when 'CH2' then convert(numeric(5,0), PD) else 0 end) CH2,
+			max(case CHANNEL_NUM when 'CH3' then convert(numeric(5,0), PD) else 0 end) CH3,
+			max(case CHANNEL_NUM when 'CH4' then convert(numeric(5,0), PD) else 0 end) CH4,
+			max(case CHANNEL_NUM when 'CH5' then convert(numeric(5,0), PD) else 0 end) CH5,
+			max(case CHANNEL_NUM when 'CH6' then convert(numeric(5,0), PD) else 0 end) CH6,
+			max(case CHANNEL_NUM when 'CH7' then convert(numeric(5,0), PD) else 0 end) CH7,
+			max(case CHANNEL_NUM when 'CH8' then convert(numeric(5,0), PD) else 0 end) CH8,
+			max(case CHANNEL_NUM when 'CH9' then convert(numeric(5,0), PD) else 0 end) CH9,
+			max(case CHANNEL_NUM when 'CH10' then convert(numeric(5,0), PD) else 0 end) CH10,
+			max(case CHANNEL_NUM when 'CH11' then convert(numeric(5,0), PD) else 0 end) CH11,
+			max(case CHANNEL_NUM when 'CH12' then convert(numeric(5,0), PD) else 0 end) CH12,
+			max(case CHANNEL_NUM when 'CH13' then convert(numeric(5,0), PD) else 0 end) CH13,
+			max(case CHANNEL_NUM when 'CH14' then convert(numeric(5,0), PD) else 0 end) CH14,
+			max(case CHANNEL_NUM when 'CH15' then convert(numeric(5,0), PD) else 0 end) CH15,
+			max(case CHANNEL_NUM when 'CH16' then convert(numeric(5,0), PD) else 0 end) CH16,
+			max(case CHANNEL_NUM when 'CH17' then convert(numeric(5,0), PD) else 0 end) CH17,
+			max(case CHANNEL_NUM when 'CH18' then convert(numeric(5,0), PD) else 0 end) CH18
+		from ${table} where
+			EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+			GROUP BY RECEIVE_TIME ORDER BY RECEIVE_TIME ASC
+  </select>
+  <select id="findReportHistoricalDataUV" parameterType="java.util.Map" resultMap="channelDataMap">
+	    select RECEIVE_TIME,
+        	max(case CHANNEL_NUM when 'CH1' then convert(numeric(5,0), UV) else 0 end) CH1,
+			max(case CHANNEL_NUM when 'CH2' then convert(numeric(5,0), UV) else 0 end) CH2,
+			max(case CHANNEL_NUM when 'CH3' then convert(numeric(5,0), UV) else 0 end) CH3,
+			max(case CHANNEL_NUM when 'CH4' then convert(numeric(5,0), UV) else 0 end) CH4,
+			max(case CHANNEL_NUM when 'CH5' then convert(numeric(5,0), UV) else 0 end) CH5,
+			max(case CHANNEL_NUM when 'CH6' then convert(numeric(5,0), UV) else 0 end) CH6,
+			max(case CHANNEL_NUM when 'CH7' then convert(numeric(5,0), UV) else 0 end) CH7,
+			max(case CHANNEL_NUM when 'CH8' then convert(numeric(5,0), UV) else 0 end) CH8,
+			max(case CHANNEL_NUM when 'CH9' then convert(numeric(5,0), UV) else 0 end) CH9,
+			max(case CHANNEL_NUM when 'CH10' then convert(numeric(5,0), UV) else 0 end) CH10,
+			max(case CHANNEL_NUM when 'CH11' then convert(numeric(5,0), UV) else 0 end) CH11,
+			max(case CHANNEL_NUM when 'CH12' then convert(numeric(5,0), UV) else 0 end) CH12,
+			max(case CHANNEL_NUM when 'CH13' then convert(numeric(5,0), UV) else 0 end) CH13,
+			max(case CHANNEL_NUM when 'CH14' then convert(numeric(5,0), UV) else 0 end) CH14,
+			max(case CHANNEL_NUM when 'CH15' then convert(numeric(5,0), UV) else 0 end) CH15,
+			max(case CHANNEL_NUM when 'CH16' then convert(numeric(5,0), UV) else 0 end) CH16,
+			max(case CHANNEL_NUM when 'CH17' then convert(numeric(5,0), UV) else 0 end) CH17,
+			max(case CHANNEL_NUM when 'CH18' then convert(numeric(5,0), UV) else 0 end) CH18
+		from ${table} where
+			EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+			GROUP BY RECEIVE_TIME ORDER BY RECEIVE_TIME ASC
+  </select>
+  <select id="findReportHistoricalDataState" parameterType="java.util.Map" resultMap="channelDataMap">
+	    select RECEIVE_TIME,
+        	max(case CHANNEL_NUM when 'CH1' then convert(numeric(5,0), STATE) else 0 end) CH1,
+			max(case CHANNEL_NUM when 'CH2' then convert(numeric(5,0), STATE) else 0 end) CH2,
+			max(case CHANNEL_NUM when 'CH3' then convert(numeric(5,0), STATE) else 0 end) CH3,
+			max(case CHANNEL_NUM when 'CH4' then convert(numeric(5,0), STATE) else 0 end) CH4,
+			max(case CHANNEL_NUM when 'CH5' then convert(numeric(5,0), STATE) else 0 end) CH5,
+			max(case CHANNEL_NUM when 'CH6' then convert(numeric(5,0), STATE) else 0 end) CH6,
+			max(case CHANNEL_NUM when 'CH7' then convert(numeric(5,0), STATE) else 0 end) CH7,
+			max(case CHANNEL_NUM when 'CH8' then convert(numeric(5,0), STATE) else 0 end) CH8,
+			max(case CHANNEL_NUM when 'CH9' then convert(numeric(5,0), STATE) else 0 end) CH9,
+			max(case CHANNEL_NUM when 'CH10' then convert(numeric(5,0), STATE) else 0 end) CH10,
+			max(case CHANNEL_NUM when 'CH11' then convert(numeric(5,0), STATE) else 0 end) CH11,
+			max(case CHANNEL_NUM when 'CH12' then convert(numeric(5,0), STATE) else 0 end) CH12,
+			max(case CHANNEL_NUM when 'CH13' then convert(numeric(5,0), STATE) else 0 end) CH13,
+			max(case CHANNEL_NUM when 'CH14' then convert(numeric(5,0), STATE) else 0 end) CH14,
+			max(case CHANNEL_NUM when 'CH15' then convert(numeric(5,0), STATE) else 0 end) CH15,
+			max(case CHANNEL_NUM when 'CH16' then convert(numeric(5,0), STATE) else 0 end) CH16,
+			max(case CHANNEL_NUM when 'CH17' then convert(numeric(5,0), STATE) else 0 end) CH17,
+			max(case CHANNEL_NUM when 'CH18' then convert(numeric(5,0), STATE) else 0 end) CH18
+		from ${table} where
+			EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR} 
+			AND RECEIVE_TIME <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR} 
+			GROUP BY RECEIVE_TIME ORDER BY RECEIVE_TIME ASC
   </select>
 </mapper>

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.hqgd.pms.domain.ChannelDatasUtil;
 import com.hqgd.pms.domain.ChannelExtremum;
 import com.hqgd.pms.domain.DataAcquisitionVo;
 
@@ -87,5 +88,12 @@ public interface DataAcquisitionVoMapper {
 	int deleteByEquipmentIf(String string, String string2);
 
 	List<ChannelExtremum> findRealRunningState();
+
+//	List<ChannelDatasUtil> findReportHistoricalData(Map<String, Object> param);
+
+	List<ChannelDatasUtil> findReportHistoricalDataTem(Map<String, Object> param);
+	List<ChannelDatasUtil> findReportHistoricalDataPD(Map<String, Object> param);
+	List<ChannelDatasUtil> findReportHistoricalDataUV(Map<String, Object> param);
+	List<ChannelDatasUtil> findReportHistoricalDataState(Map<String, Object> param);
 
 }
