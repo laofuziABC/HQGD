@@ -247,47 +247,48 @@ function showBlocks(){
 	drawCurrentChannels(result);
 }
 function drawCurrentChannels(param){
-	var equip = param.equipment;
-	var param=param.data;
-	//设置DIV高度
-	var channel = "";
-	var num;
-	if(param==null){ num=0; $("#channelDiv").css({"height":($(window).height())*0.45}); }
-	else{ num=param.length; }
-	if(num>0){
-		//超过2分钟提示
-		lTime=(new Date(param[0].receiveTime)).getTime();
-		cTime=(new Date()).getTime();
-		var timetext = "最新通道温度(单位:℃，最后监测时间："+param[0].receiveTime+")";
-		$("#last-time").text(timetext);
-		if((cTime-lTime)>(2*60*1000)){ $("#last-time").css({"color":"red"}); }
-		else{$("#last-time").css({"color":"#21242e"});}
-		let count = Math.ceil(num/3);
-		var divH=$(window).height()/3;
-		var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
-		var divW=$(window).width()*0.9;
-		var tdW=divW/3+"px;";
-		for(let i=0; i<count; i++){
-			let startIndex = 3*i;
-			let endIndex = (3*i+3>num)?num:(3*i+3);
-			channel+="<tr style='height:"+trH+"'>";
-			for(let j=startIndex; j<endIndex; j++){
-				let state=parseInt(param[j].state);
-				let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
-				if(state==5){
-					var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
-					channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+resultMsg+"</span></td>"; 
+	var channel = "<h3 style='color: red;'>未查找到通道监测信息！</h3>";
+	if(param){
+		var equip = param.equipment;
+		var param=param.data;
+		//设置DIV高度
+		var num;
+		if(!param){ num=0; $("#channelDiv").css({"height":($(window).height())*0.45}); }
+		else{ num=param.length; }
+		if(num>0){
+			//超过2分钟提示
+			lTime=(new Date(param[0].receiveTime)).getTime();
+			cTime=(new Date()).getTime();
+			var timetext = "最新通道温度(单位:℃，最后监测时间："+param[0].receiveTime+")";
+			$("#last-time").text(timetext);
+			if((cTime-lTime)>(2*60*1000)){ $("#last-time").css({"color":"red"}); }
+			else{$("#last-time").css({"color":"#21242e"});}
+			let count = Math.ceil(num/3);
+			var divH=$(window).height()/3;
+			var trH=(count==1)?(divH/2+"px;"):(divH/count+"px;");
+			var divW=$(window).width()*0.9;
+			var tdW=divW/3+"px;";
+			channel="";
+			for(let i=0; i<count; i++){
+				let startIndex = 3*i;
+				let endIndex = (3*i+3>num)?num:(3*i+3);
+				channel+="<tr style='height:"+trH+"'>";
+				for(let j=startIndex; j<endIndex; j++){
+					let state=parseInt(param[j].state);
+					let innerText=(param[j].opticalFiberPosition=="" || param[j].opticalFiberPosition==null)?param[j].channelNum:param[j].opticalFiberPosition;
+					if(state==5){
+						var resultMsg=(param[j].temperature==2999)?("系统调整中"):(param[j].temperature);
+						channel+="<td class='green' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+resultMsg+"</span></td>"; 
+					}
+					else if(state==2){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>通信故障</span></td>"; }
+					else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - -</span></td>"; }
+					else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - - - -</span></td>"; }
+					else if(state==11){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+					else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
 				}
-				else if(state==2){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>通信故障</span></td>"; }
-				else if(state==3){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - -</span></td>"; }
-				else if(state==4){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>- - - - -</span></td>"; }
-				else if(state==11){channel+="<td class='red' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
-				else{channel+="<td class='yellow' style='width:"+tdW+"; padding-left: 1%;'><span class='span_left'>"+innerText+": </span><span class='span_right'>"+param[j].temperature+"</span></td>"; }
+				channel+="</tr>";
 			}
-			channel+="</tr>";
 		}
-	}else{
-		channel+="<h3 style='color: red;'>未查找到通道监测信息！</h3>"; 
 	}
 	$("#channelsInfo").html(channel);
 }
