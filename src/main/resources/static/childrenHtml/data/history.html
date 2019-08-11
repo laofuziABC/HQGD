@@ -12,9 +12,42 @@
 			#data-show-pager a, #data-show-pager span{color: #ffffff; }
 			#data-show-pager a.goto-btn{margin: 3px; min-width: 20px;}
 			#enterNum{color: #000000;}
+			
+			#ani-container{width: 35rem; height: 4rem; z-index: 10; position: absolute; left: 40%; top: 30%; visibility: hidden;}
+			#ani-container span{font-size: 2rem; color: red;}
+			#ani-container .span1{animation: animate 5s ease-out 0.3s infinite; position:absolute; top: 0; left:0;}
+			#ani-container .span2{animation: animate 5s ease-out 0.4s infinite; position:absolute; top: 0.1rem; left: 1rem;}
+			#ani-container .span3{animation: animate 5s ease-out 0.5s infinite; position:absolute; top: 0.2rem; left: 2rem;}
+			#ani-container .span4{animation: animate 5s ease-out 0.6s infinite; position:absolute; top: 0.3rem; left: 3rem;}
+			#ani-container .span5{animation: animate 5s ease-out 0.7s infinite; position:absolute; top: 0.4rem; left: 4rem;}
+			#ani-container .span6{animation: animate 5s ease-out 0.8s infinite; position:absolute; top: 0.5rem; left: 5rem;}
+			#ani-container .span7{animation: animate 5s ease-out 0.9s infinite; position:absolute; top: 0.6rem; left: 6rem;}
+			#ani-container .span8{animation: animate 5s ease-out 1.0s infinite; position:absolute; top: 0.7rem; left: 7rem;}
+			#ani-container .span9{animation: animate 5s ease-out 1.1s infinite; position:absolute; top: 0.8rem; left: 8rem;}
+			#ani-container .span10{animation: animate 5s ease-out 1.2s infinite; position:absolute; top: 0.9rem; left: 9rem;}
+			#ani-container .span11{animation: animate 5s ease-out 1.3s infinite; position:absolute; top: 1.0rem; left: 10rem;}
+			@keyframes animate{
+				0%{top: 100%; position: relative;}
+				50%{top: 0%; position: relative;}
+				70%{top: 100%; position: relative;}
+				100%{top: 100%; position: relative;}
+			}
 		</style>
 	</head>
 	<body>
+		<div id="ani-container">
+			<span class="span1">数</span>
+			<span class="span2">据</span>
+			<span class="span3">正</span>
+			<span class="span4">在</span>
+			<span class="span5">导</span>
+			<span class="span6">出</span>
+			<span class="span7">，</span>
+			<span class="span8">请</span>
+			<span class="span9">稍</span>
+			<span class="span10">候</span>
+			<span class="span11">……</span>
+		</div>
 		<!-- 上方的统计图【开始】 -->
 		<div class="ssjc_right_up">
 			<div class="nei">
@@ -38,8 +71,8 @@
 					</span> 
 					<span class="float_right">
 						<input type="button" class="youcecha" onclick="showHistoryContent();" value="查询" />
-						<input type="button" class="youcecha" onclick="reportHistory();" value="导出" />
-						<input type="button" class="youcecha" onclick="exportHistoryData();" value="导出2" />  
+						<!-- <input type="button" class="youcecha" onclick="reportHistory();" value="导出" /> -->
+						<input type="button" class="youcecha" onclick="exportHistoryData();" value="导出" />  
 					</span>
 				</div>
 				<!-- 筛选条件【结束】 -->
@@ -215,28 +248,28 @@
 			}
 			
 			function exportHistoryData(){
-				var param = {
-					"equipmentId" : equiId2,
-					"startTime" : $("#startTime").val(),
-					"endTime" : $("#endTime").val(),
-					"state" : $("#data-type").val()
-				};
-				$.ajax({
-					url : "dataAcquisition/exportHistoryData",
-					type : "post",
-					data : param,
-					dataType : "json",
-					success : function(result){
-						if(result){
-							alert("成功导出！请在桌面查看导出结果！");
-						}else{
-							alert("导出失败！");
+				var param = {"equipmentId" : equiId2, "startTime" : $("#startTime").val(), "endTime" : $("#endTime").val(), "state" : $("#data-type").val() };
+				if(confirm("是否将数据导出到桌面？")){
+					document.getElementById("ani-container").style.visibility="visible";
+					$.ajax({
+						url : "dataAcquisition/exportHistoryData",
+						type : "post",
+						data : param,
+						dataType : "json",
+						success : function(result){
+							document.getElementById("ani-container").style.visibility="hidden";
+							if(result){
+								alert("成功导出！请在桌面查看导出结果！");
+							}else{
+								alert("导出失败！");
+							}
+						},
+						error: function(){
+							document.getElementById("ani-container").style.visibility="hidden";
+							alert("操作失败！");
 						}
-					},
-					error: function(){
-						alert("操作失败！");
-					}
-				});
+					});
+				}
 			}
 		</script>
 	</body>
