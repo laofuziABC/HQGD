@@ -586,7 +586,7 @@ public class DataAcquisitionService implements IDataAcquisitionService {
 		result[0]=name;
 		result[num*3+1]=findRunningState(state);
 		result[num*3+2]=tem[num];
-		for(int i=0; i<tem.length; i++) {
+		for(int i=0; i<tem.length-1; i++) {
 			result[i*3+1]=tem[i];
 			result[i*3+2]=pd[i];
 			result[i*3+3]=uv[i];
